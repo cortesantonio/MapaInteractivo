@@ -27,7 +27,7 @@ export default function ShowData() {
   return (
     <ul>
       {data.map((item) => (
-        <li key={item.id}>{item.nombreaccesbilidad}</li>
+        <li key={item.id}>{item.tipo}</li>
       ))}
     </ul>
   );
