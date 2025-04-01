@@ -35,6 +35,6 @@ Si quieres aportar a este proyecto, ¡eres bienvenido! Puedes contribuir con có
    ```
 3. Ejecuta el entorno de desarrollo:
    ```bash
-   npm run deev
+   npm run dev
    ```
 💙 **Hagamos juntos un mundo más accesible!**
