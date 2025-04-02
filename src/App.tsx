@@ -1,6 +1,6 @@
 import './App.css'
 import Buscador from './components/Buscador';
-import List from './screens/marcadores/List';
+import List from './screens/solicitudes/List';
 function App() {
 
   return (
