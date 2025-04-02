@@ -1,15 +1,12 @@
 import './App.css'
 import Buscador from './components/Buscador';
-import ShowData from './components/showData';
+import List from './screens/marcadores/List';
 function App() {
 
   return (
-    <>
-      <  Buscador />
-      <div>
-        <h1>Datos de Supabase</h1>
-        <ShowData />
-      </div>    </>
+    <div style={{ padding: '25px' }}>
+
+    </div>
   )
 }
 
