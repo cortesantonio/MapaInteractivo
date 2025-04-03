@@ -14,8 +14,8 @@ function List() {
     return (
         <div className={styles.container}>
             <header className={styles.header}>
-                <hr style={{ maxWidth: '50%', minWidth: '150px', width: '50%' }} />
-                <h2 style={{ fontSize: '1rem', textAlign: 'right' }}>Gestion de solicitudes</h2>
+                <hr style={{ maxWidth: '70%', minWidth: '150px', width: '60%' }} />
+                <h2 style={{textAlign:'right'}} >Gestion de solicitudes</h2>
             </header>
             <div className={styles.filtros}>
                 <div style={{ display: 'flex', gap: '5px' }}>

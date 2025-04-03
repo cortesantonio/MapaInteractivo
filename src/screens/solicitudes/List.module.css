@@ -1,7 +1,6 @@
 * {
     padding: 0;
     margin: 0;
-    font-family: Arial, Helvetica, sans-serif;
 }
 
 .container {
@@ -29,25 +28,26 @@
     gap: 5px;
     justify-content: left;
     flex-direction: column;
+    margin-bottom: 25px;
 }
 
-.filtros .buscador {
+.filtros .buscar {
     display: flex;
     justify-content: lef1;
 }
 
-.filtros .buscador form {
+.filtros .buscar form {
     display: flex;
     gap: 5px;
 }
 
-.filtros .buscador form input {
+.filtros .buscar form input {
     padding: 2px;
     border-radius: 5px;
     border: 1px solid gray;
 }
 
-.filtros .buscador form button {
+.filtros .buscar form button {
     background-color: transparent;
     border: none;
     outline: none;
@@ -62,6 +62,7 @@
     cursor: pointer;
     transition: 0.2s all;
     margin-bottom: 15px;
+    background-color: transparent;
 }
 
 .filtroCard form select {
