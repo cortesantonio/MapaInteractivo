@@ -1,0 +1,56 @@
+.titulo {
+    width: 100%;
+}
+
+.container {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.acciones {
+    margin: 25px auto;
+    width: 100%;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+}
+
+.acciones button {
+    padding: 15px 20px 15px 20px;
+    background: rgb(253, 29, 29);
+    background: linear-gradient(90deg, rgba(253, 29, 29, 1) 0%, rgba(255, 106, 60, 1) 100%);
+    font-size: 0.8rem;
+    font-weight: 500;
+    text-transform: uppercase;
+    border: none;
+    color: white;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: .3s all;
+}
+
+.acciones button:hover {
+    transform: scale(101%);
+}
+
+.opt {
+    display: flex;
+    gap: 10px;
+}
+
+form p {
+    margin-top: 15px;
+    font-weight: 500;
+}
+
+.inputText {
+    height: 30px;
+    border-radius: 5px;
+    border: 1px solid rgb(165, 165, 165);
+    margin-bottom: 10px;
+}
+
+form .labelSeccion {
+    font-weight: 500;
+}
