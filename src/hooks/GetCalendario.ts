@@ -16,8 +16,8 @@ const useGetCalendario = () => {
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
 
-  const calendarId = "correoprueba56026@gmail.com";
-  const apiKey = "AIzaSyAmCE7VQG5WuN4L8faFs8sEZsTISml-WAA";
+  const calendarId = "";
+  const apiKey = "";
 
   useEffect(() => {
     const fetchEvents = async () => {
