@@ -66,10 +66,9 @@ function BotonEventos() {
                 gap: "10px",
                 position: "absolute",
                 top: "80px",
-                zIndex: "1",
                 right: position.right,
                 width: width,
-                transition: "width 0.3s ease",
+                transition: "width 0.3s ease-in-out",
             }}
         >
             <div
@@ -80,8 +79,44 @@ function BotonEventos() {
                     height: "15px",
                     gap: "10px",
                     margin: ismargin,
+
                 }}
             >
+
+
+                <button
+                    onClick={ampliarBotonEventos}
+                    style={{
+                        background: "transparent",
+                        padding: "0px",
+                        outline: "none",
+                        border: "none",
+                        display: "flex",
+                        alignItems: "center",
+                        gap: "5px",
+
+                    }}
+                >
+
+                    <FontAwesomeIcon
+                        icon={faCalendar}
+                        size="lg"
+                        style={{ color: "black" }}
+                    />
+                    <p
+                        style={{
+                            background: "transparent",
+                            color: "black",
+                            border: "none",
+                            fontSize: "1rem",
+                            outline: "none",
+
+                        }}
+                    >
+                        Eventos
+                    </p>
+
+                </button>
                 {Eventoisvisible && (
                     <button
                         onClick={ampliarBotonEventos}
@@ -92,6 +127,7 @@ function BotonEventos() {
                             border: "none",
                             display: "flex",
                             opacity: 0.4,
+                            overflow: "hidden",
                             alignItems: "center",
                             gap: "5px",
                         }}
@@ -115,37 +151,7 @@ function BotonEventos() {
                     </button>
                 )}
 
-                <button
-                    onClick={ampliarBotonEventos}
-                    style={{
-                        background: "transparent",
-                        padding: "0px",
-                        outline: "none",
-                        border: "none",
-                        display: "flex",
-                        alignItems: "center",
-                        gap: "5px",
-                    }}
-                >
-                    
-                    <FontAwesomeIcon
-                        icon={faCalendar}
-                        size="lg"
-                        style={{ color: "black" }}
-                    />
-                    <p
-                        style={{
-                            background: "transparent",
-                            color: "black",
-                            border: "none",
-                            fontSize: "1rem",
-                            outline: "none",
-                        }}
-                    >
-                        Eventos
-                    </p>
-                    
-                </button>
+
             </div>
             <div
                 style={{
@@ -196,7 +202,7 @@ function BotonEventos() {
                                             style={{
                                                 display: "flex",
                                                 justifyContent: "center",
-                                                
+
                                             }}
                                         >
                                             <div
@@ -245,7 +251,7 @@ function BotonEventos() {
                                                             paddingRight: "20px",
                                                         }}
                                                     >
-                                                       • {event.status}
+                                                        • {event.status}
                                                     </span>
                                                 </div>
                                                 <p style={{ margin: "5px 0", fontSize: "0.9rem", opacity: 0.6 }}
