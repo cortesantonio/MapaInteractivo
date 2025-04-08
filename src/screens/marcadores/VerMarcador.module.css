@@ -1,0 +1,127 @@
+* {
+    box-sizing: border-box;
+
+}
+
+.container {
+    background-color: white;
+    height: fit-content;
+    position: relative;
+
+}
+
+
+.container .CerrarMarcador {
+    position: absolute;
+    top: 25px;
+    right: 25px;
+    width: 25px;
+    height: 25px;
+    border-radius: 50%;
+    background-color: transparent;
+    border: 2px solid white;
+    color: white;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.imagenMarcador {
+    height: 150px;
+    width: 100%;
+    object-fit: cover;
+}
+
+.headerContenido {
+    padding: 25px;
+    width: 100%;
+    height: 150px;
+    display: flex;
+    margin-bottom: 20px;
+}
+
+.headerContenido .info {
+    width: 70%;
+}
+
+
+.headerContenido .containerButtons {
+    width: 30%;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+    align-items: center;
+    gap: 10px;
+}
+
+.containerButtons button {
+    height: fit-content;
+    width: fit-content;
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+    outline: none;
+    font-size: 0.7rem;
+}
+
+.containerButtons .icon {
+    font-size: 0.8rem;
+    padding: 7px;
+    border-radius: 50%;
+    background-color: rgb(0, 183, 255);
+    color: white;
+
+
+}
+
+.ContenedorInfo {
+    width: 100%;
+    padding: 25px;
+}
+
+.headerInfo {
+    border-bottom: 1px solid black;
+    display: flex;
+    justify-content: space-between;
+    padding-bottom: 5px;
+}
+
+.headerInfo button {
+    cursor: pointer;
+    background-color: transparent;
+    border: none;
+
+}
+
+.scrollSeccion {
+    max-height: 300px;
+    height: fit-content;
+    overflow-y: auto;
+
+}
+
+.tabActiva {
+    color: #007BFF;
+    opacity: 1;
+}
+
+
+.InfoMarcador {
+    padding-top: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+
+}
+
+.InfoMarcador h4 {
+    font-weight: 400;
+}
+
+.btnVerMas {
+    background-color: transparent;
+    text-align: center;
+    margin: auto;
+    border: none;
+    color: #007BFF;
+    text-decoration: underline;
+}
