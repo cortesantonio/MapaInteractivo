@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import styles from './EscribirResena.module.css';
+import styles from './css/EscribirResena.module.css';
 import { faStar } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
