@@ -1,0 +1,101 @@
+html,body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    background-color: #fff;
+    overflow: hidden;
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  height: 100vh;
+  padding: 30px;
+  margin: 0 auto; 
+  box-sizing: border-box;
+  border-radius: 10px; 
+}
+
+  
+.flecha {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    color: #000;
+    cursor: pointer;
+    z-index: 1000;
+    font-size: 20px;
+  }
+
+  .text h1 {
+    font-size: 25px;
+    color: #000;
+    font-weight: 500;
+    display: flex;
+    margin-left: 30px;
+    margin-bottom: 30px;
+    justify-content: center;
+    width: 100%;
+  }
+  
+  .espacio {
+    width: 100%;
+    max-width: 400px;
+    margin-bottom: 20px;
+  }
+  
+  .etiquetas {
+    display: block;
+    text-align: left;
+    color: #000000;
+    margin-bottom: 8px;
+    font-weight: 400;
+  }
+  
+  .formulario {
+    width: 120%;
+    padding: 12px;
+    border: 1px solid #bfbfbf;
+    border-radius: 5px;
+    box-sizing: border-box;
+    color: #000;
+    background-color: #fff;
+  }
+
+
+
+ 
+.botones {
+    display: flex;
+    justify-content: space-between;
+    width: 123%;
+    max-width: 400px;
+    margin-top: 40px; 
+}
+  
+  .btn1,
+  .btn2 {
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    border: none;
+    font-weight: 500;
+    margin: 10px;
+  }
+  
+  .btn1 {
+    display: block;
+    color: red;
+    background-color: #fff;
+    padding: 10px;
+
+  }
+  
+  .btn2 {
+    display: block;
+    color: #fff;
+    background: linear-gradient(90deg, #ff0000, #ff6100);
+    border-radius: 5px;
+  }
