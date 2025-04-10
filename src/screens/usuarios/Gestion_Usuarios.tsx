@@ -5,11 +5,33 @@ import { useState } from 'react';
 
 function Gestion_Usuarios() {
 
+    
+
     const [isActiveBuscador, setIsActiveBuscador] = useState(false);
+    const [rolSeleccionado, setRolSeleccionado] = useState('');
 
     function handleBuscador() {
         setIsActiveBuscador(prevState => !prevState);
     }
+
+    const [usuarios] = useState([
+        { nombre: 'Alberto Fuente', rol: 'Usuario' },
+        { nombre: 'Adrián López', rol: 'Gestor' },
+        { nombre: 'Sofía Ramírez', rol: 'Administrador' },
+    ]);
+    
+    const [busqueda, setBusqueda] = useState('');
+
+    function handleBusquedaChange(e: React.ChangeEvent<HTMLInputElement>) {
+        setBusqueda(e.target.value);
+    }
+    
+    const usuariosFiltrados = usuarios.filter((usuario) => {
+        const coincideNombre = usuario.nombre.toLowerCase().includes(busqueda.toLowerCase());
+        const coincideRol = rolSeleccionado === '' || usuario.rol === rolSeleccionado;
+        return coincideNombre && coincideRol;
+    });
+    
 
     return (
         <div className={styles.container}>
@@ -29,11 +51,13 @@ function Gestion_Usuarios() {
                     <div className={styles.filtroCard}>
                         <form action="">
                             <label htmlFor="filtro"><FontAwesomeIcon icon={faFilter} /> </label>
-                            <select name="filtro" id="">
+                            <select name="filtro" value={rolSeleccionado} onChange={
+                                (e) => setRolSeleccionado(e.target.value)
+                            }>
                                 <option value="">Filtro</option>
-                                <option value="">Usuario</option>
-                                <option value="">Gestor</option>
-                                <option value="">Administrador</option>
+                                <option value="Usuario">Usuario</option>
+                                <option value="Gestor">Gestor</option>
+                                <option value="Administrador">Administrador</option>
                             </select>
                         </form>
                     </div>
@@ -66,72 +90,30 @@ function Gestion_Usuarios() {
                 {isActiveBuscador &&
                     <div className={styles.buscar}>
                         <form action="">
-                            <input type="text" placeholder='Buscar' />
+                            <input type="text" placeholder='Buscar' value={busqueda} onChange={handleBusquedaChange} />
                             <button type='submit'><FontAwesomeIcon icon={faMagnifyingGlass} /></button>
                         </form>
                     </div>
                 }
-
-                    
-
-
             </div>
-
-
             <div className={styles.content}>
                 <p style={{ color: 'gray' }}>Gestion Usuarios</p>
                 <hr style={{ width: '25%', marginTop: '10px', marginBottom: '10px ', opacity: '50%' }} />
-                <div className={styles.card} >
-                    <div className={styles.estado}
-                        style={{ backgroundColor: '#0397fc' }}
-                    >
-                        <FontAwesomeIcon icon={faUser} size='xl' style={{ color: 'white' }} />
+                {usuariosFiltrados.map((usuario, index) => (
+        <div className={styles.card} key={index}>
+            <div className={styles.estado} style={{ backgroundColor: '#0397fc' }}>
+                <FontAwesomeIcon icon={faUser} size='xl' style={{ color: 'white' }} />
+            </div>
+            <div className={styles.cardContent}>
+                <p style={{ color: 'black' }}>{usuario.nombre}</p>
+                <p style={{ color: 'gray', fontSize: '0.9rem' }}>{usuario.rol}</p>
+            </div>
+            <div className={styles.opciones}>
+                <button><FontAwesomeIcon icon={faEllipsisVertical} /></button>
+            </div>
+        </div>
+            ))}
 
-                    </div>
-                    <div className={styles.cardContent}>
-                        <p style={{ color: 'black' }}>Alberto Fuente</p>
-                        <p style={{ color: 'gray', fontSize: '0.9rem' }}>Usuario</p>
-                    </div>
-
-                    <div className={styles.opciones}>
-                        <button><FontAwesomeIcon icon={faEllipsisVertical}/></button>
-
-                        
-                    </div>
-                </div>
-
-                <div className={styles.card} >
-                    <div className={styles.estado}
-                        style={{ backgroundColor: '#0397fc' }}
-                    >
-                        <FontAwesomeIcon icon={faUser} size='xl' style={{ color: 'white' }} />
-
-                    </div>
-                    <div className={styles.cardContent}>
-                        <p style={{ color: 'black' }}>Adrián López</p>
-                        <p style={{ color: 'gray', fontSize: '0.9rem' }}>Gestor</p>
-                    </div>
-
-                    <div className={styles.opciones}>
-                        <button><FontAwesomeIcon icon={faEllipsisVertical}/></button>
-                    </div>
-                </div>
-
-                <div className={styles.card} >
-                    <div className={styles.estado}
-                        style={{ backgroundColor: '#0397fc' }}
-                    >
-                        <FontAwesomeIcon icon={faUser} size='xl' style={{ color: 'white' }} />
-
-                    </div>
-                    <div className={styles.cardContent}>
-                        <p style={{ color: 'black' }}>Sofía Ramírez</p>
-                        <p style={{ color: 'gray', fontSize: '0.9rem' }}>Administrador</p>
-                    </div>
-                    <div className={styles.opciones}>
-                        <button><FontAwesomeIcon icon={faEllipsisVertical}/></button>
-                    </div>
-                </div>
 
             </div>
 
