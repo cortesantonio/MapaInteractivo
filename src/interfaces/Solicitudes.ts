@@ -1,6 +1,6 @@
 import { Tipo_Recinto } from "./Tipo_Recinto";
 
-export interface Solicitud {
+export interface Solicitudes {
     id: number;
     nombre_locacion: string;
     direccion: string;

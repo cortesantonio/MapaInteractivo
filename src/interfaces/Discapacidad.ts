@@ -1,9 +1,8 @@
-import { Usuarios } from "./Usuario";
+import { Usuarios } from "./Usuarios";
 
 export interface Discapacidad {
-    id: number;
-    idUsuarios: Usuarios;            // FK
-    nombre: string;
-    tipoDiscapacidad: string;
-  }
-  
+  id: number;
+  id_usuario: Usuarios;            // FK
+  nombre: string;
+  tipo: string;
+}
