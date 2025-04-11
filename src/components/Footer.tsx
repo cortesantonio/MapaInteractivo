@@ -136,6 +136,7 @@ function Footer() {
                 transform: "translatex(-50%)",
                 position: "fixed",
                 transition: "width 0.3s ease",
+                left: "50%",
             }}
         >
 
