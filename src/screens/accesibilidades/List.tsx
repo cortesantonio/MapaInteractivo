@@ -4,7 +4,7 @@ import { faMagnifyingGlass, faPenToSquare, faUniversalAccess, faDeleteLeft, faPl
 import { useState, useEffect } from 'react';
 import { Accesibilidad } from '../../interfaces/Accesibilidad';
 import { supabase } from '../../services/supabase';
-import EditarAccesibilidad from './editar';
+import EditarAccesibilidad from './Editar';
 
 function ListAccesibilidad() {
     const [accesibilidades, setAccesibilidades] = useState<Accesibilidad[]>([]);
