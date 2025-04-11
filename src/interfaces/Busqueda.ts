@@ -1,9 +1,9 @@
-import { Usuarios } from "./Usuario";
+import { Usuarios } from "./Usuarios";
 import { Marcador } from "./Marcador";
 
 export interface Busqueda {
   id: number;
-  idUsuarios?: Usuarios;            // FK
-  idMarcador?: Marcador;          // FK
-  fechaHora: Date;
+  id_usuarios?: Usuarios;            // FK
+  id_marcador?: Marcador;          // FK
+  fecha_hora: Date;
 }

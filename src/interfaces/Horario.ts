@@ -1,10 +1,10 @@
 import { Marcador } from "./Marcador";
 
-export interface Horarios {
+export interface Horario {
   id: number;
-  idMarcador: Marcador;          // FK
+  id_marcador: Marcador;          // FK
   dia: string;
-  horaApertura: string;
-  horaCierre: string;
+  hora_apertura: string;
+  hora_cierre: string;
 }
 

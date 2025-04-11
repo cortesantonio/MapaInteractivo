@@ -1,16 +1,18 @@
-import { Horarios } from "./Horario";
+import { Horario } from "./Horario";
 import { Accesibilidad } from "./Accesibilidad";
 
 export interface Marcador {
   id: number;
-  nombre: string;
-  tipo: string;
-  calificacion_comunidad: number;
-  calificacion_google: number;
+  id_solicitud?: number;
+  nombre_recinto: string;
+  tipo_recinto: string;
   direccion: string;
-  pag_web: string;
+  pagina_web: string;
   telefono: string;
-  horarios?: Horarios[];
+  latitud: number;
+  longitud: number;
+  activo: boolean;
+  horario?: Horario[];
   accesibilidad?: Accesibilidad;
 }
   
