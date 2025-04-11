@@ -1,0 +1,281 @@
+.container {
+  height: 100vh;
+  width: auto;
+  
+}
+
+.containerizquierdo{
+    background-image: url("https://municipalidaddecurico.cl/wp-content/uploads/2020/05/FRONTIS-Recuperado-1024x493-1.jpg");
+    background-size: cover;
+    background-position: center; 
+}
+
+
+.containerderecho{
+    background-color:white;
+
+}
+
+.containeratras{
+    padding-left: 35px;
+    padding-top: 25px;
+
+}
+
+.containeratras .botonatras{
+    background-color:  transparent;
+    border: none;
+    font-size: 1.8rem;
+    
+}
+
+.containerlogin{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-left: 20px;
+    padding-top: 15vh;
+    padding-right: 20px;
+}
+
+.containerHeader{
+    width: 80%;
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+    max-width: 350px;
+    
+}
+
+.containerHeader h1{
+    font-size: 2rem;
+    font-weight: 600;
+}
+.containerHeader p{
+    font-size: 1rem;
+    font-weight: 300;
+}
+
+.containerboton{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding-top: 15vh;
+    width: 100%;
+}
+
+.containerdecorativo{
+    display: flex;
+    justify-content: center;
+    gap: 5px;
+    align-items: center;
+    opacity: 0.4;
+    padding-top: 55px;
+    padding-bottom: 55px;
+    width: 100%;
+    
+}
+
+.containerdecorativo p{
+    font-size: 1rem;
+}
+
+
+.botonSesion{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.botonSesion .botonGoogle{
+    background-color: #cfcbcb;
+    color: black;
+    border-radius: 20px;
+    width: 70%;
+    height: auto;
+    font-size: 1.0rem;
+    border: none;
+    padding: 10px;
+    max-width: 300px;
+    min-height: 40px;
+}
+
+.botonSesion .botonAdmin{
+    background-color: #005dc2;
+    width: 40%;
+    height: auto;
+    color: white;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    border: none;
+    padding: 10px;
+    max-width: 170px;
+    min-height: 35px;
+    transition: background-color 0.3s ease;
+
+}
+
+.botonSesion .botonAdmin:hover {
+    background-color: #003c8f; 
+    cursor: pointer; 
+}
+
+.botonSesion .botonAdmin:active {
+    background-color: #042a5f; 
+
+}
+
+.diseñoRalla{
+    width: 45px;
+    height: 1px;
+    background-color: gray;
+}
+
+
+.containerCredenciales{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-top: 5vh;
+    padding-left: 20px;
+    padding-right: 20px;
+    gap: 15px;
+    width: 80%;
+}
+.containerCredenciales .InputCredenciales{
+    width: 100%;
+    max-width: 350px;
+}
+
+.containerCredenciales .inputdatos{
+    width: 100%;
+    height: auto;
+    border-radius: 5px;
+    padding: 10px;
+    font-size: 1rem;
+    border: 1px solid #bfbfbf;
+}
+
+.containerCredenciales .inputdatos:focus{
+    outline: none;
+    border: 1px solid #005dc2;
+}
+
+.containerContraseña{
+    width: 100%;
+    max-width: 350px;
+
+}
+
+.inputContraseña {
+    position: relative;
+    width: 100%;
+    height: auto;
+    border-radius: 5px;
+    padding: 10px;
+    font-size: 1rem;
+    border: 1px solid #bfbfbf;
+    max-width: 350px;
+    
+}
+
+.inputContraseña input{
+    border: none;
+    width: 90%;
+
+}
+
+.inputContraseña input:focus{
+    outline: none;
+    border: none;
+}
+
+.inputContraseña:focus-within {
+    outline: none;
+    border: 1px solid #005dc2;
+}
+
+.botonVerContraseña{
+    position: absolute;
+    display: block;
+    background-color: white;
+    border: none;
+    font-size: 1rem;
+    color: black;
+    padding-top: 5px;
+    right: 15px;
+    bottom: 10px;
+    cursor: pointer;
+}
+
+.containerCredencialesHeader{
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+    width: 100%;
+    max-width: 350px;
+}
+
+.containerCredenciales p{
+    font-size: 1rem;
+    padding-bottom: 5px;
+}
+
+.containerIniciar{
+    display: flex;  
+    flex-direction: column;
+    align-items: center;
+    padding-top: 4vh;
+    width: 100%;
+}
+
+.botonIniciar{
+    background-color: #005dc2;
+    width: 100%;
+    height: auto;
+    color: white;
+    border-radius: 20px;
+    font-size: 1rem;
+    border: none;
+    padding: 10px;
+    max-width: 140px;
+    min-height: 35px;
+    transition: background-color 0.3s ease;
+
+}
+
+.botonIniciar:hover {
+    background-color: #003c8f; 
+    cursor: pointer; 
+}
+
+.botonIniciar:active {
+    background-color: #042a5f; 
+
+}
+
+.containerOlvide{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding-top: 5vh;
+    width: 100%;
+    transition: color 0.3s ease;
+}
+
+.containerOlvide button{
+    background-color: transparent;
+    font-size: 1rem;
+    border: none;
+    color: #005dc2;
+}
+
+.containerOlvide button:hover{
+    color: #003c8f; 
+    cursor: pointer; 
+}
+
+.containerOlvide button:active{
+    color: #000000; 
+}
+
