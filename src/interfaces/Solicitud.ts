@@ -1,17 +1,17 @@
-import { TipoRecinto } from "./TipoRecinto";
+import { Tipo_Recinto } from "./Tipo_Recinto";
 
 export interface Solicitud {
     id: number;
-    nombreLocacion: string;
+    nombre_locacion: string;
     direccion: string;
-    tipoRecinto: TipoRecinto;  // FK
+    tipo_recinto: Tipo_Recinto;  // FK
     documentacion: string;
     estado: string;
-    fechaIngreso: Date;
-    respuestaRechazo: string;
-    fechaRevision: Date;
-    porcentajePcd: number;
-    cumpleLey21015: boolean;
-    cumpleLey20422: boolean;
-    accesibilidadCertificada: boolean;
+    fecha_ingreso: Date;
+    respuesta_rechazo: string;
+    fecha_revision: Date;
+    porcentaje_pcd: number;
+    cumple_ley_21015: boolean;
+    cumple_ley_20422: boolean;
+    accesibilidad_certificada: boolean;
   };
