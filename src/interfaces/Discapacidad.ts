@@ -2,7 +2,7 @@ import { Usuarios } from "./Usuarios";
 
 export interface Discapacidad {
   id: number;
-  id_usuarios: Usuarios;            // FK
+  id_usuario: Usuarios;            // FK
   nombre: string;
   tipo: string;
 }

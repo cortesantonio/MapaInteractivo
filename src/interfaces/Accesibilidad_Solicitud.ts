@@ -1,9 +1,9 @@
-import { Solicitud } from "./Solicitud";
+import { Solicitudes } from "./Solicitudes";
 import { Accesibilidad } from "./Accesibilidad";
 
 export interface Accesibilidad_Solicitud {
     id: number;
-    id_solicitud: Solicitud;        // FK
+    id_solicitud: Solicitudes;        // FK
     id_accesibilidad: Accesibilidad; // FK
   }
   

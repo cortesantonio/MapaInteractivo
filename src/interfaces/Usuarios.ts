@@ -7,7 +7,7 @@ export interface Usuarios {
     genero: string;
     edad: number;
     telefono: number;
-    contraseña: string;
+    password: string;
     rol: string;
     activo: boolean;
   }
