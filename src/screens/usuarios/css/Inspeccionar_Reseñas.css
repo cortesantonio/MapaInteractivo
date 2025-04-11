@@ -1,0 +1,196 @@
+html, body {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    overflow: hidden;
+}
+.container {
+    margin: 0;
+    padding: 0;
+}
+
+
+.header {
+    background-image: url("https://lh3.googleusercontent.com/gps-cs-s/AB5caB9eZeqiYZh_N6HddUd7JMb6o7pqX4RRnEi7nILjYXDI7kkYSnjc_vaeigx7oH_ya-PravH6AY-cDaK_Whg_xln3BIzCQQYzWkoH6xltRO771yV22JQs9BVH0mIQMcRyRveNe0Sd=w426-h240-k-no");
+    background-size: cover;
+    background-position: center;
+    height: 400px;
+    width: 98%;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    padding: 20px;
+    color: white;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+    margin-bottom: 15px;
+}
+
+.header::before {
+    content: "";
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: linear-gradient(to top, rgba(0, 0, 0, 0.6), transparent);
+    z-index: 1;
+    border-radius: 10px;
+}
+
+.header * {
+    position: relative;
+    z-index: 2;
+}
+
+.icono {
+    position: absolute;
+    top: 15px;  
+    left: 15px;
+    cursor: pointer;
+    font-size: 1.2rem;
+    color: white;
+    transition: transform 0.2s ease;
+    z-index: 3;
+}
+.icono:hover {
+    transform: scale(1.1);
+}
+
+
+.titulo-locacion h1 {
+    margin: 0;
+    font-size: 2rem;
+    font-weight: 600;
+}
+
+.info-locacion {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 1.2rem;
+    margin-top: 5px;
+}
+
+.text {
+    font-size: 0.9rem;
+    margin-left: 5px;
+    opacity: 0.9;
+}
+
+.contenido-reseña {
+    overflow-y: auto;
+    max-height: 600px;
+    overflow-y: auto;
+    padding: 10px;
+    margin: 0 auto;
+    width: 90%;
+    background-color: #f9f9f9;
+    border-radius: 10px;
+}
+
+.titulo-reseña h4 {
+    font-size: 1.6rem;
+    font-weight: 500;
+    margin: 20px;
+    color: #333;
+}
+
+.titulo-reseña hr {
+    width: 90%;
+    margin: 0 auto;
+    border: 0.5px solid #ccc;
+}
+
+.autor-reseña {
+    margin: 20px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.autor-reseña h1 {
+    font-size: 1.2rem;
+    margin: 0;
+}
+
+.autor-reseña svg {
+    color: crimson;
+    cursor: pointer;
+    transition: transform 0.2s ease;
+}
+.autor-reseña svg:hover {
+    transform: scale(1.2);
+}
+
+.calificacion-fecha {
+    margin: 20px;
+    font-size: 1rem;
+    color: #444;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.texto-reseña {
+    margin: 20px;
+    font-size: 1rem;
+    line-height: 1.6;
+    color: #333;
+    text-align: justify;
+}
+
+.trash-button {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    color: red;
+    border: 1px solid red;
+    border-radius: 50%;
+    width: 35px;
+    height: 35px;
+    transition: all 0.2s ease;
+}
+
+.autor-reseña {
+    margin: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between; 
+}
+
+.trash-button:hover {
+    background-color: red;
+    color: white;
+    transform: scale(1.1);
+}
+
+.estrella {
+    color: #ffbf00;
+}
+
+
+@media (max-width: 600px) {
+    .header {
+        height: 250px;
+        padding: 15px;
+    }
+
+    .titulo-locacion h1 {
+        font-size: 1.4rem;
+    }
+
+    .info-locacion {
+        font-size: 1rem;
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .texto-reseña {
+        font-size: 0.9rem;
+    }
+
+    .trash-button {
+        width: 30px;
+        height: 30px;
+    }
+}
+
