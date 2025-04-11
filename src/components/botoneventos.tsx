@@ -19,7 +19,7 @@ function BotonEventos() {
 
     const getInitialPosition = () => {
         return {
-            right: window.innerWidth <= 768 ? "10%" : `${window.innerWidth - 345}px`,
+            right: window.innerWidth <= 768 ? "10%" : `${window.innerWidth - 325}px`,
         };
     };
 
