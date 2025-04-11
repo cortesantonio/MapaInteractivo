@@ -10,10 +10,9 @@ function Footer() {
     const [userIsVisible, setUserIsVisible] = useState(false);
     const [microphoneIsVisible, setMicrophoneIsVisible] = useState(false);
     const [modoNocturno, setModoNocturno] = useState(false)
-    const [modoCompacto, setModoCompacto] = useState(false)
     const [tamanoFuente, setTamanoFuente] = useState(1)
     const [width, setWidth] = useState(window.innerWidth <= 768 ? "80%" : "300px");
-    const [height, setHeight] = useState("0px");
+    const setHeight = useState("0px") [1]// Cambiado a una variable de estado para controlar la altura del panel
     const [opacity, setOpacity] = useState(0);
 
 
@@ -137,6 +136,7 @@ function Footer() {
                 transform: "translatex(-50%)",
                 position: "fixed",
                 transition: "width 0.3s ease",
+                left: "50%",
             }}
         >
 
