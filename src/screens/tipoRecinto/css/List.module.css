@@ -1,0 +1,157 @@
+* {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+}
+
+.container {
+    position: relative;
+    width: 100%;
+
+    background-color: white;
+    display: flex;
+    flex-direction: column;
+    color: black;
+
+}
+
+.header {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    margin-bottom: 15px;
+}
+
+.filtros {
+    display: flex;
+    gap: 5px;
+    justify-content: left;
+    flex-direction: column;
+    margin-bottom: 25px;
+}
+
+.filtros .buscar {
+    display: flex;
+    justify-content: right;
+}
+
+.filtros .buscar form {
+    display: flex;
+    gap: 5px;
+}
+
+.filtros .buscar form input {
+    padding: 2px;
+    border-radius: 5px;
+    border: 1px solid gray;
+}
+
+.filtros .buscar form button {
+    background-color: transparent;
+    border: none;
+    outline: none;
+
+}
+
+.filtroCard {
+    border: 1px solid gray;
+    padding: 2px 10px 2px 10px;
+    border-radius: 15px;
+    font-size: 0.8rem;
+    cursor: pointer;
+    transition: 0.2s all;
+    margin-bottom: 15px;
+    background-color: transparent;
+}
+
+.agregarCard {
+    background: rgb(253, 29, 29);
+    background: linear-gradient(90deg, rgba(253, 29, 29, 1) 0%, rgba(255, 106, 60, 1) 100%);
+    border: 1px solid gray;
+    padding: 2px 10px 2px 10px;
+    border-radius: 15px;
+    font-size: 0.8rem;
+    cursor: pointer;
+    transition: 0.2s all;
+    margin-bottom: 15px;
+    color: white;
+    border: none;
+}
+
+
+.filtroCard form select {
+    border: none;
+}
+
+.filtroCard:hover {
+    transform: scale(98%);
+}
+
+.card {
+    display: flex;
+    padding: 20px;
+    justify-content: center;
+    align-items: center;
+    background-color: white;
+    gap: 30px;
+    width: auto;
+    border-bottom: 1px solid rgb(209, 209, 209);
+    width: fit-content;
+
+}
+
+.cardContent p {
+    width: 200px;
+    text-align: left;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+
+}
+
+.card .estado {
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+
+}
+
+.card .opciones {
+    display: flex;
+    gap: 10px;
+}
+
+.card .opciones button {
+    background-color: transparent;
+    color: black;
+    padding: 0;
+    width: 20px;
+    height: 30px;
+    outline: none;
+    transition: 0.5s all;
+    border: none;
+    cursor: pointer;
+
+}
+
+.card .opciones button:hover {
+    transform: scale(110%);
+    color: gray;
+}
+
+.cardContent p {
+    font-size: 1rem;
+
+}
+
+.content {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+}
