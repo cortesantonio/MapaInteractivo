@@ -1,4 +1,4 @@
-import styles from "../usuarios/css/Gestion_Reseñas.module.css";
+import styles from "../resenas/css/Gestion_Resenas.module.css";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faMagnifyingGlass, 
 faFilter, 
@@ -11,7 +11,7 @@ import { useState } from 'react';
 
 
 
-function Gestion_Reseñas () {
+function Gestion_Resenas () {
 
     const [isActiveBuscador, setIsActiveBuscador] = useState(false);
     const [Tipo_Ubicacion_Seleccionado,  setTipo_Ubicacion_Seleccionado] = useState('');
@@ -151,4 +151,4 @@ function Gestion_Reseñas () {
 }
 
 
-export default Gestion_Reseñas;
+export default Gestion_Resenas;
