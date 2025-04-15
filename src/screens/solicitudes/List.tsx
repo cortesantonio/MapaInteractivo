@@ -1,57 +1,133 @@
 import styles from './List.module.css'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faEye, faMagnifyingGlass, faFilter, faSort, faCheck, faX, faInfo } from '@fortawesome/free-solid-svg-icons';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { Solicitudes } from '../../interfaces/Solicitudes';
+import { supabase } from '../../services/supabase';
 
 function List() {
-
     const [isActiveBuscador, setIsActiveBuscador] = useState(false);
+    const [solicitudes, setSolicitudes] = useState<Solicitudes[]>([]);
+    const [busqueda, setBusqueda] = useState('');
+    const [filtroEstado, setFiltroEstado] = useState('');
+    const [orden, setOrden] = useState('desc');
 
-    function handleBuscador() {
-        setIsActiveBuscador(prevState => !prevState);
+    useEffect(() => {
+        const fetchSolicitudes = async () => {
+            const { data, error } = await supabase
+                .from('solicitudes')
+                .select('*')
+                .order('fecha_ingreso', { ascending: orden === 'asc' });
+
+            if (error) console.error('Error al obtener solicitudes:', error);
+            else setSolicitudes(data);
+        };
+
+        fetchSolicitudes();
+    }, [orden]);
+
+    function iconos(tipo: string) {
+        switch (tipo) {
+            case 'pendiente':
+                return faEye;
+            case 'aprobado':
+                return faCheck;
+            case 'rechazado':
+                return faX;
+            default:
+                return faInfo;
+        }
     }
+
+    function bgcolor(tipo: string) {
+        switch (tipo) {
+            case 'pendiente':
+                return 'rgb(223, 171, 0)';
+            case 'aprobado':
+                return 'rgb(65, 170, 17)';
+            case 'rechazado':
+                return 'rgb(170, 17, 17)';
+            default:
+                return 'rgb(97, 97, 97)';
+        }
+    }
+
+    const solicitudesFiltradas = solicitudes
+        .filter((sol) =>
+            sol.nombre_locacion.toLowerCase().includes(busqueda.toLowerCase())
+        )
+        .filter((sol) =>
+            filtroEstado ? sol.estado === filtroEstado : true
+        );
+
+
+    function handleRechazar(id: number) {
+        const confirmRe = window.confirm('¿Estás seguro de que quieres RECHAZAR esta solicitud?');
+        if (confirmRe) {
+            const rechazarSolicitud = async () => {
+                const { data, error } = await supabase.from('solicitudes').update({ estado: 'rechazado' })
+                    .eq('id', id)
+                    .select();
+
+                if (error) {
+                    console.error('Error al rechazar la solicitud:', error);
+                } else {
+                    setSolicitudes((prevSolicitudes) =>
+                        prevSolicitudes.map((sol) =>
+                            sol.id === id ? { ...sol, estado: 'rechazado' } : sol
+                        )
+
+                    );
+                    alert('Solicitud rechazada con éxito');
+                }
+            };
+
+            rechazarSolicitud();
+        }
+    }
+
 
     return (
         <div className={styles.container}>
             <header className={styles.header}>
                 <hr style={{ maxWidth: '70%', minWidth: '150px', width: '60%' }} />
-                <h2 style={{textAlign:'right'}} >Gestion de solicitudes</h2>
+                <h2 style={{ textAlign: 'right' }} >Gestión de solicitudes</h2>
             </header>
+
             <div className={styles.filtros}>
                 <div style={{ display: 'flex', gap: '5px' }}>
-
-                    <button className={styles.filtroCard} onClick={() => handleBuscador()} >
+                    <button className={styles.filtroCard} onClick={() => setIsActiveBuscador(prev => !prev)} >
                         <FontAwesomeIcon icon={faMagnifyingGlass} /> Buscador
                     </button>
 
                     <div className={styles.filtroCard}>
-                        <form action="">
-                            <label htmlFor="filtro"><FontAwesomeIcon icon={faFilter} /> </label>
-                            <select name="filtro" id="">
-                                <option value="">Filtro</option>
-                                <option value="">Pendiente</option>
-                                <option value="">Aprobado</option>
-                                <option value="">Rechazado</option>
-                            </select>
-                        </form>
+                        <label htmlFor="filtro"><FontAwesomeIcon icon={faFilter} /> </label>
+                        <select id="filtro" onChange={(e) => setFiltroEstado(e.target.value)}>
+                            <option value="">Todos</option>
+                            <option value="pendiente">Pendiente</option>
+                            <option value="aprobado">Aprobado</option>
+                            <option value="rechazado">Rechazado</option>
+                        </select>
                     </div>
 
                     <div className={styles.filtroCard}>
-                        <form action="">
-                            <label htmlFor="orden">
-                                <FontAwesomeIcon icon={faSort} />
-                            </label>
-                            <select name="orden" id="">
-                                <option value="">Mas reciente</option>
-                                <option value="">Mas antiguo</option>
-                            </select>
-                        </form>
+                        <label htmlFor="orden"><FontAwesomeIcon icon={faSort} /></label>
+                        <select id="orden" onChange={(e) => setOrden(e.target.value)}>
+                            <option value="desc">Más reciente</option>
+                            <option value="asc">Más antiguo</option>
+                        </select>
                     </div>
                 </div>
+
                 {isActiveBuscador &&
                     <div className={styles.buscar}>
-                        <form action="">
-                            <input type="text" placeholder='Buscar' />
+                        <form onSubmit={(e) => e.preventDefault()}>
+                            <input
+                                type="text"
+                                placeholder='Buscar por locación'
+                                value={busqueda}
+                                onChange={(e) => setBusqueda(e.target.value)}
+                            />
                             <button type='submit'><FontAwesomeIcon icon={faMagnifyingGlass} /></button>
                         </form>
                     </div>
@@ -61,68 +137,30 @@ function List() {
             <div className={styles.content}>
                 <p style={{ color: 'gray' }}>Listado de Solicitudes</p>
                 <hr style={{ width: '25%', marginTop: '10px', marginBottom: '10px ', opacity: '50%' }} />
-                <div className={styles.card} >
-                    <div className={styles.estado}
-                        style={{ backgroundColor: 'rgb(223, 171, 0)' }}
-                    >
-                        <FontAwesomeIcon icon={faEye} size='xl' style={{ color: 'white' }} />
 
+                {solicitudesFiltradas.map((solicitud) => (
+                    <div className={styles.card} key={solicitud.id}>
+                        <div className={styles.estado}
+                            style={{ backgroundColor: bgcolor(solicitud.estado) }}
+                        >
+                            <FontAwesomeIcon icon={iconos(solicitud.estado)} size='xl' style={{ color: 'white' }} />
+                        </div>
+                        <div className={styles.cardContent}>
+                            <p style={{ color: solicitud.nombre_locacion.length > 0 ? 'black' : 'red' }}>
+                                {solicitud.nombre_locacion.length > 0 ? solicitud.nombre_locacion : 'Sin nombre'}
+                            </p>
+                            <p style={{ color: solicitud.direccion.length > 0 ? 'gray' : 'red', fontSize: '0.9rem' }}>
+                                {solicitud.direccion.length > 0 ? solicitud.direccion : 'Sin dirección'}
+                            </p>
+                        </div>
+                        <div className={styles.opciones}>
+                            <button><FontAwesomeIcon icon={faInfo} /> Revisar</button>
+                        </div>
                     </div>
-                    <div className={styles.cardContent}>
-                        <p style={{ color: 'black' }}>O'Higgins / Prat</p>
-                        <p style={{ color: 'gray', fontSize: '0.9rem' }}>Arturo Prat 700, Curicó, Maule</p>
-                    </div>
-
-                    <div className={styles.opciones}>
-                        <button><FontAwesomeIcon icon={faInfo} /></button>
-
-                        <button><FontAwesomeIcon icon={faX} /></button>
-                    </div>
-                </div>
-
-                <div className={styles.card} >
-                    <div className={styles.estado}
-                        style={{ backgroundColor: 'rgb(0, 173, 14)' }}
-                    >
-                        <FontAwesomeIcon icon={faCheck} size='xl' style={{ color: 'white' }} />
-
-                    </div>
-                    <div className={styles.cardContent}>
-                        <p style={{ color: 'black' }}>Hites</p>
-                        <p style={{ color: 'gray', fontSize: '0.9rem' }}>Arturo Prat 630, Curicó, Maule</p>
-                    </div>
-
-                    <div className={styles.opciones}>
-                        <button><FontAwesomeIcon icon={faInfo} /></button>
-
-                        <button><FontAwesomeIcon icon={faX} /></button>
-                    </div>
-                </div>
-
-                <div className={styles.card} >
-                    <div className={styles.estado}
-                        style={{ backgroundColor: 'rgb(173, 0, 0)' }}
-                    >
-                        <FontAwesomeIcon icon={faX} size='xl' style={{ color: 'white' }} />
-
-                    </div>
-                    <div className={styles.cardContent}>
-                        <p style={{ color: 'black' }}>Escorial De Curico</p>
-                        <p style={{ color: 'gray', fontSize: '0.9rem' }}>Yungay 475, Curicó, Maule</p>
-                    </div>
-                    <div className={styles.opciones}>
-                        <button><FontAwesomeIcon icon={faInfo} /></button>
-
-                        <button><FontAwesomeIcon icon={faX} /></button>
-                    </div>
-                </div>
-
+                ))}
             </div>
-
         </div>
     )
-
 }
-
 
 export default List;
