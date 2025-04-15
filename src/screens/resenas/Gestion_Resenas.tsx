@@ -1,154 +1,176 @@
 import styles from "../resenas/css/Gestion_Resenas.module.css";
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faMagnifyingGlass, 
-faFilter, 
-faSort,
-faEllipsisVertical,
-faBuilding,
-faTheaterMasks,faCar,faLocationDot} from '@fortawesome/free-solid-svg-icons';
-import { useState } from 'react';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import {
+  faMagnifyingGlass,
+  faFilter,
+  faEllipsisVertical,
+  faBuilding,
+  faTheaterMasks,
+  faCar,
+  faLocationDot,
+} from '@fortawesome/free-solid-svg-icons';
+import { useEffect, useState } from 'react';
+import { supabase } from '../../services/supabase';
 
+function Gestion_Resenas() {
+  const [isActiveBuscador, setIsActiveBuscador] = useState(false);
+  const [busqueda, setBusqueda] = useState('');
+  const [Tipo_Ubicacion_Seleccionado, setTipo_Ubicacion_Seleccionado] = useState('');
+  const [Estado_De_Datos] = useState(true);
 
+  const [ubicaciones] = useState([
+    {
+      nombre_recinto: 'Teatro Provincial De Curico',
+      direccion: 'Carmen 556-560, 3341768 Curicó, Maule',
+      tipo_Recinto: 'Teatro',
+      Fecha_Ingreso: '09-04-2025',
+    },
+    {
+      nombre_recinto: 'Al Forno Pizza Romana',
+      direccion: 'Av. Balmaceda 1715,Curicó, Maule',
+      tipo_Recinto: 'Restaurante',
+      Fecha_Ingreso: '08-04-2025',
+    },
+    {
+      nombre_recinto: 'Estacionamiento',
+      direccion: 'Manuel Montt 598-562, Curicó, Maule',
+      tipo_Recinto: 'Estacionamiento',
+      Fecha_Ingreso: '07-04-2025',
+    },
+  ]);
 
+  const [Gestion_resenas, Set_Resenas] = useState<any[]>([]);
 
-function Gestion_Resenas () {
-
-    const [isActiveBuscador, setIsActiveBuscador] = useState(false);
-    const [Tipo_Ubicacion_Seleccionado,  setTipo_Ubicacion_Seleccionado] = useState('');
-    const [Seleccion_de_Orden, setSeleccion_de_Orden] = useState ("")
-
-    function handleBuscador() {
-        setIsActiveBuscador(prevState => !prevState);
-    }
-
-    const [ubicaciones] = useState([
-        { nombre_locacion: 'Teatro Provincial De Curico', Ubicacion: 'Carmen 556-560, 3341768 Curicó, Maule',Tipo: "Teatro", Fecha_Ingreso: "09-04-2025"},
-        { nombre_locacion: 'Al Forno Pizza Romana', Ubicacion: 'Av. Balmaceda 1715,Curicó, Maule',Tipo: "Restaurante",Fecha_Ingreso: "08-04-2025"},
-        { nombre_locacion: 'Estacionamiento', Ubicacion: 'Manuel Montt 598-562, Curicó, Maule', Tipo:"Estacionamiento", Fecha_Ingreso: "07-04-2025"},
-    ]);
-    
-    const [busqueda, setBusqueda] = useState('');
-
-    function handleBusquedaChange(e: React.ChangeEvent<HTMLInputElement>) {
-        setBusqueda(e.target.value);
-    }
-    
-        const usuariosFiltrados = ubicaciones.filter((locacion) => {
-        const coincideNombre = locacion.nombre_locacion.toLowerCase().includes(busqueda.toLowerCase());
-        const coincideTipo_De_Ubicacion = Tipo_Ubicacion_Seleccionado === '' || locacion.Tipo === Tipo_Ubicacion_Seleccionado;
-        return coincideNombre && coincideTipo_De_Ubicacion;
-    }).sort (
-        (a,b) => {
-            if (Seleccion_de_Orden === "reciente") {
-                return new Date(b.Fecha_Ingreso).getTime() - new Date(a.Fecha_Ingreso).getTime();
-              }
-            
-              if (Seleccion_de_Orden === "antiguo") {
-                return new Date(a.Fecha_Ingreso).getTime() - new Date(b.Fecha_Ingreso).getTime();
-              }
-            
-              return 0; 
+  useEffect(() => {
+    const consulta_Sql = async () => {
+      if (!Estado_De_Datos) {
+        const { data, error } = await supabase
+          .from('marcador')
+          .select(`
+            id,
+            nombre_recinto,
+            direccion,
+            tipo_recinto (
+              id,
+              tipo
+            ),
+            solicitudes (
+              fecha_ingreso
+            )
+          `);
+        if (error) {
+          console.log('Error al Obtener las reseñas', error);
+        } else {
+          Set_Resenas(data);
         }
-    )
+      }
+    };
 
-    function iconos (tipo:string) {
+    consulta_Sql();
+  }, [Estado_De_Datos]);
 
-        switch (tipo) {
-            case "Teatro":
-                return faTheaterMasks;
-            case "Restaurante":
-                return faBuilding;
-            case "Estacionamiento":
-                return faCar;
-            default:
-                return faLocationDot
-        }
+  function handleBuscador() {
+    setIsActiveBuscador(prev => !prev);
+  }
+
+  function handleBusquedaChange(e: React.ChangeEvent<HTMLInputElement>) {
+    setBusqueda(e.target.value);
+  }
+
+  function iconos(tipo: string) {
+    switch (tipo) {
+      case 'Teatro':
+        return faTheaterMasks;
+      case 'Restaurante':
+        return faBuilding;
+      case 'Estacionamiento':
+        return faCar;
+      default:
+        return faLocationDot;
     }
-    
+  }
 
-    return (
-        <div className={styles.container}>
-            <header className={styles.header}>
-                <hr style={{ maxWidth: '70%', minWidth: '150px', width: '60%' }} />
-                <h2 style={{textAlign:'right'}} >Gestion de Reseñas</h2>
-            </header>
-            <div className={styles.filtros}>
-                <div style={{ display: 'flex', gap: '5px' }}>
+  const datosBase = Gestion_resenas.map(item => ({
+    nombre_recinto: item.nombre_recinto,
+    direccion: item.direccion,
+    tipo_Recinto: item.tipo_recinto?.tipo || "Sin tipo",
+    Fecha_Ingreso: item.solicitudes?.[0]?.fecha_ingreso || "Sin fecha",
+  }));
 
-                    <button className={styles.filtroCard} onClick={() => handleBuscador()} >
-                        <FontAwesomeIcon icon={faMagnifyingGlass} /> Buscador
-                    </button>
+  const datosParaMostrar = Estado_De_Datos ? ubicaciones : datosBase;
 
-                    
+  const usuariosFiltrados = datosParaMostrar
+    .filter(loc => {
+      const coincideNombre = loc.nombre_recinto.toLowerCase().includes(busqueda.toLowerCase());
+      const coincideTipo = Tipo_Ubicacion_Seleccionado === '' || loc.tipo_Recinto === Tipo_Ubicacion_Seleccionado;
+      return coincideNombre && coincideTipo;
+    })
 
-                    <div className={styles.filtroCard}>
-                        <form action="">
-                            <label htmlFor="filtro"><FontAwesomeIcon icon={faFilter} /> </label>
-                            <select name="filtro" value={Tipo_Ubicacion_Seleccionado} onChange={
-                                (e) => setTipo_Ubicacion_Seleccionado(e.target.value)
-                            }>
-                                <option value="">Todos</option>
-                                <option value="Teatro">Teatro</option>
-                                <option value="Restaurante">Restaurante</option>
-                                <option value="Estacionamiento">Estacionamiento</option>
-                            </select>
-                        </form>
-                    </div>
+  return (
+    <div className={styles.container}>
+      <header className={styles.header}>
+        <hr style={{ maxWidth: '70%', minWidth: '150px', width: '60%' }} />
+        <h2 style={{ textAlign: 'right' }}>Gestion de Reseñas</h2>
+      </header>
 
-                    
-                    
+      <div className={styles.filtros}>
+        <div style={{ display: 'flex', gap: '5px' }}>
+          <button className={styles.filtroCard} onClick={handleBuscador}>
+            <FontAwesomeIcon icon={faMagnifyingGlass} /> Buscador
+          </button>
 
-                    <div className={styles.filtroCard}>
-                        <form action="">
-                            <label htmlFor="orden">
-                                <FontAwesomeIcon icon={faSort} />
-                            </label>
-                            <select value={Seleccion_de_Orden} onChange={(e) =>setSeleccion_de_Orden (e.target.value)}>
-                                <option value="">Sin Ordenar</option>
-                                <option value="reciente">Mas reciente</option>
-                                <option value="antiguo">Mas antiguo</option>
-                            </select>
-                        </form>
-                    </div>
+          <div className={styles.filtroCard}>
+            <label>
+              <FontAwesomeIcon icon={faFilter} />
+            </label>
+            <select value={Tipo_Ubicacion_Seleccionado} onChange={e => setTipo_Ubicacion_Seleccionado(e.target.value)}>
+              <option value="">Todos</option>
+              <option value="Teatro">Teatro</option>
+              <option value="Restaurante">Restaurante</option>
+              <option value="Estacionamiento">Estacionamiento</option>
+            </select>
+          </div>
 
-                   
+         
+        </div>
 
+        {isActiveBuscador && (
+          <div className={styles.buscar}>
+            <form onSubmit={e => e.preventDefault()}>
+              <input type="text" placeholder="Buscar" value={busqueda} onChange={handleBusquedaChange} />
+              <button type="submit">
+                <FontAwesomeIcon icon={faMagnifyingGlass} />
+              </button>
+            </form>
+          </div>
+        )}
+      </div>
 
-                </div>
-                {isActiveBuscador &&
-                    <div className={styles.buscar}>
-                        <form action="">
-                            <input type="text" placeholder='Buscar' value={busqueda} onChange={handleBusquedaChange} />
-                            <button type='submit'><FontAwesomeIcon icon={faMagnifyingGlass} /></button>
-                        </form>
-                    </div>
-                }
-            </div>
-            <div className={styles.content}>
-                <p style={{ color: 'gray' }}>Gestion De Reseñas</p>
-                <hr style={{ width: '25%', marginTop: '10px', marginBottom: '10px ', opacity: '50%' }} />
-                {usuariosFiltrados.map((locacion, index) => (
-        <div className={styles.card} key={index}>
+      <div className={styles.content}>
+        <p style={{ color: 'gray' }}>Gestion De Reseñas</p>
+        <hr style={{ width: '25%', marginTop: '10px', marginBottom: '10px', opacity: '50%' }} />
+
+        {usuariosFiltrados.map((locacion, index) => (
+          <div className={styles.card} key={index}>
             <div className={styles.estado} style={{ backgroundColor: '#0397fc' }}>
-            <FontAwesomeIcon icon={iconos(locacion.Tipo)} size='xl' style={{ color: 'white' }} />
+              <FontAwesomeIcon icon={iconos(locacion.tipo_Recinto)} size="xl" style={{ color: 'white' }} />
             </div>
-            
+
             <div className={styles.cardContent}>
-                <p style={{ color: 'black' }}>{locacion.nombre_locacion}</p>
-                <p style={{ color: 'gray', fontSize: '0.9rem' }}>{locacion.Ubicacion}</p>
+              <p style={{ color: 'black' }}>{locacion.nombre_recinto || "Cargando..."}</p>
+              <p style={{ color: 'gray', fontSize: '0.9rem' }}>{locacion.direccion}</p>
             </div>
+
             <div className={styles.opciones}>
-                <button><FontAwesomeIcon icon={faEllipsisVertical} /></button>
+              <button>
+                <FontAwesomeIcon icon={faEllipsisVertical} />
+              </button>
             </div>
-        </div>
-            ))}
-
-
-            </div>
-
-        </div>
-    )
+          </div>
+        ))}
+      </div>
+    </div>
+  );
 }
-
 
 export default Gestion_Resenas;
