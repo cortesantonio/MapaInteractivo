@@ -5,9 +5,6 @@ import {
   faFilter,
   faEllipsisVertical,
   faBuilding,
-  faTheaterMasks,
-  faCar,
-  faLocationDot,
 } from '@fortawesome/free-solid-svg-icons';
 import { useEffect, useState } from 'react';
 import { supabase } from '../../services/supabase';
@@ -77,18 +74,15 @@ function Gestion_Resenas() {
     setBusqueda(e.target.value);
   }
 
-  function iconos(tipo: string) {
-    switch (tipo) {
-      case 'Teatro':
-        return faTheaterMasks;
-      case 'Restaurante':
-        return faBuilding;
-      case 'Estacionamiento':
-        return faCar;
+  function iconos(nombre: string) {
+
+    switch (nombre) {
       default:
-        return faLocationDot;
+        return faBuilding;
     }
   }
+
+  
 
   const datosBase = Gestion_resenas.map(item => ({
     nombre_recinto: item.nombre_recinto,
@@ -105,6 +99,8 @@ function Gestion_Resenas() {
       const coincideTipo = Tipo_Ubicacion_Seleccionado === '' || loc.tipo_Recinto === Tipo_Ubicacion_Seleccionado;
       return coincideNombre && coincideTipo;
     })
+
+    const tipo_ubicacion = ["Teatro","Restaurante", "Estacionamiento"]
 
   return (
     <div className={styles.container}>
@@ -123,11 +119,11 @@ function Gestion_Resenas() {
             <label>
               <FontAwesomeIcon icon={faFilter} />
             </label>
-            <select value={Tipo_Ubicacion_Seleccionado} onChange={e => setTipo_Ubicacion_Seleccionado(e.target.value)}>
+              <select value={Tipo_Ubicacion_Seleccionado} onChange={e => setTipo_Ubicacion_Seleccionado(e.target.value)}>
               <option value="">Todos</option>
-              <option value="Teatro">Teatro</option>
-              <option value="Restaurante">Restaurante</option>
-              <option value="Estacionamiento">Estacionamiento</option>
+              {tipo_ubicacion.map(tipo => (
+              <option key={tipo} value={tipo}>{tipo}</option>
+              ))}
             </select>
           </div>
 
