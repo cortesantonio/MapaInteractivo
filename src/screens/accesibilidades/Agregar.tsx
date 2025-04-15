@@ -88,7 +88,7 @@ export default function AgregarAccesibilidad() {
                         <option value="CA">CA </option>
                     </select>
                     <label className={styles.labelSeccion} >Nombre</label>
-                    <input name="nombreAccesibilidad" onChange={handleChange}
+                    <input name="nombre" onChange={handleChange}
                         className={styles.inputText} />
                 </div>
 
