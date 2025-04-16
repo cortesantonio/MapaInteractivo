@@ -5,7 +5,7 @@ export interface Usuarios {
     nombre: string;
     correo: string;
     genero: string;
-    edad: number;
+    fecha_nacimiento: Date;
     telefono: number;
     password: string;
     rol: string;
