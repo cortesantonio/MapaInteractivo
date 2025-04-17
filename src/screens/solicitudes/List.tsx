@@ -30,9 +30,9 @@ function List() {
         switch (tipo) {
             case 'pendiente':
                 return faEye;
-            case 'aprobado':
+            case 'aprobada':
                 return faCheck;
-            case 'rechazado':
+            case 'rechazada':
                 return faX;
             default:
                 return faInfo;
@@ -43,9 +43,9 @@ function List() {
         switch (tipo) {
             case 'pendiente':
                 return 'rgb(223, 171, 0)';
-            case 'aprobado':
+            case 'aprobada':
                 return 'rgb(65, 170, 17)';
-            case 'rechazado':
+            case 'rechazada':
                 return 'rgb(170, 17, 17)';
             default:
                 return 'rgb(97, 97, 97)';
@@ -59,33 +59,6 @@ function List() {
         .filter((sol) =>
             filtroEstado ? sol.estado === filtroEstado : true
         );
-
-
-    function handleRechazar(id: number) {
-        const confirmRe = window.confirm('¿Estás seguro de que quieres RECHAZAR esta solicitud?');
-        if (confirmRe) {
-            const rechazarSolicitud = async () => {
-                const { data, error } = await supabase.from('solicitudes').update({ estado: 'rechazado' })
-                    .eq('id', id)
-                    .select();
-
-                if (error) {
-                    console.error('Error al rechazar la solicitud:', error);
-                } else {
-                    setSolicitudes((prevSolicitudes) =>
-                        prevSolicitudes.map((sol) =>
-                            sol.id === id ? { ...sol, estado: 'rechazado' } : sol
-                        )
-
-                    );
-                    alert('Solicitud rechazada con éxito');
-                }
-            };
-
-            rechazarSolicitud();
-        }
-    }
-
 
     return (
         <div className={styles.container}>
