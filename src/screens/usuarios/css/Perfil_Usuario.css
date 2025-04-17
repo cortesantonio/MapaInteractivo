@@ -1,114 +1,119 @@
 html, body {
-    height: 100%;
-    margin: 0;
-    padding: 0;
-    background-color: #fff;
-    font-family: sans-serif;
-    overflow: hidden;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  background-color: #fff;
+  font-family: sans-serif;
+  overflow-x: hidden;
 }
-  .container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding: 30px 20px;
-    height: 100vh;
-    box-sizing: border-box;
+
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 30px 20px;
+  box-sizing: border-box;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.flecha {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  padding: 10px;
+  color: #000;
+  cursor: pointer;
+  z-index: 1000;
+  font-size: 20px;
+}
+
+.titulo {
+  font-size: 1.5rem;
+  color: #000;
+  margin-top: 40px;
+  text-align: center;
+}
+
+.perfil-icono {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #0397fc;
+  border-radius: 50%;
+  width: 120px;
+  height: 120px;
+  margin: 20px 0;
+}
+
+.icono-usuario {
+  color: white;
+  font-size: 60px;
+}
+
+.info {
+  width: 100%;
+}
+
+.campo {
+  margin-bottom: 20px;
+}
+
+.label {
+  font-weight: bold;
+  color: #000;
+  font-size: 16px;
+}
+
+.valor {
+  color: #333;
+  font-size: 15px;
+  margin-top: 5px;
+}
+
+hr {
+  border: 0;
+  border-top: 1px solid #ccc;
+  margin: 10px 0;
+  width: 100%;
+}
+
+.btn-editar {
+  display: flex;
+  justify-content: flex-start;
+  width: 100%;
+  margin-top: 30px;
+}
+
+.btn-editar button {
+  background-color: #fff;
+  color: red;
+  border: none;
+  padding: 10px 20px;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+/* Responsive para móviles */
+@media (max-width: 600px) {
+  .perfil-icono {
+    width: 100px;
+    height: 100px;
   }
-  
-  .flecha {
-    position: absolute;
-    top: 20px;
-    left: 20px;
-    padding: 10px;
-    color: #000;
-    cursor: pointer;
-    z-index: 1000;
+
+  .icono-usuario {
+    font-size: 50px;
+  }
+
+  .titulo {
     font-size: 20px;
   }
-  
-  .titulo {
-    font-size: 1.1rem;
-    color: #000;
-    margin: 10px 0;
-    text-align: center;
+
+  .label, .valor {
+    font-size: 14px;
   }
-  
-  .perfil-icono {
-    display: flex;
+
+  .btn-editar {
     justify-content: center;
-    align-items: center;
-    background-color: #0397fc;
-    border-radius: 50%;
-    width: 120px;
-    height: 120px;
-    margin-top: 10px;
   }
-  
-  .icono-usuario {
-    color: white;
-    font-size: 60px;
-  }
-  
-.container .nombre-completo {
-    font-weight: 500;
-    font-size: 1.2rem;
-    color: #000;
-    margin: 10px 0 30px 0;
-  }
-  
-  .info {
-    width: 230%;
-    max-width: 600px;
-  }
-  
-  .campo {
-    margin-bottom: 20px;
-  }
-  
-  .label {
-    display: flex;
-    align-items: flex-start;
-    font-weight: bold;
-    color: #000;
-    font-size: 16px;
-  }
-  
-  .valor {
-    display: flex;
-    align-items: flex-start;
-    color: #000;
-    font-size: 15px;
-    margin: 5px 0;
-  }
-  
-  hr {
-    border: 0;
-    border-top: 1px solid #ccc;
-    margin-top: 10px;
-    width: 100%;
-  }
-  
-  /* Responsive para móviles */
-  @media (max-width: 600px) {
-    .perfil-icono {
-      width: 100px;
-      height: 100px;
-    }
-  
-    .icono-usuario {
-      font-size: 50px;
-    }
-  
-    .titulo {
-      font-size: 20px;
-    }
-  
-    .nombre-completo {
-      font-size: 16px;
-    }
-  
-    .label, .valor {
-      font-size: 14px;
-    }
-  }
-  
+}
