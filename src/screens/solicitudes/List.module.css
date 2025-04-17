@@ -65,8 +65,9 @@
     background-color: transparent;
 }
 
-.filtroCard form select {
+.filtroCard  select {
     border: none;
+    outline: none;
 }
 
 .filtroCard:hover {
@@ -108,13 +109,15 @@
 .card .opciones button {
     background-color: transparent;
     color: black;
-    padding: 0;
-    width: 20px;
-    height: 30px;
     outline: none;
     transition: 0.5s all;
     border: none;
     cursor: pointer;
+    display: flex;
+    flex-direction: row;
+    gap: 5px;
+    color: rgb(1, 1, 158);
+
 
 }
 

@@ -1,20 +1,20 @@
 import { useState, useEffect } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faChevronDown, faMapLocation, faLocationPin, faLocationCrosshairs, faUser, faMicrophone, faCar, faTrain, faMotorcycle, faPersonWalking, faClockRotateLeft, faCircleXmark, faPersonBiking, faPlus, faMinus } from "@fortawesome/free-solid-svg-icons";
+import Reconocimiento from "../components/reconocimientodevoz";
+
 
 
 //Funcionamiento completo del footer 
 function Footer() {
     //Controla el Panel que mostrara la informacion del maplocation y del userperson
-    const [maplocationIsVsible, setMapLocationIsVisible] = useState(false);
-    const [userIsVisible, setUserIsVisible] = useState(false);
-    const [microphoneIsVisible, setMicrophoneIsVisible] = useState(false);
+    const [panelActivo, setPanelActivo] = useState<"map" | "user" | "microphone" | null>(null);
     const [modoNocturno, setModoNocturno] = useState(false)
     const [tamanoFuente, setTamanoFuente] = useState(1)
     const [width, setWidth] = useState(window.innerWidth <= 768 ? "80%" : "300px");
-    const setHeight = useState("0px") [1]// Cambiado a una variable de estado para controlar la altura del panel
-    const [opacity, setOpacity] = useState(0);
-
+    const setHeight = useState("0px")[1]// Cambiado a una variable de estado para controlar la altura del panel
+    const [Isdisplay, setIsdisplay] = useState("none");
+    const [activarReconocimiento, setactivarReconocimiento] = useState(false);
 
     //Cumple la funcion de ajutar el viewport, la config inicial y el listar, la limpieza al desmontar el componente
     useEffect(() => {
@@ -27,87 +27,36 @@ function Footer() {
     });
 
     //Funcion Separada de cada Bottom cuando se activa uno el otro se cancela
-    const mapFooter = () => {
-        if (userIsVisible) {
-            setHeight("0px");
-            setOpacity(0);
-            setTimeout(() => setUserIsVisible(false), 300);
-        }
-        if (microphoneIsVisible) {
-            setHeight("0px");
-            setOpacity(0);
-            setTimeout(() => setMicrophoneIsVisible(false), 300);
-        }
-        if (maplocationIsVsible) {
-            setHeight("0px");
-            setOpacity(0);
-            setTimeout(() => setMapLocationIsVisible(false), 300);
+    const togglePanel = (panel: "map" | "user" | "microphone") => {
+        if (panelActivo === panel) {
+            closePanel();
         } else {
-            setMapLocationIsVisible(true);
-            setTimeout(() => {
-                setHeight("350px");
-                setOpacity(1);
-            }, 10);
-        }
-    };
 
-    const userFooter = () => {
-        if (maplocationIsVsible) {
-            setHeight("0px");
-            setOpacity(0);
-            setTimeout(() => setMapLocationIsVisible(false), 300);
-        }
-        if (microphoneIsVisible) {
-            setHeight("0px");
-            setOpacity(0);
-            setTimeout(() => setMicrophoneIsVisible(false), 300);
-        }
-        if (userIsVisible) {
-            setHeight("0px");
-            setOpacity(0);
-            setTimeout(() => setUserIsVisible(false), 300);
-        } else {
-            setUserIsVisible(true);
+            setPanelActivo(panel);
             setTimeout(() => {
+                setIsdisplay("block");
                 setHeight("350px");
-                setOpacity(1);
             }, 10);
         }
     };
-
-    const microphoneFooter = () => {
-        if (maplocationIsVsible) {
-            setHeight("0px");
-            setOpacity(0);
-            setTimeout(() => setMapLocationIsVisible(false), 300);
-        }
-        if (userIsVisible) {
-            setHeight("0px");
-            setOpacity(0);
-            setTimeout(() => setUserIsVisible(false), 300);
-        }
-        if (microphoneIsVisible) {
-            setHeight("0px");
-            setOpacity(0);
-            setTimeout(() => setMicrophoneIsVisible(false), 300);
+    
+    useEffect(() => {
+        if (panelActivo === "microphone") {
+          setactivarReconocimiento(true);
         } else {
-            setMicrophoneIsVisible(true);
-            setTimeout(() => {
-                setHeight("350px");
-                setOpacity(1);
-            }, 10);
+          setactivarReconocimiento(false);
         }
-    };
+      }, [panelActivo]);
 
     const closePanel = () => {
-        setHeight("0px")
-        setOpacity(0)
+        setHeight("0px");
+        setIsdisplay("none");
+        setactivarReconocimiento(false);
         setTimeout(() => {
-            setMapLocationIsVisible(false)
-            setMicrophoneIsVisible(false)
-            setUserIsVisible(false)
-        }, 300)
-    }
+            setPanelActivo(null);
+        }, 300);
+    };
+
     const aumentarFuente = () => {
         if (tamanoFuente < 1.5) {
             setTamanoFuente(tamanoFuente + 0.1)
@@ -151,26 +100,18 @@ function Footer() {
                     gap: 10,
                 }}
             >
-                <button onClick={mapFooter} style={{ background: "transparent", padding: "20px", outline: "none", border: "none", margin: "10px" }}>
-                    {maplocationIsVsible ? (
-                        <FontAwesomeIcon icon={faChevronDown} size="xl" style={{ color: "blue" }} />
-                    ) : (
-                        <FontAwesomeIcon icon={faMapLocation} size="xl" style={{ color: "gray" }} />
-                    )}
+                <button onClick={() => togglePanel("map")} style={{ background: "transparent", padding: "20px", outline: "none", border: "none", margin: "10px" }}>
+                    <FontAwesomeIcon icon={panelActivo === "map" ? faChevronDown : faMapLocation} size="xl" style={{ color: panelActivo === "map" ? "blue" : "gray" }} />
                 </button>
 
 
 
-                <button onClick={userFooter} style={{ background: "transparent", padding: "20px", outline: "none", border: "none", margin: "10px" }}>
-                    {userIsVisible ? (
-                        <FontAwesomeIcon icon={faUser} size="xl" style={{ color: "blue" }} />
-                    ) : (
-                        <FontAwesomeIcon icon={faUser} size="xl" style={{ color: "gray" }} />
-                    )}
+                <button onClick={() => togglePanel("user")} style={{ background: "transparent", padding: "20px", outline: "none", border: "none", margin: "10px" }}>
+                    <FontAwesomeIcon icon={faUser} size="xl" style={{ color: panelActivo === "user" ? "blue" : "gray" }} />
                 </button>
             </div>
 
-            <button onClick={microphoneFooter} style={{ // El boton del Microphone esta aparte pero dentro del cotenedor principal
+            <button onClick={() => togglePanel("microphone")} style={{ // El boton del Microphone esta aparte pero dentro del cotenedor principal
                 position: "fixed",
                 bottom: "25px",
                 left: "50%",
@@ -188,11 +129,7 @@ function Footer() {
                 zIndex: 4,
                 cursor: "pointer"
             }}>
-                {microphoneIsVisible ? (
-                    <FontAwesomeIcon icon={faCircleXmark} size="xl" style={{ color: "white" }} />
-                ) : (
-                    <FontAwesomeIcon icon={faMicrophone} size="xl" style={{ color: "white" }} />
-                )}
+                <FontAwesomeIcon icon={panelActivo === "microphone" ? faCircleXmark : faMicrophone} size="xl" style={{ color: "white" }} />
             </button>
 
             <div // Panel de despliegue para cada informacion de Visualizacion 
@@ -206,11 +143,11 @@ function Footer() {
                     backgroundColor: "white",
                     overflow: "hidden",
                     height: "450px",
-                    opacity: opacity,
+                    display: Isdisplay,
                     transition: "height 0.3s ease, opacity 0.3s ease",
                 }}
             >
-                {maplocationIsVsible && ( //Vista de los contenidos que tendra el panel de trazado de rutas
+                {panelActivo === "map" && ( //Vista de los contenidos que tendra el panel de trazado de rutas
 
                     <div style={{ padding: "20px", position: "relative", height: "100%", overflow: "auto", fontSize: `${tamanoFuente}rem` }}>
                         <button
@@ -389,7 +326,7 @@ function Footer() {
 
                 )}
 
-                {userIsVisible && ( // Visualizacion de los datos que vera el usuario y sus funciones correspondientes
+                {panelActivo === "user" && ( // Visualizacion de los datos que vera el usuario y sus funciones correspondientes
                     <div style={{ padding: "20px", position: "relative", height: "100%", overflow: "auto", fontSize: `${tamanoFuente}rem` }}>
                         <div style={{
                             flexDirection: "column",
@@ -543,24 +480,38 @@ function Footer() {
 
                 )}
 
-                {microphoneIsVisible && ( //Vista de la funcion que realiza el Microphone
-                    <div style={{ padding: "15px", position: "relative", height: "50%", overflow: "auto", fontSize: `${tamanoFuente}rem` }}>
-                        <button
-                            onClick={closePanel}
-                            style={{
-                                position: "absolute",
-                                top: "1px",
-                                right: "1px",
-                                background: "transparent",
-                                padding: "10px",
-                                border: "none",
-                                cursor: "pointer"
+                {panelActivo === "microphone" && ( //Vista de la funcion que realiza el Microphone
+                    <div style={{ padding: "15px", position: "relative", height: "80%", overflow: "auto", fontSize: `${tamanoFuente}rem` }}>
+                        {panelActivo !== null && (
+                            <button
+                                onClick={closePanel}
+                                style={{
+                                    position: "absolute",
+                                    top: "1px",
+                                    right: "1px",
+                                    background: "transparent",
+                                    padding: "10px",
+                                    border: "none",
+                                    cursor: "pointer",
+                                }}
+                            >
+                                <FontAwesomeIcon icon={faCircleXmark} style={{ color: "red" }} size="xl" />
+                            </button>
+                        )}
+                        <h3 style={{ color: "black", font: " 120% sans-serif", marginTop: "50px", textAlign: "center" }}>Te Escucho ¿Donde Quieres Ir...?</h3>
 
+                        <div
+                            style={{
+                                display: "flex",
+                                justifyContent: "center",
+                                alignItems: "center",
+                                marginTop: "30px",
+                                flexDirection: "column",
+                                gap: "20px",
                             }}
                         >
-                            <FontAwesomeIcon icon={faCircleXmark} style={{ color: "red" }} size="xl" />
-                        </button>
-                        <h3 style={{ color: "black", font: " 120% sans-serif", marginTop: "50px", textAlign: "center" }}>Te Escucho ¿Donde Quieres Ir...?</h3>
+                            <Reconocimiento activarReconocimiento={activarReconocimiento}/>
+                        </div>
 
                     </div>
 
