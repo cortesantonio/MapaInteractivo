@@ -17,11 +17,14 @@
     "@vis.gl/react-google-maps": "^1.5.2",
     "date-fns": "^4.1.0",
     "react": "^18.2.0",
-    "react-dom": "^18.2.0"
+    "react-audio-visualize": "^1.2.0",
+    "react-dom": "^18.2.0",
+    "react-speech-recognition": "^4.0.0"
   },
   "devDependencies": {
     "@types/react": "^18.2.66",
     "@types/react-dom": "^18.2.22",
+    "@types/react-speech-recognition": "^3.9.6",
     "@typescript-eslint/eslint-plugin": "^7.2.0",
     "@typescript-eslint/parser": "^7.2.0",
     "@vitejs/plugin-react": "^4.2.1",
