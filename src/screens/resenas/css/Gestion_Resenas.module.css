@@ -49,18 +49,18 @@
     justify-content: lef1;
 }
 
-.filtros .buscar form {
+.filtros .buscar  {
     display: flex;
     gap: 5px;
 }
 
-.filtros .buscar form input {
+.filtros .buscar input {
     padding: 2px;
     border-radius: 5px;
     border: 1px solid gray;
 }
 
-.filtros .buscar form button {
+.filtros .buscar  button {
     background-color: transparent;
     border: none;
     outline: none;
@@ -78,7 +78,7 @@
     background-color: transparent;
 }
 
-.filtroCard form select {
+.filtroCard  select {
     border: none;
 }
 
@@ -141,6 +141,7 @@
     font-size: 1rem;
 
 }
+
 
 .content {
     display: flex;
