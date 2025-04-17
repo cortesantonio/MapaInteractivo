@@ -82,17 +82,17 @@ ul {
     border-radius: 5px;
 }
 
-.modal form {
+.modal  {
     margin-top: 15px;
     display: flex;
     flex-direction: column;
 }
 
-.modal form textarea {
+.modal  textarea {
     padding: 5px;
     height: 120px;
     margin-bottom: 15px;
-
+    max-width: 95%;
     border: 2px solid rgb(221, 221, 221);
     border-radius: 5px;
     outline: none;
