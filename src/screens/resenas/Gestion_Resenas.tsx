@@ -104,6 +104,8 @@ function Gestion_Resenas() {
         )}
       </div>
 
+      
+
       <div className={styles.content}>
         <p style={{ color: 'gray' }}>Gestion De Reseñas</p>
         <hr style={{ width: '25%', marginTop: '10px', marginBottom: '10px', opacity: '50%' }} />
