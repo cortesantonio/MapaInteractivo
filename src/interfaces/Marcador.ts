@@ -8,7 +8,7 @@ export interface Marcador {
   pagina_web: string;
   telefono: string;
   id_solicitud?: number;
-  latitud: number;
-  longitud: number;
+  latitud?: number;
+  longitud?: number;
   activo: boolean
 }
