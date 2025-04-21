@@ -16,8 +16,8 @@ const useGetCalendario = () => {
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
 
-  const calendarId = "";
-  const apiKey = "";
+  const calendarId = "correoprueba56026@gmail.com";
+  const apiKey = import.meta.env.VITE_GOOGLE_APIKEY;
 
   useEffect(() => {
     const fetchEvents = async () => {
