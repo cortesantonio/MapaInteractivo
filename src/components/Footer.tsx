@@ -2,11 +2,13 @@ import { useState, useEffect } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faChevronDown, faMapLocation, faLocationPin, faLocationCrosshairs, faUser, faMicrophone, faCar, faTrain, faMotorcycle, faPersonWalking, faClockRotateLeft, faCircleXmark, faPersonBiking, faPlus, faMinus } from "@fortawesome/free-solid-svg-icons";
 import Reconocimiento from "../components/reconocimientodevoz";
+import { useNavigate } from "react-router-dom";
 
 
 
 //Funcionamiento completo del footer 
 function Footer() {
+    const navigate = useNavigate()
     //Controla el Panel que mostrara la informacion del maplocation y del userperson
     const [panelActivo, setPanelActivo] = useState<"map" | "user" | "microphone" | null>(null);
     const [modoNocturno, setModoNocturno] = useState(false)
@@ -39,14 +41,14 @@ function Footer() {
             }, 10);
         }
     };
-    
+
     useEffect(() => {
         if (panelActivo === "microphone") {
-          setactivarReconocimiento(true);
+            setactivarReconocimiento(true);
         } else {
-          setactivarReconocimiento(false);
+            setactivarReconocimiento(false);
         }
-      }, [panelActivo]);
+    }, [panelActivo]);
 
     const closePanel = () => {
         setHeight("0px");
@@ -363,12 +365,14 @@ function Footer() {
                                         marginTop: "5px",
                                         cursor: "pointer",
                                     }}
+                                    onClick={() => { navigate('/login') }}
                                 >
                                     INICIAR SESIÓN
                                 </button>
 
                                 <div>
-                                    <button style={{ color: "black", background: "transparent", outline: "none", border: "none", padding: "10px" }}>
+                                    <button style={{ color: "black", background: "transparent", outline: "none", border: "none", padding: "10px" }}
+                                        onClick={() => { navigate('/colaborar') }}>
                                         Colaborar
                                     </button>
                                 </div>
@@ -510,7 +514,7 @@ function Footer() {
                                 gap: "20px",
                             }}
                         >
-                            <Reconocimiento activarReconocimiento={activarReconocimiento}/>
+                            <Reconocimiento activarReconocimiento={activarReconocimiento} />
                         </div>
 
                     </div>

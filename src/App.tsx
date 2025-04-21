@@ -1,56 +1,80 @@
 import './App.css'
-import Buscador from './components/Buscador';
-import BotonEventos from './components/botoneventos';
-import Map from './components/Map';
-import Footer from './components/Footer';
+import { Routes, Route } from 'react-router-dom'
 
-// Solicitudes
-/* 
-import AgregarSolicitud from './screens/solicitudes/AgregarSolicitud';
-import List from './screens/solicitudes/List'; */
+// vistas generales
+import LoginUsuario from './screens/Login/loginUsuario'
+import Home from './screens/Home'
 
-//ACCESIBILIDADES
+// vistas administrador
+import VistaAdministrador from './screens/vistaAdministrador/VistaAdministrador'
 
-/* import AgregarAccesibilidad from './screens/accesibilidades/Agregar';
-import ListAccesibilidades from './screens/accesibilidades/List';
+import List from './screens/marcadores/List'
+import AgregarMarcador from './screens/marcadores/AgregarMarcador'
+import InfoDetallada from './screens/marcadores/InfoDetallada'
+import EditarLocation from './screens/marcadores/EditarLocacion'
 
- */
+import Gestion_Usuarios from './screens/usuarios/Gestion_Usuarios'
+import Agregar_Usuarios from './screens/usuarios/Agregar_Usuarios'
+import Editar_Usuarios from './screens/usuarios/Editar_Usuarios'
+import Perfil_Usuario from './screens/usuarios/Perfil_Usuarios'
+
+import AgregarAccesibilidad from './screens/accesibilidades/Agregar'
+import ListAccesibilidades from './screens/accesibilidades/List'
+
+import AgregarTipoRecinto from './screens/tipoRecinto/Agregar'
+import ListTipoRecinto from './screens/tipoRecinto/List'
+
+import Gestion_Resenas from './screens/resenas/Gestion_Resenas'
+import Inspeccionar_Resenas from './screens/resenas/Inspeccionar_Resenas'
+
+import AgregarSolicitud from './screens/solicitudes/AgregarSolicitud'
+import ListSolicitudes from './screens/solicitudes/List'
 
 
-//LOGIN 
-/* import LoginUsuario from './screens/Login/loginUsuario'; */
-
-//MARCADORES
-/* import VerMarcador from './screens/marcadores/VerMarcador';
- */
-
-import AgregarTipoRecinto from './screens/tipoRecinto/Agregar';
-import ListTipoRecinto from './screens/tipoRecinto/List';
+import VerMarcador from './screens/marcadores/VerMarcador'
 
 function App() {
 
   return (
-    <div style={{ height: '100%', width: '100%', position: 'fixed' }}>
+    <div>
+      <Routes>
+        <Route path='/' element={<Home />} />
+        <Route path='/login' element={<LoginUsuario />} />
 
-      {/* <Map />
-      <Buscador />
-      <BotonEventos />
-      <Footer /> */}
-
-      {/* <AgregarSolicitud />
-      <List /> */}
+        <Route path='/colaborar' element={<AgregarSolicitud />} />
 
 
-      {/*  <AgregarAccesibilidad />
-      <ListAccesibilidades /> */}
+        <Route path='/panel-administrativo' element={<VistaAdministrador />} />
 
-      {/* <LoginUsuario /> */}
+        <Route path='/panel-administrativo/marcadores' element={< List />} />
+        <Route path='/panel-administrativo/marcadores/agregar' element={< AgregarMarcador />} />
+        <Route path='/panel-administrativo/marcadores/informacion' element={< InfoDetallada />} />
+        <Route path='/panel-administrativo/marcadores/editar' element={< EditarLocation />} />
 
-      {/* <VerMarcador /> */}
+        <Route path='/panel-administrativo/usuarios' element={< Gestion_Usuarios />} />
+        <Route path='/panel-administrativo/usuarios/perfil' element={< Perfil_Usuario />} />
+        <Route path='/panel-administrativo/usuarios/agregar' element={<Agregar_Usuarios />} />
+        <Route path='/panel-administrativo/usuarios/editar' element={<Editar_Usuarios />} />
 
-        {/* < AgregarTipoRecinto />
-      <ListTipoRecinto /> */}
-      
+
+        <Route path='/panel-administrativo/accesibilidades' element={< ListAccesibilidades />} />
+        <Route path='/panel-administrativo/accesibilidades/agregar' element={< AgregarAccesibilidad />} />
+
+        <Route path='/panel-administrativo/tipo-recinto' element={< ListTipoRecinto />} />
+        <Route path='/panel-administrativo/tipo-recinto/agregar' element={< AgregarTipoRecinto />} />
+
+        <Route path='/panel-administrativo/resenas' element={< Gestion_Resenas />} />
+        <Route path='/panel-administrativo/resenas/inspeccionar' element={< Inspeccionar_Resenas />} />
+
+        <Route path='/panel-administrativo/solicitudes' element={<ListSolicitudes />} />
+
+
+        <Route path='vermarcador' element={<VerMarcador />} />
+
+
+        <Route path='*' element={<h1>404 NOT FOUND</h1>} />
+
+      </Routes>
     </div>
 
   )

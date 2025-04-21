@@ -1,7 +1,7 @@
-
+import { useNavigate } from "react-router-dom";
 
 function VistaAdministrador() {
-
+    const navigate = useNavigate();
 
     return (
         <div
@@ -53,7 +53,7 @@ function VistaAdministrador() {
                         border: "none",
                         fontSize: "17px",
                         padding: "5px"
-                    }}
+                    }} onClick={() => { navigate('/panel-administrativo/marcadores') }}
                     >Gestión de marcadores
                     </button>
 
@@ -67,7 +67,7 @@ function VistaAdministrador() {
                             fontSize: "17px",
                             marginTop: "5px",
                             padding: "4px"
-                        }}
+                        }} onClick={() => { navigate('/panel-administrativo/usuarios') }}
                     >Gestión de usuarios
                     </button>
 
@@ -81,8 +81,9 @@ function VistaAdministrador() {
                             fontSize: "17px",
                             marginTop: "5px",
                             padding: "4px"
-                        }}
-                    >Gestión de reseñas
+                        }} onClick={() => { navigate('/panel-administrativo/resenas') }}
+                    >
+                        Gestión de reseñas
                     </button>
 
                     <button
@@ -95,9 +96,25 @@ function VistaAdministrador() {
                             border: "none",
                             fontSize: "17px",
                             padding: "4px"
-                        }}
+                        }} onClick={() => { navigate('/panel-administrativo/accesibilidades') }}
                     >Gestión de accesibilidades
                     </button>
+
+                    <button
+                        style={{
+                            color: "black",
+                            background: "transparent",
+                            outline: "none",
+                            display: "flex",
+                            marginTop: "5px",
+                            border: "none",
+                            fontSize: "17px",
+                            padding: "4px"
+                        }} onClick={() => { navigate('/panel-administrativo/tipo-recinto') }}
+                    >Gestión de recinto
+                    </button>
+
+
                 </div>
             </div>
 
@@ -131,7 +148,7 @@ function VistaAdministrador() {
                         border: "none",
                         fontSize: "17px",
                         padding: "4px"
-                    }}>* nuevas solicitudes.</button>
+                    }} onClick={() => { navigate('/panel-administrativo/solicitudes') }}  >* nuevas solicitudes.</button>
 
                     <button
                         style={{
@@ -143,7 +160,7 @@ function VistaAdministrador() {
                             border: "none",
                             fontSize: "17px",
                             padding: "4px"
-                        }}
+                        }} onClick={() => { navigate('/panel-administrativo/solicitudes') }}
                     >Solicitudes aceptadas.
                     </button>
 
@@ -157,7 +174,7 @@ function VistaAdministrador() {
                             border: "none",
                             fontSize: "17px",
                             padding: "4px"
-                        }}
+                        }} onClick={() => { navigate('/panel-administrativo/solicitudes') }}
                     >Solicitudes rechazadas.
                     </button>
                 </div>
