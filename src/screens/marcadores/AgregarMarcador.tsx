@@ -25,7 +25,7 @@ export default function AgregarMarcador() {
     });
     const [selecciones, setSelecciones] = useState<number[]>([]);
     const [tipoRecinto, setTipoRecinto] = useState<Tipo_Recinto[]>(); // almacena los recintos del llamado a la api
-    const [newMarcador, setnewMarcador] = useState<Marcador>(); // almacena el nuevo marcador que se va a agregar a la base de datos
+    const [newMarcador, setnewMarcador] = useState<Marcadorconaccesibilidad>(); // almacena el nuevo marcador que se va a agregar a la base de datos
 
 
     useEffect(() => {
@@ -79,10 +79,55 @@ export default function AgregarMarcador() {
     };
 
     useEffect(() => {
-        if (newMarcador) {
-            console.log("Nuevo marcador actualizado:", newMarcador);
-        }
+        const guardarMarcador = async () => {
+            if (!newMarcador) return;
+    
+            try {
+                const { data: marcadorInsertado, error: errorMarcador } = await supabase
+                    .from('marcador')
+                    .insert({
+                        nombre_recinto: newMarcador.nombre_recinto,
+                        tipo_recinto: newMarcador.tipo_recinto,
+                        direccion: newMarcador.direccion,
+                        pagina_web: newMarcador.pagina_web,
+                        telefono: newMarcador.telefono,
+                        latitud: newMarcador.latitud,
+                        longitud: newMarcador.longitud,
+                        activo: newMarcador.activo,
+                    })
+                    .select()
+                    .single();
+    
+                if (errorMarcador) {
+                    console.error('Error al guardar marcador:', errorMarcador);
+                    return;
+                }
+    
+                console.log('Marcador guardado:', marcadorInsertado);
+    
+                const relaciones = newMarcador.accesibilidades.map((idAcc) => ({
+                    id_marcador: marcadorInsertado.id,
+                    id_accesibilidad: idAcc,
+                }));
+    
+                const { error: errorRelaciones } = await supabase
+                    .from('accesibilidad_marcador')
+                    .insert(relaciones);
+    
+                if (errorRelaciones) {
+                    console.error('Error al guardar relaciones de accesibilidad:', errorRelaciones);
+                    return;
+                }
+    
+                console.log('Relaciones de accesibilidad guardadas con éxito.');
+            } catch (error) {
+                console.error('Error general al guardar el marcador:', error);
+            }
+        };
+    
+        guardarMarcador();
     }, [newMarcador]);
+    
 
 
     return (
