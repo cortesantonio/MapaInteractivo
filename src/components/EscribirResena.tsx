@@ -2,6 +2,7 @@ import { useState } from 'react';
 import styles from './css/EscribirResena.module.css';
 import { faStar } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { supabase } from '../services/supabase';
 
 interface Props {
     onSubmit: (resena: { calificacion: number; comentario: string }) => void;
@@ -13,13 +14,30 @@ export default function EscribirResena({ onSubmit, onCancel }: Props) {
     const [hover, setHover] = useState(0);
     const [comentario, setComentario] = useState('');
 
-    const handleSubmit = () => {
+    
+
+    const handleSubmit = async () => {
         if (calificacion === 0 || comentario.trim() === '') return;
         onSubmit({ calificacion, comentario });
         setCalificacion(0);
         setComentario('');
-    };
 
+        const { data, error } = await supabase.from('resenas').insert({
+            calificacion,
+            comentario,
+            fecha: new Date(), // Fecha actual
+            id_usuario: 1, 
+            id_marcador: 6,
+          });
+
+          if (error){
+            console.error("No se Puedieron Insertar los Datos",error)
+          }
+
+          else {
+            console.log ("Datos Enviados con Exito",data)
+          }
+    };
     return (
         <div className={styles.formContainer}>
             <h3>Comparte tu experiencia.</h3>
