@@ -1,4 +1,4 @@
-import styles from './AgregarMarcador.module.css'
+import styles from './css/AgregarMarcador.module.css'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faReply } from '@fortawesome/free-solid-svg-icons';
 import { useState, useEffect } from 'react';

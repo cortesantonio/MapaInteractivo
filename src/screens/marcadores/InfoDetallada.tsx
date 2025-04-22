@@ -1,4 +1,4 @@
-import styles from './InfoDetallada.module.css';
+import styles from './css/InfoDetallada.module.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faReply} from '@fortawesome/free-solid-svg-icons';
 
