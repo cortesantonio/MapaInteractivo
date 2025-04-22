@@ -69,6 +69,7 @@ function BotonEventos() {
                 right: position.right,
                 width: width,
                 transition: "width 0.3s ease-in-out",
+                zIndex: 1
             }}
         >
             <div

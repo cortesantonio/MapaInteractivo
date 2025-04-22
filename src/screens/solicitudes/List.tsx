@@ -5,7 +5,7 @@ import { useEffect, useState } from 'react';
 import { Solicitudes } from '../../interfaces/Solicitudes';
 import { supabase } from '../../services/supabase';
 
-function List() {
+function ListSolicitudes() {
     const [isActiveBuscador, setIsActiveBuscador] = useState(false);
     const [solicitudes, setSolicitudes] = useState<Solicitudes[]>([]);
     const [busqueda, setBusqueda] = useState('');
@@ -136,4 +136,4 @@ function List() {
     )
 }
 
-export default List;
+export default ListSolicitudes;
