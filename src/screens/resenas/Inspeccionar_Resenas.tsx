@@ -3,86 +3,46 @@ import { faReply, faStar, faTrash } from '@fortawesome/free-solid-svg-icons';
 import "../resenas/css/Inspeccionar_Resenas.css";
 import { useState, useEffect } from 'react';
 import { supabase } from '../../services/supabase';
+import { Resenas } from '../../interfaces/Resenas';
+
 
 function Inspeccionar_Resenas() {
   const simbolo = ">";
-  const usarDatosSimulados = true;
-  let IdMarcador = 1;
-
-  const datosSimulados = [
-    {
-      id: 1,
-      comentario: "El Teatro Provincial de Curico es, sin duda, una joya cultural que brilla en la ciudad.",
-      fecha: "2025-04-14",
-      calificacion: 5,
-      usuarios: {
-        id: 1,
-        nombre: "Elvis Cofre",
-        correo: "elvis@example.com"
-      },
-      marcador: {
-        id: 1,
-        nombre_recinto: "Teatro Provincial de Curico",
-        direccion: "Carmen 556-560, 3341768 Curicó, Maule"
-      }
-    },
-    {
-      id: 2,
-      comentario: "Hermosa experiencia, todo muy limpio y bien organizado.",
-      fecha: "2025-04-13",
-      calificacion: 4,
-      usuarios: {
-        id: 2,
-        nombre: "Josefina Herrera",
-        correo: "josefina@example.com"
-      },
-      marcador: {
-        id: 1,
-        nombre_recinto: "Teatro Provincial de Curico",
-        direccion: "Carmen 556-560, 3341768 Curicó, Maule"
-      }
-    }
-  ];
-
-  const [resenas, setResenas] = useState<any[]>([]);
-
+  let Marcador = 6; 
+  const [resenas, setResenas] = useState<Resenas[]>([]);
   useEffect(() => {
     const fetchResenas = async () => {
-      if (usarDatosSimulados) {
-        setResenas(datosSimulados);
-      } else {
         const { data, error } = await supabase
           .from('resenas')
           .select(`
             id,
-            comentario,
+            id_marcador (
+            id
+            ),
+            id_usuario (
+            id,
+            nombre
+            ),
             fecha,
             calificacion,
-            usuarios (
-              id,
-              nombre,
-              correo
-            ),
-            marcador (
-              id,
-              nombre_recinto,
-              direccion
-            )
+            comentario
           `)
-          .eq('id_marcador', IdMarcador);
+          .eq('id_marcador', Marcador); 
+          
   
         if (error) {
           console.error("Error al obtener reseñas:", error);
         } else {
-          setResenas(data);
+          setResenas(data as any);
+          console.log("Reseñas obtenidas:", data);
         }
-      }
+      
     };
 
     fetchResenas();
   }, []);
 
-  const marcador = resenas[0]?.marcador;
+  
 
   return (
     <div className="container">
@@ -91,13 +51,13 @@ function Inspeccionar_Resenas() {
           <FontAwesomeIcon icon={faReply} />
         </div>
         <div className="titulo-locacion">
-          <h1>{marcador?.nombre_recinto || "Cargando..."}</h1>
+          <h1>{"Cargando..."}</h1>
         </div>
         <div className="info-locacion">
           <h4>{simbolo} Anfiteatro</h4>
         </div>
         <div className="text">
-          <span>{marcador?.direccion || "Dirección no disponible"}</span>
+          <span>{ "Dirección no disponible"}</span>
         </div>
       </div>
 
@@ -110,7 +70,7 @@ function Inspeccionar_Resenas() {
         {resenas.map((r, index) => (
           <div className="bloque-reseña" key={index}>
             <div className="autor-reseña">
-              <h1>{r.usuarios?.nombre}</h1>
+              <h1>{r.id_usuario.nombre}</h1>
               <div className="trash-button">
                 <FontAwesomeIcon icon={faTrash} />
               </div>
