@@ -5,8 +5,10 @@ import { useState, useEffect } from 'react';
 import { supabase } from '../../services/supabase';
 import { Resenas } from '../../interfaces/Resenas';
 
+
 function Inspeccionar_Resenas() {
   const simbolo = ">";
+  let Marcador = 6; 
   const [resenas, setResenas] = useState<Resenas[]>([]);
   useEffect(() => {
     const fetchResenas = async () => {
@@ -15,9 +17,7 @@ function Inspeccionar_Resenas() {
           .select(`
             id,
             id_marcador (
-            id,
-            nombre_recinto,
-            direccion
+            id
             ),
             id_usuario (
             id,
@@ -27,12 +27,13 @@ function Inspeccionar_Resenas() {
             calificacion,
             comentario
           `)
+          .eq('id_marcador', Marcador); 
           
   
         if (error) {
           console.error("Error al obtener reseñas:", error);
         } else {
-          setResenas(data);
+          setResenas(data as any);
           console.log("Reseñas obtenidas:", data);
         }
       
