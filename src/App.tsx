@@ -30,6 +30,7 @@ import Inspeccionar_Resenas from './screens/resenas/Inspeccionar_Resenas'
 import AgregarSolicitud from './screens/solicitudes/AgregarSolicitud'
 import ListSolicitudes from './screens/solicitudes/List'
 
+import AuthCallback from './screens/AuthCallback'
 
 import VerMarcador from './screens/marcadores/VerMarcador'
 
@@ -71,6 +72,7 @@ function App() {
 
         <Route path='vermarcador' element={<VerMarcador />} />
 
+        <Route path="/auth/callback" element={<AuthCallback />} />
 
         <Route path='*' element={<h1>404 NOT FOUND</h1>} />
 

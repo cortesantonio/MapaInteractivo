@@ -3,12 +3,13 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faChevronDown, faMapLocation, faLocationPin, faLocationCrosshairs, faUser, faMicrophone, faCar, faTrain, faMotorcycle, faPersonWalking, faClockRotateLeft, faCircleXmark, faPersonBiking, faPlus, faMinus } from "@fortawesome/free-solid-svg-icons";
 import Reconocimiento from "../components/reconocimientodevoz";
 import { useNavigate } from "react-router-dom";
-
+import { useAuth } from "../hooks/useAuth";
 
 
 //Funcionamiento completo del footer 
 function Footer() {
     const navigate = useNavigate()
+    const { user } = useAuth();
     //Controla el Panel que mostrara la informacion del maplocation y del userperson
     const [panelActivo, setPanelActivo] = useState<"map" | "user" | "microphone" | null>(null);
     const [modoNocturno, setModoNocturno] = useState(false)
@@ -352,23 +353,43 @@ function Footer() {
                             <h3 style={{ color: "black", margin: "10px", textAlign: "center" }}>Opciones</h3>
 
                             <div style={{ margin: "0px", justifyItems: "left" }}>
+                                {user?.email != null ? (
 
-                                <button
-                                    style={{
-                                        color: "blue",
-                                        background: "transparent",
-                                        outline: "none",
-                                        border: "none",
-                                        fontWeight: "bold",
-                                        padding: "10px",
-                                        textAlign: "center",
-                                        marginTop: "5px",
-                                        cursor: "pointer",
-                                    }}
-                                    onClick={() => { navigate('/login') }}
-                                >
-                                    INICIAR SESIÓN
-                                </button>
+                                    <button
+                                        style={{
+                                            background: "transparent",
+                                            outline: "none",
+                                            border: "none",
+                                            fontWeight: 400,
+                                            padding: "10px",
+                                            textAlign: "center",
+                                            marginTop: "5px",
+                                            cursor: "pointer",
+                                        }}
+                                        onClick={() => { navigate('/') }}
+                                    >
+                                        Ver Perfil
+                                    </button>
+
+
+                                ) : (
+                                    <button
+                                        style={{
+                                            color: "blue",
+                                            background: "transparent",
+                                            outline: "none",
+                                            border: "none",
+                                            fontWeight: "bold",
+                                            padding: "10px",
+                                            textAlign: "center",
+                                            marginTop: "5px",
+                                            cursor: "pointer",
+                                        }}
+                                        onClick={() => { navigate('/login') }}
+                                    >
+                                        INICIAR SESIÓN
+                                    </button>)}
+
 
                                 <div>
                                     <button style={{ color: "black", background: "transparent", outline: "none", border: "none", padding: "10px" }}
