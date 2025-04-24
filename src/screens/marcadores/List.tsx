@@ -120,13 +120,13 @@ function ListMarcadores() {
                 <p style={{ color: 'gray' }}>Gestion De Marcadores </p>
                 <hr style={{ width: '25%', marginTop: '10px', marginBottom: '10px', opacity: '50%' }} />
 
-                {Edificio.map((locacion: { nombre_recinto: string; direccion: string; tipo_recinto: string; }, index: number) => (
+                {Edificio.map((locacion: { id: number; nombre_recinto: string; direccion: string; tipo_recinto: string; }, index: number) => (
                     <div className={styles.card} key={index}>
                         <div className={styles.estado} style={{ backgroundColor: '#0397fc' }}>
                             <FontAwesomeIcon icon={faBuilding} size="xl" style={{ color: 'white' }} />
                         </div>
 
-                        <div className={styles.cardContent}>
+                        <div className={styles.cardContent} style={{cursor:'pointer'}} onClick={() => { navigate(`/panel-administrativo/marcadores/informacion/${locacion.id}`)}}>
                             <p style={{ color: 'black' }}>{locacion.nombre_recinto || "Cargando..."}</p>
                             <p style={{ color: 'gray', fontSize: '0.9rem' }}>{locacion.direccion}</p>
                             <p style={{ color: 'gray', fontSize: '0.9rem' }}>{(locacion.tipo_recinto as any)?.tipo}</p>

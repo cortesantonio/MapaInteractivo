@@ -1,5 +1,5 @@
 import styles from './css/InfoDetallada.module.css';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useState, useEffect } from 'react';
 import { faReply } from '@fortawesome/free-solid-svg-icons';
@@ -13,6 +13,7 @@ interface TipoDeAccesibilidades {
 }
 
 export default function InfoDetallada() {
+    const navigate = useNavigate()
     const { id } = useParams();
     const [accesibilidades, setAccesibilidades] = useState<TipoDeAccesibilidades>({});
     const [nombreTipoRecinto, setNombreTipoRecinto] = useState('');
@@ -48,12 +49,7 @@ export default function InfoDetallada() {
     }, []);
 
 
-
-
-
     useEffect(() => {
-        const id = 9; //Aqui se define manualmente el ID del marcador
-
         const fetchMarcador = async () => {
             const { data, error } = await supabase
                 .from('marcador')
@@ -69,7 +65,7 @@ export default function InfoDetallada() {
                 const { data: relaciones, error: errorRelaciones } = await supabase
                     .from('accesibilidad_marcador')
                     .select('id_accesibilidad')
-                    .eq('id_marcador', id); //  Usa el mismo ID manual
+                    .eq('id_marcador', id);
 
                 if (errorRelaciones) {
                     console.error('Error al obtener relaciones de accesibilidad:', errorRelaciones);
@@ -80,8 +76,10 @@ export default function InfoDetallada() {
             }
         };
 
-        fetchMarcador();
-    }, []);
+        if (id) {
+            fetchMarcador();
+        }
+    }, [id]);
 
 
     useEffect(() => {
@@ -114,7 +112,7 @@ export default function InfoDetallada() {
                     alt=""
                     className={styles.imagenMarcador}
                 />
-                <button className={styles.VolverAtras}>
+                <button style={{ zIndex: 10 }} className={styles.VolverAtras} onClick={() => { navigate(-1) }}>
                     <FontAwesomeIcon icon={faReply} size='2xl' />
                 </button>
                 <div className={styles.Titulo} >
@@ -183,9 +181,9 @@ export default function InfoDetallada() {
 
                     <div className={styles.acciones}>
                         <button type="button" style={{ backgroundColor: "transparent", color: "red" }}>
-                            Eliminar
+                            DESACTIVAR
                         </button>
-                        <button type="submit">Editar</button>
+                        <button type="submit" onClick={() => { navigate(`/panel-administrativo/marcadores/editar/${dataMarcador.id}`) }}>Editar</button>
                     </div>
                 </div>
             </div>
