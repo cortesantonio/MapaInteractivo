@@ -31,7 +31,7 @@ import AgregarSolicitud from './screens/solicitudes/AgregarSolicitud'
 import ListSolicitudes from './screens/solicitudes/List'
 
 
-import VerMarcador from './screens/marcadores/VerMarcador'
+
 
 function App() {
 
@@ -69,7 +69,6 @@ function App() {
         <Route path='/panel-administrativo/solicitudes' element={<ListSolicitudes />} />
 
 
-        <Route path='vermarcador' element={<VerMarcador />} />
 
 
         <Route path='*' element={<h1>404 NOT FOUND</h1>} />

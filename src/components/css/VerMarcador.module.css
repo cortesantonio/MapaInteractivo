@@ -1,7 +1,7 @@
-* {
+/* * {
     box-sizing: border-box;
 
-}
+} */
 
 .container {
     background-color: white;
@@ -125,3 +125,13 @@
     color: #007BFF;
     text-decoration: underline;
 }
+
+
+.cargando {
+    text-align: center;
+    font-size: 1.2rem;
+    color: #74C0FC;
+    font-weight: bold;
+    margin-top: 20px;
+}
+
