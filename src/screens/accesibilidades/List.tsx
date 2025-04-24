@@ -1,15 +1,17 @@
 import styles from './css/List.module.css'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faMagnifyingGlass, faPenToSquare, faUniversalAccess, faDeleteLeft, faPlus } from '@fortawesome/free-solid-svg-icons';
+import { faMagnifyingGlass, faPenToSquare, faUniversalAccess, faDeleteLeft, faPlus, faReply } from '@fortawesome/free-solid-svg-icons';
 import { useState, useEffect } from 'react';
 import { Accesibilidad } from '../../interfaces/Accesibilidad';
 import { supabase } from '../../services/supabase';
 import EditarAccesibilidad from './Editar';
+import { useNavigate } from "react-router-dom";
 
 function ListAccesibilidad() {
     const [accesibilidades, setAccesibilidades] = useState<Accesibilidad[]>([]);
     const [selectedId, setSelectedId] = useState<number | null>(null);
     const [query, setQuery] = useState('');
+    const navigate = useNavigate()
 
     const fetchData = async () => {
         const { data, error } = await supabase
@@ -65,6 +67,9 @@ function ListAccesibilidad() {
 
     return (
         <div className={styles.container}>
+            <button style={{ position: "absolute", left: "15px", top: "4px", border: "none", background: "transparent", fontSize: "25px", alignItems: "start" }} onClick={() => { navigate(-1) }}>
+                <FontAwesomeIcon icon={faReply} />
+            </button>
             <header className={styles.header}>
                 <hr style={{ maxWidth: '70%', minWidth: '150px', width: '60%' }} />
                 <h2 style={{ textAlign: 'right' }} >Gestion de Accesibilidades</h2>

@@ -65,7 +65,7 @@ function LoginUsuario() {
           {Iscambio ? (
             <div>
               <div className={style.containeratras}>
-                <button className={style.botonatras}>
+                <button className={style.botonatras} onClick={() => { navigate('/')}}>
                   <FontAwesomeIcon icon={faArrowLeftLong} />
                 </button>
               </div>
