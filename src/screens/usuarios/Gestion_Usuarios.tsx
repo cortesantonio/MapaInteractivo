@@ -1,11 +1,14 @@
 import styles from "../usuarios/css/Gestion_Usuarios.module.css";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faMagnifyingGlass, faFilter, faUser ,faUserPen,faUserPlus,faTrash} from '@fortawesome/free-solid-svg-icons';
-import { useState,useEffect } from 'react';
+import { faMagnifyingGlass, faFilter, faUser, faUserPen, faUserPlus } from '@fortawesome/free-solid-svg-icons';
+import { useState, useEffect } from 'react';
 import { supabase } from '../../services/supabase';
 import { Usuarios } from '../../interfaces/Usuarios';
+import { useNavigate } from "react-router-dom";
 
 function Gestion_Usuarios() {
+    const navigate = useNavigate()
+
     const [isActiveBuscador, setIsActiveBuscador] = useState(false);
     const [rolSeleccionado, setRolSeleccionado] = useState('');
     const [usuarios, setUsuarios] = useState<Usuarios[]>([]);
@@ -24,19 +27,18 @@ function Gestion_Usuarios() {
                 console.error('Error al obtener datos:', error);
             } else {
                 setUsuarios(usuariosData || []);
-                console.log('Datos de usuarios obtenidos:', usuariosData);
             }
         };
 
         fetchData();
     }, []);
-    
+
     const [busqueda, setBusqueda] = useState('');
 
     function handleBusquedaChange(e: React.ChangeEvent<HTMLInputElement>) {
         setBusqueda(e.target.value);
     }
-    
+
     const usuariosFiltrados = usuarios.filter((usuario) => {
         const coincideNombre = usuario.nombre.toLowerCase().includes(busqueda.toLowerCase());
         const coincideRol = rolSeleccionado === '' || usuario.rol === rolSeleccionado;
@@ -47,7 +49,7 @@ function Gestion_Usuarios() {
         <div className={styles.container}>
             <header className={styles.header}>
                 <hr style={{ maxWidth: '70%', minWidth: '150px', width: '60%' }} />
-                <h2 style={{textAlign:'right'}} >Gestion de Usuarios</h2>
+                <h2 style={{ textAlign: 'right' }} >Gestion de Usuarios</h2>
             </header>
             <div className={styles.filtros}>
                 <div style={{ display: 'flex', gap: '5px' }}>
@@ -59,19 +61,19 @@ function Gestion_Usuarios() {
                         <form action="">
                             <label htmlFor="filtro"><FontAwesomeIcon icon={faFilter} /> </label>
                             <select value={rolSeleccionado} onChange={e => setRolSeleccionado(e.target.value)}>
-                             <option value="">Todos</option>
-                                 {[...new Set(usuarios.map(usuario => usuario.rol))].map((rolUnico, index) => (
-                                <option key={index} value={rolUnico}>
-                                    {rolUnico}
-                                </option>
+                                <option value="">Todos</option>
+                                {[...new Set(usuarios.map(usuario => usuario.rol))].map((rolUnico, index) => (
+                                    <option key={index} value={rolUnico}>
+                                        {rolUnico}
+                                    </option>
                                 ))}
                             </select>
                         </form>
-                    </div>                    
+                    </div>
 
-                    <div className= {styles.add_user}>
+                    <div className={styles.add_user}>
                         <form action="">
-                            <button>
+                            <button onClick={() => { navigate('/panel-administrativo/usuarios/agregar') }}>
                                 <FontAwesomeIcon icon={faUserPlus} /> Nuevo
                             </button>
                         </form>
@@ -90,23 +92,26 @@ function Gestion_Usuarios() {
             <div className={styles.content}>
                 <p style={{ color: 'gray' }}>Gestion Usuarios</p>
                 <hr style={{ width: '25%', marginTop: '10px', marginBottom: '10px ', opacity: '50%' }} />
-                {usuariosFiltrados.map((usuario: {nombre:string,rol:string}, index) => (
-        <div className={styles.card} key={index}>
-            <div className={styles.estado} style={{ backgroundColor: '#0397fc' }}>
-                <FontAwesomeIcon icon={faUser} size='xl' style={{ color: 'white' }} />
-            </div>
-            <div className={styles.cardContent}>
-                <p style={{ color: 'black' }}>{usuario.nombre}</p>
-                 <p style={{ color: 'gray', fontSize: '0.9rem' }}>{usuario.rol}</p> 
-            </div>
-            <div className={styles.opciones}>
-                <button><FontAwesomeIcon icon={faUserPen} /></button>
-            </div>
-            <div className={styles.opciones}>
-                <button><FontAwesomeIcon icon={faTrash} /></button>
-            </div>
-        </div>
-            ))}
+                {usuariosFiltrados.map((usuario, index) => (
+                    <div className={styles.card} key={index}>
+                        <div className={styles.estado} style={{ backgroundColor: '#0397fc' }}>
+                            <FontAwesomeIcon icon={faUser} size='xl' style={{ color: 'white' }} />
+                        </div>
+                        <div
+                            className={styles.cardContent}
+                            style={{ cursor: "pointer" }}
+                            onClick={() => navigate(`/usuario/perfil/${usuario.id}`)}
+                        >
+                            <p style={{ color: 'black' }}>{usuario.nombre}</p>
+                            <p style={{ color: 'gray', fontSize: '0.9rem' }}>{usuario.rol}</p>
+                        </div>
+                        <div className={styles.opciones}>
+                            <button onClick={() => { navigate(`/usuarios/editar/${usuario.id}`) }}>
+                                <FontAwesomeIcon icon={faUserPen} />
+                            </button>
+                        </div>
+                    </div>
+                ))}
 
             </div>
 

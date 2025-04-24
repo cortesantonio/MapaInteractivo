@@ -53,9 +53,9 @@ function App() {
         <Route path='/panel-administrativo/marcadores/editar' element={< EditarLocation />} />
 
         <Route path='/panel-administrativo/usuarios' element={< Gestion_Usuarios />} />
-        <Route path='/panel-administrativo/usuarios/perfil' element={< Perfil_Usuario />} />
+        <Route path='/usuario/perfil/:id' element={< Perfil_Usuario />} />
         <Route path='/panel-administrativo/usuarios/agregar' element={<Agregar_Usuarios />} />
-        <Route path='/panel-administrativo/usuarios/editar' element={<Editar_Usuarios />} />
+        <Route path='/usuarios/editar/:id' element={<Editar_Usuarios />} />
 
 
         <Route path='/panel-administrativo/accesibilidades' element={< ListAccesibilidades />} />
