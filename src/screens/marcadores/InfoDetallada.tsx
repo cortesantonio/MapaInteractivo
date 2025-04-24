@@ -48,23 +48,11 @@ export default function InfoDetallada() {
     }, []);
 
 
-    useEffect(() => {
-        if (!id) return;
-        const fetchMarcador = async () => {
-            const { data, error } = await supabase
-                .from('marcador')
-                .select('*')
-                .eq('id', Number(id))
-                .single();
-            if (error) console.error('Error:', error);
-            else setDataMarcador(data);
-        };
-        fetchMarcador();
-    }, [id]);
+
 
 
     useEffect(() => {
-        const id = 7; //Aqui se define manualmente el ID del marcador
+        const id = 9; //Aqui se define manualmente el ID del marcador
 
         const fetchMarcador = async () => {
             const { data, error } = await supabase
@@ -81,7 +69,7 @@ export default function InfoDetallada() {
                 const { data: relaciones, error: errorRelaciones } = await supabase
                     .from('accesibilidad_marcador')
                     .select('id_accesibilidad')
-                    .eq('id_marcador', 7); //  Usa el mismo ID manual
+                    .eq('id_marcador', id); //  Usa el mismo ID manual
 
                 if (errorRelaciones) {
                     console.error('Error al obtener relaciones de accesibilidad:', errorRelaciones);
