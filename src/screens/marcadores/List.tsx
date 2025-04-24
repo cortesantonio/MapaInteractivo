@@ -5,7 +5,8 @@ import {
     faFilter,
     faEllipsisVertical,
     faBuilding,
-    faLocationDot
+    faLocationDot,
+    faReply
 } from '@fortawesome/free-solid-svg-icons';
 import { useEffect, useState } from 'react';
 import { supabase } from '../../services/supabase';
@@ -70,8 +71,11 @@ function ListMarcadores() {
 
     return (
         <div className={styles.container}>
-            <header className={styles.header}>
-                <hr style={{ maxWidth: '70%', minWidth: '150px', width: '60%' }} />
+            <button style={{ position: "absolute", left: "15px", top: "4px", border: "none", background: "transparent", fontSize: "25px", alignItems: "start" }} onClick={() => { navigate(-1) }}>
+                <FontAwesomeIcon icon={faReply} />
+            </button>
+            <header className={styles.header} style={{paddingTop:'20px'}}>
+                <hr style={{ maxWidth: '70%', minWidth: '150px', width: '60%'}} />
                 <h2 style={{ textAlign: 'right' }}>Gestion de Marcadores</h2>
             </header>
 

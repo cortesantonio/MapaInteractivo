@@ -1,9 +1,10 @@
 import styles from './List.module.css'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faEye, faMagnifyingGlass, faFilter, faSort, faCheck, faX, faInfo } from '@fortawesome/free-solid-svg-icons';
+import { faEye, faMagnifyingGlass, faFilter, faSort, faCheck, faX, faInfo, faReply } from '@fortawesome/free-solid-svg-icons';
 import { useEffect, useState } from 'react';
 import { Solicitudes } from '../../interfaces/Solicitudes';
 import { supabase } from '../../services/supabase';
+import { useNavigate } from "react-router-dom";
 
 function ListSolicitudes() {
     const [isActiveBuscador, setIsActiveBuscador] = useState(false);
@@ -11,6 +12,7 @@ function ListSolicitudes() {
     const [busqueda, setBusqueda] = useState('');
     const [filtroEstado, setFiltroEstado] = useState('');
     const [orden, setOrden] = useState('desc');
+    const navigate = useNavigate()
 
     useEffect(() => {
         const fetchSolicitudes = async () => {
@@ -62,7 +64,10 @@ function ListSolicitudes() {
 
     return (
         <div className={styles.container}>
-            <header className={styles.header}>
+            <button style={{ position: "absolute", left: "15px", top: "4px", border: "none", background: "transparent", fontSize: "25px", alignItems: "start" }} onClick={() => { navigate(-1)}}>
+                <FontAwesomeIcon icon={faReply} />
+            </button>
+            <header className={styles.header} style={{paddingTop:'20px'}}>
                 <hr style={{ maxWidth: '70%', minWidth: '150px', width: '60%' }} />
                 <h2 style={{ textAlign: 'right' }} >Gestión de solicitudes</h2>
             </header>
