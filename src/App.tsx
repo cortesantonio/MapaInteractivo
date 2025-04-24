@@ -32,7 +32,7 @@ import ListSolicitudes from './screens/solicitudes/List'
 
 import AuthCallback from './screens/AuthCallback'
 
-import VerMarcador from './screens/marcadores/VerMarcador'
+
 
 function App() {
 
@@ -70,7 +70,6 @@ function App() {
         <Route path='/panel-administrativo/solicitudes' element={<ListSolicitudes />} />
 
 
-        <Route path='vermarcador' element={<VerMarcador />} />
 
         <Route path="/auth/callback" element={<AuthCallback />} />
 
