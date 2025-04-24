@@ -1,108 +1,161 @@
 .container {
     width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
     margin: 0 auto;
-    padding: 0;
-    overflow: hidden;
 }
 
-.HeaderFijo {
+.header {
     position: relative;
     width: 100%;
-    margin: 0;
-    padding: 0;
+}
+
+.header img {
+    z-index: 0;
+    width: 100%;
+    height: 400px;
+    object-fit: cover;
+    filter: brightness(50%);
+}
+
+.VolverAtras {
+    position: absolute;
+    top: 25px;
+    left: 25px;
+    background-color: transparent;
+    border: none;
+    outline: none;
+    color: white;
 }
 
 .Titulo {
     position: absolute;
-    top: 0;
+    top: 25px;
     left: 0;
-    right: 0;
-    color: rgb(255, 255, 255);
-    padding-left: 15px;
-    text-align: center;
-}
-
-.VolverAtras {
-    background-color: transparent;
-    position: absolute;
-    cursor: pointer;
-    padding: 10px;
-    color: white;
-    font-weight: bold;
-    border: none;
-    top: 10px;
-    left: 10px;
-    width: 40px;
-    height: 40px;
-    z-index: 2;
-}
-
-.imagenMarcador {
-    height: 300px;
     width: 100%;
-    object-fit: cover;
-    display: block;
-    margin-top: 0;
-    padding-top: 0;
-    filter: brightness(50%);
+    text-align: center;
+    color: white;
 }
 
 .locacionTitulo {
     position: absolute;
-    top: 0;
-    font-size: 20px;
+    bottom: 25px;
+    left: 25px;
     color: white;
-    padding-left: 25px;
 }
 
-.locacionSubtitulo {
-    position: absolute;
-    top: 0;
-    font-size: 19px;
-    color: white;
-    padding-left: 25px;
+.Conten {
+    width: 100%;
+    padding: 25px;
+    background-color: #fff;
 }
 
-.formContainer {
+.FormContainer {
+    flex-direction: column;
+}
+
+.formGrid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 10px;
+    margin-bottom: 30px
+}
+
+.formSection {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+s .formSection label {
+    font-size: 16px;
+    font-weight: 600;
+    margin-bottom: -10px;
+}
+
+.formSection p {
+    font-size: 18px;
+    margin: 0;
+    padding: 5px 0;
+    border-bottom: 1px solid #eaeaea;
+}
+
+.labelSeccion {
+    font-size: 16px !important;
+    color: #555;
+    font-weight: 600;
+}
+
+.ContainerinputTelefono {
+    display: flex;
+    align-items: center;
+    width: 100%;
+}
+
+.ContainerinputTelefono:focus-within {
+    border: 2px solid black;
+}
+
+.ContainerinputTelefono p {
+    margin: 3px;
+}
+
+.ContainerinputTelefono input {
+    border: none;
+    outline: none;
+    right: 20px;
+    width: 100%;
+    font-weight: 500;
+    font-size: 1rem;
+}
+
+.gridContainer {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 20px;
+    width: 100%;
     padding: 20px;
-    width: 100%;
+    border-radius: 10px;
 }
 
-.inputText {
-    width: 100%;
-    height: 30px;
-    border-radius: 5px;
-    border: 1px solid rgb(165, 165, 165);
-    margin-bottom: 10px;
-    padding: 0 10px;
-    box-sizing: border-box;
+.accesibilidadGrupo {
+    gap: 10px;
+    display: flex;
+    flex-direction: column;
+    font-size: 17px;
 }
 
-.formselect {
-    width: 100%;
-    padding: 8px;
-    margin-bottom: 15px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
+.accesibilidadGrupo p {
+    margin: 0;
+    color: #333;
 }
 
-.sectionContainer {
-    margin-top: 20px;
-    margin: 5px;
+.opt {
+    display: flex;
+    align-items: center;
+    gap: 8px;
 }
 
-.sectionContainer p {
-    font-weight: bold;
-    margin-top: 15px;
-    margin-bottom: 10px;
+.opt input[type="checkbox"] {
+    width: 18px;
+    height: 18px;
+    accent-color: #4a6da7;
+}
+
+.opt label {
+    font-size: 15px;
+    color: #555;
 }
 
 .acciones {
-    margin: 25px auto;
     width: 100%;
     display: flex;
     justify-content: center;
-    padding-top: 50px;
+    gap: 50px;
+    margin-top: 30px;
+    padding-top: 20px;
+    cursor: pointer;
 }
 
 .acciones button {
@@ -114,99 +167,4 @@
     border: none;
     color: white;
     border-radius: 5px;
-    cursor: pointer;
-}
-
-.scrollSeccion {
-    max-height: 300px;
-    height: fit-content;
-    overflow-y: auto;
-}
-
-
-/* Estilos responsivos */
-
-@media (min-width: 767px) {
-    .Titulo {
-        top: 10px;
-        padding: 5px;
-    }
-    .Titulo h2 {
-        font-size: 2rem;
-    }
-    .VolverAtras {
-        top: 10px;
-        left: 10px;
-        width: 40px;
-        height: 40px;
-    }
-    .locacionTitulo {
-        font-size: 1.5rem;
-        padding-top: 270px;
-    }
-    .locacionSubtitulo {
-        font-size: 1.5rem;
-        padding-top: 320px;
-    }
-    .imagenMarcador {
-        height: 300px;
-    }
-    .formGrid {
-        display: grid;
-        grid-template-columns: repeat(5, 1fr);
-        gap: 20px;
-        margin-top: 20px;
-    }
-    .formSection {
-        margin-bottom: 20px;
-    }
-    .imagenMarcador {
-        height: 400px;
-    }
-    .acciones {
-        gap: 10px;
-    }
-    .acciones button {
-        margin-left: 10px;
-    }
-    .locacionTitulo {
-        font-size: 2.5rem;
-    }
-}
-
-@media (max-width: 767px) {
-    .Titulo h2 {
-        font-size: 1.5rem;
-    }
-    .locacionTitulo {
-        font-size: 1.5rem;
-        padding-top: 240px;
-    }
-    .locacionSubtitulo {
-        font-size: 1rem;
-        padding-top: 290px;
-    }
-    .VolverAtras {
-        top: 10px;
-        left: 10px;
-        width: 20px;
-        height: 20px;
-    }
-    .imagenMarcador {
-        height: 350px;
-    }
-    .formGrid {
-        display: flex;
-        flex-direction: column;
-    }
-    .formSection {
-        margin-bottom: 15px;
-    }
-    .acciones {
-        flex-direction: row;
-        justify-content: space-between;
-    }
-    .acciones button {
-        width: 48%;
-    }
 }
