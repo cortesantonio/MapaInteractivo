@@ -1,11 +1,17 @@
 .titulo {
     width: 100%;
+    padding-top: 20px;
 }
 
 .container {
     display: flex;
+    align-items: center;
     flex-direction: column;
     gap: 10px;
+    height: 100vh;
+    overflow-y: auto;
+    padding: 0 50px;
+    
 }
 
 .acciones {

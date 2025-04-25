@@ -67,20 +67,20 @@ function ListAccesibilidad() {
 
     return (
         <div className={styles.container}>
-            <button style={{ position: "absolute", left: "15px", top: "4px", border: "none", background: "transparent", fontSize: "25px", alignItems: "start" }} onClick={() => { navigate(-1) }}>
+            <button style={{ position: "absolute", left: "15px", top: "10px", border: "none", background: "transparent", fontSize: "25px", alignItems: "start" }} onClick={() => { navigate(-1) }}>
                 <FontAwesomeIcon icon={faReply} />
             </button>
-            <header className={styles.header}>
-                <hr style={{ maxWidth: '70%', minWidth: '150px', width: '60%' }} />
-                <h2 style={{ textAlign: 'right' }} >Gestion de Accesibilidades</h2>
+            <header className={styles.header} style={{ paddingTop:'40px', gap:'15px'}}>
+                <hr style={{ flexGrow: "1"}} />
+                <h2 style={{ textAlign: 'right', paddingRight: "15px", whiteSpace:"nowrap" }} >Gestion de Accesibilidades</h2>
             </header>
             <div className={styles.filtros}>
-                <div style={{ display: 'flex', gap: '5px', justifyContent: 'right' }}>
+                <div style={{ display: 'flex', gap: '5px' }}>
 
                     <button className={styles.filtroCard} onClick={() => handleBuscador()} >
                         <FontAwesomeIcon icon={faMagnifyingGlass} /> Buscador
                     </button>
-                    <button className={styles.agregarCard} style={{backgroundColor:'red'}}>
+                    <button className={styles.agregarCard} style={{backgroundColor:'red'}} onClick={() => navigate('/accesibilidad/agregar')}>
                         <FontAwesomeIcon icon={faPlus} color='white'  /> Agregar
                     </button>
                 </div>

@@ -29,6 +29,7 @@
     justify-content: left;
     flex-direction: column;
     margin-bottom: 25px;
+    padding-left: 50px;  /*Agregado por Mati*/
 }
 
 .add_user button {
@@ -80,6 +81,7 @@
 
 .filtroCard  select {
     border: none;
+    background-color: transparent; 
 }
 
 .filtroCard:hover {
