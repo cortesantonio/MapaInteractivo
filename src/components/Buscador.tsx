@@ -1,12 +1,49 @@
 import { useState, useEffect } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faFilter, faFilterCircleXmark } from "@fortawesome/free-solid-svg-icons";
+import { faFilter, faFilterCircleXmark, faLocationDot } from "@fortawesome/free-solid-svg-icons";
+import styles from "./css/Buscador.module.css";
+
+interface Marcador {
+    id: number;
+    nombre: string;
+    direccion: string;
+    filtros: string[];
+}
+
+const marcadoresSimulados: Marcador[] = [
+    {
+        id: 1,
+        nombre: "Centro Cultural",
+        direccion: "Av. Siempre Viva 123",
+        filtros: ["Rampas", "Baños Adaptados", "Señalización auditiva"]
+    },
+    {
+        id: 2,
+        nombre: "Biblioteca Central",
+        direccion: "Calle de los Libros 456",
+        filtros: ["Ascensores", "Señalización en braille"]
+    },
+];
+
+
 
 function Buscador() {
     const [filtroIsVisible, setFiltroIsVisible] = useState(false);
     const [width, setWidth] = useState(window.innerWidth <= 768 ? "80%" : "300px");
     const [height, setHeight] = useState("0px");
     const [opacity, setOpacity] = useState(0);
+    const [displayFiltro, setDisplayFiltro] = useState("none");
+    const [filtrosActivos, setFiltrosActivos] = useState<Record<string, boolean>>({});
+
+    const [marcadores, setMarcadores] = useState<Marcador[]>([]);
+    const [resultados, setResultados] = useState<Marcador[]>([]);
+    const [busqueda, setBusqueda] = useState<string>("");
+
+    useEffect(() => {
+        // hacer aqui el llamado a la api o al almacen de cache
+
+        setMarcadores(marcadoresSimulados);
+    }, []);
 
     useEffect(() => {
         const handleResize = () => {
@@ -17,61 +54,67 @@ function Buscador() {
         return () => window.removeEventListener("resize", handleResize);
     },);
 
+    const toggleFiltro = (filtro: string) => {
+        setFiltrosActivos(prev => ({
+            ...prev,
+            [filtro]: !prev[filtro]
+        }));
+    };
+
+
+    useEffect(() => {
+        const texto = busqueda.toLowerCase();
+        const filtrosSeleccionados = Object.entries(filtrosActivos)
+            .filter(([_, activo]) => activo)
+            .map(([nombre]) => nombre);
+
+        const filtrados = marcadores.filter((m) => {
+            const coincideTexto =
+                m.nombre.toLowerCase().includes(texto) ||
+                m.direccion.toLowerCase().includes(texto);
+
+            const coincideFiltro = filtrosSeleccionados.every(f =>
+                m.filtros.includes(f)
+            );
+
+            return coincideTexto && (filtrosSeleccionados.length === 0 || coincideFiltro);
+        });
+
+        setResultados(filtrados);
+    }, [busqueda, marcadores, filtrosActivos]);
+
+
     const ampliarBuscador = () => {
         if (filtroIsVisible) {
             setHeight("0px");
             setOpacity(0);
             setTimeout(() => setFiltroIsVisible(false), 300);
+            setDisplayFiltro('none')
         } else {
             setFiltroIsVisible(true);
             setTimeout(() => {
-                setHeight("525px");
+                setHeight("fit-content");
+                setDisplayFiltro('block')
                 setOpacity(1);
             }, 10);
         }
     };
 
     return (
-        <div
+        <div className={styles.container}
             style={{
-                backgroundColor: "white",
-                alignItems: "center",
-                padding: "10px",
-                borderRadius: "15px",
-                gap: "10px",
-                position: "absolute",
-                top: "25px",
-                zIndex: "1",
-                left: "25px",
                 width: width,
                 transition: "width 0.3s ease",
             }}
         >
             <div
-                style={{
-                    display: "flex",
-                    justifyContent: "space-around",
-                    alignItems: "center",
-                    height: "25px",
-                    gap: 10,
-                }}
-            >
-                <img src="src/assets/icons/marcador-negro.png" alt="Marcador" style={{ width: "15px" }} />
+                className={styles.distribucionContainer}>
+                <FontAwesomeIcon icon={faLocationDot} size="xl" />
                 <input
                     type="text"
-
+                    className={styles.inpBuscar}
                     placeholder="Buscador"
-                    style={{
-                        background: "transparent",
-                        color: "black",
-                        border: "none",
-                        fontSize: "1rem",
-                        width: "100%",
-                        height: "25px",
-                        outline: "none",
-                        fontWeight: "bold",
-
-                    }}
+                    onChange={(e) => setBusqueda(e.target.value)}
                 />
 
                 <button onClick={ampliarBuscador} style={{ background: "transparent", padding: "0px", outline: "none", border: "none" }}>
@@ -89,72 +132,154 @@ function Buscador() {
                     height: height,
                     opacity: opacity,
                     transition: "height 0.3s ease, opacity 0.3s ease",
+                    backgroundColor: "white",
+                    marginTop: '10px',
+                    borderRadius: '15px',
+                    padding: '15px',
+                    display: displayFiltro
+
                 }}
             >
                 {filtroIsVisible && (
-                    <div style={{ marginTop: "10px", textAlign: "left" }}>
+                    <div style={{ textAlign: "left" }}>
                         <p style={{ color: "black", fontWeight: 550 }}>Accesibilidad Física</p>
+
                         <label style={{ color: "black" }}>
-                            <input type="checkbox" /> Rampas
+                            <input
+                                type="checkbox"
+                                checked={filtrosActivos["Rampas"] || false}
+                                onChange={() => toggleFiltro("Rampas")}
+                            /> Rampas
                         </label>
                         <br />
+
                         <label style={{ color: "black" }}>
-                            <input type="checkbox" /> Ascensores
+                            <input
+                                type="checkbox"
+                                checked={filtrosActivos["Ascensores"] || false}
+                                onChange={() => toggleFiltro("Ascensores")}
+                            /> Ascensores
                         </label>
                         <br />
+
                         <label style={{ color: "black" }}>
-                            <input type="checkbox" /> Puertas Automáticas
+                            <input
+                                type="checkbox"
+                                checked={filtrosActivos["Puertas Automáticas"] || false}
+                                onChange={() => toggleFiltro("Puertas Automáticas")}
+                            /> Puertas Automáticas
                         </label>
                         <br />
+
                         <label style={{ color: "black" }}>
-                            <input type="checkbox" /> Baños Adaptados
+                            <input
+                                type="checkbox"
+                                checked={filtrosActivos["Baños Adaptados"] || false}
+                                onChange={() => toggleFiltro("Baños Adaptados")}
+                            /> Baños Adaptados
                         </label>
                         <br />
+
                         <label style={{ color: "black" }}>
-                            <input type="checkbox" /> Estacionamientos Reservados
+                            <input
+                                type="checkbox"
+                                checked={filtrosActivos["Estacionamientos Reservados"] || false}
+                                onChange={() => toggleFiltro("Estacionamientos Reservados")}
+                            /> Estacionamientos Reservados
                         </label>
                         <br />
+
                         <p style={{ color: "black", fontWeight: 550 }}>Accesibilidad Sensorial</p>
+
                         <label style={{ color: "black" }}>
-                            <input type="checkbox" /> Señalización en braille
+                            <input
+                                type="checkbox"
+                                checked={filtrosActivos["Señalización en braille"] || false}
+                                onChange={() => toggleFiltro("Señalización en braille")}
+                            /> Señalización en braille
                         </label>
                         <br />
+
                         <label style={{ color: "black" }}>
-                            <input type="checkbox" /> Señalización auditiva
+                            <input
+                                type="checkbox"
+                                checked={filtrosActivos["Señalización auditiva"] || false}
+                                onChange={() => toggleFiltro("Señalización auditiva")}
+                            /> Señalización auditiva
                         </label>
                         <br />
+
                         <label style={{ color: "black" }}>
-                            <input type="checkbox" /> Luces intermitentes
+                            <input
+                                type="checkbox"
+                                checked={filtrosActivos["Luces intermitentes"] || false}
+                                onChange={() => toggleFiltro("Luces intermitentes")}
+                            /> Luces intermitentes
                         </label>
                         <br />
+
                         <label style={{ color: "black" }}>
-                            <input type="checkbox" /> Mapas táctiles
+                            <input
+                                type="checkbox"
+                                checked={filtrosActivos["Mapas táctiles"] || false}
+                                onChange={() => toggleFiltro("Mapas táctiles")}
+                            /> Mapas táctiles
                         </label>
                         <br />
-                        <p style={{ color: "black", fontWeight: 550 }}>Accesibilidad Sensorial</p>
+
+                        <p style={{ color: "black", fontWeight: 550 }}>Accesibilidad Cognitiva</p>
+
                         <label style={{ color: "black" }}>
-                            <input type="checkbox" /> Símbolos universales
+                            <input
+                                type="checkbox"
+                                checked={filtrosActivos["Símbolos universales"] || false}
+                                onChange={() => toggleFiltro("Símbolos universales")}
+                            /> Símbolos universales
                         </label>
                         <br />
+
                         <label style={{ color: "black" }}>
-                            <input type="checkbox" /> Rutas intuitivas
+                            <input
+                                type="checkbox"
+                                checked={filtrosActivos["Rutas intuitivas"] || false}
+                                onChange={() => toggleFiltro("Rutas intuitivas")}
+                            /> Rutas intuitivas
                         </label>
                         <br />
+
                         <label style={{ color: "black" }}>
-                            <input type="checkbox" /> Atención con personal capacitado
+                            <input
+                                type="checkbox"
+                                checked={filtrosActivos["Atención con personal capacitado"] || false}
+                                onChange={() => toggleFiltro("Atención con personal capacitado")}
+                            /> Atención con personal capacitado
                         </label>
-                        <br />
-                        <div style={{ display: "flex", justifyContent: "space-between", marginTop: "10px" }}>
-                            <button style={{ backgroundColor: "white", color: "#af0000", fontWeight: "lighter", width: '40%' }}>Cancelar</button>
-                            <button style={{ background: "linear-gradient(45deg, #ff0000, #ff6100)", color: "white", fontWeight: "bold", width: '40%' }}>Filtrar</button>
-                        </div>
                     </div>
 
                 )}
             </div>
 
-
+            {busqueda.length > 0 && (
+                <div style={{
+                    marginTop: "10px", textAlign: "left", maxHeight: "200px", overflowY: "auto",
+                    backgroundColor: 'white', borderRadius: '10px', padding: '10px'
+                }}>
+                    <p>Resultados</p>
+                    <hr />
+                    {resultados.length > 0 ? (
+                        resultados.map((item) => (
+                            <div key={item.id} style={{ padding: "5px 0", borderBottom: "1px solid #ccc" }}>
+                                <strong>{item.nombre}</strong><br />
+                                <small>{item.direccion}</small>
+                            </div>
+                        ))
+                    ) : (
+                        <p style={{ color: "gray" }}>No se encontraron resultados.</p>
+                    )}
+                </div>
+            )}
         </div >
+
     );
 }
 
