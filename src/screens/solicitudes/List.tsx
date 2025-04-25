@@ -64,12 +64,12 @@ function ListSolicitudes() {
 
     return (
         <div className={styles.container}>
-            <button style={{ position: "absolute", left: "15px", top: "4px", border: "none", background: "transparent", fontSize: "25px", alignItems: "start" }} onClick={() => { navigate(-1)}}>
+            <button style={{ position: "absolute", left: "15px", top: "10px", border: "none", background: "transparent", fontSize: "25px", alignItems: "start" }} onClick={() => { navigate(-1) }}>
                 <FontAwesomeIcon icon={faReply} />
             </button>
-            <header className={styles.header} style={{paddingTop:'20px'}}>
-                <hr style={{ maxWidth: '70%', minWidth: '150px', width: '60%' }} />
-                <h2 style={{ textAlign: 'right' }} >Gestión de solicitudes</h2>
+            <header className={styles.header} style={{ paddingTop:'40px', gap:'15px'}}>
+                <hr style={{ flexGrow: "1"}} />
+                <h2 style={{ textAlign: 'right', paddingRight: "15px", whiteSpace:"nowrap" }} >Gestión de solicitudes</h2>
             </header>
 
             <div className={styles.filtros}>

@@ -95,7 +95,6 @@ function BotonEventos() {
                         display: "flex",
                         alignItems: "center",
                         gap: "5px",
-                        width: "100%",
 
                     }}
                 >
