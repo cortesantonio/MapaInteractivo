@@ -6,76 +6,38 @@ import { supabase } from '../../services/supabase';
 
 function Inspeccionar_Resenas() {
   const simbolo = ">";
-  const usarDatosSimulados = true;
-  let IdMarcador = 1;
-
-  const datosSimulados = [
-    {
-      id: 1,
-      comentario: "El Teatro Provincial de Curico es, sin duda, una joya cultural que brilla en la ciudad.",
-      fecha: "2025-04-14",
-      calificacion: 5,
-      usuarios: {
-        id: 1,
-        nombre: "Elvis Cofre",
-        correo: "elvis@example.com"
-      },
-      marcador: {
-        id: 1,
-        nombre_recinto: "Teatro Provincial de Curico",
-        direccion: "Carmen 556-560, 3341768 Curicó, Maule"
-      }
-    },
-    {
-      id: 2,
-      comentario: "Hermosa experiencia, todo muy limpio y bien organizado.",
-      fecha: "2025-04-13",
-      calificacion: 4,
-      usuarios: {
-        id: 2,
-        nombre: "Josefina Herrera",
-        correo: "josefina@example.com"
-      },
-      marcador: {
-        id: 1,
-        nombre_recinto: "Teatro Provincial de Curico",
-        direccion: "Carmen 556-560, 3341768 Curicó, Maule"
-      }
-    }
-  ];
-
+  const marcadorId = 1; // Cambia esto si necesitas un marcador diferente
   const [resenas, setResenas] = useState<any[]>([]);
 
   useEffect(() => {
     const fetchResenas = async () => {
-      if (usarDatosSimulados) {
-        setResenas(datosSimulados);
-      } else {
-        const { data, error } = await supabase
-          .from('resenas')
-          .select(`
+      const { data, error } = await supabase
+        .from('resenas')
+        .select(`
+          id,
+          comentario,
+          fecha,
+          calificacion,
+          usuarios (
             id,
-            comentario,
-            fecha,
-            calificacion,
-            usuarios (
-              id,
-              nombre,
-              correo
-            ),
-            marcador (
-              id,
-              nombre_recinto,
-              direccion
+            nombre,
+            correo
+          ),
+          marcador (
+            id,
+            nombre_recinto,
+            direccion,
+            tipo_recinto (
+              tipo
             )
-          `)
-          .eq('id_marcador', IdMarcador);
-  
-        if (error) {
-          console.error("Error al obtener reseñas:", error);
-        } else {
-          setResenas(data);
-        }
+          )
+        `)
+        .eq('id_marcador', marcadorId);
+
+      if (error) {
+        console.error("Error al obtener reseñas:", error);
+      } else {
+        setResenas(data || []);
       }
     };
 
@@ -87,6 +49,9 @@ function Inspeccionar_Resenas() {
   return (
     <div className="container">
       <div className="header">
+        <div className='imagen'>
+          <img src="https://lh3.googleusercontent.com/gps-cs-s/AB5caB9eZeqiYZh_N6HddUd7JMb6o7pqX4RRnEi7nILjYXDI7kkYSnjc_vaeigx7oH_ya-PravH6AY-cDaK_Whg_xln3BIzCQQYzWkoH6xltRO771yV22JQs9BVH0mIQMcRyRveNe0Sd=w426-h240-k-no" alt="" />
+        </div>
         <div className="icono">
           <FontAwesomeIcon icon={faReply} />
         </div>
@@ -94,7 +59,7 @@ function Inspeccionar_Resenas() {
           <h1>{marcador?.nombre_recinto || "Cargando..."}</h1>
         </div>
         <div className="info-locacion">
-          <h4>{simbolo} Anfiteatro</h4>
+          <h4>{simbolo} {marcador?.tipo_recinto?.tipo || "Cargando tipo..."}</h4>
         </div>
         <div className="text">
           <span>{marcador?.direccion || "Dirección no disponible"}</span>
@@ -103,14 +68,14 @@ function Inspeccionar_Resenas() {
 
       <div className="contenido-reseña">
         <div className="titulo-reseña">
-          <h4>Reseñas</h4>
+          <h4 style={{ paddingLeft: '0' }}>Reseñas</h4>
           <hr />
         </div>
 
         {resenas.map((r, index) => (
           <div className="bloque-reseña" key={index}>
             <div className="autor-reseña">
-              <h1>{r.usuarios?.nombre}</h1>
+              <h1>{r.usuarios?.nombre || "Anónimo"}</h1>
               <div className="trash-button">
                 <FontAwesomeIcon icon={faTrash} />
               </div>
@@ -133,3 +98,4 @@ function Inspeccionar_Resenas() {
 }
 
 export default Inspeccionar_Resenas;
+
