@@ -2,13 +2,26 @@ import { useState, useEffect } from "react";
 import style from "./loginUsuario.module.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowLeftLong, faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
-
+import { useNavigate } from 'react-router-dom'
+import { supabase } from "../../services/supabase";
 
 function LoginUsuario() {
+  const navigate = useNavigate()
+
   const [isMobile, setIsMobile] = useState(false);
   const [Iscambio, setIscambio] = useState(true);
   const [mostrarContraseña, setMostrarContraseña] = useState(false);
 
+  const loginWithGoogle = async () => {
+    const { error } = await supabase.auth.signInWithOAuth({
+      provider: 'google',
+      options: {
+        redirectTo: `${window.location.origin}/auth/callback`,
+      },
+    })
+    if (error) console.error('Error al iniciar sesión', error.message)
+    // No navegamos aquí; Supabase nos redirige a Google
+  }
 
   useEffect(() => {
     const checkScreenSize = () => {
@@ -52,7 +65,7 @@ function LoginUsuario() {
           {Iscambio ? (
             <div>
               <div className={style.containeratras}>
-                <button className={style.botonatras}>
+                <button className={style.botonatras} onClick={() => { navigate('/')}}>
                   <FontAwesomeIcon icon={faArrowLeftLong} />
                 </button>
               </div>
@@ -65,7 +78,7 @@ function LoginUsuario() {
 
                 <div className={style.containerboton}>
                   <div className={style.botonSesion}>
-                    <button className={style.botonGoogle}>
+                    <button className={style.botonGoogle} onClick={loginWithGoogle}>
                       Continuar con Google
                     </button>
                   </div>
@@ -121,7 +134,7 @@ function LoginUsuario() {
 
                       </input>
                       <button onClick={() => setMostrarContraseña(!mostrarContraseña)} className={style.botonVerContraseña}>
-                        {mostrarContraseña ? <FontAwesomeIcon icon={faEye} style={{color: "#005dc2"}} /> : <FontAwesomeIcon icon={faEyeSlash} />}
+                        {mostrarContraseña ? <FontAwesomeIcon icon={faEye} style={{ color: "#005dc2" }} /> : <FontAwesomeIcon icon={faEyeSlash} />}
                       </button>
                     </div>
 

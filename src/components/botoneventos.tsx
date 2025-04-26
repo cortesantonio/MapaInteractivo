@@ -12,7 +12,7 @@ function BotonEventos() {
     const [Eventoisvisible, setEventoIsVisible] = useState(false);
     const [height, setHeight] = useState("0px");
     const [opacity, setOpacity] = useState(0);
-    const [width, setWidth] = useState("80px");
+    const [width, setWidth] = useState("90px");
     const [ismargin, setismargin] = useState("0");
 
     const { events, error } = useGetCalendario();
@@ -39,7 +39,7 @@ function BotonEventos() {
             setHeight("0px");
             setismargin("0px");
             setOpacity(0);
-            setWidth("80px");
+            setWidth("90px");
             setTimeout(() => setEventoIsVisible(false), 300);
         } else {
             setEventoIsVisible(true);

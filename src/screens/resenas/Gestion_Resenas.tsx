@@ -5,11 +5,13 @@ import {
   faFilter,
   faEllipsisVertical,
   faBuilding,
+  faReply,
 } from '@fortawesome/free-solid-svg-icons';
 import { useEffect, useState } from 'react';
 import { supabase } from '../../services/supabase';
 import { Tipo_Recinto } from "../../interfaces/Tipo_Recinto";
 import { Marcador } from '../../interfaces/Marcador';
+import { useNavigate } from 'react-router-dom'
 
 function Gestion_Resenas() {
   const [isActiveBuscador, setIsActiveBuscador] = useState(false);
@@ -17,6 +19,8 @@ function Gestion_Resenas() {
   const [Tipo_Ubicacion_Seleccionado, setTipo_Ubicacion_Seleccionado] = useState('');
   const [tipoRecinto, setTipoRecinto] = useState<Tipo_Recinto[]>();
   const [Gestion_resenas, Set_Resenas] = useState<Marcador[]>([]); 
+
+  const navigate = useNavigate()
 
   useEffect(() => {
     const fetchData = async () => {
@@ -66,9 +70,14 @@ function Gestion_Resenas() {
 
   return (
     <div className={styles.container}>
-      <header className={styles.header}>
-        <hr style={{ maxWidth: '70%', minWidth: '150px', width: '60%' }} />
-        <h2 style={{ textAlign: 'right' }}>Gestion de Reseñas</h2>
+
+      <button style={{ position: "absolute", left: "15px", top: "10px", border: "none", background: "transparent", fontSize: "25px", alignItems: "start" }} onClick={() => { navigate(-1) }}>
+        <FontAwesomeIcon icon={faReply} />
+      </button>
+
+      <header className={styles.header} style={{ paddingTop:'40px', gap:'15px'}}>
+        <hr style={{ flexGrow: "1"}} />
+        <h2 style={{ textAlign: 'right', paddingRight: "15px", whiteSpace:"nowrap"}}>Gestion de Reseñas</h2>
       </header>
 
       <div className={styles.filtros}>

@@ -1,9 +1,10 @@
-import styles from './EditarLocacion.module.css';
+import styles from './css/EditarLocacion.module.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faReply} from '@fortawesome/free-solid-svg-icons';
+import { faReply } from '@fortawesome/free-solid-svg-icons';
+import { useNavigate } from 'react-router-dom';
 
-function EditarLocation(){
-
+function EditarLocation() {
+    const navigate = useNavigate()
     return (
         <div className={styles.container}>
 
@@ -12,7 +13,7 @@ function EditarLocation(){
                     alt=""
                     className={styles.imagenMarcador}
                 />
-                <button className={styles.VolverAtras}>
+                <button className={styles.VolverAtras} onClick={() => { navigate(-1) }}>
                     <FontAwesomeIcon icon={faReply} size='2xl' />
                 </button>
 
@@ -129,8 +130,8 @@ function EditarLocation(){
 
                         </form>
                         <div className={styles.acciones}>
-                            <button type="button" style={{ backgroundColor: "transparent", color: "red" }}>
-                                Eliminar
+                            <button type="button" style={{ backgroundColor: "transparent", color: "red" }} onClick={() => { navigate(-1) }} >
+                                CANCELAR CAMBIOS
                             </button>
                             <button type="submit">Guardar Cambios</button>
                         </div>

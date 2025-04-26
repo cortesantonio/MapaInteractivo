@@ -30,8 +30,9 @@ import Inspeccionar_Resenas from './screens/resenas/Inspeccionar_Resenas'
 import AgregarSolicitud from './screens/solicitudes/AgregarSolicitud'
 import ListSolicitudes from './screens/solicitudes/List'
 
+import AuthCallback from './screens/AuthCallback'
 
-import VerMarcador from './screens/marcadores/VerMarcador'
+
 
 function App() {
 
@@ -52,9 +53,9 @@ function App() {
         <Route path='/panel-administrativo/marcadores/editar' element={< EditarLocation />} />
 
         <Route path='/panel-administrativo/usuarios' element={< Gestion_Usuarios />} />
-        <Route path='/panel-administrativo/usuarios/perfil' element={< Perfil_Usuario />} />
+        <Route path='/usuario/perfil/:id' element={< Perfil_Usuario />} />
         <Route path='/panel-administrativo/usuarios/agregar' element={<Agregar_Usuarios />} />
-        <Route path='/panel-administrativo/usuarios/editar' element={<Editar_Usuarios />} />
+        <Route path='/usuarios/editar/:id' element={<Editar_Usuarios />} />
 
 
         <Route path='/panel-administrativo/accesibilidades' element={< ListAccesibilidades />} />
@@ -69,8 +70,8 @@ function App() {
         <Route path='/panel-administrativo/solicitudes' element={<ListSolicitudes />} />
 
 
-        <Route path='vermarcador' element={<VerMarcador />} />
 
+        <Route path="/auth/callback" element={<AuthCallback />} />
 
         <Route path='*' element={<h1>404 NOT FOUND</h1>} />
 

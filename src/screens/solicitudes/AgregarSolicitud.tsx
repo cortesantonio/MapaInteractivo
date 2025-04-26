@@ -1,17 +1,19 @@
 import styles from './AgregarSolicitud.module.css'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faReply } from '@fortawesome/free-solid-svg-icons'
+import { faInfo, faReply } from '@fortawesome/free-solid-svg-icons'
 import { useState, useEffect } from 'react';
 import { Usuarios } from '../../interfaces/Usuarios';
 import { Solicitudes } from '../../interfaces/Solicitudes';
 import { Accesibilidad } from '../../interfaces/Accesibilidad';
 import { supabase } from '../../services/supabase';
 import { Tipo_Recinto } from '../../interfaces/Tipo_Recinto';
+import { useNavigate } from 'react-router-dom';
 interface AccesibilidadesPorTipo {
     [tipo: string]: Accesibilidad[];
 }
 
 export default function AgregarSolicitud() {
+    const navigate = useNavigate()
     const [accesibilidades, setAccesibilidades] = useState<AccesibilidadesPorTipo>({});
     const [formData, setFormData] = useState<Partial<Solicitudes>>({
         nombre_locacion: '',
@@ -131,7 +133,7 @@ export default function AgregarSolicitud() {
             setUsuario({ ...usuario, id: newUser.id });
         }
 
-        const { data: solicitud, error } = await supabase
+        const { data: solicitud } = await supabase
             .from('solicitudes')
             .insert({
                 id_usuario: idUsuario,
@@ -160,10 +162,10 @@ export default function AgregarSolicitud() {
     return (
         <div className={styles.container}>
             <div className={styles.titulo}>
-                <button style={{ backgroundColor: 'transparent', border: 'none', cursor: 'pointer' }}>
+                <button style={{ position:"absolute", backgroundColor: 'transparent', border: 'none', cursor: 'pointer', left:"10px"}} onClick={() => { navigate(-1) }}>
                     <FontAwesomeIcon icon={faReply} size='2xl' />
                 </button>
-                <h2 style={{ textAlign: 'center' }}>Colaborar</h2>
+                <h2 style={{ textAlign: 'center' }}>Colaborar <FontAwesomeIcon icon={faInfo} style={{ border: '1px solid gray', borderRadius: '50%', width: '20px', height: '20px', padding: '5px', color: 'gray' }} /></h2>
             </div>
 
             <form onSubmit={handleSubmit}>
@@ -266,7 +268,7 @@ export default function AgregarSolicitud() {
                 <div className={styles.opt}>
                     <label htmlFor='cumple_ley_21015' style={{ fontWeight: 500 }}>Cumple con la ley nro. 21015</label>
                     <input type="checkbox" name="cumple_ley_21015" id='cumple_ley_21015' onChange={handleInputChange} />
-                    
+
                 </div>
 
                 <div className={styles.opt}>
