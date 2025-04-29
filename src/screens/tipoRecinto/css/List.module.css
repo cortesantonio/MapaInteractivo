@@ -30,6 +30,7 @@
     justify-content: left;
     flex-direction: column;
     margin-bottom: 25px;
+    align-items: center;
 }
 
 .filtros .buscar {

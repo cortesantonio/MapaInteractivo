@@ -162,7 +162,7 @@ export default function AgregarSolicitud() {
     return (
         <div className={styles.container}>
             <div className={styles.titulo}>
-                <button style={{ backgroundColor: 'transparent', border: 'none', cursor: 'pointer' }} onClick={() => { navigate(-1) }}>
+                <button style={{ position:"absolute", backgroundColor: 'transparent', border: 'none', cursor: 'pointer', left:"10px"}} onClick={() => { navigate(-1) }}>
                     <FontAwesomeIcon icon={faReply} size='2xl' />
                 </button>
                 <h2 style={{ textAlign: 'center' }}>Colaborar <FontAwesomeIcon icon={faInfo} style={{ border: '1px solid gray', borderRadius: '50%', width: '20px', height: '20px', padding: '5px', color: 'gray' }} /></h2>
