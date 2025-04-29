@@ -1,29 +1,26 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faReply, faUser } from "@fortawesome/free-solid-svg-icons";
-import "../usuarios/css/Perfil_Usuario.css";
+import styles from "../usuarios/css/Perfil_Usuario.module.css";
 import { supabase } from "../../services/supabase";
 import { useEffect, useState } from "react";
 import { Usuarios } from "../../interfaces/Usuarios";
-import { useNavigate, useParams } from "react-router-dom";
 
 function Perfil_Usuario() {
-  const navigate = useNavigate()
-
   const [usuarios, setUsuarios] = useState<Usuarios[]>([]);
-  const { id } = useParams();
-
-  const idUsuario = id;
+  const idUsuario = 1;
 
   useEffect(() => {
     const fetchData = async () => {
       const { data: usuariosData, error } = await supabase
         .from('usuarios')
-        .select('*').eq('id', idUsuario); // Cambia '1' por el ID del usuario que deseas obtener
+        .select('*')
+        .eq('id', idUsuario);
 
       if (error) {
         console.error('Error al obtener datos:', error);
       } else {
         setUsuarios(usuariosData || []);
+        console.log('Datos de usuarios obtenidos:', usuariosData);
       }
     };
 
@@ -32,42 +29,43 @@ function Perfil_Usuario() {
 
   return (
     <div>
-      <div className="flecha" style={{ cursor: 'pointer' }} onClick={() => { navigate(-1) }}>
+      <div className={styles.flecha}>
         <FontAwesomeIcon icon={faReply} />
       </div>
-      <div className="container">
-        <h2 className="titulo">Usuario</h2>
-        <div className="perfil-icono">
-          <FontAwesomeIcon className="icono-usuario" icon={faUser} />
+
+      <div className={styles.container}>
+        <h2 className={styles.titulo}>Usuario</h2>
+
+        <div className={styles.perfil_icono}>
+          <FontAwesomeIcon className={styles.icono_usuario} icon={faUser} />
         </div>
 
-        <div className="info">
-          <div className="perfil-info">
-            {usuarios.map((usuario) => (
-              <div key={usuario.id}>
-                <div className="campo">
-                  <span className="label">Nombre:</span>
-                  <p className="nombre-usuario">{usuario.nombre}</p>
-                  <hr />
-                </div>
-                <div className="campo">
-                  <span className="label">Correo:</span>
-                  <p className="correo-usuario">{usuario.correo}</p>
-                  <hr />
-                </div>
-                <div>
-                  <span className="label">Rol:</span>
-                  <p className="rol-usuario">{usuario.rol}</p>
-                  <hr />
-                </div>
+        <div className= {styles.perfil_info}>
+          {usuarios.map((usuario) => (
+            <div className= {styles.informacion_campos} key={usuario.id}>
+              <div className={styles.campo}>
+                <span className={styles.label}>Nombre:</span>
+                <p className={styles.valor}>{usuario.nombre}</p>
+                <hr />
               </div>
-            ))}
-          </div>
+
+              <div className={styles.campo}>
+                <span className={styles.label}>Correo:</span>
+                <p className={styles.valor}>{usuario.correo}</p>
+                <hr />
+              </div>
+
+              <div className={styles.campo}>
+                <span className={styles.label}>Rol:</span>
+                <p className={styles.valor}>{usuario.rol}</p>
+                <hr />
+              </div>
+            </div>
+          ))}
         </div>
 
-        <div className="btn-editar" >
-          <button onClick={() => { navigate(`/usuarios/editar/${idUsuario}`) }}>
-            Editar Usuario</button>
+        <div className={styles.btn_editar}>
+          <button>Editar Usuario</button>
         </div>
       </div>
     </div>

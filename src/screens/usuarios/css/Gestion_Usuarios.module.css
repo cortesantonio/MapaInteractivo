@@ -53,6 +53,8 @@
 .filtros .buscar form {
     display: flex;
     gap: 5px;
+    
+    
 }
 
 .filtros .buscar input {
