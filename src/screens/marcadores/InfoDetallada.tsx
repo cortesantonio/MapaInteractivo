@@ -29,8 +29,6 @@ export default function InfoDetallada() {
     });
     const [selecciones, setSelecciones] = useState<number[]>([]);
 
-
-
     useEffect(() => { // LLAMADO A LA API PARA OBTNER TODOAS LAS ACCESIBILIDADES QUE HAY EN LA BASE DE DATOS Y LA CLASIFICA POR TIPO
         const fetchAccesibilidades = async () => {
             const { data, error } = await supabase.from('accesibilidad').select('*');
@@ -47,7 +45,6 @@ export default function InfoDetallada() {
 
         fetchAccesibilidades();
     }, []);
-
 
     useEffect(() => {
         const fetchMarcador = async () => {
@@ -112,7 +109,7 @@ export default function InfoDetallada() {
                     alt=""
                     className={styles.imagenMarcador}
                 />
-                <button style={{ zIndex: 10 }} className={styles.VolverAtras} onClick={() => { navigate(-1) }}>
+                <button style={{ zIndex: 10 }} className={styles.VolverAtras} onClick={() => { navigate(`/panel-administrativo/marcadores`) }}>
                     <FontAwesomeIcon icon={faReply} size='2xl' />
                 </button>
                 <div className={styles.Titulo} >
