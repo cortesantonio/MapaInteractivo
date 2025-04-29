@@ -26,7 +26,7 @@ export default function Home() {
 
   const estilosMarcador: CSSProperties = {
     position: "absolute",
-    zIndex: 10,
+    zIndex: 1,
     bottom: isMobile ? "0px" : "60px",
     left: isMobile ? "0px" : "25px",
     width: isMobile ? "100%" : "auto",
