@@ -1,4 +1,4 @@
-import { useEffect, useState, CSSProperties} from "react";
+import { useEffect, useState, CSSProperties } from "react";
 import Map from "../components/Map";
 import Footer from "../components/Footer";
 import Buscador from "../components/Buscador";
@@ -27,16 +27,20 @@ export default function Home() {
   const estilosMarcador: CSSProperties = {
     position: "absolute",
     zIndex: 10,
-    bottom: isMobile ? "0px" : "60px",  
-    left: isMobile ? "0px" : "25px",     
+    bottom: isMobile ? "0px" : "60px",
+    left: isMobile ? "0px" : "25px",
     width: isMobile ? "100%" : "auto",
-    height: isMobile ? "85%" : "auto",    
-    transition: "bottom 0.3s ease-in-out",  
+    height: isMobile ? "85%" : "auto",
+    transition: "bottom 0.3s ease-in-out",
   };
 
   return (
     <div style={{ width: '100%', height: '100vh', position: 'relative' }}>
-      <Buscador />
+
+      <Buscador onSeleccionMarcador={(id: number) => {
+        setMarcadorSeleccionadoId(id);
+        setMostrarMarcador(true);
+      }} />
       <BotonEventos />
 
       <Map

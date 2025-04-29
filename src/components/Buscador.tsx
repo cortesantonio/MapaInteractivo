@@ -2,7 +2,8 @@ import { useState, useEffect } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faFilter, faFilterCircleXmark, faLocationDot } from "@fortawesome/free-solid-svg-icons";
 import styles from "./css/Buscador.module.css";
-
+import { supabase } from "../services/supabase";
+import { Accesibilidad } from "../interfaces/Accesibilidad";
 interface Marcador {
     id: number;
     nombre: string;
@@ -10,24 +11,12 @@ interface Marcador {
     filtros: string[];
 }
 
-const marcadoresSimulados: Marcador[] = [
-    {
-        id: 1,
-        nombre: "Centro Cultural",
-        direccion: "Av. Siempre Viva 123",
-        filtros: ["Rampas", "Baños Adaptados", "Señalización auditiva"]
-    },
-    {
-        id: 2,
-        nombre: "Biblioteca Central",
-        direccion: "Calle de los Libros 456",
-        filtros: ["Ascensores", "Señalización en braille"]
-    },
-];
+interface BuscadorProps {
+    onSeleccionMarcador: (id: number) => void;
+}
 
+function Buscador({ onSeleccionMarcador }: BuscadorProps) {
 
-
-function Buscador() {
     const [filtroIsVisible, setFiltroIsVisible] = useState(false);
     const [width, setWidth] = useState(window.innerWidth <= 768 ? "80%" : "300px");
     const [height, setHeight] = useState("0px");
@@ -38,12 +27,59 @@ function Buscador() {
     const [marcadores, setMarcadores] = useState<Marcador[]>([]);
     const [resultados, setResultados] = useState<Marcador[]>([]);
     const [busqueda, setBusqueda] = useState<string>("");
+    const [opcionesAccesibilidad, setOpcionesAccesibilidad] = useState<Accesibilidad[]>([]);
+
 
     useEffect(() => {
-        // hacer aqui el llamado a la api o al almacen de cache
+        const fetchMarcadores = async () => {
+            // 1. Traer marcadores y relaciones con accesibilidad
+            const { data: marcadoresData, error: marcadoresError } = await supabase
+                .from('marcador')
+                .select(`
+                    id,
+                    nombre_recinto,
+                    direccion,
+                    accesibilidad_marcador (
+                        accesibilidad (
+                            nombre
+                        )
+                    )
+                `).eq('activo', true);
 
-        setMarcadores(marcadoresSimulados);
+            // 2. Traer accesibilidades
+            const { data: accesibilidadesData, error: accesibilidadesError } = await supabase
+                .from('accesibilidad')
+                .select('id, nombre, tipo');
+
+            if (marcadoresError || accesibilidadesError) {
+                console.error(marcadoresError || accesibilidadesError);
+                return;
+            }
+
+            // 3. Formatear marcadores
+            const marcadoresFormateados = marcadoresData.map((item: any) => ({
+                id: item.id,
+                nombre: item.nombre_recinto,
+                direccion: item.direccion,
+                filtros: item.accesibilidad_marcador.map((am: any) => am.accesibilidad.nombre)
+            }));
+
+            // 4. Inicializar filtros activos con todos en true. OPCIONAL, PARA DESPUES DEJARLE COMO PREDETERMINADO SI EL USUARIO TIENE DISCAPACIDAD REGISTRADA.
+            const filtrosIniciales: Record<string, boolean> = {};
+            accesibilidadesData.forEach((a) => {
+                filtrosIniciales[a.nombre] = false;
+            });
+
+            setMarcadores(marcadoresFormateados);
+            setResultados(marcadoresFormateados);
+            setFiltrosActivos(filtrosIniciales);
+            setOpcionesAccesibilidad(accesibilidadesData);
+        };
+
+        fetchMarcadores();
     }, []);
+
+
 
     useEffect(() => {
         const handleResize = () => {
@@ -100,6 +136,9 @@ function Buscador() {
         }
     };
 
+
+
+
     return (
         <div className={styles.container}
             style={{
@@ -142,120 +181,21 @@ function Buscador() {
             >
                 {filtroIsVisible && (
                     <div style={{ textAlign: "left" }}>
-                        <p style={{ color: "black", fontWeight: 550 }}>Accesibilidad Física</p>
-
-                        <label style={{ color: "black" }}>
-                            <input
-                                type="checkbox"
-                                checked={filtrosActivos["Rampas"] || false}
-                                onChange={() => toggleFiltro("Rampas")}
-                            /> Rampas
-                        </label>
-                        <br />
-
-                        <label style={{ color: "black" }}>
-                            <input
-                                type="checkbox"
-                                checked={filtrosActivos["Ascensores"] || false}
-                                onChange={() => toggleFiltro("Ascensores")}
-                            /> Ascensores
-                        </label>
-                        <br />
-
-                        <label style={{ color: "black" }}>
-                            <input
-                                type="checkbox"
-                                checked={filtrosActivos["Puertas Automáticas"] || false}
-                                onChange={() => toggleFiltro("Puertas Automáticas")}
-                            /> Puertas Automáticas
-                        </label>
-                        <br />
-
-                        <label style={{ color: "black" }}>
-                            <input
-                                type="checkbox"
-                                checked={filtrosActivos["Baños Adaptados"] || false}
-                                onChange={() => toggleFiltro("Baños Adaptados")}
-                            /> Baños Adaptados
-                        </label>
-                        <br />
-
-                        <label style={{ color: "black" }}>
-                            <input
-                                type="checkbox"
-                                checked={filtrosActivos["Estacionamientos Reservados"] || false}
-                                onChange={() => toggleFiltro("Estacionamientos Reservados")}
-                            /> Estacionamientos Reservados
-                        </label>
-                        <br />
-
-                        <p style={{ color: "black", fontWeight: 550 }}>Accesibilidad Sensorial</p>
-
-                        <label style={{ color: "black" }}>
-                            <input
-                                type="checkbox"
-                                checked={filtrosActivos["Señalización en braille"] || false}
-                                onChange={() => toggleFiltro("Señalización en braille")}
-                            /> Señalización en braille
-                        </label>
-                        <br />
-
-                        <label style={{ color: "black" }}>
-                            <input
-                                type="checkbox"
-                                checked={filtrosActivos["Señalización auditiva"] || false}
-                                onChange={() => toggleFiltro("Señalización auditiva")}
-                            /> Señalización auditiva
-                        </label>
-                        <br />
-
-                        <label style={{ color: "black" }}>
-                            <input
-                                type="checkbox"
-                                checked={filtrosActivos["Luces intermitentes"] || false}
-                                onChange={() => toggleFiltro("Luces intermitentes")}
-                            /> Luces intermitentes
-                        </label>
-                        <br />
-
-                        <label style={{ color: "black" }}>
-                            <input
-                                type="checkbox"
-                                checked={filtrosActivos["Mapas táctiles"] || false}
-                                onChange={() => toggleFiltro("Mapas táctiles")}
-                            /> Mapas táctiles
-                        </label>
-                        <br />
-
-                        <p style={{ color: "black", fontWeight: 550 }}>Accesibilidad Cognitiva</p>
-
-                        <label style={{ color: "black" }}>
-                            <input
-                                type="checkbox"
-                                checked={filtrosActivos["Símbolos universales"] || false}
-                                onChange={() => toggleFiltro("Símbolos universales")}
-                            /> Símbolos universales
-                        </label>
-                        <br />
-
-                        <label style={{ color: "black" }}>
-                            <input
-                                type="checkbox"
-                                checked={filtrosActivos["Rutas intuitivas"] || false}
-                                onChange={() => toggleFiltro("Rutas intuitivas")}
-                            /> Rutas intuitivas
-                        </label>
-                        <br />
-
-                        <label style={{ color: "black" }}>
-                            <input
-                                type="checkbox"
-                                checked={filtrosActivos["Atención con personal capacitado"] || false}
-                                onChange={() => toggleFiltro("Atención con personal capacitado")}
-                            /> Atención con personal capacitado
-                        </label>
+                        <p style={{ color: "black", fontWeight: 550 }}>Filtros de Accesibilidad</p>
+                        {opcionesAccesibilidad.map((acces) => (
+                            <div key={acces.id}>
+                                <label style={{ color: "black" }}>
+                                    <input
+                                        type="checkbox"
+                                        checked={filtrosActivos[acces.nombre] || false}
+                                        onChange={() => toggleFiltro(acces.nombre)}
+                                    />{" "}
+                                    {acces.nombre}
+                                </label>
+                                <br />
+                            </div>
+                        ))}
                     </div>
-
                 )}
             </div>
 
@@ -266,16 +206,16 @@ function Buscador() {
                 }}>
                     <p>Resultados</p>
                     <hr />
-                    {resultados.length > 0 ? (
-                        resultados.map((item) => (
-                            <div key={item.id} style={{ padding: "5px 0", borderBottom: "1px solid #ccc" }}>
-                                <strong>{item.nombre}</strong><br />
-                                <small>{item.direccion}</small>
-                            </div>
-                        ))
-                    ) : (
-                        <p style={{ color: "gray" }}>No se encontraron resultados.</p>
-                    )}
+                    {resultados.map((item) => (
+                        <div
+                            key={item.id}
+                            style={{ padding: "5px 0", borderBottom: "1px solid #ccc", cursor: "pointer" }}
+                            onClick={() => onSeleccionMarcador(item.id)}
+                        >
+                            <strong>{item.nombre}</strong><br />
+                            <small>{item.direccion}</small>
+                        </div>
+                    ))}
                 </div>
             )}
         </div >
