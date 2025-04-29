@@ -4,7 +4,7 @@ import Footer from "../components/Footer";
 import Buscador from "../components/Buscador";
 import BotonEventos from "../components/botoneventos";
 import VerMarcador from "../components/VerMarcador";
-
+import NavbarUser from "../components/NavbarUser";
 export default function Home() {
   const [marcadorSeleccionadoId, setMarcadorSeleccionadoId] = useState<number | null>(null);
   const [mostrarMarcador, setMostrarMarcador] = useState(false);
@@ -42,6 +42,7 @@ export default function Home() {
         setMostrarMarcador(true);
       }} />
       <BotonEventos />
+      <NavbarUser />
 
       <Map
         onSeleccionMarcador={(id: number) => {
