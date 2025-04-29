@@ -1,69 +1,125 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import {
-  faReply
-} from "@fortawesome/free-solid-svg-icons"
+    faReply
+  } from "@fortawesome/free-solid-svg-icons"
+import styles from "../usuarios/css/Formularios.module.css"
+import { supabase } from "../../services/supabase"
+import { useState,useEffect } from "react"
+import { Usuarios } from "../../interfaces/Usuarios"
 
-import "../usuarios/css/Formularios.css"
-import { useParams, useNavigate } from "react-router-dom"
+function Editar_Usuarios () {
+  const usuario_id = 1;
+  const [usuarios, setUsuarios] = useState<Usuarios[]>([]);
+function Presionar_boton () {
+    console.log("Botón presionado");
+    
+  };
+  
+  useEffect (() =>  {
+    const fetchUsuarios = async () => {
+      const { data: usuariosData, error } = await supabase.from('usuarios').select('*').eq('id', usuario_id)
+      if (error) {
+        console.error('Error al obtener datos:', error)
+      } else {
+        setUsuarios(usuariosData || [])
+        console.log('Datos de usuarios obtenidos:', usuariosData)
+      }
+    };
 
+    fetchUsuarios()
+  }, [])
 
-function Editar_Usuarios() {
-  const { id } = useParams(); // ESTE ES EL ID QUE VIAJA POR LA URL, DEBE SER TOMADO Y SER CONSULTADO EN BASE DE DATOS PARA MOSTRAR LA INFO.
-  const navigate = useNavigate();
+const Actualizar_Informacion = async () => {
+  const {error} = await supabase.from('usuarios').update({
+    nombre: usuarios[0].nombre,
+    correo: usuarios[0].correo,
+    telefono: usuarios[0].telefono,
+    genero: usuarios[0].genero,
+    rol: usuarios[0].rol,
+  })
+  .eq('id', usuario_id)
 
-  return (
-    <div>
-      <div className="flecha">
-        <FontAwesomeIcon icon={faReply} onClick={() => { navigate(-1) }} />
-      </div>
+  if (error) {
+    console.error('Error al actualizar datos:', error)
+    alert("Hubo un error al actualizar los datos")
+  } else {
+    console.log('Datos de usuario actualizados:', usuarios[0])
+    alert("Datos de usuario actualizados correctamente")
+  }
+};
 
-      <div className="container">
-        <div className="text">
-          <h1>Editar Usuario</h1>
+  const handleChange = (field: keyof Usuarios, value: any) => {
+    const updatedUsuario = { ...usuarios[0], [field]: value };
+    setUsuarios([updatedUsuario]);
+  };
+    return (
+      <div>
+        <div className={styles.flecha}>
+        <FontAwesomeIcon icon={faReply}/>
+        </div>
+        <div className= {styles.container}>
+          <div className={styles.titulo}>
+            <h1>Editar Usuario</h1>
+          </div>
+        <form className={styles.div_formulario}>
+            <div className= {styles.espacio}>
+              <label className={styles.etiquetas}>Nombre Completo</label>
+              <input className= {styles.formulario} type="text" placeholder="Nombre" onChange={(e) => handleChange('nombre',e.target.value)} value={usuarios[0]?.nombre || ""} />
+            </div>
+        <div className= {styles.espacio}>
+          <label className= {styles.etiquetas}>Correo</label>
+          <input className= {styles.formulario} type="email" placeholder="tu@correo.cl" onChange={(e) => handleChange('correo',e.target.value)} value={usuarios[0]?.correo || ""} />
+        </div>
+        <div className= {styles.espacio}>
+          <label className= {styles.etiquetas}>Contraseña</label>
+          <input className= {styles.formulario} type="password" placeholder="Contraseña" onChange={(e) => handleChange('password',e.target.value)} value={usuarios[0]?.password || ""}/>
         </div>
 
-        <form>
-          <div className="espacio">
-            <label className="etiquetas">Nombre Completo</label>
-            <input className="formulario" type="text" placeholder="Nombre" />
-          </div>
+        <div className= {styles.espacio}>
+          <label className= {styles.etiquetas}>Telefono</label>
+          <input className= {styles.formulario} type="tel" placeholder="Contraseña" onChange={(e) => handleChange('telefono',e.target.value)} value={usuarios[0]?.telefono || ""}  />
+        </div>
 
-          <div className="espacio">
-            <label className="etiquetas">Rut</label>
-            <input className="formulario" type="text" placeholder="12.345.678-9" />
-          </div>
-
-          <div className="espacio">
-            <label className="etiquetas">Correo</label>
-            <input className="formulario" type="email" placeholder="tu@correo.cl" />
-          </div>
-
-          <div className="espacio">
-            <label className="etiquetas">Contraseña</label>
-            <input className="formulario" type="password" placeholder="Contraseña" />
-          </div>
-
-          <div className="espacio">
-            <label className="etiquetas">Repetir Contraseña</label>
-            <input className="formulario" type="password" placeholder="Repetir Contraseña" />
-          </div>
-
-          <div className="espacio">
-            <label className="etiquetas">Rol</label>
-            <select className="formulario">
-              <option value="gestor">Gestor</option>
-              <option value="administrador">Administrador</option>
-            </select>
-          </div>
-
-          <div className="botones">
-            <button className="btn1" type="button">Cancelar</button>
-            <button className="btn2" type="submit">Guardar Cambios</button>
-          </div>
+        <div className= {styles.espacio}>
+          <label className= {styles.etiquetas}>Genero</label>
+          <select
+            className={styles.formulario}
+            onChange={(e) => handleChange('genero', e.target.value)}
+            value={usuarios[0]?.genero || ""}
+>
+            {['Hombre', 'Mujer'].map((rol, index) => (
+              <option key={index} value={rol}>
+                {rol.charAt(0).toUpperCase() + rol.slice(1)}
+              </option>
+            ))}
+          </select>
+        </div>
+        <div className= {styles.espacio}>
+          <label className= {styles.etiquetas}>Repetir Contraseña</label>
+          <input className= {styles.formulario} type="password" placeholder="Repetir Contraseña" />
+        </div>
+        <div className= {styles.espacio}>
+          <label className= {styles.etiquetas}>Rol</label>
+          <select
+            className={styles.formulario}
+            onChange={(e) => handleChange('rol', e.target.value)}
+            value={usuarios[0]?.rol || ""}
+          >
+            {['gestor', 'administrador'].map((rol, index) => (
+              <option key={index} value={rol}>
+                {rol.charAt(0).toUpperCase() + rol.slice(1)}
+              </option>
+            ))}
+          </select>
+        </div>
+        <div className= {styles.botones}>
+            <button className= {styles.btn1} type="button">Cancelar</button>
+            <button onClick={Presionar_boton} className= {styles.btn2} type="submit">Editar Usuario</button>
+        </div>
         </form>
       </div>
     </div>
-  )
+    )
 }
 
 

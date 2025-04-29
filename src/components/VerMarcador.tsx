@@ -5,7 +5,7 @@ import { formatDistanceToNow } from 'date-fns';
 import { es } from 'date-fns/locale'; // para español
 import styles from './css/VerMarcador.module.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faShareNodes, faRoute, faCommentDots, faStar, faLocationDot, faPhone, faEarthAmericas } from '@fortawesome/free-solid-svg-icons';
+import { faShareNodes, faRoute, faCommentDots, faStar, faLocationDot, faPhone, faEarthAmericas, faChevronUp, faChevronDown } from '@fortawesome/free-solid-svg-icons';
 import EscribirResena from '../components/EscribirResena';
 import { supabase } from '../services/supabase';
 import { Horarios } from '../interfaces/Horarios';
@@ -26,7 +26,6 @@ export default function VerMarcador({ MarcadorSelectId, CerrarMarcador }: Props)
     const [resenasMarcador, setResenasMarcador] = useState<Review[]>([]);
     const [tabActiva, setTabActiva] = useState<'general' | 'resenas'>('general');
     const [mostrarFormulario, setMostrarFormulario] = useState(false);
-    const diasSemana = ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado', 'Domingo'];
 
 
     useEffect(() => {
@@ -107,6 +106,12 @@ export default function VerMarcador({ MarcadorSelectId, CerrarMarcador }: Props)
 
 
       function InfoMarcador() {
+
+        const [mostrarTodos, setMostrarTodos] = useState(false);
+
+        const diasSemana = ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado', 'Domingo'];
+
+        const diasAMostrar = mostrarTodos ? diasSemana : diasSemana.slice(0, 3);
         return (
             <div className={styles.InfoMarcador}>
                 {cargando ? (  
@@ -119,8 +124,8 @@ export default function VerMarcador({ MarcadorSelectId, CerrarMarcador }: Props)
                             <p><FontAwesomeIcon icon={faEarthAmericas} style={{ color: "#74C0FC" }} /> {Marcador.pagina_web}</p>
     
                             <h4>Horarios</h4>
-                            <ul  style={{ paddingLeft: '20px' }}>
-                                {diasSemana.map((dia, index) => {
+                            <ul style={{ paddingLeft: '20px' }}>
+                                {diasAMostrar.map((dia, index) => {
                                     const horario = horariosMarcador.find((h: any) => h.dia.toLowerCase() === dia.toLowerCase());
                                     return (
                                         <li key={index}>
@@ -129,7 +134,20 @@ export default function VerMarcador({ MarcadorSelectId, CerrarMarcador }: Props)
                                     );
                                 })}
                             </ul>
-    
+                            <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', flexDirection: 'column' }}>
+                                    <button onClick={() => setMostrarTodos(!mostrarTodos)} className={styles.fechaVerMas}>
+                                        {mostrarTodos ? (
+                                            <>
+                                                <FontAwesomeIcon icon={faChevronUp} /> Ver menos días 
+                                            </>
+                                        ) : (
+                                            <>
+                                                <FontAwesomeIcon icon={faChevronDown} /> Ver más días 
+                                            </>
+                                        )}
+                                    </button>
+                            </div>
+
                             <h4>Accesibilidad</h4>
                             {Object.keys(accesibilidadAgrupada).map((tipo, index) => (
                                 <div key={index}>
@@ -153,6 +171,8 @@ export default function VerMarcador({ MarcadorSelectId, CerrarMarcador }: Props)
             </div>
         );
     }
+    
+
     
 
 
