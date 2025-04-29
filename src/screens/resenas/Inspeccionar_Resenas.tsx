@@ -11,9 +11,11 @@ function Inspeccionar_Resenas() {
   const { id } = useParams();
   const [marcador, setMarcador] = useState<Marcador | null>(null);
   const [resenas, setResenas] = useState<Resenas[]>([]);
+  const [loading, setLoading] = useState<boolean>(true);
 
   useEffect(() => {
     const fetchData = async () => {
+      setLoading(true);
       try {
         const { data: marcadorData, error: marcadorError } = await supabase.from("marcador").select(`id,nombre_recinto,direccion,tipo_recinto (tipo)`).eq("id", id).single();
         if (marcadorError) throw marcadorError;
@@ -23,11 +25,38 @@ function Inspeccionar_Resenas() {
         setResenas(resenasData as any || []);
       } catch (error) {
         console.error("Error al obtener los datos:", error);
+      } finally {
+        setLoading(false);
       }
     };
     fetchData();
   }, [id]);
 
+  const renderResenas = () => {
+  if (loading) return <p>Cargando reseñas...</p>;
+  if (resenas.length === 0) return <p>No hay Reseñas aún</p>;
+
+    return resenas.map((r, index) => (
+      <div className={styles.bloque_reseña} key={index}>
+        <div className={styles.autor_reseña}>
+          <h1>{r.id_usuario?.nombre}</h1>
+          <div className={styles.trash_button}>
+            <FontAwesomeIcon icon={faTrash} />
+          </div>
+        </div>
+
+        <div className={styles.calificacion_fecha}>
+          <FontAwesomeIcon className={styles.estrella} icon={faStar} />
+          <span>{r.calificacion}</span>
+          <span>{new Date(r.fecha).toLocaleDateString()}</span>
+        </div>
+
+        <div className={styles.texto_reseña}>
+          <span>{r.comentario}</span>
+        </div>
+      </div>
+    ));
+  };
   return (
     <div className={styles.container}>
       <div className={styles.header}>
@@ -37,51 +66,26 @@ function Inspeccionar_Resenas() {
             alt=""
           />
         </div>
-
         <div className={styles.icono}>
           <FontAwesomeIcon icon={faReply} />
         </div>
-
         <div className={styles.titulo_locacion}>
           <h2>{marcador?.nombre_recinto || "Cargando..."}</h2>
         </div>
-
         <div className={styles.info_locacion}>
-          <h4>{'>'} {(marcador?.tipo_recinto as any)?.tipo  || "Cargando tipo..."}</h4>
+          <h4>{'>'} {(marcador?.tipo_recinto as any)?.tipo || "Cargando tipo..."}</h4>
         </div>
-
         <div className={styles.text}>
           <h2>{marcador?.direccion || "Cargando..."}</h2>
         </div>
       </div>
-
       <div className={styles.inspeccionar_reseñas}>
         <div className={styles.contenido_reseña}>
           <div className={styles.titulo_reseña}>
             <h4 style={{ paddingLeft: '0' }}>Reseñas</h4>
             <hr />
           </div>
-
-          {resenas.map((r, index) => (
-            <div className={styles.bloque_reseña} key={index}>
-              <div className={styles.autor_reseña}>
-                <h1>{r.id_usuario?.nombre}</h1>
-                <div className={styles.trash_button}>
-                  <FontAwesomeIcon icon={faTrash} />
-                </div>
-              </div>
-
-              <div className={styles.calificacion_fecha}>
-                <FontAwesomeIcon className={styles.estrella} icon={faStar} />
-                <span>{r.calificacion}</span>
-                <span>{new Date(r.fecha).toLocaleDateString()}</span>
-              </div>
-
-              <div className={styles.texto_reseña}>
-                <span>{r.comentario}</span>
-              </div>
-            </div>
-          ))}
+          {renderResenas()}
         </div>
       </div>
     </div>
