@@ -65,7 +65,7 @@ function App() {
         <Route path='/panel-administrativo/tipo-recinto/agregar' element={< AgregarTipoRecinto />} />
 
         <Route path='/panel-administrativo/resenas' element={< Gestion_Resenas />} />
-        <Route path='/panel-administrativo/resenas/inspeccionar' element={< Inspeccionar_Resenas />} />
+        <Route path='/panel-administrativo/resenas/inspeccionar/:id' element={< Inspeccionar_Resenas />} />
 
         <Route path='/panel-administrativo/solicitudes' element={<ListSolicitudes />} />
 

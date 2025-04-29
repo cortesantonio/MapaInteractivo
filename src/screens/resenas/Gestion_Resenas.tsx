@@ -18,7 +18,7 @@ function Gestion_Resenas() {
   const [busqueda, setBusqueda] = useState('');
   const [Tipo_Ubicacion_Seleccionado, setTipo_Ubicacion_Seleccionado] = useState('');
   const [tipoRecinto, setTipoRecinto] = useState<Tipo_Recinto[]>();
-  const [Gestion_resenas, Set_Resenas] = useState<Marcador[]>([]); 
+  const [Gestion_resenas, Set_Resenas] = useState<Marcador[]>([]);
 
   const navigate = useNavigate()
 
@@ -66,7 +66,7 @@ function Gestion_Resenas() {
       tipo === Tipo_Ubicacion_Seleccionado.toLowerCase();
     return coincideBusqueda && coincideTipo;
   });
-  
+
 
   return (
     <div className={styles.container}>
@@ -75,9 +75,9 @@ function Gestion_Resenas() {
         <FontAwesomeIcon icon={faReply} />
       </button>
 
-      <header className={styles.header} style={{ paddingTop:'40px', gap:'15px'}}>
-        <hr style={{ flexGrow: "1"}} />
-        <h2 style={{ textAlign: 'right', paddingRight: "15px", whiteSpace:"nowrap"}}>Gestion de Reseñas</h2>
+      <header className={styles.header} style={{ paddingTop: '40px', gap: '15px' }}>
+        <hr style={{ flexGrow: "1" }} />
+        <h2 style={{ textAlign: 'right', paddingRight: "15px", whiteSpace: "nowrap" }}>Gestion de Reseñas</h2>
       </header>
 
       <div className={styles.filtros}>
@@ -113,29 +113,25 @@ function Gestion_Resenas() {
         )}
       </div>
 
-      
+
 
       <div className={styles.content}>
         <p style={{ color: 'gray' }}>Gestion De Reseñas</p>
         <hr style={{ width: '25%', marginTop: '10px', marginBottom: '10px', opacity: '50%' }} />
 
-        {Edificio.map((locacion: { nombre_recinto: string; direccion: string; tipo_recinto:string; }, index: number) => (
+        {Edificio.map((locacion: { id: number, nombre_recinto: string; direccion: string; tipo_recinto: string; }, index: number) => (
           <div className={styles.card} key={index}>
             <div className={styles.estado} style={{ backgroundColor: '#0397fc' }}>
               <FontAwesomeIcon icon={faBuilding} size="xl" style={{ color: 'white' }} />
             </div>
 
-            <div className={styles.cardContent}>
+            <div className={styles.cardContent} style={{ cursor: 'pointer' }} onClick={() => { navigate(`/panel-administrativo/resenas/inspeccionar/${locacion.id}`) }}>
               <p style={{ color: 'black' }}>{locacion.nombre_recinto || "Cargando..."}</p>
               <p style={{ color: 'gray', fontSize: '0.9rem' }}>{locacion.direccion}</p>
               <p style={{ color: 'gray', fontSize: '0.9rem' }}>{(locacion.tipo_recinto as any)?.tipo}</p>
             </div>
 
-            <div className={styles.opciones}>
-              <button>
-                <FontAwesomeIcon icon={faEllipsisVertical} />
-              </button>
-            </div>
+
           </div>
         ))}
       </div>
