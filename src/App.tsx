@@ -49,8 +49,8 @@ function App() {
 
         <Route path='/panel-administrativo/marcadores' element={< List />} />
         <Route path='/panel-administrativo/marcadores/agregar' element={< AgregarMarcador />} />
-        <Route path='/panel-administrativo/marcadores/informacion' element={< InfoDetallada />} />
-        <Route path='/panel-administrativo/marcadores/editar' element={< EditarLocation />} />
+        <Route path='/panel-administrativo/marcadores/informacion/:id' element={< InfoDetallada />} />
+        <Route path='/panel-administrativo/marcadores/editar/:id' element={< EditarLocation />} />
 
         <Route path='/panel-administrativo/usuarios' element={< Gestion_Usuarios />} />
         <Route path='/usuario/perfil/:id' element={< Perfil_Usuario />} />
