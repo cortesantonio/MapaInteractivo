@@ -8,15 +8,16 @@
   margin: 0 auto;
 }
 
-.flecha {
+.botonatras {
   position: absolute;
   top: 20px;
   left: 20px;
-  padding: 10px;
-  color: #000;
+  font-size: 1.5rem;
+  background-color: transparent;
+  color: rgb(0, 0, 0);
+  border: none;
   cursor: pointer;
-  z-index: 1000;
-  font-size: 20px;
+  z-index: 3;
 }
 
 .titulo {

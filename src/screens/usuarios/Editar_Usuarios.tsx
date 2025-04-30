@@ -6,10 +6,12 @@ import styles from "../usuarios/css/Formularios.module.css"
 import { supabase } from "../../services/supabase"
 import { useState,useEffect } from "react"
 import { Usuarios } from "../../interfaces/Usuarios"
+import { useNavigate } from "react-router-dom"
 
 function Editar_Usuarios () {
   const usuario_id = 1;
   const [usuarios, setUsuarios] = useState<Usuarios[]>([]);
+  const navigate = useNavigate();
 function Presionar_boton () {
     console.log("Botón presionado");
     
@@ -54,8 +56,10 @@ const Actualizar_Informacion = async () => {
   };
     return (
       <div>
-        <div className={styles.flecha}>
-        <FontAwesomeIcon icon={faReply}/>
+        <div>
+          <button className={styles.botonatras} onClick={() => navigate(-1)}>
+            <FontAwesomeIcon icon={faReply}/> 
+          </button>
         </div>
         <div className= {styles.container}>
           <div className={styles.titulo}>
