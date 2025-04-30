@@ -1,7 +1,7 @@
 
 
 export interface Usuarios {
-    id: number;
+    id: string;
     nombre: string;
     correo: string;
     genero: string;
