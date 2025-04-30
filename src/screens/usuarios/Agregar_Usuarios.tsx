@@ -1,4 +1,5 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
+import { useNavigate } from "react-router-dom"
 import {
     faReply
   } from "@fortawesome/free-solid-svg-icons"
@@ -8,10 +9,14 @@ import styles from "../usuarios/css/Formularios.module.css"
 
 
 function Agregar_Usuarios () {
+    const navigate = useNavigate();
     return (
         <div>
-            <div className={styles.flecha}>
-            <FontAwesomeIcon icon={faReply}/>
+            <div>
+              <button className={styles.botonatras} onClick={() => navigate(-1)}>
+                  <FontAwesomeIcon icon={faReply}/>
+              </button>
+            
             </div>
       
       

@@ -6,11 +6,14 @@ import { supabase } from '../../services/supabase';
 import { Resenas } from '../../interfaces/Resenas';
 import { Marcador } from '../../interfaces/Marcador';
 import { useParams } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 function Inspeccionar_Resenas() {
   const { id } = useParams();
   const [marcador, setMarcador] = useState<Marcador | null>(null);
   const [resenas, setResenas] = useState<Resenas[]>([]);
+
+  const navigate = useNavigate();
   const [loading, setLoading] = useState<boolean>(true);
 
   useEffect(() => {
@@ -66,8 +69,11 @@ function Inspeccionar_Resenas() {
             alt=""
           />
         </div>
-        <div className={styles.icono}>
-          <FontAwesomeIcon icon={faReply} />
+        <div>
+          <button className={styles.botonatras} onClick={() => navigate(-1)}>
+            <FontAwesomeIcon icon={faReply} />
+          </button>
+
         </div>
         <div className={styles.titulo_locacion}>
           <h2>{marcador?.nombre_recinto || "Cargando..."}</h2>

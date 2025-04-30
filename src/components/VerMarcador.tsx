@@ -125,14 +125,18 @@ export default function VerMarcador({ MarcadorSelectId, CerrarMarcador }: Props)
     
                             <h4>Horarios</h4>
                             <ul style={{ paddingLeft: '20px' }}>
-                                {diasAMostrar.map((dia, index) => {
-                                    const horario = horariosMarcador.find((h: any) => h.dia.toLowerCase() === dia.toLowerCase());
-                                    return (
-                                        <li key={index}>
-                                            {dia}: {horario ? `${horario.apertura.slice(0,5)} - ${horario.cierre.slice(0,5)}` : 'Cerrado'}
-                                        </li>
-                                    );
-                                })}
+                            {diasAMostrar.map((dia, index) => {
+                                const horario = horariosMarcador.find((h: any) => h.dia.toLowerCase() === dia.toLowerCase());
+                                const esUltimoVisible = !mostrarTodos && index === 2; 
+                                return (
+                                <li
+                                    key={index}
+                                    className={esUltimoVisible ? styles.tercerdia : ''}
+                                >
+                                    {dia}: {horario ? `${horario.apertura.slice(0,5)} - ${horario.cierre.slice(0,5)}` : 'Cerrado'}
+                                </li>
+                                );
+                            })}
                             </ul>
                             <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', flexDirection: 'column' }}>
                                     <button onClick={() => setMostrarTodos(!mostrarTodos)} className={styles.fechaVerMas}>
