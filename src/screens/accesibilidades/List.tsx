@@ -80,7 +80,7 @@ function ListAccesibilidad() {
                     <button className={styles.filtroCard} onClick={() => handleBuscador()} >
                         <FontAwesomeIcon icon={faMagnifyingGlass} /> Buscador
                     </button>
-                    <button className={styles.agregarCard} style={{backgroundColor:'red'}} onClick={() => navigate('/accesibilidad/agregar')}>
+                    <button className={styles.agregarCard} style={{backgroundColor:'red'}} onClick={() => navigate('/panel-administrativo/accesibilidades/agregar')}>
                         <FontAwesomeIcon icon={faPlus} color='white'  /> Agregar
                     </button>
                 </div>
