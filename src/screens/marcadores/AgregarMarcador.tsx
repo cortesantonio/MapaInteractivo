@@ -6,12 +6,14 @@ import { Marcador } from '../../interfaces/Marcador';
 import { Accesibilidad } from '../../interfaces/Accesibilidad';
 import { Tipo_Recinto } from '../../interfaces/Tipo_Recinto';
 import { supabase } from '../../services/supabase';
+import { useNavigate } from 'react-router-dom';
 
 interface TipoDeAccesibilidades {
     [tipo: string]: Accesibilidad[];
 }
 
 export default function AgregarMarcador() {
+    const navigate = useNavigate();
     const [accesibilidades, setAccesibilidades] = useState<TipoDeAccesibilidades>({});
     const [dataMarcador, setDataMarcador] = useState<Partial<Marcador>>({
         nombre_recinto: '',
@@ -81,7 +83,7 @@ export default function AgregarMarcador() {
     useEffect(() => {
         const guardarMarcador = async () => {
             if (!newMarcador) return;
-    
+
             try {
                 const { data: marcadorInsertado, error: errorMarcador } = await supabase
                     .from('marcador')
@@ -97,37 +99,37 @@ export default function AgregarMarcador() {
                     })
                     .select()
                     .single();
-    
+
                 if (errorMarcador) {
                     console.error('Error al guardar marcador:', errorMarcador);
                     return;
                 }
-    
+
                 console.log('Marcador guardado:', marcadorInsertado);
-    
+
                 const relaciones = newMarcador.accesibilidades.map((idAcc) => ({
                     id_marcador: marcadorInsertado.id,
                     id_accesibilidad: idAcc,
                 }));
-    
+
                 const { error: errorRelaciones } = await supabase
                     .from('accesibilidad_marcador')
                     .insert(relaciones);
-    
+
                 if (errorRelaciones) {
                     console.error('Error al guardar relaciones de accesibilidad:', errorRelaciones);
                     return;
                 }
-    
+
                 console.log('Relaciones de accesibilidad guardadas con éxito.');
             } catch (error) {
                 console.error('Error general al guardar el marcador:', error);
             }
         };
-    
+
         guardarMarcador();
     }, [newMarcador]);
-    
+
 
 
     return (
@@ -135,7 +137,7 @@ export default function AgregarMarcador() {
         <div className={styles.container}>
             <div className={styles.titulo} >
                 <button style={{ backgroundColor: 'transparent', border: 'none', cursor: 'pointer', padding: "10px" }}>
-                    <FontAwesomeIcon icon={faReply} size='2xl' />
+                    <FontAwesomeIcon icon={faReply} size='2xl' onClick={() => { navigate(-1) }} />
                 </button>
                 <h2 style={{ textAlign: 'center' }}>
                     Agregar Marcador

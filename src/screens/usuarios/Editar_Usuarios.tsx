@@ -117,7 +117,7 @@ function Editar_Usuarios() {
             </select>
           </div>
           <div className={styles.botones}>
-            <button className={styles.btn1} type="button">Cancelar</button>
+            <button className={styles.btn1} type="button" onClick={() => { navigate(-1) }} >Cancelar</button>
             <button onClick={Presionar_boton} className={styles.btn2} type="submit">Editar Usuario</button>
           </div>
         </form>

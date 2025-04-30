@@ -9,7 +9,7 @@ import { useEffect } from 'react';
 import { Usuarios } from '../../interfaces/Usuarios';
 import { Tipo_Recinto } from '../../interfaces/Tipo_Recinto';
 import { Accesibilidad_Solicitud } from '../../interfaces/Accesibilidad_Solicitud';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 
 interface AccesibilidadesPorTipo {
     [tipo: string]: Accesibilidad[];
@@ -23,7 +23,8 @@ type SolicitudCompleta = Solicitudes & {
 
 
 export default function Ver() {
-    const {id} = useParams()
+    const navigate = useNavigate()
+    const { id } = useParams()
     const [solicitud, setSolicitud] = useState<Partial<SolicitudCompleta>>({});
     const [accesibilidades, setAccesibilidades] = useState<AccesibilidadesPorTipo>({});
     const [isActiveModal, setIsActiveModal] = useState(false)
@@ -119,7 +120,7 @@ export default function Ver() {
         <div className={styles.container}>
 
             <div className={styles.titulo} >
-                <button style={{ backgroundColor: 'transparent', border: 'none', cursor: 'pointer' }}>
+                <button onClick={() => { navigate(-1) }} style={{ backgroundColor: 'transparent', border: 'none', cursor: 'pointer' }}>
                     <FontAwesomeIcon icon={faReply} size='2xl' />
                 </button>
                 <h2>
