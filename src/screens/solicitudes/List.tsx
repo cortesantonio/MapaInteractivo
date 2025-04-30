@@ -67,9 +67,9 @@ function ListSolicitudes() {
             <button style={{ position: "absolute", left: "15px", top: "10px", border: "none", background: "transparent", fontSize: "25px", alignItems: "start" }} onClick={() => { navigate(-1) }}>
                 <FontAwesomeIcon icon={faReply} />
             </button>
-            <header className={styles.header} style={{ paddingTop:'40px', gap:'15px'}}>
-                <hr style={{ flexGrow: "1"}} />
-                <h2 style={{ textAlign: 'right', paddingRight: "15px", whiteSpace:"nowrap" }} >Gestión de solicitudes</h2>
+            <header className={styles.header} style={{ paddingTop: '40px', gap: '15px' }}>
+                <hr style={{ flexGrow: "1" }} />
+                <h2 style={{ textAlign: 'right', paddingRight: "15px", whiteSpace: "nowrap" }} >Gestión de solicitudes</h2>
             </header>
 
             <div className={styles.filtros}>
@@ -131,8 +131,8 @@ function ListSolicitudes() {
                                 {solicitud.direccion.length > 0 ? solicitud.direccion : 'Sin dirección'}
                             </p>
                         </div>
-                        <div className={styles.opciones}>
-                            <button><FontAwesomeIcon icon={faInfo} /> Revisar</button>
+                        <div className={styles.opciones} onClick={() => { navigate(`/panel-administrativo/solicitud/${solicitud.id}`) }}>
+                            <button><FontAwesomeIcon  icon={faInfo} /> Revisar</button>
                         </div>
                     </div>
                 ))}

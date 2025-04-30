@@ -31,6 +31,7 @@ import AgregarSolicitud from './screens/solicitudes/AgregarSolicitud'
 import ListSolicitudes from './screens/solicitudes/List'
 
 import AuthCallback from './screens/AuthCallback'
+import Ver from './screens/solicitudes/Ver'
 
 
 
@@ -68,6 +69,7 @@ function App() {
         <Route path='/panel-administrativo/resenas/inspeccionar/:id' element={< Inspeccionar_Resenas />} />
 
         <Route path='/panel-administrativo/solicitudes' element={<ListSolicitudes />} />
+        <Route path='/panel-administrativo/solicitud/:id' element={<Ver />} />
 
 
 
