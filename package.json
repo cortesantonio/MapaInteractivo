@@ -20,7 +20,8 @@
     "react-audio-visualize": "^1.2.0",
     "react-dom": "^18.2.0",
     "react-router-dom": "^6.30.0",
-    "react-speech-recognition": "^4.0.0"
+    "react-speech-recognition": "^4.0.0",
+    "recharts": "^2.15.3"
   },
   "devDependencies": {
     "@types/react": "^18.2.66",
