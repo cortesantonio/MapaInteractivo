@@ -50,9 +50,9 @@ function Gestion_Usuarios() {
             <button style={{ position: "absolute", left: "15px", top: "10px", border: "none", background: "transparent", fontSize: "25px", alignItems: "start" }} onClick={() => { navigate(-1) }}>
                 <FontAwesomeIcon icon={faReply} />
             </button>
-            <header className={styles.header} style={{ paddingTop:'40px', gap:'15px'}}>
-                <hr style={{ flexGrow: "1"}} />
-                <h2 style={{ textAlign: 'right', paddingRight: "15px", whiteSpace:"nowrap" }} >Gestion de Usuarios</h2>
+            <header className={styles.header} style={{ paddingTop: '40px', gap: '15px' }}>
+                <hr style={{ flexGrow: "1" }} />
+                <h2 style={{ textAlign: 'right', paddingRight: "15px", whiteSpace: "nowrap" }} >Gestion de Usuarios</h2>
             </header>
             <div className={styles.filtros}>
                 <div style={{ display: 'flex', gap: '5px' }}>
@@ -74,7 +74,7 @@ function Gestion_Usuarios() {
                         </form>
                     </div>
 
-                    <div className={styles.add_user} style={{paddingLeft:'10vw'/*Agregado Mati*/ }}>
+                    <div className={styles.add_user} style={{ paddingLeft: '10vw'/*Agregado Mati*/ }}>
                         <form action="">
                             <button onClick={() => { navigate('/panel-administrativo/usuarios/agregar') }}>
                                 <FontAwesomeIcon icon={faUserPlus} /> Nuevo
@@ -97,8 +97,13 @@ function Gestion_Usuarios() {
                 <hr style={{ width: '25%', marginTop: '10px', marginBottom: '10px ', opacity: '50%' }} />
                 {usuariosFiltrados.map((usuario, index) => (
                     <div className={styles.card} key={index}>
+
                         <div className={styles.estado} style={{ backgroundColor: '#0397fc' }}>
-                            <FontAwesomeIcon icon={faUser} size='xl' style={{ color: 'white' }} />
+                            { usuario.avatar_url != null ? (
+                                <img src={usuario.avatar_url} className={styles.imgEstado} alt="" />) :
+                                (<FontAwesomeIcon icon={faUser} size='xl' style={{ color: 'white' }} />)}
+
+
                         </div>
                         <div
                             className={styles.cardContent}
