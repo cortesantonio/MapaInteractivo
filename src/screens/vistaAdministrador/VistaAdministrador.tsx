@@ -1,7 +1,29 @@
+import { useEffect, useState } from "react";
+import { supabase } from "../../services/supabase";
 import { useNavigate } from "react-router-dom";
+import  GraficoTorta  from "../../components/grafico/graficotorta";
+
 
 function VistaAdministrador() {
     const navigate = useNavigate();
+
+    const [datosGrafico, setdatosGrafico] = useState<any[]>([]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const { data, error } = await supabase
+        .from('solicitudes')
+        .select('estado');
+
+      if (error) {
+        console.error('Error al obtener datos:', error);
+      } else {
+        setdatosGrafico(data);
+      }
+    };
+
+    fetchData();
+  }, []);
 
     return (
         <div
@@ -16,12 +38,13 @@ function VistaAdministrador() {
             }}
         >
             <div style={{
-                marginTop: "40px",
+                marginTop: "10px",
                 width: "380px",
-                height: "200px",
+                height: "30vh",
                 display: "flex",
-                boxShadow: "0 4px 6px rgba(0, 0, 0, 0.43)"
-            }}>Espacio para el grafico
+            }}> 
+
+            < GraficoTorta datosGrafico={datosGrafico} />
 
             </div>
 
