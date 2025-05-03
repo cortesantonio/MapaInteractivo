@@ -39,8 +39,8 @@ function VistaAdministrador() {
         >
             <div style={{
                 marginTop: "10px",
-                width: "380px",
-                height: "30vh",
+                width: "65vw",
+                height: "25vh",
                 display: "flex",
             }}> 
 
@@ -49,7 +49,7 @@ function VistaAdministrador() {
             </div>
 
             {/* Sección de Gestión */}
-            <div style={{ position: 'relative', margin: '15px', width: "380px", display: "flex", marginTop: "30px" }}>
+            <div style={{ position: 'relative', margin: '15px', width: "80vw", maxWidth: "380px", display: "flex", marginTop: "30px" }}>
                 <hr style={{ border: 'none', borderTop: '1px solid rgba(0, 0, 0, 0.42)', width: "78%" }} />
                 <h3
                     style={{
@@ -65,7 +65,7 @@ function VistaAdministrador() {
                 </h3>
             </div>
 
-            <div style={{ marginBottom: "20px", width: "380px", alignItems: "center", justifyContent: "center" }}>
+            <div style={{ marginBottom: "20px", width: "80vw", maxWidth: "380px", alignItems: "center", justifyContent: "center" }}>
 
                 <div style={{ margin: "2px", marginTop: "5px" }}>
                     <button style={{
@@ -142,7 +142,7 @@ function VistaAdministrador() {
             </div>
 
             {/* Sección de Solicitudes */}
-            <div style={{ position: 'relative', margin: '15px', width: "380px", display: "flex" }}>
+            <div style={{ position: 'relative', margin: '15px', width: "80vw", maxWidth: "380px", display: "flex" }}>
                 <hr style={{ border: 'none', borderTop: '1px solid rgba(0, 0, 0, 0.42)', width: "73%" }} />
                 <h3
                     style={{
@@ -158,7 +158,7 @@ function VistaAdministrador() {
                 </h3>
             </div>
 
-            <div style={{ marginBottom: "20px", width: "380px", alignItems: "center", justifyContent: "center" }}>
+            <div style={{ marginBottom: "20px", width: "80vw", maxWidth: "380px", alignItems: "center", justifyContent: "center" }}>
 
                 <div style={{ display: "flex", flexDirection: "column", gap: "0.5rem" }}>
 
@@ -206,11 +206,12 @@ function VistaAdministrador() {
                 {/* Botón de cerrar sesión */}
                 <button
                     style={{
-                        width: "150px",
+                        width: "35vw",
+                        maxWidth: "150px",
                         backgroundColor: "rgba(236, 21, 21, 0.7)",
                         color: "white",
                         margin: "10px",
-                        marginLeft: "230px",
+                        marginLeft: "25vw",
                         padding: "10px",
                         borderRadius: "7px",
                         fontWeight: "500",

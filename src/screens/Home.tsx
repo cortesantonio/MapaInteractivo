@@ -5,10 +5,13 @@ import Buscador from "../components/Buscador";
 import BotonEventos from "../components/botoneventos";
 import VerMarcador from "../components/VerMarcador";
 import NavbarUser from "../components/NavbarUser";
+
+
 export default function Home() {
   const [marcadorSeleccionadoId, setMarcadorSeleccionadoId] = useState<number | null>(null);
   const [mostrarMarcador, setMostrarMarcador] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
+  const [isStreetViewActive, setIsStreetViewActive] = useState(false);
 
   useEffect(() => {
     const mediaQuery = window.matchMedia("(max-width: 768px)");
@@ -37,30 +40,35 @@ export default function Home() {
   return (
     <div style={{ width: '100%', height: '100vh', position: 'relative' }}>
 
-      <Buscador onSeleccionMarcador={(id: number) => {
-        setMarcadorSeleccionadoId(id);
-        setMostrarMarcador(true);
-      }} />
-      <BotonEventos />
-      <NavbarUser />
-
       <Map
         onSeleccionMarcador={(id: number) => {
           setMarcadorSeleccionadoId(id);
           setMostrarMarcador(true);
         }}
+        onStreetViewChange={(isActive) => setIsStreetViewActive(isActive)}
       />
 
-      {mostrarMarcador && marcadorSeleccionadoId !== null && (
-        <div style={estilosMarcador}>
-          <VerMarcador
-            MarcadorSelectId={marcadorSeleccionadoId}
-            CerrarMarcador={() => setMostrarMarcador(false)}
-          />
-        </div>
-      )}
+      {!isStreetViewActive && (
+        <>
+          <Buscador onSeleccionMarcador={(id: number) => {
+            setMarcadorSeleccionadoId(id);
+            setMostrarMarcador(true);
+          }} />
+          <BotonEventos />
+          <NavbarUser />
 
-      <Footer />
+          {mostrarMarcador && marcadorSeleccionadoId !== null && (
+            <div style={estilosMarcador}>
+              <VerMarcador
+                MarcadorSelectId={marcadorSeleccionadoId}
+                CerrarMarcador={() => setMostrarMarcador(false)}
+              />
+            </div>
+          )}
+
+          <Footer />
+        </>
+      )}
     </div>
   );
 }
