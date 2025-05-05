@@ -1,6 +1,6 @@
 import { useEffect, useState, CSSProperties } from "react";
 import Map from "../components/Map";
-import Footer from "../components/Footer";
+import Footer from "../components/Footer/Footer";
 import Buscador from "../components/Buscador";
 import BotonEventos from "../components/botoneventos";
 import VerMarcador from "../components/VerMarcador";

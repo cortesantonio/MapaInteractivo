@@ -1,0 +1,98 @@
+.PanelActivo {
+    padding: 20px;
+    position: relative;
+    height: 100%;
+    overflow: auto;
+}
+
+.ButtonClose {
+    position: absolute;
+    top: 1px;
+    right: 1px;
+    background: transparent;
+    padding: 10px;
+    border: none;
+    cursor: pointer;
+}
+
+.ContenUno {
+    display: flex;
+    align-items: center;
+    margin-bottom: 8px;
+}
+
+.ContenInterUno {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-right: 8px;
+    color: green;
+}
+
+.Input {
+    background: transparent;
+    color: black;
+    font-size: 14px;
+    width: 100%;
+    border: 1px solid gray;
+    border-radius: 20px;
+    padding: 7px 12px;
+    outline: none;
+}
+
+.ContenDos {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.ContenInterDos {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-right: 12px;
+    color: red;
+}
+
+.PositionIcons {
+    overflow: hidden;
+    display: flex;
+    gap: 44px;
+    margin: 20px 0;
+}
+
+.ButttonIcons {
+    background: transparent;
+    padding: 0px;
+    outline: none;
+    border: none;
+}
+
+.hr {
+    border: 0;
+    border-top: 1px solid rgb(200, 197, 197);
+    margin: 10px 0;
+}
+
+.TituloDestin {
+    color: gray;
+    text-align: center;
+    font: 100% sans-serif;
+}
+
+.ContenInfo {
+    display: flex;
+    align-items: center;
+    margin: 1px;
+    font-size: 13px;
+    text-align-last: left;
+    margin-top: 10px;
+}
+
+.IconsClock {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-right: 10px;
+    color: gray;
+}
