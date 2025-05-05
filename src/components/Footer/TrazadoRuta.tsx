@@ -13,14 +13,16 @@ export default function TrazadoRuta({ tamanoFuente, closePanel, panelActivo }: {
 }) {
 
     const { user } = useAuth();
-
+    const [destinosRecientes, setDestinosRecientes] = useState<boolean>(false)
     const [busquedasRecientes, setBusquedasRecientes] = useState<Partial<Busquedas>[]>([]);
 
 
     useEffect(() => {
         const obtenerBusquedas = async () => {
-            if (!user) return; // Si no hay usuario, no hace nada
-
+            if (!user) { // Si no hay usuario, no hace nada
+                setDestinosRecientes(false);
+                return;
+            }
             const { data, error } = await supabase
                 .from('busquedas')
                 .select(`
@@ -39,6 +41,7 @@ export default function TrazadoRuta({ tamanoFuente, closePanel, panelActivo }: {
                     fecha_hora: item.fecha_hora,
                 }));
                 setBusquedasRecientes(busquedasRecientesFormateadas);
+                setDestinosRecientes(busquedasRecientesFormateadas.length > 0)
                 console.log(busquedasRecientesFormateadas)
             } else {
                 console.error("Error al obtener búsquedas con marcadores:", error);
@@ -47,6 +50,8 @@ export default function TrazadoRuta({ tamanoFuente, closePanel, panelActivo }: {
 
         obtenerBusquedas();
     }, [user]);
+
+
 
 
     return (
@@ -91,16 +96,15 @@ export default function TrazadoRuta({ tamanoFuente, closePanel, panelActivo }: {
                         </button>
                     </div>
 
-                    <hr className={styles.hr} style={{ width: "98%" }}></hr>
+                    <hr className={styles.Lineahr} style={{ width: "98%" }}></hr>
 
                     {/* Desde aqui en adelante realizar la funcion correspondiente con la tabla de busquedas */}
-
                     <div style={{ marginTop: "15px" }}>
                         <h4 className={styles.TituloDestin}>
                             DESTINOS RECIENTES
                         </h4>
-
-                        {busquedasRecientes.map((busquedas, index) => (
+                        {/*Cuando no hay destinos registrados muestra el mensaje, si lo hay muestra los destinos registrados del usuario logeado*/}
+                        {!destinosRecientes ? (<p className={styles.MensajeP}>No hay Destinos Recientes</p>) : (busquedasRecientes.map((busquedas, index) => (
                             <div key={index} className={styles.ContenInfo}>
                                 <div className={styles.IconsClock}>
                                     <FontAwesomeIcon icon={faClockRotateLeft} style={{ color: "gray" }} size="lg" />
@@ -110,10 +114,9 @@ export default function TrazadoRuta({ tamanoFuente, closePanel, panelActivo }: {
                                     <p style={{ margin: "0", color: "gray", fontSize: "12px" }}> {busquedas.id_marcador?.direccion} </p>
                                 </div>
                             </div>
+                        )))}
 
-                        ))}
-
-                        <hr className={styles.hr} style={{ width: "90%" }}></hr>
+                        <hr className={styles.Lineahr} style={{ width: "90%" }}></hr>
                     </div>
 
                 </div>

@@ -64,7 +64,7 @@ const Map = ({
 
   return (
     <APIProvider apiKey={apiKey}>
-      <GoogleMap defaultCenter={center} defaultZoom={zoom} style={{ height: "100%", width: "100%" }} colorScheme="DARK" mapId="7d3698ad84e7e9c3">
+      <GoogleMap defaultCenter={center} defaultZoom={zoom} style={{ height: "100%", width: "100%" }} colorScheme="DARK" mapId="85924eacc82f2794">
         <CustomMap
           marcadores={marcadores}
           SeleccionMarcador={onSeleccionMarcador}
