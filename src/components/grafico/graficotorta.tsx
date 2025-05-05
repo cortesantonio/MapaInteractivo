@@ -42,19 +42,20 @@ const GraficoTorta = ({ datosGrafico}: Props) => {
   useEffect(() => {
     const resize = () => {
       if (containerRef.current) {
-        const height = containerRef.current.offsetHeight;
-        setOuterRadius(height * 0.35);
+        const { offsetHeight, offsetWidth } = containerRef.current;
+        const size = Math.min(offsetHeight, offsetWidth);
+        setOuterRadius(size * 0.35); 
       }
     };
-
-    resize(); 
-
+  
+    resize(); // inicial
+  
     window.addEventListener('resize', resize);
     return () => window.removeEventListener('resize', resize);
   }, []);
 
   return (
-    <div style={{ width: '100%', height: '100%' }}>
+    <div style={{ width: '100%', height: '100%' }} >
       {datos.length === 0 ? (
         <p>Cargando gráfico...</p>
       ) : (
