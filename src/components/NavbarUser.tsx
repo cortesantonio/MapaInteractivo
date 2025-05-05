@@ -2,50 +2,51 @@ import { useAuth } from "../hooks/useAuth"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faRightFromBracket } from "@fortawesome/free-solid-svg-icons";
 import { useNavigate } from "react-router-dom";
+import styles from './css/NavbarUser.module.css'
+import { useState } from "react";
 
 export default function NavbarUser() {
     const { user, signOut } = useAuth()
     const navigate = useNavigate()
+    const [modalOpen, setModalOpen] = useState(false)
+
+
     if (!user) return null
-
-    console.log(user)
-
     return (
-        <div style={{
-            position: 'absolute', top: 25, right: 25, background: 'red', height: 'fit-content',
-            padding: 5, zIndex: 5, backgroundColor: 'white', borderRadius: '10px',
-            boxShadow: '1px 1px 2px black'
-        }}>
-            <div style={{ display: 'flex', gap: 10, justifyContent: 'center', alignItems: 'center' }} >
-                <img
-                    src={user?.user_metadata?.picture || '../src/assets/react.svg'}
-                    alt="Foto de perfil"
-                    style={{ width: '40px', height: '40px', borderRadius: '50%' }}
-                />
+        <div style={{ display: 'flex', justifyContent: 'start', alignItems: 'end', flexDirection: 'column', gap: '10px' }}>
+            <div className={styles.containerUser} >
+                <div style={{ display: 'flex', gap: 10, justifyContent: 'center', alignItems: 'center' }}
+                    onClick={() => { setModalOpen(!modalOpen) }}
+                >
+                    <img
+                        src={user?.user_metadata?.picture || '../src/assets/react.svg'}
+                        alt="Foto de perfil"
+                        style={{ width: '100%', height: '100%', borderRadius: '50%' }}
+                    />
+                </div>
+            </div>
 
-                <div>
-                    <p onClick={() => { navigate(`/usuario/perfil/${user.id}`) }} style={{ textDecoration: 'underline', fontWeight: 400, cursor: 'pointer' }}>{user?.user_metadata.full_name} </p>
-                    <p style={{ fontSize: '0.8rem', color: 'gray' }}>{user?.email} </p>
+            {modalOpen == true && (
+                <div style={{ backgroundColor: 'white', borderRadius: '15px', padding: 10, pointerEvents: 'auto', width: '200px' }}>
+                    <div >
+                        <p style={{ fontWeight: 400, cursor: 'pointer', textOverflow: 'ellipsis', whiteSpace: 'nowrap', overflow: 'hidden' }}>{user?.user_metadata.full_name} </p>
+                        <p style={{ fontSize: '0.9rem', color: 'gray', textOverflow: 'ellipsis', whiteSpace: 'nowrap', overflow: 'hidden' }}>{user?.email} </p>
+
+                    </div>
+                    <div className={styles.opt}>
+                        <button className={styles.btnNavegacion} onClick={() => { navigate(`/usuario/perfil/${user.id}`) }} style={{ display: 'block' }}>Ver perfil</button>
+                        <button className={styles.btnNavegacion} onClick={() => { navigate(`/usuario/perfil/editar/${user.id}`) }} style={{ display: 'block' }}>Editar perfil</button>
+                    </div>
+
+                    <button className={styles.btnCerrarSesion} onClick={signOut}>
+                        Cerrar Sesion  <FontAwesomeIcon icon={faRightFromBracket} />
+                    </button>
                 </div>
 
-                <button
-                    style={{
-                        backgroundColor: "rgb(253, 29, 29)",
-                        background: "linear-gradient(90deg, rgba(253, 29, 29, 1) 0%, rgba(255, 106, 60, 1) 100%)",
-                        border: 'none',
-                        width: '30px',
-                        height: '30px',
-                        borderRadius: '50%',
-                        color: 'white',
-                        display: 'flex',
-                        justifyContent: 'center',
-                        alignItems: 'center'
-                    }}
-                    onClick={signOut}>
-                    <FontAwesomeIcon icon={faRightFromBracket} />
-                </button>
-            </div>
-        </div>
+            )
+            }
+        </div >
+
     )
 
 }

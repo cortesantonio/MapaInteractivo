@@ -50,12 +50,20 @@ export default function Home() {
 
       {!isStreetViewActive && (
         <>
-          <Buscador onSeleccionMarcador={(id: number) => {
-            setMarcadorSeleccionadoId(id);
-            setMostrarMarcador(true);
-          }} />
-          <BotonEventos />
-          <NavbarUser />
+          <div style={{
+            position: 'absolute', top: 0, right: 0, zIndex: 1, width: '100%', display: 'flex', justifyContent: 'space-between', padding: 25, pointerEvents: 'none', flexWrap: 'wrap'
+          }}>
+            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'start', gap: 10, pointerEvents: 'auto' }}>
+              <Buscador onSeleccionMarcador={(id: number) => {
+                setMarcadorSeleccionadoId(id);
+                setMostrarMarcador(true);
+              }} />
+              <BotonEventos />
+            </div>
+
+            <NavbarUser />
+          </div>
+
 
           {mostrarMarcador && marcadorSeleccionadoId !== null && (
             <div style={estilosMarcador}>
@@ -68,7 +76,8 @@ export default function Home() {
 
           <Footer />
         </>
-      )}
-    </div>
+      )
+      }
+    </div >
   );
 }

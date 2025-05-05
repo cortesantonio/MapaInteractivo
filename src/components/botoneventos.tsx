@@ -64,9 +64,6 @@ function BotonEventos() {
                 padding: "10px",
                 borderRadius: "5px",
                 gap: "10px",
-                position: "absolute",
-                top: "80px",
-                right: position.right,
                 width: width,
                 transition: "width 0.3s ease-in-out",
                 zIndex: 1
