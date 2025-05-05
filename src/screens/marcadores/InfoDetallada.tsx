@@ -109,7 +109,7 @@ export default function InfoDetallada() {
                     alt=""
                     className={styles.imagenMarcador}
                 />
-                <button style={{ zIndex: 10 }} className={styles.VolverAtras} onClick={() => { navigate(`/panel-administrativo/marcadores`) }}>
+                <button style={{ zIndex: 10 }} className={styles.VolverAtras} onClick={() => { navigate(-1) }}>
                     <FontAwesomeIcon icon={faReply} size='2xl' />
                 </button>
                 <div className={styles.Titulo} >

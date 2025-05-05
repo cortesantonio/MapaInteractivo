@@ -4,10 +4,12 @@ import { faRightFromBracket } from "@fortawesome/free-solid-svg-icons";
 import { useNavigate } from "react-router-dom";
 
 export default function NavbarUser() {
-    let idUser = 1;
     const { user, signOut } = useAuth()
     const navigate = useNavigate()
     if (!user) return null
+
+    console.log(user)
+
     return (
         <div style={{
             position: 'absolute', top: 25, right: 25, background: 'red', height: 'fit-content',
@@ -22,7 +24,7 @@ export default function NavbarUser() {
                 />
 
                 <div>
-                    <p onClick={() => { navigate(`/usuario/perfil/${idUser}`) }} style={{ textDecoration: 'underline', fontWeight: 400, cursor: 'pointer' }}>{user?.user_metadata.full_name} </p>
+                    <p onClick={() => { navigate(`/usuario/perfil/${user.id}`) }} style={{ textDecoration: 'underline', fontWeight: 400, cursor: 'pointer' }}>{user?.user_metadata.full_name} </p>
                     <p style={{ fontSize: '0.8rem', color: 'gray' }}>{user?.email} </p>
                 </div>
 

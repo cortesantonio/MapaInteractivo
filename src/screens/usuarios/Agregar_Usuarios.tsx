@@ -60,7 +60,7 @@ function Agregar_Usuarios() {
           </div>
 
           <div className={styles.botones}>
-            <button className={styles.btn1} type="button">Cancelar</button>
+            <button className={styles.btn1} type="button" onClick={() => { navigate(-1) }}>Cancelar</button>
             <button className={styles.btn2} type="submit">Añadir Usuario</button>
           </div>
         </form>

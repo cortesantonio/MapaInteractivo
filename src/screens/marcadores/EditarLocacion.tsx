@@ -124,7 +124,7 @@ export default function EditarLocacion() {
                     className={styles.imagenMarcador}
                 />
                 <button className={styles.VolverAtras}
-                    type="submit" onClick={() => { navigate(`/panel-administrativo/marcadores/informacion`) }}>
+                    type="submit" onClick={() => { navigate(-1) }}>
                     <FontAwesomeIcon icon={faReply} size='2xl' />
                 </button>
                 <div className={styles.Titulo} >
@@ -230,9 +230,7 @@ export default function EditarLocacion() {
                                 }}
                             >CANCELAR
                             </button>
-                            <button type="submit" onClick={() => {
-                                navigate(`/panel-administrativo/marcadores`); // Para volver atrás
-                            }} >Guardar Cambios</button>
+                            <button type="submit"  >Guardar Cambios</button>
                         </div>
                     </form>
 

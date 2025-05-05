@@ -1,0 +1,147 @@
+.PanelActivo {
+    padding: 20px;
+    position: relative;
+    height: 100%;
+    overflow: auto;
+}
+
+.ButtonClose {
+    position: absolute;
+    top: 1px;
+    right: 1px;
+    background: transparent;
+    padding: 10px;
+    border: none;
+    cursor: pointer;
+}
+
+.Titulo {
+    color: black;
+    margin: 10px;
+    text-align: center;
+}
+
+.ButtonPerfil {
+    background: transparent;
+    outline: none;
+    border: none;
+    font-weight: 400;
+    padding: 10px;
+    text-align: center;
+    margin-top: 5px;
+    cursor: pointer;
+}
+
+.ButtonSesion {
+    color: blue;
+    background: transparent;
+    outline: none;
+    border: none;
+    font-weight: bold;
+    padding: 10px;
+    text-align: center;
+    margin-top: 5px;
+    cursor: pointer;
+}
+
+.ButtonColab {
+    color: black;
+    background: transparent;
+    outline: none;
+    border: none;
+    padding: 10px;
+}
+
+.ContenSpan {
+    display: flex;
+    justify-content: space-around;
+    align-items: right;
+    padding: 9px;
+}
+
+.SpanNocturn {
+    color: black;
+    text-align: right;
+}
+
+.ButtonNoctur {
+    width: 40px;
+    height: 20px;
+    border-radius: 34px;
+    left: 20px;
+    border: 1px solid gray;
+    outline: none;
+    position: relative;
+    transition: background-color 0.4s;
+    cursor: pointer;
+}
+
+.Span {
+    position: absolute;
+    height: 16px;
+    border: 1px solid gray;
+    width: 16px;
+    bottom: 1px;
+    background-color: black;
+    border-radius: 50%;
+    transition: 0.4s;
+}
+
+.ButtonCompact {
+    color: black;
+    background: transparent;
+    outline: none;
+    border: none;
+    padding: 9px;
+    cursor: pointer;
+}
+
+.ContenFuncion {
+    justify-content: space-between;
+    padding: 8px;
+    justify-items: center;
+    text-align: center;
+    margin: 10px;
+}
+
+.MenosFuente {
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    font-size: 20px;
+    display: flex;
+    font-weight: bold;
+    align-items: center;
+    padding: 0;
+}
+
+.MenosA {
+    margin-right: 2px;
+    color: black;
+    text-align: center;
+    font-size: 18px;
+}
+
+.TituloFuente {
+    margin: 5px;
+    color: black;
+    justify-items: center;
+}
+
+.MasFuente {
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    font-size: 20px;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    padding: 0;
+}
+
+.MasA {
+    margin-right: 2px;
+    color: black;
+    text-align: center;
+    font-size: 18px;
+}

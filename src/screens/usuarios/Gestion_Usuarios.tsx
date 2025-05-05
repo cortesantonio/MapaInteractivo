@@ -14,6 +14,7 @@ import { Usuarios } from "../../interfaces/Usuarios";
 import { useNavigate } from "react-router-dom";
 
 function Gestion_Usuarios() {
+
   const navigate = useNavigate();
 
   const [isActiveBuscador, setIsActiveBuscador] = useState(false);
