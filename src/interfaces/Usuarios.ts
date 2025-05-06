@@ -11,5 +11,6 @@ export interface Usuarios {
     password: string;
     rol: string;
     activo: boolean;
+    rut:string;
   }
   

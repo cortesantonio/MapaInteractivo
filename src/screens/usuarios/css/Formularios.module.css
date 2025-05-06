@@ -1,13 +1,3 @@
-.page_container {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  min-height: 100vh;
-  width: 100%;
-  padding: 20px;
-  box-sizing: border-box;
-}
-
 .container {
   display: flex;
   flex-direction: column;
@@ -57,10 +47,14 @@
 }
 
 .espacio {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
   width: 100%;
   max-width: 400px;
   margin-bottom: 20px;
 }
+
 
 .etiquetas {
   display: block;
@@ -111,3 +105,54 @@
   background: linear-gradient(90deg, #ff0000, #ff6100);
   border-radius: 5px;
 }
+
+.input_contraseña {
+  position: relative;
+  width: 100%;
+}
+
+.formulario {
+  padding-right: 40px; 
+}
+
+.boton_ojito {
+  position: absolute;
+  top: 50%;
+  right: 10px;
+  transform: translateY(-50%);
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+}
+
+.btn_desactivar_usuario button {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.checkbox_input {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start; 
+  width: 100%;
+  max-width: 400px;
+  margin-bottom: 20px;
+  margin-left: 5px;
+  gap: 5px; 
+}
+
+.checkbox_input input[type="checkbox"] {
+  width: 15px; 
+  height: 15px; 
+  cursor: pointer;
+}
+
+.checkbox_input label {
+ padding-left: 10px;
+  padding-top: 20px;
+  font-size: 1rem; 
+  color: #000; 
+  font-weight: 300; 
+}
+
