@@ -7,6 +7,7 @@ import { Accesibilidad } from '../../interfaces/Accesibilidad';
 import { Tipo_Recinto } from '../../interfaces/Tipo_Recinto';
 import { supabase } from '../../services/supabase';
 import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../../hooks/useAuth';
 
 interface TipoDeAccesibilidades {
     [tipo: string]: Accesibilidad[];
@@ -14,6 +15,7 @@ interface TipoDeAccesibilidades {
 
 export default function AgregarMarcador() {
     const navigate = useNavigate();
+    const { user } = useAuth();
     const [accesibilidades, setAccesibilidades] = useState<TipoDeAccesibilidades>({});
     const [dataMarcador, setDataMarcador] = useState<Partial<Marcador>>({
         nombre_recinto: '',
@@ -21,6 +23,7 @@ export default function AgregarMarcador() {
         direccion: '',
         pagina_web: '',
         telefono: '',
+        url_img: '',
         latitud: undefined,
         longitud: undefined,
         activo: true,
@@ -56,7 +59,6 @@ export default function AgregarMarcador() {
                 setAccesibilidades(agrupadas);
             }
         };
-
         fetchAccesibilidades();
     }, []);
 
@@ -96,6 +98,8 @@ export default function AgregarMarcador() {
                         latitud: newMarcador.latitud,
                         longitud: newMarcador.longitud,
                         activo: newMarcador.activo,
+                        url_img: newMarcador.url_img,
+                        id_usuario: user?.id
                     })
                     .select()
                     .single();
@@ -174,12 +178,14 @@ export default function AgregarMarcador() {
                                 type="number" value={dataMarcador.telefono}
                                 onChange={(e) => setDataMarcador({ ...dataMarcador, telefono: e.target.value })} required />
                         </div>
+
                         <label className={styles.labelSeccion} htmlFor="">Imagen de su local en URL</label>
                         <input
                             type="text"
                             value={dataMarcador.url_img}
                             onChange={(e) => setDataMarcador({ ...dataMarcador, url_img: e.target.value })}
                             className={styles.inputText} required />
+
                         <label className={styles.labelSeccion} htmlFor="">Latitud</label>
                         <input className={styles.inputText} //Crear 
                             type="number"

@@ -6,7 +6,7 @@ import { faReply } from '@fortawesome/free-solid-svg-icons';
 import { Marcador } from '../../interfaces/Marcador';
 import { Accesibilidad } from '../../interfaces/Accesibilidad';
 import { supabase } from '../../services/supabase';
-
+import { faArrowUpRightFromSquare } from '@fortawesome/free-solid-svg-icons';
 
 interface TipoDeAccesibilidades {
     [tipo: string]: Accesibilidad[];
@@ -23,12 +23,18 @@ export default function InfoDetallada() {
         direccion: '',
         pagina_web: '',
         telefono: '',
+        id_usuario: undefined,
+        id_solicitud: undefined,
         url_img: '',
         latitud: undefined,
         longitud: undefined,
         activo: true,
     });
     const [selecciones, setSelecciones] = useState<number[]>([]);
+    const [supervisor, setSupervisor] = useState({
+        id: undefined,
+        nombre: ''
+    });
 
     useEffect(() => { // LLAMADO A LA API PARA OBTNER TODOAS LAS ACCESIBILIDADES QUE HAY EN LA BASE DE DATOS Y LA CLASIFICA POR TIPO
         const fetchAccesibilidades = async () => {
@@ -79,6 +85,25 @@ export default function InfoDetallada() {
         }
     }, [id]);
 
+    useEffect(() => {
+        const fetchNombreUsuario = async () => {
+            if (!dataMarcador.id_usuario) return;
+
+            const { data, error } = await supabase
+                .from('usuarios')
+                .select('id, nombre')
+                .eq('id', dataMarcador.id_usuario)
+                .single();
+
+            if (error) {
+                console.error('Error al obtener el nombre del usuario:', error);
+            } else {
+                setSupervisor(data);
+            }
+        };
+
+        fetchNombreUsuario();
+    }, [dataMarcador.id_usuario]);
 
     useEffect(() => {
         const fetchTipoRecinto = async () => {
@@ -101,6 +126,27 @@ export default function InfoDetallada() {
     }, [dataMarcador.tipo_recinto]);
 
 
+    const toggleActivo = async () => {
+        if (!id) return;
+
+        const nuevoEstado = !dataMarcador.activo;
+
+        const { error } = await supabase
+            .from('marcador')
+            .update({ activo: nuevoEstado })
+            .eq('id', id);
+
+        if (error) {
+            console.error('Error al cambiar el estado de activo:', error);
+        } else {
+            setDataMarcador(prev => ({ ...prev, activo: nuevoEstado }));
+            alert(`Marcador ${nuevoEstado ? 'activado' : 'desactivado'} correctamente.`);
+        }
+    };
+
+
+
+
     return (
         <div className={styles.container}>
 
@@ -120,6 +166,8 @@ export default function InfoDetallada() {
                 <div className={styles.locacionTitulo}>
                     <h4>{dataMarcador.nombre_recinto}</h4>
                     <p>{nombreTipoRecinto}</p>
+
+
                 </div>
             </div>
 
@@ -128,9 +176,36 @@ export default function InfoDetallada() {
                     <div className={styles.formGrid}>
                         {/*Primer Grupo*/}
                         <div className={styles.formSection} >
+                            <label htmlFor="">¿Está activo? {dataMarcador.activo ? (<p>Si</p>) : (<p>No</p>)}</label>
+                            <label className={styles.labelSeccion} >Solicitud</label>
+                            {dataMarcador.id_solicitud == null ? (
+                                <p>No se ingresó registro.</p>
+                            ) : (
+                                <p>{dataMarcador.id_solicitud}
+                                    <button className={styles.btnLink} >
+                                        <FontAwesomeIcon onClick={() => { navigate(`/panel-administrativo/solicitud/${supervisor.id}`) }} size="sm" icon={faArrowUpRightFromSquare} />
+
+                                    </button>
+                                </p>
+                            )}
+
+                            <label className={styles.labelSeccion} >Supervisor</label>
+                            {supervisor.id === undefined ? (
+                                <p>No se ingresó registro.</p>
+                            ) : (
+                                <p>{supervisor.nombre}
+                                    <button className={styles.btnLink} >
+                                        <FontAwesomeIcon onClick={() => { navigate(`/usuario/perfil/${supervisor.id}`) }} size="sm" icon={faArrowUpRightFromSquare} />
+
+                                    </button>
+                                </p>
+                            )}
+
 
                             <label className={styles.labelSeccion} >Nombre Locacion</label>
                             <p>{dataMarcador.nombre_recinto}</p>
+                            <label className={styles.labelSeccion}>Tipo de Recinto</label>
+                            <p>{nombreTipoRecinto}</p>
                             <label className={styles.labelSeccion} htmlFor="">Direccion</label>
                             <p>{dataMarcador.direccion}</p>
                             <label className={styles.labelSeccion} htmlFor="">Pagina Web</label>
@@ -144,8 +219,7 @@ export default function InfoDetallada() {
                             <p>{dataMarcador.latitud}</p>
                             <label className={styles.labelSeccion}>Longitud</label>
                             <p>{dataMarcador.longitud}</p>
-                            <label className={styles.labelSeccion}>Tipo de Recinto</label>
-                            <p>{nombreTipoRecinto}</p>
+
 
                         </div>
 
@@ -179,8 +253,13 @@ export default function InfoDetallada() {
                     </div>
 
                     <div className={styles.acciones}>
-                        <button type="button" style={{ backgroundColor: "transparent", color: "red" }}>
-                            DESACTIVAR
+
+                        <button
+                            type="button"
+                            onClick={toggleActivo}
+                            style={{ color: dataMarcador.activo ? 'red' : 'green', backgroundColor: 'transparent' }}
+                        >
+                            {dataMarcador.activo ? 'Desactivar' : 'Activar'}
                         </button>
                         <button type="submit" onClick={() => { navigate(`/panel-administrativo/marcadores/editar/${dataMarcador.id}`) }}>Editar</button>
                     </div>
