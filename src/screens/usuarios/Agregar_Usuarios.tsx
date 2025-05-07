@@ -13,11 +13,56 @@ function Agregar_Usuarios() {
   const [nombre, setNombre] = useState("");
   const [fechaNacimiento, setFechaNacimiento] = useState("");
   const [correo, setCorreo] = useState("");
-  const [contrasena, setContrasena] = useState("");
+  const [password, setContrasena] = useState("");
   const [repetirContrasena, setRepetirContrasena] = useState("");
   const [telefono, setTelefono] = useState("");
   const [rol, setRol] = useState("gestor");
   const [genero, setGenero] = useState("Hombre");
+  const [tipo, set_tipo_discapacidad] = useState("Fisica");
+  const [nombreDiscapacidad, setNombreDiscapacidad] = useState("");
+  const [tiene_una_Discapacidad, set_tiene_una_Discapacidad] = useState(false);
+  
+
+  // Función para formatear el RUT mientras el usuario escribe
+  const formatearRut = (rut: string): string => {
+    // Eliminar todos los caracteres no numéricos y la letra K
+    let valor = rut.replace(/[^\dkK]/g, "");
+    
+    // Separar el cuerpo y el dígito verificador
+    let cuerpo = valor;
+    let dv = "";
+    
+    if (valor.length > 1) {
+      cuerpo = valor.slice(0, -1);
+      dv = valor.slice(-1).toUpperCase();
+    }
+    
+    // Formatear el cuerpo con puntos
+    if (cuerpo.length > 0) {
+      let rutFormateado = "";
+      let i = cuerpo.length - 1;
+      let contador = 0;
+      
+      while (i >= 0) {
+        rutFormateado = cuerpo.charAt(i) + rutFormateado;
+        contador++;
+        if (contador === 3 && i !== 0) {
+          rutFormateado = "." + rutFormateado;
+          contador = 0;
+        }
+        i--;
+      }
+      
+      // Agregar el guión y dígito verificador
+      if (dv) {
+        rutFormateado = rutFormateado + "-" + dv;
+      }
+      
+      return rutFormateado;
+    }
+    
+    return valor;
+  };
 
   const validarRut = (rut: string): boolean => {
     rut = rut.replace(/\./g, "").replace("-", "");
@@ -39,41 +84,62 @@ function Agregar_Usuarios() {
     return dv === dvEsperado;
   };
 
+  const handleRutChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const valorIngresado = e.target.value;
+    
+    // Solo permitir números, K, k, puntos y guiones
+    if (!/^[0-9kK.\-]*$/.test(valorIngresado) && valorIngresado !== "") {
+      return;
+    }
+    
+    // Formateamos el RUT
+    const rutFormateado = formatearRut(valorIngresado);
+    setRut(rutFormateado);
+    
+    // Validamos el RUT solo si tiene un formato completo
+    if (rutFormateado.includes("-")) {
+      setRutValido(validarRut(rutFormateado));
+    } else {
+      // Si no está completo, no mostramos error todavía
+      setRutValido(true);
+    }
+  };
   const handleSubmit = async (e: FormEvent): Promise<void> => {
     e.preventDefault();
-
-    if (!rutValido) {
+    if (!validarRut(rut)) {
       alert("El RUT no es válido");
       return;
     }
-
-    if (contrasena !== repetirContrasena) {
+    if (password !== repetirContrasena) {
       alert("Las contraseñas no coinciden");
       return;
     }
-
-    const { data, error } = await supabase.from("usuarios").insert([
-      {
-        nombre,
-        rut,
-        fecha_nacimiento: fechaNacimiento,
-        correo,
-        contrasena,
-        telefono,
-        rol,
-        genero
-      },
-    ]);
-
-    console.log(data);
-
-    if (error) {
-      console.error(error);
-      alert("Error al añadir usuario");
-    } else {
+    try {
+      const {data:userData, error: userError} = await supabase.from("usuarios").insert([{nombre,rut,fecha_nacimiento: fechaNacimiento,correo,password,telefono,rol,genero}]).select();
+      if (userError) {
+        console.error(userError);
+        alert("Error al añadir usuario");
+        return;
+      }
+      console.log(userData);
+      if (tiene_una_Discapacidad && userData && userData.length > 0){
+        const userId = userData[0].id;
+        const {error:discapacidad_error} = await supabase.from("discapacidad").insert([{
+            id_usuario: userId,
+            nombre: nombreDiscapacidad,
+            tipo: tipo
+        }]);
+        if (discapacidad_error) {
+          console.error("Error al añadir discapacidad:", discapacidad_error);
+          alert("Usuario creado, pero hubo un error al registrar la discapacidad");
+          return;
+        }
+      }
       alert("Usuario añadido correctamente");
-      // Opcional: redirigir después de agregar
-      // navigate('/ruta-destino');
+      navigate(-1);
+    } catch (error) {
+      console.error(error);
+      alert("Error en el proceso de registro");
     }
   };
 
@@ -108,40 +174,25 @@ function Agregar_Usuarios() {
               type="text"
               placeholder="12.345.678-9"
               value={rut}
-              onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                const valor = e.target.value;
-                setRut(valor);
-                setRutValido(validarRut(valor));
-              }}
+              onChange={handleRutChange}
+              maxLength={12}
               required
             />
             {!rutValido && (
               <span style={{ color: "red", fontSize: "0.8rem" }}>
-                Rut no válido ("Por favor, Escriba Correctamente su Rut")
+                Rut no válido ("Por favor, escriba correctamente su Rut")
               </span>
             )}
           </div>
 
           <div className={styles.espacio}>
             <label className={styles.etiquetas}>Fecha Nacimiento</label>
-            <input
-              className={styles.formulario}
-              type="date"
-              placeholder="Fecha Nacimiento"
-              onChange={(e) => setFechaNacimiento(e.target.value)}
-              required
-            />
+            <input className={styles.formulario} type="date" placeholder="Fecha Nacimiento" onChange={(e) => setFechaNacimiento(e.target.value)} required/>
           </div>
 
           <div className={styles.espacio}>
             <label className={styles.etiquetas}>Correo</label>
-            <input
-              className={styles.formulario}
-              type="email"
-              placeholder="tu@correo.cl"
-              onChange={(e) => setCorreo(e.target.value)}
-              required
-            />
+            <input className={styles.formulario} type="email" placeholder="tu@correo.cl"onChange={(e) => setCorreo(e.target.value)}required/>
           </div>
 
           <div className={styles.espacio}>
@@ -210,6 +261,7 @@ function Agregar_Usuarios() {
             >
               <option value="gestor">Gestor</option>
               <option value="administrador">Administrador</option>
+              <option value="usuario">usuario</option>
             </select>
           </div>
 
@@ -226,16 +278,44 @@ function Agregar_Usuarios() {
             </select>
           </div>
 
+          <div className={styles.checkbox_input}>
+            <div className={styles.checkbox_container}>
+              <input
+                type="checkbox"
+                checked={tiene_una_Discapacidad}
+                onChange={(e) => set_tiene_una_Discapacidad(e.target.checked)}
+              />
+              <label>¿Presentas algún tipo de discapacidad?</label>
+            </div>
+          </div>
+          
+          {tiene_una_Discapacidad && (
+            <>
+              <div className={styles.espacio}>
+                <label className={styles.etiquetas}>Tipo Discapacidad</label>
+                <select
+                  onChange={(e) => set_tipo_discapacidad(e.target.value)}
+                  className={styles.formulario}
+                  value={tipo}
+                >
+                  <option value="Fisica">Física</option>
+                  <option value="Sensorial">Sensorial</option>
+                  <option value="Intelectual">Intelectual</option>
+                  <option value="Psicosocial">Psicosocial</option>
+                  <option value="NeuroDesarrollo">NeuroDesarrollo</option>
+                </select>
+              </div>
+
+              <div className={styles.espacio}>
+                <label className={styles.etiquetas}>Especifica el nombre</label>
+                <input className={styles.formulario} type="text" placeholder="Nombre de la discapacidad" value={nombreDiscapacidad}  onChange={(e) => setNombreDiscapacidad(e.target.value)} required/>
+              </div>
+            </>
+          )}
+
           <div className={styles.botones}>
-            <button
-              className={styles.btn1}
-              type="button"
-              onClick={() => navigate(-1)}
-            >
-              Cancelar
-            </button>
-            <button className={styles.btn2} type="submit">
-              Añadir Usuario
+            <button className={styles.btn1} type="button" onClick={() => navigate(-1)}>Cancelar</button>
+            <button className={styles.btn2} type="submit">Añadir Usuario
             </button>
           </div>
         </form>
