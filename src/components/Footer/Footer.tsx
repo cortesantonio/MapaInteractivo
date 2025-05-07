@@ -8,8 +8,12 @@ import TrazadoRuta from './TrazadoRuta';
 import User from './User';
 import Microfono from "./Microfono";
 
+interface Props {          // FK
+    onSeleccionMarcador: (id: number) => void;
+}
+
 //Funcionamiento completo del footer 
-export default function Footer() {
+export default function Footer({ onSeleccionMarcador }: Props) {
     const navigate = useNavigate()
     const { user } = useAuth();
     //Controla el Panel que mostrara la informacion del maplocation y del userperson
@@ -94,7 +98,7 @@ export default function Footer() {
             </button>
             <div className={styles.PanelInfo} style={{ display: Isdisplay, transition: "height 0.3s ease, opacity 0.3s ease" }}>
                 {/* Vista de los contenidos que tendra el panel de trazado de rutas */}
-                {panelActivo === "map" && <TrazadoRuta tamanoFuente={tamanoFuente} closePanel={closePanel} panelActivo={panelActivo} />}
+                {panelActivo === "map" && <TrazadoRuta tamanoFuente={tamanoFuente} closePanel={closePanel} panelActivo={panelActivo} onSeleccionMarcadorRecientes={onSeleccionMarcador} />}
 
                 {/* Visualizacion de los datos que vera el usuario y sus funciones correspondientes */}
                 {panelActivo === "user" && <User tamanoFuente={tamanoFuente} closePanel={closePanel} panelActivo={panelActivo} user={user} navigate={navigate}
