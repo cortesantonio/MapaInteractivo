@@ -20,7 +20,7 @@ function Inspeccionar_Resenas() {
     const fetchData = async () => {
       setLoading(true);
       try {
-        const { data: marcadorData, error: marcadorError } = await supabase.from("marcador").select(`id,nombre_recinto,direccion,tipo_recinto (tipo)`).eq("id", id).single();
+        const { data: marcadorData, error: marcadorError } = await supabase.from("marcador").select(`id,nombre_recinto,direccion,url_img,tipo_recinto (tipo)`).eq("id", id).single();
         if (marcadorError) throw marcadorError;
         setMarcador(marcadorData as any);
         const { data: resenasData, error: resenasError } = await supabase.from("resenas").select(`id,id_usuario (id,nombre),fecha,calificacion,comentario`).eq("id_marcador", id);
@@ -36,8 +36,8 @@ function Inspeccionar_Resenas() {
   }, [id]);
 
   const renderResenas = () => {
-  if (loading) return <p>Cargando reseñas...</p>;
-  if (resenas.length === 0) return <p>No hay Reseñas aún</p>;
+    if (loading) return <p>Cargando reseñas...</p>;
+    if (resenas.length === 0) return <p>No hay Reseñas aún</p>;
 
     return resenas.map((r, index) => (
       <div className={styles.bloque_reseña} key={index}>
@@ -65,8 +65,9 @@ function Inspeccionar_Resenas() {
       <div className={styles.header}>
         <div className={styles.imagen}>
           <img
-            src="https://lh3.googleusercontent.com/gps-cs-s/AB5caB9eZeqiYZh_N6HddUd7JMb6o7pqX4RRnEi7nILjYXDI7kkYSnjc_vaeigx7oH_ya-PravH6AY-cDaK_Whg_xln3BIzCQQYzWkoH6xltRO771yV22JQs9BVH0mIQMcRyRveNe0Sd=w426-h240-k-no"
-            alt=""
+            src={marcador?.url_img}
+            alt="Imagen del recinto"
+            className={styles.imagenMarcador}
           />
         </div>
         <div>

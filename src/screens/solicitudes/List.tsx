@@ -112,9 +112,12 @@ function ListSolicitudes() {
                 }
             </div>
 
-            <div className={styles.content}>
-                <p style={{ color: 'gray' }}>Listado de Solicitudes</p>
+            <div className={styles.SubTitulo}>
+                <p>Listado de Solicitudes</p>
                 <hr style={{ width: '25%', marginTop: '10px', marginBottom: '10px ', opacity: '50%' }} />
+            </div>
+            <div className={styles.content}>
+
 
                 {solicitudesFiltradas.map((solicitud) => (
                     <div className={styles.card} key={solicitud.id}>
@@ -132,7 +135,7 @@ function ListSolicitudes() {
                             </p>
                         </div>
                         <div className={styles.opciones} onClick={() => { navigate(`/panel-administrativo/solicitud/${solicitud.id}`) }}>
-                            <button><FontAwesomeIcon  icon={faInfo} /> Revisar</button>
+                            <button><FontAwesomeIcon icon={faInfo} /> Revisar</button>
                         </div>
                     </div>
                 ))}

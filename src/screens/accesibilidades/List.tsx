@@ -43,14 +43,14 @@ function ListAccesibilidad() {
     }
     const handleDelete = async (id: number) => {
         const confirmDelete = window.confirm('¿Estás seguro que deseas eliminar este registro?');
-    
+
         if (!confirmDelete) return;
-    
+
         const { error } = await supabase
             .from('accesibilidad')
             .delete()
             .eq('id', id);
-    
+
         if (error) {
             console.error('Error al eliminar:', error);
             alert('Hubo un error al eliminar el registro.');
@@ -70,9 +70,9 @@ function ListAccesibilidad() {
             <button style={{ position: "absolute", left: "15px", top: "10px", border: "none", background: "transparent", fontSize: "25px", alignItems: "start" }} onClick={() => { navigate(-1) }}>
                 <FontAwesomeIcon icon={faReply} />
             </button>
-            <header className={styles.header} style={{ paddingTop:'40px', gap:'15px'}}>
-                <hr style={{ flexGrow: "1"}} />
-                <h2 style={{ textAlign: 'right', paddingRight: "15px", whiteSpace:"nowrap" }} >Gestion de Accesibilidades</h2>
+            <header className={styles.header} style={{ paddingTop: '40px', gap: '15px' }}>
+                <hr style={{ flexGrow: "1" }} />
+                <h2 style={{ textAlign: 'right', paddingRight: "15px", whiteSpace: "nowrap" }} >Gestion de Accesibilidades</h2>
             </header>
             <div className={styles.filtros}>
                 <div style={{ display: 'flex', gap: '5px' }}>
@@ -80,8 +80,8 @@ function ListAccesibilidad() {
                     <button className={styles.filtroCard} onClick={() => handleBuscador()} >
                         <FontAwesomeIcon icon={faMagnifyingGlass} /> Buscador
                     </button>
-                    <button className={styles.agregarCard} style={{backgroundColor:'red'}} onClick={() => navigate('/panel-administrativo/accesibilidades/agregar')}>
-                        <FontAwesomeIcon icon={faPlus} color='white'  /> Agregar
+                    <button className={styles.agregarCard} style={{ backgroundColor: 'red' }} onClick={() => navigate('/panel-administrativo/accesibilidades/agregar')}>
+                        <FontAwesomeIcon icon={faPlus} color='white' /> Agregar
                     </button>
                 </div>
                 {isActiveBuscador &&
@@ -98,10 +98,12 @@ function ListAccesibilidad() {
                 }
             </div>
 
-            <div className={styles.content}>
-                <p style={{ color: 'gray' }}>Listado</p>
-
+            <div className={styles.SubTitulo}>
+                <p>Listado</p>
                 <hr style={{ width: '25%', marginTop: '10px', marginBottom: '10px ', opacity: '50%' }} />
+            </div>
+            <div className={styles.content}>
+
 
                 {filteredAccesibilidades.map((accesibilidad) => (
                     <div key={accesibilidad.id} className={styles.card} >
@@ -119,7 +121,7 @@ function ListAccesibilidad() {
                             <button title='Editar' onClick={() => setSelectedId(accesibilidad.id)}>
                                 <FontAwesomeIcon icon={faPenToSquare} />
                             </button>
-                            <button title='Borrar filtro'  onClick={() => handleDelete(accesibilidad.id)} ><FontAwesomeIcon icon={faDeleteLeft} /></button>
+                            <button title='Borrar filtro' onClick={() => handleDelete(accesibilidad.id)} ><FontAwesomeIcon icon={faDeleteLeft} /></button>
                         </div>
                     </div>
                 ))}
