@@ -8,7 +8,6 @@ import { Tipo_Recinto } from '../../interfaces/Tipo_Recinto';
 import { supabase } from '../../services/supabase';
 import { useNavigate, useParams } from 'react-router-dom';
 
-
 interface TipoDeAccesibilidades {
     [tipo: string]: Accesibilidad[];
 }
@@ -31,7 +30,6 @@ export default function EditarLocacion() {
     const [dataMarcador, setDataMarcador] = useState<Partial<Marcador>>(estadoInicialMarcadores);
     const [selecciones, setSelecciones] = useState<number[]>([]);
     const [tipoRecinto, setTipoRecinto] = useState<Tipo_Recinto[]>([]);
-    const [newMarcador, setnewMarcador] = useState<Marcadorconaccesibilidad>();
 
     useEffect(() => { //Busca todos los tipo de recintos registradas en la base de datos
         const fetchTipos = async () => {
@@ -70,9 +68,6 @@ export default function EditarLocacion() {
         );
     };
 
-    type Marcadorconaccesibilidad = Marcador & {
-        accesibilidades: number[]
-    }
     const handleAgregarMarcador = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         actualizarMarcador();
@@ -120,7 +115,7 @@ export default function EditarLocacion() {
                 .from('marcador')
                 .update({
                     ...dataMarcador,
-                    tipo_recinto: dataMarcador.tipo_recinto, // Asegura que sea número
+                    tipo_recinto: dataMarcador.tipo_recinto, 
                 })
                 .eq('id', id);
     
