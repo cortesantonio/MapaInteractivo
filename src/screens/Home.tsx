@@ -64,6 +64,11 @@ export default function Home() {
             <NavbarUser />
           </div>
 
+          <Footer onSeleccionMarcador={(id: number) => {
+            setMarcadorSeleccionadoId(id);
+            setMostrarMarcador(true);
+          }} />
+
 
           {mostrarMarcador && marcadorSeleccionadoId !== null && (
             <div style={estilosMarcador}>
@@ -74,7 +79,9 @@ export default function Home() {
             </div>
           )}
 
-          <Footer />
+
+
+
         </>
       )
       }

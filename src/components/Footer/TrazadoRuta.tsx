@@ -4,17 +4,18 @@ import { faLocationPin, faLocationCrosshairs, faCar, faTrain, faMotorcycle, faPe
 import { supabase } from '../../services/supabase';
 import { useState, useEffect } from 'react';
 import { useAuth } from "../../hooks/useAuth";
-import { Busquedas } from "../../interfaces/Busquedas";
 
-export default function TrazadoRuta({ tamanoFuente, closePanel, panelActivo }: {
+
+export default function TrazadoRuta({ tamanoFuente, closePanel, panelActivo, onSeleccionMarcadorRecientes }: {
     tamanoFuente: number,
     closePanel: () => void
     panelActivo: string
+    onSeleccionMarcadorRecientes: (id: number) => void
 }) {
 
     const { user } = useAuth();
     const [destinosRecientes, setDestinosRecientes] = useState<boolean>(false)
-    const [busquedasRecientes, setBusquedasRecientes] = useState<Partial<Busquedas>[]>([]);
+    const [busquedasRecientes, setBusquedasRecientes] = useState<Array<{ id_marcador: any, fecha_hora: string }>>([]);
 
 
     useEffect(() => {
@@ -28,9 +29,14 @@ export default function TrazadoRuta({ tamanoFuente, closePanel, panelActivo }: {
                 .select(`
                 fecha_hora,
                 id_marcador(
+                id,
                 nombre_recinto,
-                direccion
-                )
+                direccion,
+                accesibilidad_marcador (
+                    accesibilidad (
+                        nombre
+                    )
+                ))
             `)
                 .eq('id_usuario', user.id)
                 .order('fecha_hora', { ascending: false })
@@ -105,7 +111,7 @@ export default function TrazadoRuta({ tamanoFuente, closePanel, panelActivo }: {
                         </h4>
                         {/*Cuando no hay destinos registrados muestra el mensaje, si lo hay muestra los destinos registrados del usuario logeado*/}
                         {!destinosRecientes ? (<p className={styles.MensajeP}>No hay Destinos Recientes</p>) : (busquedasRecientes.map((busquedas, index) => (
-                            <div key={index} className={styles.ContenInfo}>
+                            <div key={index} className={styles.ContenInfo} onClick={() => onSeleccionMarcadorRecientes(busquedas.id_marcador?.id)}>
                                 <div className={styles.IconsClock}>
                                     <FontAwesomeIcon icon={faClockRotateLeft} style={{ color: "gray" }} size="lg" />
                                 </div>
