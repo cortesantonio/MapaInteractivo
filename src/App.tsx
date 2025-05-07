@@ -33,54 +33,128 @@ import ListSolicitudes from './screens/solicitudes/List'
 import AuthCallback from './screens/AuthCallback'
 import Ver from './screens/solicitudes/Ver'
 
-
-
+import ProtectedRoute from './components/ProtectedRoute'
 function App() {
-
   return (
     <div>
       <Routes>
         <Route path='/' element={<Home />} />
         <Route path='/login' element={<LoginUsuario />} />
-
         <Route path='/colaborar' element={<AgregarSolicitud />} />
 
+        {/* Panel administrativo protegido */}
+        <Route path='/panel-administrativo' element={
+          <ProtectedRoute allowedRoles={['administrador', 'gestor']}>
+            <VistaAdministrador />
+          </ProtectedRoute>
+        } />
 
-        <Route path='/panel-administrativo' element={<VistaAdministrador />} />
+        <Route path='/panel-administrativo/marcadores' element={
+          <ProtectedRoute allowedRoles={['administrador', 'gestor']}>
+            <List />
+          </ProtectedRoute>
+        } />
 
-        <Route path='/panel-administrativo/marcadores' element={< List />} />
-        <Route path='/panel-administrativo/marcadores/agregar' element={< AgregarMarcador />} />
-        <Route path='/panel-administrativo/marcadores/informacion/:id' element={< InfoDetallada />} />
-        <Route path='/panel-administrativo/marcadores/editar/:id' element={< EditarLocation />} />
+        <Route path='/panel-administrativo/marcadores/agregar' element={
+          <ProtectedRoute allowedRoles={['administrador', 'gestor']}>
+            <AgregarMarcador />
+          </ProtectedRoute>
+        } />
 
-        <Route path='/panel-administrativo/usuarios' element={< Gestion_Usuarios />} />
-        <Route path='/usuario/perfil/:id' element={< Perfil_Usuario />} />
-        <Route path='/panel-administrativo/usuarios/agregar' element={<Agregar_Usuarios />} />
-        <Route path='/usuarios/editar/:id' element={<Editar_Usuarios />} />
+        <Route path='/panel-administrativo/marcadores/informacion/:id' element={
+          <ProtectedRoute allowedRoles={['administrador', 'gestor']}>
+            <InfoDetallada />
+          </ProtectedRoute>
+        } />
 
+        <Route path='/panel-administrativo/marcadores/editar/:id' element={
+          <ProtectedRoute allowedRoles={['administrador', 'gestor']}>
+            <EditarLocation />
+          </ProtectedRoute>
+        } />
 
-        <Route path='/panel-administrativo/accesibilidades' element={< ListAccesibilidades />} />
-        <Route path='/panel-administrativo/accesibilidades/agregar' element={< AgregarAccesibilidad />} />
+        <Route path='/panel-administrativo/usuarios' element={
+          <ProtectedRoute allowedRoles={['administrador', 'gestor']}>
+            <Gestion_Usuarios />
+          </ProtectedRoute>
+        } />
 
-        <Route path='/panel-administrativo/tipo-recinto' element={< ListTipoRecinto />} />
-        <Route path='/panel-administrativo/tipo-recinto/agregar' element={< AgregarTipoRecinto />} />
+        <Route path='/usuario/perfil/:id' element={
+          <ProtectedRoute allowedRoles={['administrador', 'gestor', 'usuario']}>
+            <Perfil_Usuario />
+          </ProtectedRoute>
+        } />
 
-        <Route path='/panel-administrativo/resenas' element={< Gestion_Resenas />} />
-        <Route path='/panel-administrativo/resenas/inspeccionar/:id' element={< Inspeccionar_Resenas />} />
+        <Route path='/panel-administrativo/usuarios/agregar' element={
+          <ProtectedRoute allowedRoles={['administrador']}>
+            <Agregar_Usuarios />
+          </ProtectedRoute>
+        } />
 
-        <Route path='/panel-administrativo/solicitudes' element={<ListSolicitudes />} />
-        <Route path='/panel-administrativo/solicitud/:id' element={<Ver />} />
+        <Route path='/usuarios/editar/:id' element={
+          <ProtectedRoute allowedRoles={['administrador', 'gestor', 'usuario']}> // se debe respetar la jerarquia, admin puede modificar todo, gestor solo usuarios.
+            <Editar_Usuarios />
+          </ProtectedRoute>
+        } />
 
+        {/* Accesibilidades protegidas */}
+        <Route path='/panel-administrativo/accesibilidades' element={
+          <ProtectedRoute allowedRoles={['administrador', 'gestor']}>
+            <ListAccesibilidades />
+          </ProtectedRoute>
+        } />
 
+        <Route path='/panel-administrativo/accesibilidades/agregar' element={
+          <ProtectedRoute allowedRoles={['administrador', 'gestor']}>
+            <AgregarAccesibilidad />
+          </ProtectedRoute>
+        } />
 
-        <Route path="/auth/callback" element={<AuthCallback />} />
+        {/* Tipos de recinto protegidos */}
+        <Route path='/panel-administrativo/tipo-recinto' element={
+          <ProtectedRoute allowedRoles={['administrador', 'gestor']}>
+            <ListTipoRecinto />
+          </ProtectedRoute>
+        } />
 
+        <Route path='/panel-administrativo/tipo-recinto/agregar' element={
+          <ProtectedRoute allowedRoles={['administrador', 'gestor']}>
+            <AgregarTipoRecinto />
+          </ProtectedRoute>
+        } />
+
+        {/* Reseñas protegidas */}
+        <Route path='/panel-administrativo/resenas' element={
+          <ProtectedRoute allowedRoles={['administrador', 'gestor']}>
+            <Gestion_Resenas />
+          </ProtectedRoute>
+        } />
+
+        <Route path='/panel-administrativo/resenas/inspeccionar/:id' element={
+          <ProtectedRoute allowedRoles={['administrador', 'gestor']}>
+            <Inspeccionar_Resenas />
+          </ProtectedRoute>
+        } />
+
+        {/* Solicitudes protegidas */}
+        <Route path='/panel-administrativo/solicitudes' element={
+          <ProtectedRoute allowedRoles={['administrador', 'gestor']}>
+            <ListSolicitudes />
+          </ProtectedRoute>
+        } />
+
+        <Route path='/panel-administrativo/solicitud/:id' element={
+          <ProtectedRoute allowedRoles={['administrador', 'gestor']}>
+            <Ver />
+          </ProtectedRoute>
+        } />
+
+        {/* Callback auth y 404 sin protección */}
+        <Route path='/auth/callback' element={<AuthCallback />} />
         <Route path='*' element={<h1>404 NOT FOUND</h1>} />
-
       </Routes>
     </div>
-
   )
 }
 
-export default App
+export default App;
