@@ -23,6 +23,7 @@ export default function InfoDetallada() {
         direccion: '',
         pagina_web: '',
         telefono: '',
+        url_img: '',
         latitud: undefined,
         longitud: undefined,
         activo: true,
@@ -105,8 +106,9 @@ export default function InfoDetallada() {
 
 
             <div className={styles.header}>
-                <img src="https://media.vlnradio.cl/wp-content/uploads/2016/08/teatro_provincial_curico.jpg?w=0"
-                    alt=""
+                <img
+                    src={dataMarcador?.url_img}
+                    alt="Imagen del recinto"
                     className={styles.imagenMarcador}
                 />
                 <button style={{ zIndex: 10 }} className={styles.VolverAtras} onClick={() => { navigate(-1) }}>

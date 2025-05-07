@@ -13,8 +13,8 @@ import { Accesibilidad } from '../interfaces/Accesibilidad';
 
 interface Props {
     MarcadorSelectId: number;
-    CerrarMarcador:  () => void;
-  }
+    CerrarMarcador: () => void;
+}
 
 export default function VerMarcador({ MarcadorSelectId, CerrarMarcador }: Props) {
     const [cargando, setCargando] = useState<boolean>(true);
@@ -30,61 +30,63 @@ export default function VerMarcador({ MarcadorSelectId, CerrarMarcador }: Props)
 
     useEffect(() => {
         const fetchMarcador = async () => {
-          const { data, error } = await supabase
-            .from("marcador")
-            .select("id, *, tipo_recinto(tipo),  horarios(*), accesibilidad_marcador(id_accesibilidad(*)), resenas(*, fecha, id_usuario(nombre)) ")
-            .eq("id", MarcadorSelectId);
+            const { data, error } = await supabase
+                .from("marcador")
+                .select("id, *, tipo_recinto(tipo),  horarios(*), accesibilidad_marcador(id_accesibilidad(*)), resenas(*, fecha, id_usuario(nombre)) ")
+                .eq("id", MarcadorSelectId);
 
-          if (error) {
-            console.error("Error al obtener los marcadores:", error);
-          } else if (data && data.length > 0) {
+            if (error) {
+                console.error("Error al obtener los marcadores:", error);
+            } else if (data && data.length > 0) {
 
-            const marcador = data[0];
-      
-            if (marcador) {
-                const marcadorFormateado: Partial<Marcador> = {
-                  id: marcador.id,
-                  nombre_recinto: marcador.nombre_recinto,
-                  tipo_recinto: marcador.tipo_recinto.tipo,
-                  direccion: marcador.direccion,
-                  pagina_web: marcador.pagina_web,
-                  telefono: marcador.telefono,
-                  activo: marcador.activo
-                };
-              
-                setMarcador(marcadorFormateado);
-              }
-            
-            if (marcador.horarios && marcador.horarios.length > 0) {
-                setHorariosMarcador(marcador.horarios);
+                const marcador = data[0];
+
+                if (marcador) {
+                    const marcadorFormateado: Partial<Marcador> = {
+                        id: marcador.id,
+                        nombre_recinto: marcador.nombre_recinto,
+                        tipo_recinto: marcador.tipo_recinto.tipo,
+                        direccion: marcador.direccion,
+                        url_img: marcador.url_img,
+                        pagina_web: marcador.pagina_web,
+                        telefono: marcador.telefono,
+                        activo: marcador.activo
+                    };
+
+                    setMarcador(marcadorFormateado);
+                    console.log(data)
+                }
+
+                if (marcador.horarios && marcador.horarios.length > 0) {
+                    setHorariosMarcador(marcador.horarios);
+                }
+
+                if (marcador.accesibilidad_marcador && marcador.accesibilidad_marcador.length > 0) {
+                    const accesibilidades = marcador.accesibilidad_marcador.map((item: any) => item.id_accesibilidad);
+                    setAccesibilidadMarcador(accesibilidades);
+                }
+
+                if (marcador.resenas && marcador.resenas.length > 0) {
+                    const resenasFormateadas: Review[] = marcador.resenas.map((resena: any) => ({
+                        idresena: resena.id,
+                        idusuario: resena.id_usuario.id,
+                        nombreusuario: resena.id_usuario.nombre,
+                        fecha: resena.fecha,
+                        calificacion: resena.calificacion,
+                        comentario: resena.comentario
+                    }));
+
+                    setResenasMarcador(resenasFormateadas);
+                }
             }
-
-            if (marcador.accesibilidad_marcador && marcador.accesibilidad_marcador.length > 0) {
-                const accesibilidades = marcador.accesibilidad_marcador.map((item: any) => item.id_accesibilidad);
-                setAccesibilidadMarcador(accesibilidades);
-            }
-
-            if (marcador.resenas && marcador.resenas.length > 0) {
-                const resenasFormateadas: Review[] = marcador.resenas.map((resena: any) => ({
-                    idresena: resena.id, 
-                    idusuario: resena.id_usuario.id , 
-                    nombreusuario: resena.id_usuario.nombre,
-                    fecha: resena.fecha,
-                    calificacion: resena.calificacion,
-                    comentario: resena.comentario
-                }));
-                
-                setResenasMarcador(resenasFormateadas);
-            }
-          }
-          setCargando(false);
+            setCargando(false);
         };
-      
+
         if (MarcadorSelectId) {
-          fetchMarcador();
+            fetchMarcador();
         }
-      }, [MarcadorSelectId]);
-      
+    }, [MarcadorSelectId]);
+
 
     useEffect(() => {
         const handleResize = () => {
@@ -98,14 +100,14 @@ export default function VerMarcador({ MarcadorSelectId, CerrarMarcador }: Props)
 
     const accesibilidadAgrupada = accesibilidadMarcador.reduce((acc: Record<string, string[]>, item) => {
         if (!acc[item.tipo]) {
-          acc[item.tipo] = [];
+            acc[item.tipo] = [];
         }
         acc[item.tipo].push(item.nombre);
         return acc;
-      }, {});
+    }, {});
 
 
-      function InfoMarcador() {
+    function InfoMarcador() {
 
         const [mostrarTodos, setMostrarTodos] = useState(false);
 
@@ -114,42 +116,42 @@ export default function VerMarcador({ MarcadorSelectId, CerrarMarcador }: Props)
         const diasAMostrar = mostrarTodos ? diasSemana : diasSemana.slice(0, 3);
         return (
             <div className={styles.InfoMarcador}>
-                {cargando ? (  
-                    <div className={styles.cargando}>Cargando...</div> 
-                ) : (  
+                {cargando ? (
+                    <div className={styles.cargando}>Cargando...</div>
+                ) : (
                     Marcador && (
                         <>
                             <p><FontAwesomeIcon icon={faLocationDot} style={{ color: "#74C0FC" }} /> {Marcador.direccion}</p>
                             <p><FontAwesomeIcon icon={faPhone} style={{ color: "#74C0FC" }} /> {Marcador.telefono}</p>
                             <p><FontAwesomeIcon icon={faEarthAmericas} style={{ color: "#74C0FC" }} /> {Marcador.pagina_web}</p>
-    
+
                             <h4>Horarios</h4>
                             <ul style={{ paddingLeft: '20px' }}>
-                            {diasAMostrar.map((dia, index) => {
-                                const horario = horariosMarcador.find((h: any) => h.dia.toLowerCase() === dia.toLowerCase());
-                                const esUltimoVisible = !mostrarTodos && index === 2; 
-                                return (
-                                <li
-                                    key={index}
-                                    className={esUltimoVisible ? styles.tercerdia : ''}
-                                >
-                                    {dia}: {horario ? `${horario.apertura.slice(0,5)} - ${horario.cierre.slice(0,5)}` : 'Cerrado'}
-                                </li>
-                                );
-                            })}
+                                {diasAMostrar.map((dia, index) => {
+                                    const horario = horariosMarcador.find((h: any) => h.dia.toLowerCase() === dia.toLowerCase());
+                                    const esUltimoVisible = !mostrarTodos && index === 2;
+                                    return (
+                                        <li
+                                            key={index}
+                                            className={esUltimoVisible ? styles.tercerdia : ''}
+                                        >
+                                            {dia}: {horario ? `${horario.apertura.slice(0, 5)} - ${horario.cierre.slice(0, 5)}` : 'Cerrado'}
+                                        </li>
+                                    );
+                                })}
                             </ul>
                             <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', flexDirection: 'column' }}>
-                                    <button onClick={() => setMostrarTodos(!mostrarTodos)} className={styles.fechaVerMas}>
-                                        {mostrarTodos ? (
-                                            <>
-                                                <FontAwesomeIcon icon={faChevronUp} /> Ver menos días 
-                                            </>
-                                        ) : (
-                                            <>
-                                                <FontAwesomeIcon icon={faChevronDown} /> Ver más días 
-                                            </>
-                                        )}
-                                    </button>
+                                <button onClick={() => setMostrarTodos(!mostrarTodos)} className={styles.fechaVerMas}>
+                                    {mostrarTodos ? (
+                                        <>
+                                            <FontAwesomeIcon icon={faChevronUp} /> Ver menos días
+                                        </>
+                                    ) : (
+                                        <>
+                                            <FontAwesomeIcon icon={faChevronDown} /> Ver más días
+                                        </>
+                                    )}
+                                </button>
                             </div>
 
                             <h4>Accesibilidad</h4>
@@ -175,9 +177,9 @@ export default function VerMarcador({ MarcadorSelectId, CerrarMarcador }: Props)
             </div>
         );
     }
-    
 
-    
+
+
 
 
     function ListReviews() {
@@ -187,7 +189,7 @@ export default function VerMarcador({ MarcadorSelectId, CerrarMarcador }: Props)
 
         return (
             <div style={{ textAlign: 'center' }}>
-                
+
                 {reseñasAMostrar.map((resena) => (
                     <div key={resena.idresena} style={{ textAlign: 'left', borderBottom: '1px solid #ccc', margin: '10px 0px 10px 0px', padding: '10px' }}>
                         <p style={{ fontWeight: 400 }}>{resena.nombreusuario}</p>
@@ -215,10 +217,15 @@ export default function VerMarcador({ MarcadorSelectId, CerrarMarcador }: Props)
         <div className={styles.container} style={{ width: width, height: height }}>
             <div className={styles.HeaderFijo}>
                 <button onClick={CerrarMarcador} className={styles.CerrarMarcador}>X</button>
-                <img src="https://lh3.googleusercontent.com/gps-cs-s/AB5caB9eZeqiYZh_N6HddUd7JMb6o7pqX4RRnEi7nILjYXDI7kkYSnjc_vaeigx7oH_ya-PravH6AY-cDaK_Whg_xln3BIzCQQYzWkoH6xltRO771yV22JQs9BVH0mIQMcRyRveNe0Sd=w426-h240-k-no"
-                    alt=""
-                    className={styles.imagenMarcador}
-                />
+                {cargando ? (
+                    <p>Cargando imagen...</p>
+                ) : (
+                    <img
+                        src={Marcador?.url_img}
+                        alt="Imagen del recinto"
+                        className={styles.imagenMarcador}
+                    />
+                )}
                 <div className={styles.headerContenido}>
                     <div className={styles.info}>
                         <h2>{cargando ? 'Cargando...' : Marcador?.nombre_recinto}</h2>
@@ -281,7 +288,7 @@ export default function VerMarcador({ MarcadorSelectId, CerrarMarcador }: Props)
                             setMostrarFormulario(false);
                         }}
                         onCancel={() => setMostrarFormulario(false)}
-                        idMarcador={MarcadorSelectId} 
+                        idMarcador={MarcadorSelectId}
                     />
                 )}
             </div>

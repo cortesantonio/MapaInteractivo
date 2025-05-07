@@ -174,8 +174,12 @@ export default function AgregarMarcador() {
                                 type="number" value={dataMarcador.telefono}
                                 onChange={(e) => setDataMarcador({ ...dataMarcador, telefono: e.target.value })} required />
                         </div>
-
-
+                        <label className={styles.labelSeccion} htmlFor="">Imagen de su local en URL</label>
+                        <input
+                            type="text"
+                            value={dataMarcador.url_img}
+                            onChange={(e) => setDataMarcador({ ...dataMarcador, url_img: e.target.value })}
+                            className={styles.inputText} required />
                         <label className={styles.labelSeccion} htmlFor="">Latitud</label>
                         <input className={styles.inputText} //Crear 
                             type="number"

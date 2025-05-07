@@ -32,6 +32,7 @@ export default function TrazadoRuta({ tamanoFuente, closePanel, panelActivo, onS
                 id,
                 nombre_recinto,
                 direccion,
+                url_img,
                 accesibilidad_marcador (
                     accesibilidad (
                         nombre

@@ -23,6 +23,7 @@ export default function EditarLocacion() {
         direccion: '',
         pagina_web: '',
         telefono: '',
+        url_img: '',
         latitud: undefined,
         longitud: undefined,
         activo: true,
@@ -119,10 +120,13 @@ export default function EditarLocacion() {
     return (
         <div className={styles.container}>
             <div className={styles.header}>
-                <img src="https://media.vlnradio.cl/wp-content/uploads/2016/08/teatro_provincial_curico.jpg?w=0"
-                    alt=""
+
+                <img
+                    src={dataMarcador.url_img}
+                    alt="Imagen del recinto"
                     className={styles.imagenMarcador}
                 />
+
                 <button className={styles.VolverAtras}
                     type="submit" onClick={() => { navigate(-1) }}>
                     <FontAwesomeIcon icon={faReply} size='2xl' />
