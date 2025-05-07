@@ -1,11 +1,6 @@
 import styles from "../resenas/css/Gestion_Resenas.module.css";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import {
-  faMagnifyingGlass,
-  faFilter,
-  faBuilding,
-  faReply,
-} from '@fortawesome/free-solid-svg-icons';
+import { faMagnifyingGlass, faFilter, faBuilding, faReply } from '@fortawesome/free-solid-svg-icons';
 import { useEffect, useState } from 'react';
 import { supabase } from '../../services/supabase';
 import { Tipo_Recinto } from "../../interfaces/Tipo_Recinto";
@@ -113,11 +108,11 @@ function Gestion_Resenas() {
       </div>
 
 
-
-      <div className={styles.content}>
-        <p style={{ color: 'gray' }}>Gestion De Reseñas</p>
+      <div className={styles.SubTitulo}>
+        <p>Gestion De Reseñas</p>
         <hr style={{ width: '25%', marginTop: '10px', marginBottom: '10px', opacity: '50%' }} />
-
+      </div>
+      <div className={styles.content}>
         {Edificio.map((locacion: { id: number, nombre_recinto: string; direccion: string; tipo_recinto: string; }, index: number) => (
           <div className={styles.card} key={index}>
             <div className={styles.estado} style={{ backgroundColor: '#0397fc' }}>
@@ -129,8 +124,6 @@ function Gestion_Resenas() {
               <p style={{ color: 'gray', fontSize: '0.9rem' }}>{locacion.direccion}</p>
               <p style={{ color: 'gray', fontSize: '0.9rem' }}>{(locacion.tipo_recinto as any)?.tipo}</p>
             </div>
-
-
           </div>
         ))}
       </div>

@@ -70,9 +70,9 @@ function ListTipoRecinto() {
             <button style={{ position: "absolute", left: "15px", top: "10px", border: "none", background: "transparent", fontSize: "25px", alignItems: "start" }} onClick={() => { navigate(-1) }}>
                 <FontAwesomeIcon icon={faReply} />
             </button>
-            <header className={styles.header} style={{ paddingTop:'40px', gap:'15px'}}>
-                 <hr style={{ flexGrow: "1"}} />
-                <h2 style={{ textAlign: 'right', paddingRight: "15px", whiteSpace:"nowrap" }} >Gestion de Recinto</h2>
+            <header className={styles.header} style={{ paddingTop: '40px', gap: '15px' }}>
+                <hr style={{ flexGrow: "1" }} />
+                <h2 style={{ textAlign: 'right', paddingRight: "15px", whiteSpace: "nowrap" }} >Gestion de Recinto</h2>
             </header>
             <div className={styles.filtros}>
                 <div style={{ display: 'flex', gap: '5px', justifyContent: 'right' }}>
@@ -98,10 +98,12 @@ function ListTipoRecinto() {
                 }
             </div>
 
-            <div className={styles.content}>
-                <p style={{ color: 'gray' }}>Listado</p>
-
+            <div className={styles.SubTitulo}>
+                <p>Listado</p>
                 <hr style={{ width: '25%', marginTop: '10px', marginBottom: '10px ', opacity: '50%' }} />
+            </div>
+            <div className={styles.content}>
+
 
                 {TipoRecintosFiltrados.map((tRecinto) => (
                     <div key={tRecinto.id} className={styles.card} >

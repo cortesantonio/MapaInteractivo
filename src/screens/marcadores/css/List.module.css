@@ -1,18 +1,10 @@
-* {
-    padding: 0;
-    margin: 0;
-}
-button{cursor: pointer;}
-
 .container {
     position: relative;
     width: 100%;
-
     background-color: white;
     display: flex;
-    flex-direction: column;
     color: black;
-
+    flex-direction: column;
 }
 
 .header {
@@ -30,7 +22,8 @@ button{cursor: pointer;}
     justify-content: left;
     flex-direction: column;
     margin-bottom: 25px;
-    align-items: center;  /*Agregado por Mati*/
+    align-items: center;
+    /*Agregado por Mati*/
 }
 
 .add_user button {
@@ -45,6 +38,7 @@ button{cursor: pointer;}
     justify-content: center;
     border: none;
     gap: 5px;
+    cursor: pointer;
 }
 
 .filtros .buscar {
@@ -67,7 +61,6 @@ button{cursor: pointer;}
     background-color: transparent;
     border: none;
     outline: none;
-
 }
 
 .filtroCard {
@@ -83,7 +76,7 @@ button{cursor: pointer;}
 
 .filtroCard select {
     border: none;
-    background-color: transparent; 
+    background-color: transparent;
 }
 
 .filtroCard:hover {
@@ -97,11 +90,8 @@ button{cursor: pointer;}
     align-items: center;
     background-color: white;
     gap: 30px;
-    width: auto;
     border-bottom: 1px solid rgb(209, 209, 209);
     width: fit-content;
-
-
 }
 
 .cardContent p {
@@ -110,7 +100,6 @@ button{cursor: pointer;}
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-
 }
 
 .card .estado {
@@ -120,7 +109,6 @@ button{cursor: pointer;}
     align-items: center;
     justify-content: center;
     border-radius: 50%;
-
 }
 
 .card .opciones button {
@@ -133,7 +121,6 @@ button{cursor: pointer;}
     transition: 0.5s all;
     border: none;
     cursor: pointer;
-
 }
 
 .card .opciones button:hover {
@@ -143,13 +130,18 @@ button{cursor: pointer;}
 
 .cardContent p {
     font-size: 1rem;
-
 }
 
+.SubTitulo {
+    text-align: center;
+    color: gray;
+    justify-items: center;
+}
 
 .content {
     display: flex;
-    justify-content: center;
-    flex-direction: column;
-    align-items: center;
+    justify-content: start;
+    flex-wrap: wrap;
+    padding: 25px;
+    gap: 10px;
 }
