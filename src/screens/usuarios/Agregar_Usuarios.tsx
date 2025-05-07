@@ -21,6 +21,7 @@ function Agregar_Usuarios() {
   const [tipo, set_tipo_discapacidad] = useState("Fisica");
   const [nombreDiscapacidad, setNombreDiscapacidad] = useState("");
   const [tiene_una_Discapacidad, set_tiene_una_Discapacidad] = useState(false);
+  
 
   // Función para formatear el RUT mientras el usuario escribe
   const formatearRut = (rut: string): string => {

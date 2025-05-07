@@ -109,6 +109,7 @@ function Editar_Usuarios() {
     Actualizar_Discapacidad ();
   };
 
+  
   useEffect(() => {
     const fetchUsuarios = async () => {
       //Consulta para Mostar datos segun el id del Usuario

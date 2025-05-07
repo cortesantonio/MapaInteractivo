@@ -124,6 +124,8 @@
   cursor: pointer;
 }
 
+
+
 .btn_desactivar_usuario button {
   display: flex;
   justify-content: flex-end;
