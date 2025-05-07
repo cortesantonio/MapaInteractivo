@@ -7,6 +7,7 @@ export interface Marcador {
   direccion: string;
   pagina_web: string;
   telefono: string;
+  url_img: string;
   id_solicitud?: number;
   latitud?: number;
   longitud?: number;
