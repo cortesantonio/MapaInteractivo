@@ -37,6 +37,7 @@ export default function TrazadoRuta({
     const [resultados, setResultados] = useState<Array<{ id: number, nombre: string, direccion: string, lat: number, lng: number }>>([]);
     const [mostrarResultados, setMostrarResultados] = useState(false);
     const [destinoEstablecido, setDestinoEstablecido] = useState<boolean>(false);
+    const [modoViajeActual, setModoViajeActual] = useState<'DRIVING' | 'BICYCLING' | 'WALKING' | 'TRANSIT'>('DRIVING');
 
 
     useEffect(() => {
@@ -124,14 +125,23 @@ export default function TrazadoRuta({
     useEffect(() => {
         if (Idrutamarcador === null) return;
     
-        const marcador = resultados.find(item => item.id === Idrutamarcador);
+        const marcador = marcadorUbicacion.find(item => item.id === Idrutamarcador);
         if (marcador) {
             establecerDestino(marcador.lat, marcador.lng);
             setBusqueda(marcador.nombre);
             setMostrarResultados(false);
+            setDestinoEstablecido(true);
+        } else {
+            setBusqueda(""); 
+            setDestinoEstablecido(false);
         }
-    }, [Idrutamarcador, resultados, establecerDestino]);
+    }, [Idrutamarcador, marcadorUbicacion, establecerDestino]);
     
+
+    const handleCambiarModoViaje = (modo: 'DRIVING' | 'BICYCLING' | 'WALKING' | 'TRANSIT') => {
+        cambiarModoViaje(modo);  // Llama a la función prop
+        setModoViajeActual(modo); // Actualiza el estado local
+    };
 
     return (
         <div>
@@ -214,24 +224,22 @@ export default function TrazadoRuta({
                                     </div>
                                 )}
 
-
-                            </div>
-                            
+                            </div> 
                         </div>
                     </div>
 
                     <div className={styles.PositionIcons}>
-                        <button className={styles.ButttonIcons} onClick={() => cambiarModoViaje('DRIVING')}>
-                            <FontAwesomeIcon icon={faCar} size="lg" style={{ color: "black" }} />
+                        <button className={styles.ButttonIcons} onClick={() => handleCambiarModoViaje('DRIVING')}>
+                            <FontAwesomeIcon icon={faCar} size="lg" style={{ color: modoViajeActual === 'DRIVING' ? 'rgb(75, 127, 241)' : 'black' }}/>
                         </button>
-                        <button className={styles.ButttonIcons} onClick={() => cambiarModoViaje('TRANSIT')}>
-                            <FontAwesomeIcon icon={faBus} size="lg" style={{ color: "black" }} />
+                        <button className={styles.ButttonIcons}>
+                            <FontAwesomeIcon icon={faBus} size="lg" style={{ color: "gray" }} />
                         </button>
-                        <button className={styles.ButttonIcons} onClick={() => cambiarModoViaje('WALKING')}>
-                            <FontAwesomeIcon icon={faPersonWalking} size="lg" style={{ color: "black" }} />
+                        <button className={styles.ButttonIcons} onClick={() => handleCambiarModoViaje('WALKING')}>
+                            <FontAwesomeIcon icon={faPersonWalking} size="lg" style={{ color: modoViajeActual === 'WALKING' ? 'rgb(75, 127, 241)' : 'black' }}/>
                         </button>
-                        <button className={styles.ButttonIcons} onClick={() => cambiarModoViaje('BICYCLING')}>
-                            <FontAwesomeIcon icon={faPersonBiking} size="lg" style={{ color: "black" }} />
+                        <button className={styles.ButttonIcons} onClick={() => handleCambiarModoViaje('BICYCLING')}>
+                            <FontAwesomeIcon icon={faPersonBiking} size="lg" style={{ color: modoViajeActual === 'BICYCLING' ? 'rgb(75, 127, 241)' : 'black' }}/>
                         </button>
                     </div>
 
