@@ -72,7 +72,7 @@ export default function EditarLocacion() {
         e.preventDefault();
         actualizarMarcador();
     };
-    
+
 
     useEffect(() => { // Usa el id de forma dinamica obteniendolo desde el id que se encuentra en la URL
         const fetchMarcador = async () => {
@@ -108,48 +108,48 @@ export default function EditarLocacion() {
 
     const actualizarMarcador = async () => {
         if (!id) return;
-    
+
         try {
             // 1. Actualiza la tabla 'marcador'
             const { error: errorMarcador } = await supabase
                 .from('marcador')
                 .update({
                     ...dataMarcador,
-                    tipo_recinto: dataMarcador.tipo_recinto, 
+                    tipo_recinto: dataMarcador.tipo_recinto,
                 })
                 .eq('id', id);
-    
+
             if (errorMarcador) {
                 console.error('Error al actualizar el marcador:', errorMarcador);
                 return;
             }
-    
+
             // 2. Elimina las relaciones antiguas en 'accesibilidad_marcador'
             const { error: errorDelete } = await supabase
                 .from('accesibilidad_marcador')
                 .delete()
                 .eq('id_marcador', id);
-    
+
             if (errorDelete) {
                 console.error('Error al eliminar relaciones anteriores:', errorDelete);
                 return;
             }
-    
+
             // 3. Inserta las nuevas relaciones
             const nuevasRelaciones = selecciones.map(idAcc => ({
                 id_marcador: id,
                 id_accesibilidad: idAcc,
             }));
-    
+
             const { error: errorInsert } = await supabase
                 .from('accesibilidad_marcador')
                 .insert(nuevasRelaciones);
-    
+
             if (errorInsert) {
                 console.error('Error al insertar nuevas relaciones:', errorInsert);
                 return;
             }
-    
+
             alert('Marcador actualizado correctamente.');
             navigate(-1);
         } catch (err) {
@@ -158,6 +158,8 @@ export default function EditarLocacion() {
     };
 
     return (
+
+
         <div className={styles.container}>
             <div className={styles.header}>
 

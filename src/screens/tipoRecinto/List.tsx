@@ -6,7 +6,7 @@ import { supabase } from '../../services/supabase';
 import { Tipo_Recinto } from '../../interfaces/Tipo_Recinto';
 import EditarTipoRecinto from './Editar';
 import { useNavigate } from "react-router-dom";
-
+import NavbarAdmin from '../../components/NavbarAdmin';
 function ListTipoRecinto() {
     const [tiposRecintos, setTiposRecintos] = useState<Tipo_Recinto[]>([]);
     const [selectedId, setSelectedId] = useState<number | null>(null);
@@ -65,7 +65,8 @@ function ListTipoRecinto() {
     );
 
 
-    return (
+    return (<>
+        <NavbarAdmin />
         <div className={styles.container}>
             <button style={{ position: "absolute", left: "15px", top: "10px", border: "none", background: "transparent", fontSize: "25px", alignItems: "start" }} onClick={() => { navigate(-1) }}>
                 <FontAwesomeIcon icon={faReply} />
@@ -132,6 +133,8 @@ function ListTipoRecinto() {
             </div>
 
         </div>
+    </>
+
     )
 
 }
