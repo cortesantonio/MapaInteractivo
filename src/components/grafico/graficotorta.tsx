@@ -2,7 +2,6 @@ import { useRef, useEffect, useState } from 'react';
 import { PieChart, Pie, Cell, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 
 
-
 interface Props {
   datosGrafico: { estado: string }[];
 }
@@ -48,7 +47,7 @@ const GraficoTorta = ({ datosGrafico}: Props) => {
       }
     };
   
-    resize(); // inicial
+    resize(); 
   
     window.addEventListener('resize', resize);
     return () => window.removeEventListener('resize', resize);
@@ -56,8 +55,8 @@ const GraficoTorta = ({ datosGrafico}: Props) => {
 
   return (
     <div style={{ width: '100%', height: '100%' }} >
-      {datos.length === 0 ? (
-        <p>Cargando gráfico...</p>
+      {datosFiltrados.length === 0 ? (
+        <p style={{ textAlign: 'center', fontSize: '16px', paddingTop: '1rem' }}>No existen datos</p>
       ) : (
         <ResponsiveContainer ref={containerRef}  width="100%" height="100%">
           <PieChart>
