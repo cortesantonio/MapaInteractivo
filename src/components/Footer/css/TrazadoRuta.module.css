@@ -2,7 +2,6 @@
     padding: 20px;
     position: relative;
     height: 100%;
-    overflow: auto;
 }
 
 .ButtonClose {
@@ -57,8 +56,9 @@
 .PositionIcons {
     overflow: hidden;
     display: flex;
-    gap: 44px;
-    margin: 20px 0;
+    justify-content: center;
+    gap: 50px;
+    margin: 12px 0;
 }
 
 .ButttonIcons {
@@ -103,3 +103,35 @@
     margin-right: 10px;
     color: gray;
 }
+
+
+.activa {
+    background-color: #d1f7d6;
+    color: #0a8a0a;
+    animation: pulseActive 2s infinite;
+  }
+  
+  .desactivada {
+    background-color: #fbe1e1;
+    color: #b80000;
+    animation: fadeInactive 3s infinite;
+  }
+  
+  @keyframes pulseActive {
+    0% { box-shadow: 0 0 5px #4caf50; }
+    50% { box-shadow: 0 0 10px #4caf50; }
+    100% { box-shadow: 0 0 5px #4caf50; }
+  }
+  
+  @keyframes fadeInactive {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.6; }
+  }
+
+
+  .TituloIndi{
+    color: rgb(130, 127, 127);
+    text-align: center;
+    padding: 3px;
+    font: 100% sans-serif;
+  }
