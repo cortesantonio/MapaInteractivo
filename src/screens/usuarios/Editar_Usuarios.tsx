@@ -18,24 +18,24 @@ function Editar_Usuarios() {
   const [rutValido, setRutValido] = useState(true);
   const [discapacidad, setDiscapacidad] = useState<Discapacidad[]>([]);
   const [tipoAccesibilidadSeleccionado, setTipoAccesibilidadSeleccionado] = useState<string>("");
-  
+
   // Función para validar el RUT chileno
   const validarRut = (rut: string): boolean => {
     if (!rut) return false;
     rut = rut.replace(/\./g, "").replace("-", "");
     if (rut.length < 2) return false;
     if (!/^[0-9]+[0-9kK]{1}$/.test(rut)) return false;
-    
+
     const cuerpo = rut.slice(0, -1);
     let dv = rut.slice(-1).toUpperCase();
     let suma = 0;
     let multiplo = 2;
-    
+
     for (let i = cuerpo.length - 1; i >= 0; i--) {
       suma += parseInt(cuerpo[i]) * multiplo;
       multiplo = multiplo < 7 ? multiplo + 1 : 2;
     }
-    
+
     let resultado = 11 - (suma % 11);
     let dvEsperado = resultado === 11 ? "0" : resultado === 10 ? "K" : resultado.toString();
     return dv === dvEsperado;
@@ -44,29 +44,29 @@ function Editar_Usuarios() {
   // Función para formatear el RUT chileno
   const formatRut = (value: string): string => {
     let rutLimpio = value.replace(/[^0-9kK]/g, "");
-    
+
     let dv = "";
     if (rutLimpio.length > 1) {
       dv = rutLimpio.charAt(rutLimpio.length - 1);
       rutLimpio = rutLimpio.slice(0, -1);
     }
-    
+
     let resultado = "";
     while (rutLimpio.length > 3) {
       resultado = "." + rutLimpio.substr(rutLimpio.length - 3) + resultado;
       rutLimpio = rutLimpio.slice(0, rutLimpio.length - 3);
     }
     resultado = rutLimpio + resultado;
-    
+
     if (dv) {
       resultado += "-" + dv;
     }
-    
+
     return resultado;
   };
 
   // Función para manejar cambios en el campo RUT
-  const handleRutChange = (e: React.ChangeEvent<HTMLInputElement>) => {const value = e.target.value;const formattedRut = formatRut(value);handleChange('rut', formattedRut); setRutValido(validarRut(formattedRut));};
+  const handleRutChange = (e: React.ChangeEvent<HTMLInputElement>) => { const value = e.target.value; const formattedRut = formatRut(value); handleChange('rut', formattedRut); setRutValido(validarRut(formattedRut)); };
 
   useEffect(() => {
     const fetchUsuarios = async () => {
@@ -85,7 +85,7 @@ function Editar_Usuarios() {
         // Consulta para obtener todos los tipos de Accesibilidad
         const { data: accesibilidadData } = await supabase.from('accesibilidad').select('*');
         setAccesibilidad(accesibilidadData || []);
-        
+
         if (accesibilidadData && accesibilidadData.length > 0) {
           setTipoAccesibilidadSeleccionado(accesibilidadData[0].id);
         }
@@ -115,7 +115,7 @@ function Editar_Usuarios() {
   const Actualizar_Informacion = async () => {
     try {
       // Actualizar información del usuario
-      const { error: errorUsuario } = await supabase.from('usuarios').update({nombre: usuarios[0].nombre,correo: usuarios[0].correo,telefono: usuarios[0].telefono,genero: usuarios[0].genero,rol: usuarios[0].rol,rut: usuarios[0].rut,password: usuarios[0].password,fecha_nacimiento: usuarios[0].fecha_nacimiento}).eq('id', id);
+      const { error: errorUsuario } = await supabase.from('usuarios').update({ nombre: usuarios[0].nombre, correo: usuarios[0].correo, telefono: usuarios[0].telefono, genero: usuarios[0].genero, rol: usuarios[0].rol, rut: usuarios[0].rut, password: usuarios[0].password, fecha_nacimiento: usuarios[0].fecha_nacimiento }).eq('id', id);
       if (errorUsuario) {
         console.error('Error al actualizar datos de usuario:', errorUsuario);
         alert("Hubo un error al actualizar los datos del usuario");
@@ -125,28 +125,25 @@ function Editar_Usuarios() {
       if (tiene_una_Discapacidad) {
         // Verificar si ya existe un registro de discapacidad para este usuario
         const { data: existingData } = await supabase.from("discapacidad").select("*").eq("id_usuario", id);
-        
+
         if (existingData && existingData.length > 0) {
           // Si existe, actualizamos
-          await supabase.from("discapacidad").update({nombre: discapacidad[0]?.nombre || "",tipo: discapacidad[0]?.tipo || "",}).eq("id_usuario", id);
+          await supabase.from("discapacidad").update({ nombre: discapacidad[0]?.nombre || "", tipo: discapacidad[0]?.tipo || "", }).eq("id_usuario", id);
         } else {
           // Si no existe, insertamos
-          await supabase.from("discapacidad").insert([{id_usuario: id,nombre: discapacidad[0]?.nombre || "",tipo: discapacidad[0]?.tipo || "",}]);
+          await supabase.from("discapacidad").insert([{ id_usuario: id, nombre: discapacidad[0]?.nombre || "", tipo: discapacidad[0]?.tipo || "", }]);
         }
-      } else {
-        // Si no tiene discapacidad pero antes tenía, eliminar el registro
-        await supabase.from("discapacidad").delete().eq('id_usuario', id);
       }
-      console.log('Datos de usuario actualizados correctamente');
       alert("Datos de usuario actualizados correctamente");
+      console.log('Datos de usuario actualizados correctamente');
       navigate(-1);
     } catch (error) {
       console.error('Error general al actualizar:', error);
       alert("Ocurrió un error al actualizar la información");
     }
   };
-  const handleDiscapacidadChange = (field: keyof Discapacidad, value: string) => {const updated = [{ ...discapacidad[0], [field]: value }];setDiscapacidad(updated);};
-  const handleChange = (field: keyof Usuarios, value: any) => {const updatedUsuario = { ...usuarios[0], [field]: value };setUsuarios([updatedUsuario]);};
+  const handleDiscapacidadChange = (field: keyof Discapacidad, value: string) => { const updated = [{ ...discapacidad[0], [field]: value }]; setDiscapacidad(updated); };
+  const handleChange = (field: keyof Usuarios, value: any) => { const updatedUsuario = { ...usuarios[0], [field]: value }; setUsuarios([updatedUsuario]); };
   return (
     <div>
       <div>
@@ -161,46 +158,46 @@ function Editar_Usuarios() {
         <form className={styles.div_formulario} onSubmit={(e) => e.preventDefault()}>
           <div className={styles.espacio}>
             <label className={styles.etiquetas}>Nombre Completo *</label>
-            <input 
-              className={styles.formulario} 
-              type="text" 
-              placeholder="Nombre" 
-              onChange={(e) => handleChange('nombre', e.target.value)} 
-              value={usuarios[0]?.nombre || ""} 
-              required 
+            <input
+              className={styles.formulario}
+              type="text"
+              placeholder="Nombre"
+              onChange={(e) => handleChange('nombre', e.target.value)}
+              value={usuarios[0]?.nombre || ""}
+              required
             />
           </div>
           <div className={styles.espacio}>
             <label className={styles.etiquetas}>Correo *</label>
-            <input 
-              className={styles.formulario} 
-              type="email" 
-              placeholder="tu@correo.cl" 
-              onChange={(e) => handleChange('correo', e.target.value)} 
-              value={usuarios[0]?.correo || ""} 
-              required 
+            <input
+              className={styles.formulario}
+              type="email"
+              placeholder="tu@correo.cl"
+              onChange={(e) => handleChange('correo', e.target.value)}
+              value={usuarios[0]?.correo || ""}
+              required
             />
           </div>
           <div className={styles.espacio}>
             <label className={styles.etiquetas}>Fecha de Nacimiento</label>
-            <input 
-              className={styles.formulario} 
-              type="date" 
-              placeholder="Fecha de Nacimiento" 
-              onChange={(e) => handleChange('fecha_nacimiento', e.target.value)} 
-              value={usuarios[0]?.fecha_nacimiento ? new Date(usuarios[0].fecha_nacimiento).toISOString().split('T')[0] : ""} 
+            <input
+              className={styles.formulario}
+              type="date"
+              placeholder="Fecha de Nacimiento"
+              onChange={(e) => handleChange('fecha_nacimiento', e.target.value)}
+              value={usuarios[0]?.fecha_nacimiento ? new Date(usuarios[0].fecha_nacimiento).toISOString().split('T')[0] : ""}
             />
           </div>
           <div className={styles.espacio}>
             <label className={styles.etiquetas}>Rut *</label>
-            <input 
-              className={`${styles.formulario} ${!rutValido ? styles.input_error : ''}`} 
-              type="text" 
-              placeholder="12.345.678-9" 
-              onChange={handleRutChange} 
-              value={usuarios[0]?.rut || ""} 
+            <input
+              className={`${styles.formulario} ${!rutValido ? styles.input_error : ''}`}
+              type="text"
+              placeholder="12.345.678-9"
+              onChange={handleRutChange}
+              value={usuarios[0]?.rut || ""}
               maxLength={12}
-              required 
+              required
             />
             {!rutValido && (
               <span className={styles.error_text}>
@@ -211,17 +208,17 @@ function Editar_Usuarios() {
           <div className={styles.espacio}>
             <label className={styles.etiquetas}>Contraseña *</label>
             <div className={styles.input_contraseña}>
-              <input 
-                className={styles.formulario} 
-                type={mostrarContraseña ? "text" : "password"} 
-                placeholder="Contraseña" 
-                onChange={(e) => handleChange('password', e.target.value)} 
-                value={usuarios[0]?.password || ""} 
-                required 
+              <input
+                className={styles.formulario}
+                type={mostrarContraseña ? "text" : "password"}
+                placeholder="Contraseña"
+                onChange={(e) => handleChange('password', e.target.value)}
+                value={usuarios[0]?.password || ""}
+                required
               />
-              <button 
-                type="button" 
-                onClick={() => setMostrarContraseña(!mostrarContraseña)} 
+              <button
+                type="button"
+                onClick={() => setMostrarContraseña(!mostrarContraseña)}
                 className={styles.boton_ojito}
               >
                 <FontAwesomeIcon icon={mostrarContraseña ? faEye : faEyeSlash} style={{ color: "black" }} />
@@ -230,12 +227,12 @@ function Editar_Usuarios() {
           </div>
           <div className={styles.espacio}>
             <label className={styles.etiquetas}>Teléfono</label>
-            <input 
-              className={styles.formulario} 
-              type="tel" 
-              placeholder="Teléfono" 
-              onChange={(e) => handleChange('telefono', e.target.value)} 
-              value={usuarios[0]?.telefono || ""} 
+            <input
+              className={styles.formulario}
+              type="tel"
+              placeholder="Teléfono"
+              onChange={(e) => handleChange('telefono', e.target.value)}
+              value={usuarios[0]?.telefono || ""}
             />
           </div>
 
@@ -282,12 +279,12 @@ function Editar_Usuarios() {
               />
               <label htmlFor="discapacidad_checkbox">¿Presentas algún tipo de discapacidad?</label>
             </div>
-            
+
             {tiene_una_Discapacidad && (
               <>
                 <div className={styles.espacio}>
                   <label className={styles.etiquetas}>Tipo de Accesibilidad *</label>
-                  <select 
+                  <select
                     className={styles.formulario}
                     value={tipoAccesibilidadSeleccionado}
                     onChange={(e) => setTipoAccesibilidadSeleccionado(e.target.value)}
@@ -301,14 +298,14 @@ function Editar_Usuarios() {
                     ))}
                   </select>
                 </div>
-                
+
                 <div className={styles.espacio}>
                   <label className={styles.etiquetas}>Nombre de la Discapacidad *</label>
-                  <input 
-                    className={styles.formulario} 
-                    type="text" 
-                    placeholder="Nombre de la discapacidad" 
-                    value={discapacidad[0]?.nombre || ""} 
+                  <input
+                    className={styles.formulario}
+                    type="text"
+                    placeholder="Nombre de la discapacidad"
+                    value={discapacidad[0]?.nombre || ""}
                     onChange={(e) => handleDiscapacidadChange("nombre", e.target.value)}
                     required={tiene_una_Discapacidad}
                   />
@@ -316,11 +313,11 @@ function Editar_Usuarios() {
 
                 <div className={styles.espacio}>
                   <label className={styles.etiquetas}>Tipo de Discapacidad *</label>
-                  <input 
-                    className={styles.formulario} 
-                    type="text" 
-                    placeholder="Tipo de Discapacidad" 
-                    value={discapacidad[0]?.tipo || ""} 
+                  <input
+                    className={styles.formulario}
+                    type="text"
+                    placeholder="Tipo de Discapacidad"
+                    value={discapacidad[0]?.tipo || ""}
                     onChange={(e) => handleDiscapacidadChange("tipo", e.target.value)}
                     required={tiene_una_Discapacidad}
                   />
@@ -328,14 +325,14 @@ function Editar_Usuarios() {
               </>
             )}
           </div>
-          
+
           <div className={styles.botones}>
             <button className={styles.btn1} type="button" onClick={() => navigate(-1)}>
               Cancelar
             </button>
-            <button 
-              className={styles.btn2} 
-              type="button" 
+            <button
+              className={styles.btn2}
+              type="button"
               onClick={Actualizar_Informacion}
             >
               Editar Usuario

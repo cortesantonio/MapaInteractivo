@@ -1,7 +1,7 @@
 
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import { faReply, faUser, faStar } from "@fortawesome/free-solid-svg-icons"
+import { faUser, faStar } from "@fortawesome/free-solid-svg-icons"
 import styles from "../usuarios/css/Perfil_Usuario.module.css"
 import { supabase } from "../../services/supabase"
 import { useEffect, useState } from "react"
@@ -9,7 +9,7 @@ import type { Usuarios } from "../../interfaces/Usuarios"
 import type { Resenas } from "../../interfaces/Resenas"
 import type { Solicitudes } from "../../interfaces/Solicitudes"
 import { useNavigate, useParams } from "react-router-dom"
-
+import NavbarAdmin from "../../components/NavbarAdmin"
 function Perfil_Usuario() {
   const [usuarios, setUsuarios] = useState<Usuarios[]>([])
   const [resenas, setResenas] = useState<Resenas[]>([])
@@ -31,7 +31,6 @@ function Perfil_Usuario() {
 
       if (resenasError) throw resenasError
       setResenas((resenasData as any) || [])
-      console.log("datos reseñas", resenasData)
 
       // Obtener datos del usuario
       const { data: usuariosData, error } = await supabase.from("usuarios").select("*").eq("id", id)
@@ -40,7 +39,6 @@ function Perfil_Usuario() {
         console.error("Error al obtener datos:", error)
       } else {
         setUsuarios(usuariosData || [])
-        console.log("Datos de usuarios obtenidos:", usuariosData)
       }
 
       // Obtener datos de solicitudes
@@ -51,7 +49,6 @@ function Perfil_Usuario() {
 
       if (solicitudesError) throw solicitudesError
       setSolicitud(solicitudesData)
-      console.log("Datos Solicitudes", solicitudesData)
     }
     fetchData()
   }, [id])
@@ -180,7 +177,7 @@ function Perfil_Usuario() {
                 <div className={styles.campo}>
                   <p className={styles.valor}>{aporte.nombre_locacion}</p>
                 </div>
-          
+
                 <div>
                   <label>Descripción</label>
                 </div>
@@ -265,17 +262,13 @@ function Perfil_Usuario() {
 
   return (
     <div>
-      <div>
-        <button className={styles.botonatras} onClick={() => navigate(-1)}>
-          <FontAwesomeIcon icon={faReply} />
-        </button>
-      </div>
+      <NavbarAdmin />
 
       <div className={styles.container}>
         <h2 className={styles.titulo}>Usuario</h2>
 
         <div className={styles.perfil_icono}>
-          <FontAwesomeIcon className={styles.icono_usuario} icon={faUser} />
+          <img src={usuarios[0]?.avatar_url || ''} className={styles.imgUsuario} alt="" />
         </div>
 
         <div className={styles.nombre_usuario}>
@@ -288,6 +281,7 @@ function Perfil_Usuario() {
 
         {renderContenido()}
       </div>
+
     </div>
   )
 }

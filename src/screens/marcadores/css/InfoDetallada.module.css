@@ -171,3 +171,10 @@
     color: white;
     border-radius: 5px;
 }
+
+.btnLink {
+    background-color: transparent;
+    border: none;
+    margin-left: 10px;
+    cursor: pointer;
+}

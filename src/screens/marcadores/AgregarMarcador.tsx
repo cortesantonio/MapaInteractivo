@@ -7,13 +7,15 @@ import { Accesibilidad } from '../../interfaces/Accesibilidad';
 import { Tipo_Recinto } from '../../interfaces/Tipo_Recinto';
 import { supabase } from '../../services/supabase';
 import { useNavigate } from 'react-router-dom';
-
+import { useAuth } from '../../hooks/useAuth';
+import NavbarAdmin from '../../components/NavbarAdmin';
 interface TipoDeAccesibilidades {
     [tipo: string]: Accesibilidad[];
 }
 
 export default function AgregarMarcador() {
     const navigate = useNavigate();
+    const { user } = useAuth();
     const [accesibilidades, setAccesibilidades] = useState<TipoDeAccesibilidades>({});
     const [dataMarcador, setDataMarcador] = useState<Partial<Marcador>>({
         nombre_recinto: '',
@@ -21,6 +23,7 @@ export default function AgregarMarcador() {
         direccion: '',
         pagina_web: '',
         telefono: '',
+        url_img: '',
         latitud: undefined,
         longitud: undefined,
         activo: true,
@@ -56,7 +59,6 @@ export default function AgregarMarcador() {
                 setAccesibilidades(agrupadas);
             }
         };
-
         fetchAccesibilidades();
     }, []);
 
@@ -96,6 +98,8 @@ export default function AgregarMarcador() {
                         latitud: newMarcador.latitud,
                         longitud: newMarcador.longitud,
                         activo: newMarcador.activo,
+                        url_img: newMarcador.url_img,
+                        id_usuario: user?.id
                     })
                     .select()
                     .single();
@@ -133,101 +137,105 @@ export default function AgregarMarcador() {
 
 
     return (
+        <>
+            <NavbarAdmin />
 
-        <div className={styles.container}>
-            <div className={styles.titulo} >
-                <button style={{ backgroundColor: 'transparent', border: 'none', cursor: 'pointer', padding: "10px" }}>
-                    <FontAwesomeIcon icon={faReply} size='2xl' onClick={() => { navigate(-1) }} />
-                </button>
-                <h2 style={{ textAlign: 'center' }}>
-                    Agregar Marcador
-                </h2>
-            </div>
+            <div className={styles.container}>
+                <div className={styles.titulo} style={{ marginTop: '25px' }} >
+                    <h2 style={{ textAlign: 'center' }}>
+                        Agregar Marcador
+                    </h2>
+                </div>
 
-            <div style={{ margin: 'auto', padding: '30px' }}>
-                <form onSubmit={handleAgregarMarcador}>
-                    <div style={{ display: 'flex', flexDirection: 'column', maxWidth: '100%' }}>
+                <div style={{ margin: 'auto', padding: '30px' }}>
+                    <form onSubmit={handleAgregarMarcador}>
+                        <div style={{ display: 'flex', flexDirection: 'column', maxWidth: '100%' }}>
 
-                        <label className={styles.labelSeccion} >Nombre Locacion</label>
-                        <input
-                            type="text"
-                            value={dataMarcador.nombre_recinto}
-                            onChange={(e) => setDataMarcador({ ...dataMarcador, nombre_recinto: e.target.value })}
-                            className={styles.inputText} required />
-                        <label className={styles.labelSeccion} htmlFor="">Direccion</label>
-                        <input
-                            type="text"
-                            value={dataMarcador.direccion}
-                            onChange={(e) => setDataMarcador({ ...dataMarcador, direccion: e.target.value })}
-                            className={styles.inputText} required />
-                        <label className={styles.labelSeccion} htmlFor="">Pagina Web</label>
-                        <input
-                            type="text"
-                            value={dataMarcador.pagina_web}
-                            onChange={(e) => setDataMarcador({ ...dataMarcador, pagina_web: e.target.value })}
-                            className={styles.inputText} required />
-
-                        <label className={styles.labelSeccion} htmlFor="">Telefono</label>
-                        <div className={styles.ContainerinputTelefono}>
-                            <p className={styles.codTelfono}>+569</p>
+                            <label className={styles.labelSeccion} >Nombre Locacion</label>
                             <input
-                                type="number" value={dataMarcador.telefono}
-                                onChange={(e) => setDataMarcador({ ...dataMarcador, telefono: e.target.value })} required />
+                                type="text"
+                                value={dataMarcador.nombre_recinto}
+                                onChange={(e) => setDataMarcador({ ...dataMarcador, nombre_recinto: e.target.value })}
+                                className={styles.inputText} required />
+                            <label className={styles.labelSeccion} htmlFor="">Direccion</label>
+                            <input
+                                type="text"
+                                value={dataMarcador.direccion}
+                                onChange={(e) => setDataMarcador({ ...dataMarcador, direccion: e.target.value })}
+                                className={styles.inputText} required />
+                            <label className={styles.labelSeccion} htmlFor="">Pagina Web</label>
+                            <input
+                                type="text"
+                                value={dataMarcador.pagina_web}
+                                onChange={(e) => setDataMarcador({ ...dataMarcador, pagina_web: e.target.value })}
+                                className={styles.inputText} required />
+
+                            <label className={styles.labelSeccion} htmlFor="">Telefono</label>
+                            <div className={styles.ContainerinputTelefono}>
+                                <p className={styles.codTelfono}>+569</p>
+                                <input
+                                    type="number" value={dataMarcador.telefono}
+                                    onChange={(e) => setDataMarcador({ ...dataMarcador, telefono: e.target.value })} required />
+                            </div>
+
+                            <label className={styles.labelSeccion} htmlFor="">Imagen de su local en URL</label>
+                            <input
+                                type="text"
+                                value={dataMarcador.url_img}
+                                onChange={(e) => setDataMarcador({ ...dataMarcador, url_img: e.target.value })}
+                                className={styles.inputText} required />
+
+                            <label className={styles.labelSeccion} htmlFor="">Latitud</label>
+                            <input className={styles.inputText} //Crear 
+                                type="number"
+                                value={dataMarcador.latitud}
+                                onChange={(e) => setDataMarcador({ ...dataMarcador, latitud: parseFloat(e.target.value) })} required />
+                            <label className={styles.labelSeccion} htmlFor="">Longitud</label>
+                            <input className={styles.inputText}
+                                type="number"
+                                value={dataMarcador.longitud}
+                                onChange={(e) => setDataMarcador({ ...dataMarcador, longitud: parseFloat(e.target.value) })} required />
+
+                            <label className={styles.labelSeccion}>Tipo de Recinto</label>
+                            <select name="tipo_recinto" value={dataMarcador.tipo_recinto} onChange={(e) => setDataMarcador({ ...dataMarcador, tipo_recinto: e.target.value })} className={styles.inputText} required>
+                                <option value="" >Selecciona un tipo de recinto</option>
+                                {tipoRecinto?.map((tipo) => (
+                                    <option key={tipo.id} value={tipo.id}>{tipo.tipo}</option>
+                                ))}
+                            </select>
+
                         </div>
-                        <label className={styles.labelSeccion} htmlFor="">Imagen de su local en URL</label>
-                        <input
-                            type="text"
-                            value={dataMarcador.url_img}
-                            onChange={(e) => setDataMarcador({ ...dataMarcador, url_img: e.target.value })}
-                            className={styles.inputText} required />
-                        <label className={styles.labelSeccion} htmlFor="">Latitud</label>
-                        <input className={styles.inputText} //Crear 
-                            type="number"
-                            value={dataMarcador.latitud}
-                            onChange={(e) => setDataMarcador({ ...dataMarcador, latitud: parseFloat(e.target.value) })} required />
-                        <label className={styles.labelSeccion} htmlFor="">Longitud</label>
-                        <input className={styles.inputText}
-                            type="number"
-                            value={dataMarcador.longitud}
-                            onChange={(e) => setDataMarcador({ ...dataMarcador, longitud: parseFloat(e.target.value) })} required />
 
-                        <label className={styles.labelSeccion}>Tipo de Recinto</label>
-                        <select name="tipo_recinto" value={dataMarcador.tipo_recinto} onChange={(e) => setDataMarcador({ ...dataMarcador, tipo_recinto: e.target.value })} className={styles.inputText} required>
-                            <option value="" >Selecciona un tipo de recinto</option>
-                            {tipoRecinto?.map((tipo) => (
-                                <option key={tipo.id} value={tipo.id}>{tipo.tipo}</option>
-                            ))}
-                        </select>
+                        {Object.entries(accesibilidades).map(([tipo, lista]) => (
+                            <div key={tipo}>
+                                <p>{`Accesibilidad ${tipo}`}</p>
+                                {lista.map(acc => (
+                                    <div className={styles.opt} key={acc.id}>
+                                        <input
+                                            type="checkbox"
+                                            value={acc.id}
+                                            checked={selecciones.includes(acc.id)}
+                                            onChange={() => handleCheckboxChange(acc.id)}
+                                            id={acc.nombre}
+                                        />
+                                        <label htmlFor={acc.nombre} >{acc.nombre}</label>
+                                    </div>
+                                ))}
+                            </div>
+                        ))}
 
-                    </div>
-
-                    {Object.entries(accesibilidades).map(([tipo, lista]) => (
-                        <div key={tipo}>
-                            <p>{`Accesibilidad ${tipo}`}</p>
-                            {lista.map(acc => (
-                                <div className={styles.opt} key={acc.id}>
-                                    <input
-                                        type="checkbox"
-                                        value={acc.id}
-                                        checked={selecciones.includes(acc.id)}
-                                        onChange={() => handleCheckboxChange(acc.id)}
-                                        id={acc.nombre}
-                                    />
-                                    <label htmlFor={acc.nombre} >{acc.nombre}</label>
-                                </div>
-                            ))}
+                        <div className={styles.acciones}>
+                            <button type="submit" >Agregar Marcador</button>
                         </div>
-                    ))}
+                    </form>
 
-                    <div className={styles.acciones}>
-                        <button type="submit" >Agregar Marcador</button>
-                    </div>
-                </form>
-
+                </div>
             </div>
-        </div>
 
 
+
+
+        </>
     )
 
 }

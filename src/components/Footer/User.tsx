@@ -1,13 +1,12 @@
 import styles from "./css/User.module.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCircleXmark, faPlus, faMinus } from "@fortawesome/free-solid-svg-icons";
-
+import { useAuth } from "../../hooks/useAuth";
 
 export default function User({
     tamanoFuente,
     closePanel,
     panelActivo,
-    user,
     navigate,
     modoNocturno,
     setModoNocturno,
@@ -24,6 +23,8 @@ export default function User({
     disminuirFuente: () => void;
     aumentarFuente: () => void;
 }) {
+    const { userRole, user } = useAuth();
+
 
     return (
         <div>
@@ -38,9 +39,12 @@ export default function User({
 
                         <div style={{ margin: "0px", justifyItems: "left" }}>
                             {user?.email != null ? (
-                                <button className={styles.ButtonPerfil} onClick={() => { navigate('/') }}>
-                                    Ver Perfil
-                                </button>
+                                <>
+                                    {userRole !== 'usuario' ? (<button onClick={() => { navigate('/panel-administrativo') }} className={styles.ButtonSesion}>PANEL ADMINISTRATIVO</button>)
+                                        :
+                                        (<button onClick={() => { navigate(`/usuario/perfil/${user.id}`) }} className={styles.ButtonSesion}>VER PERFIL</button >)
+                                    }
+                                </>
                             ) : (
                                 <button className={styles.ButtonSesion} onClick={() => { navigate('/login') }}>
                                     INICIAR SESIÓN
