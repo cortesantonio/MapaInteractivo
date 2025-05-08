@@ -257,7 +257,7 @@ export default function TrazadoRuta({
                                 busquedasRecientes.map((busquedas, index) => (
                                     <div key={index} className={styles.ContenInfo} onClick={() => onSeleccionMarcadorRecientes(busquedas.id_marcador?.id)}>
                                         <div className={styles.IconsClock}>
-                                            <FontAwesomeIcon icon={faClockRotateLeft} style={{ color: "gray" }} size="lg" />
+                                            <FontAwesomeIcon icon={faClockRotateLeft} style={{ color: "gray" }} size="xl" />
                                         </div>
                                         <div>
                                             <p style={{ margin: "0", fontWeight: "bold", color: "black" }}>
@@ -270,7 +270,6 @@ export default function TrazadoRuta({
                                     </div>
                                 ))
                             )}
-                            <hr className={styles.Lineahr} style={{ width: "90%" }} />
                         </div>
                     ) : null}
 

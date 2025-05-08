@@ -1,6 +1,6 @@
 import styles from './css/List.module.css'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faMagnifyingGlass, faPenToSquare, faUniversalAccess, faDeleteLeft, faPlus, faReply } from '@fortawesome/free-solid-svg-icons';
+import { faMagnifyingGlass, faPenToSquare, faUniversalAccess, faDeleteLeft, faPlus } from '@fortawesome/free-solid-svg-icons';
 import { useState, useEffect } from 'react';
 import { supabase } from '../../services/supabase';
 import { Tipo_Recinto } from '../../interfaces/Tipo_Recinto';
@@ -68,9 +68,7 @@ function ListTipoRecinto() {
     return (<>
         <NavbarAdmin />
         <div className={styles.container}>
-            <button style={{ position: "absolute", left: "15px", top: "10px", border: "none", background: "transparent", fontSize: "25px", alignItems: "start" }} onClick={() => { navigate(-1) }}>
-                <FontAwesomeIcon icon={faReply} />
-            </button>
+
             <header className={styles.header} style={{ paddingTop: '40px', gap: '15px' }}>
                 <hr style={{ flexGrow: "1" }} />
                 <h2 style={{ textAlign: 'right', paddingRight: "15px", whiteSpace: "nowrap" }} >Gestion de Recinto</h2>

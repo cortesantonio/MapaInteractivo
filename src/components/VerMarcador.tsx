@@ -27,7 +27,7 @@ export default function VerMarcador({ MarcadorSelectId, CerrarMarcador, establec
     const [resenasMarcador, setResenasMarcador] = useState<Review[]>([]);
     const [tabActiva, setTabActiva] = useState<'general' | 'resenas'>('general');
     const [mostrarFormulario, setMostrarFormulario] = useState(false);
-    
+
 
     useEffect(() => {
         const fetchMarcador = async () => {
@@ -126,7 +126,7 @@ export default function VerMarcador({ MarcadorSelectId, CerrarMarcador, establec
                         <>
                             <p><FontAwesomeIcon icon={faLocationDot} style={{ color: "#74C0FC" }} /> {Marcador.direccion}</p>
                             <p><FontAwesomeIcon icon={faPhone} style={{ color: "#74C0FC" }} /> {Marcador.telefono}</p>
-                            <p><FontAwesomeIcon icon={faEarthAmericas} style={{ color: "#74C0FC" }} /> {Marcador.pagina_web}</p>
+                            <p><FontAwesomeIcon icon={faEarthAmericas} style={{ color: "#74C0FC" }} /> <a href={Marcador.pagina_web}>{Marcador.pagina_web}</a></p>
 
                             <h4>Horarios</h4>
                             <ul style={{ paddingLeft: '20px' }}>
@@ -244,8 +244,9 @@ export default function VerMarcador({ MarcadorSelectId, CerrarMarcador, establec
                         </button>
                         <button onClick={() => {
                             establecerIdRutaMarcador(Marcador.id as number);
-                            CerrarMarcador();}}>
-                                
+                            CerrarMarcador();
+                        }}>
+
                             <FontAwesomeIcon icon={faRoute} className={styles.icon} />
                             <p>Cómo llegar</p>
                         </button>
