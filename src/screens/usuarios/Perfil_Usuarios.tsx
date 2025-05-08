@@ -31,7 +31,6 @@ function Perfil_Usuario() {
 
       if (resenasError) throw resenasError
       setResenas((resenasData as any) || [])
-      console.log("datos reseñas", resenasData)
 
       // Obtener datos del usuario
       const { data: usuariosData, error } = await supabase.from("usuarios").select("*").eq("id", id)
@@ -40,7 +39,6 @@ function Perfil_Usuario() {
         console.error("Error al obtener datos:", error)
       } else {
         setUsuarios(usuariosData || [])
-        console.log("Datos de usuarios obtenidos:", usuariosData)
       }
 
       // Obtener datos de solicitudes
@@ -51,7 +49,6 @@ function Perfil_Usuario() {
 
       if (solicitudesError) throw solicitudesError
       setSolicitud(solicitudesData)
-      console.log("Datos Solicitudes", solicitudesData)
     }
     fetchData()
   }, [id])
@@ -271,7 +268,7 @@ function Perfil_Usuario() {
         <h2 className={styles.titulo}>Usuario</h2>
 
         <div className={styles.perfil_icono}>
-          <FontAwesomeIcon className={styles.icono_usuario} icon={faUser} />
+          <img src={usuarios[0]?.avatar_url || ''} className={styles.imgUsuario} alt="" />
         </div>
 
         <div className={styles.nombre_usuario}>
