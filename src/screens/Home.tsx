@@ -1,4 +1,4 @@
-import { useEffect, useState, CSSProperties } from "react";
+import { useEffect, useState, CSSProperties, useCallback } from "react";
 import Map from "../components/Map";
 import Footer from "../components/Footer/Footer";
 import Buscador from "../components/Buscador";
@@ -7,11 +7,29 @@ import VerMarcador from "../components/VerMarcador";
 import NavbarUser from "../components/NavbarUser";
 
 
+
 export default function Home() {
   const [marcadorSeleccionadoId, setMarcadorSeleccionadoId] = useState<number | null>(null);
   const [mostrarMarcador, setMostrarMarcador] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
   const [isStreetViewActive, setIsStreetViewActive] = useState(false);
+  const [modoViaje, setModoViaje] = useState<'DRIVING' | 'BICYCLING' | 'WALKING' | 'TRANSIT'>('DRIVING');
+  const [destino, setDestino] = useState<{ lat: number; lng: number } | null>(null);
+  const [ubicacionActiva, setUbicacionActiva] = useState(false);
+  const [Idrutamarcador, setIdrutamarcador] = useState<number | null>(null);
+  const [onIndicaciones, setOnIndicaciones] = useState<string[]>([]);
+
+  const establecerDestino = useCallback((lat: number | null, lng: number | null) => {
+    if (lat !== null && lng !== null) {
+      setDestino({ lat, lng });
+    } else {
+      setDestino(null);
+    }
+  }, []);
+
+  const handleUbicacionActiva = (activa: boolean) => {
+    setUbicacionActiva(activa);
+  };
 
   useEffect(() => {
     const mediaQuery = window.matchMedia("(max-width: 768px)");
@@ -46,6 +64,10 @@ export default function Home() {
           setMostrarMarcador(true);
         }}
         onStreetViewChange={(isActive) => setIsStreetViewActive(isActive)}
+        modoViaje={modoViaje}
+        destinoRuta={destino}
+        onUbicacionActiva={handleUbicacionActiva}
+        onIndicaciones={setOnIndicaciones}
       />
 
       {!isStreetViewActive && (
@@ -67,7 +89,15 @@ export default function Home() {
           <Footer onSeleccionMarcador={(id: number) => {
             setMarcadorSeleccionadoId(id);
             setMostrarMarcador(true);
-          }} />
+            }}
+            cambiarModoViaje={setModoViaje}
+            establecerDestino={establecerDestino}
+            ubicacionActiva={ubicacionActiva}
+            Idrutamarcador={Idrutamarcador} 
+            limpiarRutaMarcador={() => setIdrutamarcador(null)}
+            InformacionDestino={destino} 
+            onIndicaciones={onIndicaciones}
+             />
 
 
           {mostrarMarcador && marcadorSeleccionadoId !== null && (
@@ -75,12 +105,10 @@ export default function Home() {
               <VerMarcador
                 MarcadorSelectId={marcadorSeleccionadoId}
                 CerrarMarcador={() => setMostrarMarcador(false)}
+                establecerIdRutaMarcador={(id) => setIdrutamarcador(id)}
               />
             </div>
           )}
-
-
-
 
         </>
       )
