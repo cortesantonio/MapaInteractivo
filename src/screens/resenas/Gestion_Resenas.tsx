@@ -1,6 +1,6 @@
 import styles from "../resenas/css/Gestion_Resenas.module.css";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faMagnifyingGlass, faFilter, faBuilding, faReply } from '@fortawesome/free-solid-svg-icons';
+import { faMagnifyingGlass, faFilter, faBuilding } from '@fortawesome/free-solid-svg-icons';
 import { useEffect, useState } from 'react';
 import { supabase } from '../../services/supabase';
 import { Tipo_Recinto } from "../../interfaces/Tipo_Recinto";

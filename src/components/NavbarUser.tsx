@@ -35,7 +35,7 @@ export default function NavbarUser() {
                     </div>
                     <div className={styles.opt}>
                         <button className={styles.btnNavegacion} onClick={() => { navigate(`/usuario/perfil/${user.id}`) }} style={{ display: 'block' }}>Ver perfil</button>
-                        <button className={styles.btnNavegacion} onClick={() => { navigate(`/usuario/perfil/editar/${user.id}`) }} style={{ display: 'block' }}>Editar perfil</button>
+                        <button className={styles.btnNavegacion} onClick={() => { navigate(`/usuarios/editar/${user.id}`) }} style={{ display: 'block' }}>Editar perfil</button>
                     </div>
 
                     <button className={styles.btnCerrarSesion} onClick={signOut}>
