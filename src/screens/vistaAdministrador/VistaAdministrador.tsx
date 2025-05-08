@@ -3,10 +3,11 @@ import { supabase } from "../../services/supabase";
 import { useNavigate } from "react-router-dom";
 import GraficoTorta from "../../components/grafico/graficotorta";
 import NavbarAdmin from "../../components/NavbarAdmin";
+import { useAuth } from "../../hooks/useAuth";
 
 function VistaAdministrador() {
     const navigate = useNavigate();
-
+    const { signOut } = useAuth()
     const [datosGrafico, setdatosGrafico] = useState<any[]>([]);
 
     useEffect(() => {
@@ -220,6 +221,10 @@ function VistaAdministrador() {
                             fontWeight: "500",
                             border: "none",
                             cursor: "pointer",
+                        }}
+                        onClick={() => {
+                            signOut();
+                            navigate('/');
                         }}
                     >
                         CERRAR SESIÓN
