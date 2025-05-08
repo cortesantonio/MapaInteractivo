@@ -5,15 +5,16 @@ import {
     faFilter,
     faEllipsisVertical,
     faBuilding,
-    faLocationDot,
-    faReply
+    faLocationDot
 } from '@fortawesome/free-solid-svg-icons';
+
 import { useEffect, useState } from 'react';
 import { supabase } from '../../services/supabase';
 import { Tipo_Recinto } from "../../interfaces/Tipo_Recinto";
 import { Marcador } from '../../interfaces/Marcador';
 import { useNavigate } from 'react-router-dom';
 import NavbarAdmin from '../../components/NavbarAdmin';
+
 function ListMarcadores() {
     const navigate = useNavigate()
 
@@ -43,7 +44,6 @@ function ListMarcadores() {
             } else {
                 setTipoRecinto(tipoRecintoData || []);
                 Set_Resenas(gestionResenasData || []);
-                console.log('Datos de reseñas obtenidos:', gestionResenasData);
             }
         };
 
@@ -127,7 +127,7 @@ function ListMarcadores() {
                 <div className={styles.content}>
 
 
-                    {Edificio.map((locacion: { id: number; nombre_recinto: string; direccion: string; tipo_recinto: string; }, index: number) => (
+                    {Edificio.map((locacion: { id: number; nombre_recinto: string; direccion: string; tipo_recinto: string; activo: boolean }, index: number) => (
                         <div className={styles.card} key={index}>
                             <div className={styles.estado} style={{ backgroundColor: '#0397fc' }}>
                                 <FontAwesomeIcon icon={faBuilding} size="xl" style={{ color: 'white' }} />
@@ -140,9 +140,7 @@ function ListMarcadores() {
                             </div>
 
                             <div className={styles.opciones}>
-                                <button>
-                                    <FontAwesomeIcon icon={faEllipsisVertical} />
-                                </button>
+                                {locacion.activo ? (<p style={{ color: 'green' }}>• Activo</p>) : (<p style={{ color: 'red' }}>• Desactivado</p>)}
                             </div>
                         </div>
                     ))}

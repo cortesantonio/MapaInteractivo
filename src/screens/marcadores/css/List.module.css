@@ -111,22 +111,15 @@
     border-radius: 50%;
 }
 
-.card .opciones button {
-    background-color: transparent;
-    color: black;
-    padding: 0;
-    width: 20px;
-    height: 30px;
-    outline: none;
-    transition: 0.5s all;
-    border: none;
-    cursor: pointer;
+.card .opciones {
+    text-align: center;
 }
 
-.card .opciones button:hover {
-    transform: scale(110%);
-    color: gray;
+.card .opciones p {
+    font-weight: 500;
+
 }
+
 
 .cardContent p {
     font-size: 1rem;
