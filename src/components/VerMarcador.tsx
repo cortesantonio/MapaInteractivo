@@ -14,9 +14,10 @@ import { Accesibilidad } from '../interfaces/Accesibilidad';
 interface Props {
     MarcadorSelectId: number;
     CerrarMarcador: () => void;
+    establecerIdRutaMarcador: (id: number) => void;
 }
 
-export default function VerMarcador({ MarcadorSelectId, CerrarMarcador }: Props) {
+export default function VerMarcador({ MarcadorSelectId, CerrarMarcador, establecerIdRutaMarcador }: Props) {
     const [cargando, setCargando] = useState<boolean>(true);
     const [width, setWidth] = useState(window.innerWidth <= 768 ? "100%" : "350px");
     const [height, setHeight] = useState(window.innerWidth <= 768 ? "100%" : "fit-content");
@@ -46,6 +47,8 @@ export default function VerMarcador({ MarcadorSelectId, CerrarMarcador }: Props)
                         id: marcador.id,
                         nombre_recinto: marcador.nombre_recinto,
                         tipo_recinto: marcador.tipo_recinto.tipo,
+                        latitud: marcador.latitud,
+                        longitud: marcador.longitud,
                         direccion: marcador.direccion,
                         url_img: marcador.url_img,
                         pagina_web: marcador.pagina_web,
@@ -123,7 +126,7 @@ export default function VerMarcador({ MarcadorSelectId, CerrarMarcador }: Props)
                         <>
                             <p><FontAwesomeIcon icon={faLocationDot} style={{ color: "#74C0FC" }} /> {Marcador.direccion}</p>
                             <p><FontAwesomeIcon icon={faPhone} style={{ color: "#74C0FC" }} /> {Marcador.telefono}</p>
-                            <p><FontAwesomeIcon icon={faEarthAmericas} style={{ color: "#74C0FC" }} /> {Marcador.pagina_web}</p>
+                            <p><FontAwesomeIcon icon={faEarthAmericas} style={{ color: "#74C0FC" }} /> <a href={Marcador.pagina_web}>{Marcador.pagina_web}</a></p>
 
                             <h4>Horarios</h4>
                             <ul style={{ paddingLeft: '20px' }}>
@@ -177,8 +180,6 @@ export default function VerMarcador({ MarcadorSelectId, CerrarMarcador }: Props)
             </div>
         );
     }
-
-
 
 
 
@@ -241,9 +242,13 @@ export default function VerMarcador({ MarcadorSelectId, CerrarMarcador }: Props)
                         <button >
                             <FontAwesomeIcon icon={faShareNodes} className={styles.icon} /> <p>Compartir</p>
                         </button>
-                        <button >
+                        <button onClick={() => {
+                            establecerIdRutaMarcador(Marcador.id as number);
+                            CerrarMarcador();
+                        }}>
+
                             <FontAwesomeIcon icon={faRoute} className={styles.icon} />
-                            <p>Como llegar</p>
+                            <p>Cómo llegar</p>
                         </button>
                         {!mostrarFormulario &&
                             <button onClick={() => setMostrarFormulario(true)}>

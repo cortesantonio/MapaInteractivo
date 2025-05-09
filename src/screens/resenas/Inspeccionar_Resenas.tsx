@@ -1,5 +1,5 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faReply, faStar, faTrash } from '@fortawesome/free-solid-svg-icons';
+import { faReply, faStar, faTrash, faArrowUpRightFromSquare } from '@fortawesome/free-solid-svg-icons';
 import styles from "../resenas/css/Inspeccionar_Resenas.module.css";
 import { useState, useEffect } from 'react';
 import { supabase } from '../../services/supabase';
@@ -42,7 +42,8 @@ function Inspeccionar_Resenas() {
     return resenas.map((r, index) => (
       <div className={styles.bloque_reseña} key={index}>
         <div className={styles.autor_reseña}>
-          <h1>{r.id_usuario?.nombre}</h1>
+          <h1>{r.id_usuario?.nombre} <button style={{ background: 'none', border: 'none' }}
+            onClick={() => { navigate(`/usuario/perfil/${r.id_usuario.id}`) }}> <FontAwesomeIcon icon={faArrowUpRightFromSquare} /></button> </h1>
           <div className={styles.trash_button}>
             <FontAwesomeIcon icon={faTrash} />
           </div>

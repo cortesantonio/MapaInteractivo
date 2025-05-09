@@ -2,6 +2,7 @@
 
 export interface Marcador {
   id: number;
+  id_usuario: number;
   nombre_recinto: string;
   tipo_recinto: string;
   direccion: string;

@@ -154,6 +154,7 @@ function Buscador({ onSeleccionMarcador }: BuscadorProps) {
                     className={styles.inpBuscar}
                     placeholder="Buscador"
                     onChange={(e) => setBusqueda(e.target.value)}
+                    value={busqueda}
                 />
 
                 <button onClick={ampliarBuscador} style={{ background: "transparent", padding: "0px", outline: "none", border: "none" }}>
@@ -165,21 +166,22 @@ function Buscador({ onSeleccionMarcador }: BuscadorProps) {
                 </button>
             </div>
 
-            <div
-                style={{
-                    overflow: "hidden",
-                    height: height,
-                    opacity: opacity,
-                    transition: "height 0.3s ease, opacity 0.3s ease",
-                    backgroundColor: "white",
-                    marginTop: '10px',
-                    borderRadius: '15px',
-                    padding: '15px',
-                    display: displayFiltro
 
-                }}
-            >
-                {filtroIsVisible && (
+            {filtroIsVisible && (
+                <div
+                    style={{
+                        overflow: "hidden",
+                        height: height,
+                        opacity: opacity,
+                        transition: "height 0.3s ease, opacity 0.3s ease",
+                        backgroundColor: "white",
+                        marginTop: '10px',
+                        borderRadius: '15px',
+                        padding: '15px',
+                        display: displayFiltro
+
+                    }}
+                >
                     <div style={{ textAlign: "left" }}>
                         <p style={{ color: "black", fontWeight: 550 }}>Filtros de Accesibilidad</p>
                         {opcionesAccesibilidad.map((acces) => (
@@ -196,8 +198,9 @@ function Buscador({ onSeleccionMarcador }: BuscadorProps) {
                             </div>
                         ))}
                     </div>
-                )}
-            </div>
+                </div>
+
+            )}
 
             {busqueda.length > 0 && (
                 <div style={{
@@ -210,7 +213,11 @@ function Buscador({ onSeleccionMarcador }: BuscadorProps) {
                         <div
                             key={item.id}
                             style={{ padding: "5px 0", borderBottom: "1px solid #ccc", cursor: "pointer" }}
-                            onClick={() => onSeleccionMarcador(item.id)}
+                            onClick={() => {
+                                onSeleccionMarcador(item.id);
+                                setFiltroIsVisible(false);
+                                setBusqueda("");
+                            }}
                         >
                             <strong>{item.nombre}</strong><br />
                             <small>{item.direccion}</small>

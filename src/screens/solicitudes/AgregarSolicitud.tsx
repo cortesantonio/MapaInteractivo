@@ -90,6 +90,7 @@ export default function AgregarSolicitud() {
 
 
 
+    
     const [usuarioEncontrado, setUsuarioEncontrado] = useState(false); // SEMAFORO PARA SABER SI EL USUARIO SE ENCONTRO O NO Y ASI SABER CUANDO CREAR EL USUARIO O CUANDO PASAR EL ID
 
     const handleCorreoBlur = async () => { // AQUI SE BUSCA EL USUARIO POR EL CORREO EN LA BASE DE DATOS, SI EXISTE SE SETEA EN EL FORM Y SE AUTO COMPLETA. SI NO, SE CREA.
@@ -175,7 +176,7 @@ export default function AgregarSolicitud() {
                 <button style={{ position: "absolute", backgroundColor: 'transparent', border: 'none', cursor: 'pointer', left: "10px" }} onClick={() => { navigate(-1) }}>
                     <FontAwesomeIcon icon={faReply} size='2xl' />
                 </button>
-                <h2 style={{ textAlign: 'center' }}>Colaborar <FontAwesomeIcon icon={faInfo} style={{ border: '1px solid gray', borderRadius: '50%', width: '20px', height: '20px', padding: '5px', color: 'gray' }} /></h2>
+                <h2 style={{ textAlign: 'center' }}>Colaborar <FontAwesomeIcon icon={faInfo} style={{ border: '1px solid gray', borderRadius: '50%', width: '20px', height: '20px', padding: '5px', color: 'gray',cursor:'pointer'} } onClick={() => { navigate("/info") }}/></h2>
             </div>
 
             <form onSubmit={handleSubmit}>

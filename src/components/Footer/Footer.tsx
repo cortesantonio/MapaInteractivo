@@ -10,10 +10,27 @@ import Microfono from "./Microfono";
 
 interface Props {          // FK
     onSeleccionMarcador: (id: number) => void;
+    cambiarModoViaje: (modo: 'DRIVING' | 'BICYCLING' | 'WALKING' | 'TRANSIT') => void;
+    establecerDestino: (lat: number | null, lng: number | null) => void;
+    ubicacionActiva: boolean
+    Idrutamarcador: number | null;
+    limpiarRutaMarcador: () => void;
+    InformacionDestino?: any; 
+    onIndicaciones?: string[]; 
+    
 }
 
 //Funcionamiento completo del footer 
-export default function Footer({ onSeleccionMarcador }: Props) {
+export default function Footer({ 
+    onSeleccionMarcador, 
+    cambiarModoViaje, 
+    establecerDestino, 
+    ubicacionActiva, 
+    Idrutamarcador, 
+    limpiarRutaMarcador, 
+    InformacionDestino,
+    onIndicaciones
+}: Props) {
     const navigate = useNavigate()
     const { user } = useAuth();
     //Controla el Panel que mostrara la informacion del maplocation y del userperson
@@ -24,6 +41,7 @@ export default function Footer({ onSeleccionMarcador }: Props) {
     const setHeight = useState("0px")[1]// Cambiado a una variable de estado para controlar la altura del panel
     const [Isdisplay, setIsdisplay] = useState("none");
     const [activarReconocimiento, setactivarReconocimiento] = useState(false);
+
 
     //Cumple la funcion de ajutar el viewport, la config inicial y el listar, la limpieza al desmontar el componente
     useEffect(() => {
@@ -40,7 +58,7 @@ export default function Footer({ onSeleccionMarcador }: Props) {
         if (panelActivo === panel) {
             closePanel();
         } else {
-
+            establecerDestino(null, null);
             setPanelActivo(panel);
             setTimeout(() => {
                 setIsdisplay("block");
@@ -48,6 +66,23 @@ export default function Footer({ onSeleccionMarcador }: Props) {
             }, 10);
         }
     };
+
+    useEffect(() => {
+        if (Idrutamarcador !== null && panelActivo !== "map") {
+            setPanelActivo("map");
+            setTimeout(() => {
+                setIsdisplay("block");
+                setHeight("350px");
+            }, 10);
+        }
+    }, [Idrutamarcador, panelActivo]);
+
+    useEffect(() => {
+        if (panelActivo !== "map") {
+            establecerDestino(null, null);
+            limpiarRutaMarcador
+        }
+    }, [panelActivo, Idrutamarcador]);
 
     useEffect(() => {
         if (panelActivo === "microphone") {
@@ -61,6 +96,9 @@ export default function Footer({ onSeleccionMarcador }: Props) {
         setHeight("0px");
         setIsdisplay("none");
         setactivarReconocimiento(false);
+        if (Idrutamarcador !== null) {
+            limpiarRutaMarcador(); 
+        }
         setTimeout(() => {
             setPanelActivo(null);
         }, 300);
@@ -77,6 +115,7 @@ export default function Footer({ onSeleccionMarcador }: Props) {
             setTamanoFuente(tamanoFuente - 0.1)
         }
     }
+
 
     return (
         // Contenedor pirncipal (padre)
@@ -96,9 +135,16 @@ export default function Footer({ onSeleccionMarcador }: Props) {
             <button onClick={() => togglePanel("microphone")} className={styles.ButtonMicro}>
                 <FontAwesomeIcon icon={panelActivo === "microphone" ? faCircleXmark : faMicrophone} size="xl" style={{ color: "white" }} />
             </button>
-            <div className={styles.PanelInfo} style={{ display: Isdisplay, transition: "height 0.3s ease, opacity 0.3s ease" }}>
+            <div className={styles.PanelInfo} style={{
+                display: Isdisplay, transition: "height 0.3s ease, opacity 0.3s ease", height:
+                    ubicacionActiva && InformacionDestino && Object.keys(InformacionDestino).length > 0
+                        ? "340px"
+                        : "450px",
+            }}>
                 {/* Vista de los contenidos que tendra el panel de trazado de rutas */}
-                {panelActivo === "map" && <TrazadoRuta tamanoFuente={tamanoFuente} closePanel={closePanel} panelActivo={panelActivo} onSeleccionMarcadorRecientes={onSeleccionMarcador} />}
+                {panelActivo === "map" && <TrazadoRuta tamanoFuente={tamanoFuente} closePanel={closePanel} panelActivo={panelActivo}
+                    onSeleccionMarcadorRecientes={onSeleccionMarcador} cambiarModoViaje={cambiarModoViaje} establecerDestino={establecerDestino} 
+                    ubicacionActiva={ubicacionActiva} Idrutamarcador={Idrutamarcador} onIndicaciones={onIndicaciones}/>}
 
                 {/* Visualizacion de los datos que vera el usuario y sus funciones correspondientes */}
                 {panelActivo === "user" && <User tamanoFuente={tamanoFuente} closePanel={closePanel} panelActivo={panelActivo} user={user} navigate={navigate}
