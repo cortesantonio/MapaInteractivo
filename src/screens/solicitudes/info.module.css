@@ -190,6 +190,7 @@
     }
 }
 
+
 /* Media Queries para dispositivos muy pequeños */
 @media (max-width: 480px) {
     .container .titulo h1 {

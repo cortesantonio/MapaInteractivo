@@ -22,6 +22,7 @@ import Perfil_Usuario from './screens/usuarios/Perfil_Usuarios'
 import AgregarAccesibilidad from './screens/accesibilidades/Agregar'
 import ListAccesibilidades from './screens/accesibilidades/List'
 
+
 import AgregarTipoRecinto from './screens/tipoRecinto/Agregar'
 import ListTipoRecinto from './screens/tipoRecinto/List'
 
