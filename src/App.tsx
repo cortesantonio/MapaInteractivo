@@ -18,6 +18,7 @@ import Agregar_Usuarios from './screens/usuarios/Agregar_Usuarios'
 import Editar_Usuarios from './screens/usuarios/Editar_Usuarios'
 import Perfil_Usuario from './screens/usuarios/Perfil_Usuarios'
 
+
 import AgregarAccesibilidad from './screens/accesibilidades/Agregar'
 import ListAccesibilidades from './screens/accesibilidades/List'
 
@@ -33,13 +34,16 @@ import ListSolicitudes from './screens/solicitudes/List'
 import AuthCallback from './screens/AuthCallback'
 import Ver from './screens/solicitudes/Ver'
 
+
 import ProtectedRoute from './components/ProtectedRoute'
+import Info from "./screens/solicitudes/Info"
 function App() {
   return (
     <div>
       <Routes>
         <Route path='/' element={<Home />} />
         <Route path='/login' element={<LoginUsuario />} />
+        <Route path='/info' element= {<Info />}/>
         <Route path='/colaborar' element={<AgregarSolicitud />} />
 
         {/* Panel administrativo protegido */}

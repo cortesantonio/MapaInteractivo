@@ -1,0 +1,223 @@
+.container_principal {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+    color: #333;
+    background-color: #f8f9f8;
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+    box-sizing: border-box;
+    border-radius: 100px;
+}
+
+.container {
+    width: 100%;
+    padding: 10px;
+    box-sizing: border-box;
+}
+
+.botonatras {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    color: #000;
+    cursor: pointer;
+    z-index: 1000;
+    font-size: 25px;
+    background-color: transparent;
+    border: none;
+}
+
+.container .titulo h1 {
+    text-align: center;
+    font-size: 1.5rem;
+    font-weight: 300;
+    line-height: 1.5;
+    margin-top: 2rem;
+}
+
+.titulo hr {
+    width: 100%;
+    margin: 5px auto 15px;
+}
+
+.contentenido_principal_Seccion {
+    width: 100%;
+}
+
+.Seccion_de_Accesibilidad {
+    margin-bottom: 2rem;
+    width: 100%;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 1.5rem;
+}
+
+
+
+.Seccion_de_Accesibilidad .seccion_de_titulos h2 {
+   text-align: center;
+   font-weight: 350;
+   margin: 1rem 0;
+   padding: 5px;
+   font-size: 1.4rem;
+}
+
+.featureHeader {
+    display: flex;
+    flex-direction: row-reverse;
+    justify-content: flex-end;
+    align-items: center;
+    margin-bottom: 1rem;
+}
+
+.featureHeader h3 {
+    font-size: 1.2rem;
+    font-weight: 400;
+    margin-right: 10px;
+}
+
+.featureHeader .featureIcon_1,
+.featureHeader .featureIcon_2,
+.featureHeader .featureIcon_3,
+.featureHeader .featureIcon_4 {
+    margin: 0 5px 0 0;
+    padding: 5px;
+    font-size: 1.1rem;
+    color: blue;
+}
+
+.Pre_Descripcion {
+    width: 100%;
+    margin-bottom: 1rem;
+}
+
+.Pre_Descripcion h4 {
+    margin: 0 0 10px 0;
+    text-align: left;
+    width: 100%;
+    font-weight: 350;
+    font-size: 1rem;
+    line-height: 1.4;
+}
+
+.especificacion_de_contenido {
+    display: flex;
+    justify-content: flex-start;
+    flex-direction: column;
+    margin-bottom: 1.2rem;
+}
+
+.especificacion_de_contenido h5 {
+    font-size: 1.05rem;
+    margin-bottom: 5px;
+    font-weight: 500;
+}
+
+.especificacion_de_contenido hr {
+    width: 194px;
+    max-width: 100%;
+    margin: 0 0 10px 0;
+}
+
+.especificacion_de_contenido h4 {
+    margin: 10px 0 5px 0;
+    font-size: 1rem;
+    font-weight: 400;
+}
+
+.especificacion_de_contenido ul {
+    padding-left: 15px;
+    margin: 0;
+}
+
+.especificacion_de_contenido li {
+    list-style: none;
+    margin: 8px 0;
+    position: relative;
+    padding-left: 15px;
+    line-height: 1.4;
+}
+
+.especificacion_de_contenido li:before {
+    content: "•";
+    position: absolute;
+    left: 0;
+    color: #666;
+}
+
+/* Media Queries para dispositivos móviles */
+@media (max-width: 768px) {
+    .container_principal {
+        padding: 15px 10px;
+    }
+    
+    .botonatras {
+        top: 10px;
+        left: 10px;
+        font-size: 20px;
+    }
+    
+    .container .titulo h1 {
+        font-size: 1.3rem;
+        line-height: 1.3;
+        margin-top: 1.5rem;
+    }
+    
+    .Seccion_de_Accesibilidad .seccion_de_titulos h2 {
+        font-size: 1.2rem;
+    }
+    
+    .featureHeader h3 {
+        font-size: 1.1rem;
+    }
+    
+    .Pre_Descripcion,
+    .especificacion_de_contenido {
+        padding-left: 0;
+        margin-left: 0;
+    }
+    
+    .Pre_Descripcion h4,
+    .especificacion_de_contenido h4 {
+        font-size: 0.95rem;
+    }
+    
+    .especificacion_de_contenido h5 {
+        font-size: 1rem;
+    }
+}
+
+/* Media Queries para dispositivos muy pequeños */
+@media (max-width: 480px) {
+    .container .titulo h1 {
+        font-size: 1.2rem;
+    }
+    
+    .Seccion_de_Accesibilidad .seccion_de_titulos h2 {
+        font-size: 1.1rem;
+    }
+    
+    .featureHeader {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    
+    .featureHeader h3 {
+        margin-bottom: 5px;
+        margin-right: 0;
+    }
+    
+    .featureHeader .featureIcon_1,
+    .featureHeader .featureIcon_2,
+    .featureHeader .featureIcon_3,
+    .featureHeader .featureIcon_4 {
+        margin-bottom: 5px;
+    }
+    
+    .especificacion_de_contenido hr {
+        width: 150px;
+    }
+}
