@@ -10,15 +10,25 @@ const CustomMap = ({
   marcadores,
   SeleccionMarcador,
   ubicacionUsuario,
-  onStreetViewChange
+  destinoRuta,
+  onStreetViewChange,
+  modoViaje,
+  onUbicacionActiva,
+  onIndicaciones,
 }: {
   marcadores: any[],
   SeleccionMarcador: (id: number) => void,
   ubicacionUsuario?: { lat: number, lng: number } | null
+  destinoRuta?: { lat: number, lng: number } | null,
   onStreetViewChange?: (isActive: boolean) => void
+  modoViaje: 'DRIVING' | 'BICYCLING' | 'WALKING' | 'TRANSIT'
+  onUbicacionActiva: (activa: boolean) => void,
+  onIndicaciones: (instrucciones: string[]) => void
+
 }) => {
 
   const map = useMap();
+
 
   useEffect(() => {
     if (map) {
@@ -34,9 +44,18 @@ const CustomMap = ({
         streetViewControlOptions: {
           position: window.google.maps.ControlPosition.RIGHT_CENTER,
         },
-        gestureHandling: "greedy"
+        gestureHandling: "greedy",
+        clickableIcons: false
+        
       });
 
+    }
+
+  }, [map]);
+
+
+  useEffect(() => {
+    if (map) {
       const streetView = map.getStreetView();
       const handleStreetViewChange = () => {
 
@@ -50,20 +69,97 @@ const CustomMap = ({
 
       };
       streetView.addListener('visible_changed', handleStreetViewChange);
+
     }
 
   }, [map, onStreetViewChange]);
 
+
+  useEffect(() => {
+    if (!map || !ubicacionUsuario) return;
   
+    if (!destinoRuta) {
+      onIndicaciones([]); 
+      return;
+    }
+  
+    const directionsService = new google.maps.DirectionsService();
+    const directionsRenderer = new google.maps.DirectionsRenderer({
+      suppressMarkers: true,
+      polylineOptions: {
+        strokeColor: "#4285F4",
+        strokeOpacity: 0.9,
+        strokeWeight: 5
+      }
+    });
+
+
+  
+    directionsRenderer.setMap(map);
+  
+    directionsService.route(
+      {
+        origin: ubicacionUsuario,
+        destination: destinoRuta,
+        travelMode: google.maps.TravelMode[modoViaje],
+      },
+      (result, status) => {
+        if (status === "OK" && result) {
+          directionsRenderer.setDirections(result);
+  
+          const steps = result.routes[0].legs[0].steps;
+          const instrucciones = steps.map(step => step.instructions);
+          onIndicaciones(instrucciones);
+
+        } else {
+          console.error("Error al calcular la ruta:", status);
+        }
+      }
+    );
+  
+    return () => {
+      directionsRenderer.setMap(null);
+
+    };
+  }, [map, modoViaje, ubicacionUsuario, destinoRuta]);
+  
+
+  useEffect(() => {
+    if (ubicacionUsuario) {
+      onUbicacionActiva(true); 
+    } else {
+      onUbicacionActiva(false); 
+    }
+  }, [ubicacionUsuario, onUbicacionActiva]);
+
+
   return (
     <>
-      {marcadores.map((m, index) => (
+      {!destinoRuta && marcadores.map((m, index) => (
         <AdvancedMarker
           key={index}
           position={{ lat: m.latitud, lng: m.longitud }}
           onClick={() => SeleccionMarcador(m.id)}
         />
       ))}
+
+      {destinoRuta && (
+        <AdvancedMarker position={destinoRuta} title="Destino">
+          <div style={{ width: "32px", height: "32px" }}>
+            <svg
+              viewBox="0 0 24 24"
+              width="100%"
+              height="100%"
+              fill="#d62828"
+              stroke="white"
+              strokeWidth="2"
+            >
+              <path d="M12 2C8 2 5 5.5 5 9.5C5 14.28 12 22 12 22C12 22 19 14.28 19 9.5C19 5.5 16 2 12 2Z" />
+              <circle cx="12" cy="9.5" r="2.5" fill="white" />
+            </svg>
+          </div>
+        </AdvancedMarker>
+      )}
 
       {ubicacionUsuario && (
         <AdvancedMarker 
@@ -97,6 +193,9 @@ const CustomMap = ({
           `}</style>
         </div>
       </AdvancedMarker>
+
+
+
       )}
     </>
   );
@@ -106,42 +205,66 @@ const Map = ({
   center = lugarCentrado,
   zoom = zoomPorDefecto,
   onSeleccionMarcador,
-  onStreetViewChange
+  onStreetViewChange,
+  modoViaje,
+  destinoRuta,
+  onUbicacionActiva,
+  onIndicaciones
+
 }: {
   center?: { lat: number, lng: number },
   zoom?: number,
   onSeleccionMarcador: (id: number) => void,
   onStreetViewChange?: (isActive: boolean) => void
+  destinoRuta?: { lat: number, lng: number } | null,
+  modoViaje: 'DRIVING' | 'BICYCLING' | 'WALKING' | 'TRANSIT',
+  onUbicacionActiva: (activa: boolean) => void,
+  onIndicaciones: (instrucciones: string[]) => void
+
 }) => {
   const [marcadores, setMarcadores] = useState<any[]>([]);
   const [ubicacionUsuario, setUbicacionUsuario] = useState<{ lat: number, lng: number } | null>(null);
+  
 
   useEffect(() => {
     const fetchMarcador = async () => {
       const { data, error } = await supabase
         .from("marcador")
         .select("id, latitud, longitud");
-
+  
       if (error) {
         console.error("Error al obtener los marcadores:", error);
       } else {
         setMarcadores(data);
       }
     };
-
+  
     fetchMarcador();
-
+  
+    let watchId: number;
+  
     if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(
+      watchId = navigator.geolocation.watchPosition(
         (position) => {
           const { latitude, longitude } = position.coords;
           setUbicacionUsuario({ lat: latitude, lng: longitude });
         },
         (error) => {
           console.error("Error al obtener geolocalización:", error);
+        },
+        {
+          enableHighAccuracy: true,
+          maximumAge: 5000, 
+          timeout: 10000
         }
       );
     }
+  
+    return () => {
+      if (watchId !== undefined) {
+        navigator.geolocation.clearWatch(watchId);
+      }
+    };
   }, []);
 
   return (
@@ -152,6 +275,11 @@ const Map = ({
           SeleccionMarcador={onSeleccionMarcador}
           ubicacionUsuario={ubicacionUsuario}
           onStreetViewChange={onStreetViewChange}
+          modoViaje={modoViaje}
+          destinoRuta={destinoRuta}
+          onUbicacionActiva={onUbicacionActiva}
+          onIndicaciones={onIndicaciones} 
+
         />
       </GoogleMap>
     </APIProvider>

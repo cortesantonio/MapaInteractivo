@@ -12,7 +12,7 @@ import { useState, useEffect } from "react";
 import { supabase } from "../../services/supabase";
 import { Usuarios } from "../../interfaces/Usuarios";
 import { useNavigate } from "react-router-dom";
-
+import NavbarAdmin from "../../components/NavbarAdmin";
 function Gestion_Usuarios() {
 
   const navigate = useNavigate();
@@ -54,25 +54,9 @@ function Gestion_Usuarios() {
     return coincideNombre && coincideRol;
   });
 
-  return (
+  return (<>
+    <NavbarAdmin />
     <div className={styles.container}>
-      <button
-        style={{
-          position: "absolute",
-          left: "15px",
-          top: "10px",
-          border: "none",
-          background: "transparent",
-          fontSize: "25px",
-          alignItems: "start",
-        }}
-        onClick={() => {
-          navigate(-1);
-        }}
-      >
-        <FontAwesomeIcon icon={faReply} />
-      </button>
-
       <header className={styles.header} style={{ paddingTop: "40px", gap: "15px" }}>
         <hr style={{ flexGrow: "1" }} />
         <h2
@@ -190,6 +174,7 @@ function Gestion_Usuarios() {
         </div>
       </div>
     </div>
+  </>
   );
 }
 

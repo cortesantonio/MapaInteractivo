@@ -8,7 +8,6 @@ import { Tipo_Recinto } from '../../interfaces/Tipo_Recinto';
 import { supabase } from '../../services/supabase';
 import { useNavigate, useParams } from 'react-router-dom';
 
-
 interface TipoDeAccesibilidades {
     [tipo: string]: Accesibilidad[];
 }
@@ -31,7 +30,6 @@ export default function EditarLocacion() {
     const [dataMarcador, setDataMarcador] = useState<Partial<Marcador>>(estadoInicialMarcadores);
     const [selecciones, setSelecciones] = useState<number[]>([]);
     const [tipoRecinto, setTipoRecinto] = useState<Tipo_Recinto[]>([]);
-    const [newMarcador, setnewMarcador] = useState<Marcadorconaccesibilidad>();
 
     useEffect(() => { //Busca todos los tipo de recintos registradas en la base de datos
         const fetchTipos = async () => {
@@ -70,18 +68,11 @@ export default function EditarLocacion() {
         );
     };
 
-    type Marcadorconaccesibilidad = Marcador & {
-        accesibilidades: number[]
-    }
-
-    const handleAgregarMarcador = (e: React.FormEvent<HTMLFormElement>) => { //Se agrega los nuevos datos al marcador
+    const handleAgregarMarcador = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        const envio: Marcadorconaccesibilidad = {
-            ...(dataMarcador as Marcador),
-            accesibilidades: selecciones,
-        };
-        setnewMarcador(envio);
+        actualizarMarcador();
     };
+
 
     useEffect(() => { // Usa el id de forma dinamica obteniendolo desde el id que se encuentra en la URL
         const fetchMarcador = async () => {
@@ -115,9 +106,60 @@ export default function EditarLocacion() {
         }
     }, [id]);
 
+    const actualizarMarcador = async () => {
+        if (!id) return;
 
+        try {
+            // 1. Actualiza la tabla 'marcador'
+            const { error: errorMarcador } = await supabase
+                .from('marcador')
+                .update({
+                    ...dataMarcador,
+                    tipo_recinto: dataMarcador.tipo_recinto,
+                })
+                .eq('id', id);
+
+            if (errorMarcador) {
+                console.error('Error al actualizar el marcador:', errorMarcador);
+                return;
+            }
+
+            // 2. Elimina las relaciones antiguas en 'accesibilidad_marcador'
+            const { error: errorDelete } = await supabase
+                .from('accesibilidad_marcador')
+                .delete()
+                .eq('id_marcador', id);
+
+            if (errorDelete) {
+                console.error('Error al eliminar relaciones anteriores:', errorDelete);
+                return;
+            }
+
+            // 3. Inserta las nuevas relaciones
+            const nuevasRelaciones = selecciones.map(idAcc => ({
+                id_marcador: id,
+                id_accesibilidad: idAcc,
+            }));
+
+            const { error: errorInsert } = await supabase
+                .from('accesibilidad_marcador')
+                .insert(nuevasRelaciones);
+
+            if (errorInsert) {
+                console.error('Error al insertar nuevas relaciones:', errorInsert);
+                return;
+            }
+
+            alert('Marcador actualizado correctamente.');
+            navigate(-1);
+        } catch (err) {
+            console.error('Error inesperado:', err);
+        }
+    };
 
     return (
+
+
         <div className={styles.container}>
             <div className={styles.header}>
 
@@ -153,36 +195,7 @@ export default function EditarLocacion() {
                                     value={dataMarcador.nombre_recinto}
                                     onChange={(e) => setDataMarcador({ ...dataMarcador, nombre_recinto: e.target.value })}
                                     className={styles.inputText} required />
-                                <label className={styles.labelSeccion} htmlFor="">Direccion</label>
-                                <input
-                                    type="text"
-                                    value={dataMarcador.direccion}
-                                    onChange={(e) => setDataMarcador({ ...dataMarcador, direccion: e.target.value })}
-                                    className={styles.inputText} required />
-                                <label className={styles.labelSeccion} htmlFor="">Pagina Web</label>
-                                <input
-                                    type="text"
-                                    value={dataMarcador.pagina_web}
-                                    onChange={(e) => setDataMarcador({ ...dataMarcador, pagina_web: e.target.value })}
-                                    className={styles.inputText} required />
 
-                                <label className={styles.labelSeccion} htmlFor="">Telefono</label>
-                                <div className={styles.ContainerinputTelefono}>
-                                    <p className={styles.codTelfono}>+569</p>
-                                    <input
-                                        type="number" value={dataMarcador.telefono}
-                                        onChange={(e) => setDataMarcador({ ...dataMarcador, telefono: e.target.value })} required />
-                                </div>
-                                <label className={styles.labelSeccion} htmlFor="">Latitud</label>
-                                <input className={styles.inputText} //Crear 
-                                    type="number"
-                                    value={dataMarcador.latitud}
-                                    onChange={(e) => setDataMarcador({ ...dataMarcador, latitud: parseFloat(e.target.value) })} required />
-                                <label className={styles.labelSeccion} htmlFor="">Longitud</label>
-                                <input className={styles.inputText}
-                                    type="number"
-                                    value={dataMarcador.longitud}
-                                    onChange={(e) => setDataMarcador({ ...dataMarcador, longitud: parseFloat(e.target.value) })} required />
                                 <label className={styles.labelSeccion}>Tipo de Recinto</label>
                                 <select
                                     name="tipo_recinto"
@@ -202,6 +215,46 @@ export default function EditarLocacion() {
                                         </option>
                                     ))}
                                 </select>
+
+                                <label className={styles.labelSeccion} htmlFor="">Direccion</label>
+                                <input
+                                    type="text"
+                                    value={dataMarcador.direccion}
+                                    onChange={(e) => setDataMarcador({ ...dataMarcador, direccion: e.target.value })}
+                                    className={styles.inputText} required />
+                                <label className={styles.labelSeccion} htmlFor="">Pagina Web</label>
+                                <input
+                                    type="text"
+                                    value={dataMarcador.pagina_web}
+                                    onChange={(e) => setDataMarcador({ ...dataMarcador, pagina_web: e.target.value })}
+                                    className={styles.inputText} required />
+
+                                <label className={styles.labelSeccion} htmlFor="">URL de imagen</label>
+                                <input
+                                    type="text"
+                                    value={dataMarcador.url_img}
+                                    onChange={(e) => setDataMarcador({ ...dataMarcador, url_img: e.target.value })}
+                                    className={styles.inputText} required />
+
+
+                                <label className={styles.labelSeccion} htmlFor="">Telefono</label>
+                                <div className={styles.ContainerinputTelefono}>
+                                    <p className={styles.codTelfono}>+569</p>
+                                    <input
+                                        type="number" value={dataMarcador.telefono}
+                                        onChange={(e) => setDataMarcador({ ...dataMarcador, telefono: e.target.value })} required />
+                                </div>
+                                <label className={styles.labelSeccion} htmlFor="">Latitud</label>
+                                <input className={styles.inputText} //Crear 
+                                    type="number"
+                                    value={dataMarcador.latitud}
+                                    onChange={(e) => setDataMarcador({ ...dataMarcador, latitud: parseFloat(e.target.value) })} required />
+                                <label className={styles.labelSeccion} htmlFor="">Longitud</label>
+                                <input className={styles.inputText}
+                                    type="number"
+                                    value={dataMarcador.longitud}
+                                    onChange={(e) => setDataMarcador({ ...dataMarcador, longitud: parseFloat(e.target.value) })} required />
+
                             </div>
                             {/*Segundo Grupo*/}
                             <div className={styles.gridContainer}>
@@ -234,7 +287,7 @@ export default function EditarLocacion() {
                                 }}
                             >CANCELAR
                             </button>
-                            <button type="submit"  >Guardar Cambios</button>
+                            <button    >Guardar Cambios</button>
                         </div>
                     </form>
 
