@@ -1,0 +1,63 @@
+.ContenPrin {
+    background-Color: white;
+    padding: 5px;
+    align-Items: center;
+    border-radius: 10px;
+    top: auto;
+    bottom: 10px;
+    z-index: 1;
+    height: 5%;
+    transform: translatex(-50%);
+    position: fixed;
+    transition: width 0.3s ease;
+    left: 50%;
+}
+
+.ContenButton {
+    display: flex;
+    align-Items: center;
+    justify-Content: space-between;
+    margin: 2px;
+    height: 30px;
+    width: auto;
+    gap: 10;
+}
+
+.Button {
+    background: transparent;
+    padding: 20px;
+    outline: none;
+    border: none;
+    margin: 10px;
+}
+
+.ButtonMicro {
+    position: fixed;
+    bottom: 25px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background-color: rgb(253, 29, 29);
+    background: linear-gradient(90deg, rgba(253, 29, 29, 1) 0%, rgba(255, 106, 60, 1) 100%);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: none;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+    z-Index: 4;
+    cursor: pointer;
+}
+
+.PanelInfo {
+    position: absolute;
+    border-radius: 5px;
+    margin-top: 8px;
+    bottom: 80%;
+    width: 100%;
+    left: 0px;
+    background-color: white;
+    overflow: hidden;
+    height: 450px;
+}

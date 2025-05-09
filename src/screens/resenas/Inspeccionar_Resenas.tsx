@@ -1,132 +1,100 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faReply, faStar, faTrash } from '@fortawesome/free-solid-svg-icons';
-import "../resenas/css/Inspeccionar_Resenas.css";
+import { faReply, faStar, faTrash, faArrowUpRightFromSquare } from '@fortawesome/free-solid-svg-icons';
+import styles from "../resenas/css/Inspeccionar_Resenas.module.css";
 import { useState, useEffect } from 'react';
 import { supabase } from '../../services/supabase';
+import { Resenas } from '../../interfaces/Resenas';
+import { Marcador } from '../../interfaces/Marcador';
+import { useParams } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 function Inspeccionar_Resenas() {
-  const simbolo = ">";
-  const usarDatosSimulados = true;
-  let IdMarcador = 1;
+  const { id } = useParams();
+  const [marcador, setMarcador] = useState<Marcador | null>(null);
+  const [resenas, setResenas] = useState<Resenas[]>([]);
 
-  const datosSimulados = [
-    {
-      id: 1,
-      comentario: "El Teatro Provincial de Curico es, sin duda, una joya cultural que brilla en la ciudad.",
-      fecha: "2025-04-14",
-      calificacion: 5,
-      usuarios: {
-        id: 1,
-        nombre: "Elvis Cofre",
-        correo: "elvis@example.com"
-      },
-      marcador: {
-        id: 1,
-        nombre_recinto: "Teatro Provincial de Curico",
-        direccion: "Carmen 556-560, 3341768 Curicó, Maule"
-      }
-    },
-    {
-      id: 2,
-      comentario: "Hermosa experiencia, todo muy limpio y bien organizado.",
-      fecha: "2025-04-13",
-      calificacion: 4,
-      usuarios: {
-        id: 2,
-        nombre: "Josefina Herrera",
-        correo: "josefina@example.com"
-      },
-      marcador: {
-        id: 1,
-        nombre_recinto: "Teatro Provincial de Curico",
-        direccion: "Carmen 556-560, 3341768 Curicó, Maule"
-      }
-    }
-  ];
-
-  const [resenas, setResenas] = useState<any[]>([]);
+  const navigate = useNavigate();
+  const [loading, setLoading] = useState<boolean>(true);
 
   useEffect(() => {
-    const fetchResenas = async () => {
-      if (usarDatosSimulados) {
-        setResenas(datosSimulados);
-      } else {
-        const { data, error } = await supabase
-          .from('resenas')
-          .select(`
-            id,
-            comentario,
-            fecha,
-            calificacion,
-            usuarios (
-              id,
-              nombre,
-              correo
-            ),
-            marcador (
-              id,
-              nombre_recinto,
-              direccion
-            )
-          `)
-          .eq('id_marcador', IdMarcador);
-  
-        if (error) {
-          console.error("Error al obtener reseñas:", error);
-        } else {
-          setResenas(data);
-        }
+    const fetchData = async () => {
+      setLoading(true);
+      try {
+        const { data: marcadorData, error: marcadorError } = await supabase.from("marcador").select(`id,nombre_recinto,direccion,url_img,tipo_recinto (tipo)`).eq("id", id).single();
+        if (marcadorError) throw marcadorError;
+        setMarcador(marcadorData as any);
+        const { data: resenasData, error: resenasError } = await supabase.from("resenas").select(`id,id_usuario (id,nombre),fecha,calificacion,comentario`).eq("id_marcador", id);
+        if (resenasError) throw resenasError;
+        setResenas(resenasData as any || []);
+      } catch (error) {
+        console.error("Error al obtener los datos:", error);
+      } finally {
+        setLoading(false);
       }
     };
+    fetchData();
+  }, [id]);
 
-    fetchResenas();
-  }, []);
+  const renderResenas = () => {
+    if (loading) return <p>Cargando reseñas...</p>;
+    if (resenas.length === 0) return <p>No hay Reseñas aún</p>;
 
-  const marcador = resenas[0]?.marcador;
+    return resenas.map((r, index) => (
+      <div className={styles.bloque_reseña} key={index}>
+        <div className={styles.autor_reseña}>
+          <h1>{r.id_usuario?.nombre} <button style={{ background: 'none', border: 'none' }}
+            onClick={() => { navigate(`/usuario/perfil/${r.id_usuario.id}`) }}> <FontAwesomeIcon icon={faArrowUpRightFromSquare} /></button> </h1>
+          <div className={styles.trash_button}>
+            <FontAwesomeIcon icon={faTrash} />
+          </div>
+        </div>
 
-  return (
-    <div className="container">
-      <div className="header">
-        <div className="icono">
-          <FontAwesomeIcon icon={faReply} />
+        <div className={styles.calificacion_fecha}>
+          <FontAwesomeIcon className={styles.estrella} icon={faStar} />
+          <span>{r.calificacion}</span>
+          <span>{new Date(r.fecha).toLocaleDateString()}</span>
         </div>
-        <div className="titulo-locacion">
-          <h1>{marcador?.nombre_recinto || "Cargando..."}</h1>
-        </div>
-        <div className="info-locacion">
-          <h4>{simbolo} Anfiteatro</h4>
-        </div>
-        <div className="text">
-          <span>{marcador?.direccion || "Dirección no disponible"}</span>
+
+        <div className={styles.texto_reseña}>
+          <span>{r.comentario}</span>
         </div>
       </div>
-
-      <div className="contenido-reseña">
-        <div className="titulo-reseña">
-          <h4>Reseñas</h4>
-          <hr />
+    ));
+  };
+  return (
+    <div className={styles.container}>
+      <div className={styles.header}>
+        <div className={styles.imagen}>
+          <img
+            src={marcador?.url_img}
+            alt="Imagen del recinto"
+            className={styles.imagenMarcador}
+          />
         </div>
+        <div>
+          <button className={styles.botonatras} onClick={() => navigate(-1)}>
+            <FontAwesomeIcon icon={faReply} />
+          </button>
 
-        {resenas.map((r, index) => (
-          <div className="bloque-reseña" key={index}>
-            <div className="autor-reseña">
-              <h1>{r.usuarios?.nombre}</h1>
-              <div className="trash-button">
-                <FontAwesomeIcon icon={faTrash} />
-              </div>
-            </div>
-
-            <div className="calificacion-fecha">
-              <FontAwesomeIcon className="estrella" icon={faStar} />
-              <span>{r.calificacion}</span>
-              <span>{new Date(r.fecha).toLocaleDateString()}</span>
-            </div>
-
-            <div className="texto-reseña">
-              <span>{r.comentario}</span>
-            </div>
+        </div>
+        <div className={styles.titulo_locacion}>
+          <h2>{marcador?.nombre_recinto || "Cargando..."}</h2>
+        </div>
+        <div className={styles.info_locacion}>
+          <h4>{'>'} {(marcador?.tipo_recinto as any)?.tipo || "Cargando tipo..."}</h4>
+        </div>
+        <div className={styles.text}>
+          <h2>{marcador?.direccion || "Cargando..."}</h2>
+        </div>
+      </div>
+      <div className={styles.inspeccionar_reseñas}>
+        <div className={styles.contenido_reseña}>
+          <div className={styles.titulo_reseña}>
+            <h4 style={{ paddingLeft: '0' }}>Reseñas</h4>
+            <hr />
           </div>
-        ))}
+          {renderResenas()}
+        </div>
       </div>
     </div>
   );

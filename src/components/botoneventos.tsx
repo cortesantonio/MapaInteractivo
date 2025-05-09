@@ -44,7 +44,7 @@ function BotonEventos() {
         } else {
             setEventoIsVisible(true);
             setTimeout(() => {
-                setHeight("400px");
+                setHeight("fit-content");
                 setismargin("10px");
                 setOpacity(1);
                 if (window.innerWidth <= 768) {
@@ -64,9 +64,6 @@ function BotonEventos() {
                 padding: "10px",
                 borderRadius: "5px",
                 gap: "10px",
-                position: "absolute",
-                top: "80px",
-                right: position.right,
                 width: width,
                 transition: "width 0.3s ease-in-out",
                 zIndex: 1
@@ -95,7 +92,6 @@ function BotonEventos() {
                         display: "flex",
                         alignItems: "center",
                         gap: "5px",
-                        width: "100%",
 
                     }}
                 >
@@ -198,6 +194,21 @@ function BotonEventos() {
                                     overflowY: "auto",
                                 }}
                             >
+
+                                {events.length === 0 && (
+                                    <div
+                                        style={{
+                                            textAlign: "center",
+                                            color: "gray",
+                                            fontSize: "1rem",
+                                            width: "100%",
+
+                                        }}
+                                    >
+                                        No hay eventos próximos
+                                    </div>
+                                )}
+
                                 {events.map((event) => (
                                     <div key={event.id} style={{ paddingBottom: "10px" }}>
                                         <div
@@ -221,12 +232,12 @@ function BotonEventos() {
                                         <div
                                             style={{
                                                 display: "flex",
-                                                justifyContent: "space-between",
-                                                alignItems: "center",
+                                                justifyContent: 'space-between',
+                                                alignItems: "start",
                                             }}
                                         >
-                                            <div style={{ display: "flex", alignItems: "center", padding: "10px", opacity: 0.8 }}>
-                                                <FontAwesomeIcon icon={faCalendar} size="2x" style={{ color: "black" }} />
+                                            <div style={{ display: "flex", alignItems: 'center', padding: "10px", opacity: 0.8, marginTop: '15px' }}>
+                                                <FontAwesomeIcon icon={faCalendar} size="xl" style={{ color: "black" }} />
                                             </div>
                                             <div
                                                 style={{
@@ -243,14 +254,15 @@ function BotonEventos() {
                                                         alignItems: "center",
                                                     }}
                                                 >
-                                                    <h3 style={{ margin: 0, fontSize: "1.2rem", fontWeight: "600" }}>
+                                                    <h3 style={{ margin: 0, fontSize: "1rem", fontWeight: "600" }}>
                                                         {event.title}
                                                     </h3>
                                                     <span
                                                         style={{
-                                                            fontSize: "0.8rem",
+                                                            fontSize: "0.7rem",
                                                             color: event.colorStatus,
-                                                            paddingRight: "20px",
+                                                            textTransform: 'uppercase',
+                                                            textAlign: 'center'
                                                         }}
                                                     >
                                                         • {event.status}
@@ -265,7 +277,7 @@ function BotonEventos() {
                                                         alignItems: "center",
                                                         gap: "5px",
                                                         fontSize: "0.9rem",
-                                                        paddingTop: "5px",
+                                                        marginTop: '10px',
                                                         color: "#00570a",
                                                     }}
                                                 >
@@ -281,7 +293,8 @@ function BotonEventos() {
                                                         gap: "5px",
                                                         fontSize: "0.9rem",
                                                         color: "#00570a",
-                                                        paddingTop: "5px",
+                                                        marginTop: '10px'
+
                                                     }}
                                                 >
                                                     <FontAwesomeIcon icon={faLocationDot} />
@@ -291,6 +304,8 @@ function BotonEventos() {
                                         </div>
                                     </div>
                                 ))}
+
+
                             </div>
                         )}
                     </div>

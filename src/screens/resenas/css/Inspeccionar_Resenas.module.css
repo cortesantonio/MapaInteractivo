@@ -1,0 +1,280 @@
+
+.container {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  max-width: 100%;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  overflow-x: hidden;
+}
+
+.header {
+  position: relative;
+  width: 100%;
+  height: 360px;
+  color: white;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+}
+
+.imagen {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.imagen img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  max-width: 200vw;
+}
+
+.header::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.3));
+  z-index: 2;
+}
+
+.botonatras {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  font-size: 1.5rem;
+  background-color: transparent;
+  color: white;
+  border: none;
+  cursor: pointer;
+  z-index: 3;
+}
+
+.titulo_locacion {
+  position: absolute;
+  bottom: 80px;
+  left: 50px;
+  z-index: 3;
+}
+
+.titulo_locacion h2 {
+  margin: 0;
+  font-size: 2.5rem;
+  font-weight: 350;
+}
+
+.info_locacion {
+  position: absolute;
+  bottom: 55px;
+  left: 30px;
+  z-index: 3;
+  display: flex;
+  align-items: center;
+}
+
+.info_locacion h4 {
+  margin: 0;
+  font-size: 1.7rem;
+  font-weight: 300;
+}
+
+.text {
+  position: absolute;
+  bottom: 20px;
+  left: 50px;
+  z-index: 3;
+}
+
+.text h2 {
+  margin: 0;
+  font-size: 1.2rem;
+  font-weight: 400;
+  opacity: 0.9;
+}
+
+.contenido_reseña {
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+  background-color: #ffffff;
+  max-width: 800px;
+  margin: 0 auto;
+  width: 100%;
+  max-height: calc(110vh - 360px);
+  padding: 0 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.inspeccionar_reseñas {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  padding: 20px 0;
+}
+
+.titulo_reseña {
+  padding: 15px 5px;
+  text-align: left;
+  width: 100%;
+}
+
+.titulo_reseña h4 {
+  margin: 0;
+  font-size: 1.5rem;
+  color: #333;
+  font-weight: 400;
+}
+
+.titulo_reseña hr {
+  width: 100%;
+  margin: 10px auto;
+  border: none;
+  border-top: 1px solid #e0e0e0;
+}
+
+.bloque_reseña {
+  padding: 10px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 90%;
+  max-width: 600px;
+}
+
+.autor_reseña {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 0 0 10px 0;
+  width: 100%;
+}
+
+.autor_reseña h1 {
+  font-size: 1.4rem;
+  font-weight: 350;
+  color: #333;
+  margin: 0;
+}
+
+.trash_button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: 1px solid #ff3b30;
+  color: #ff3b30;
+  cursor: pointer;
+}
+
+.calificacion_fecha {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 10px;
+  font-size: 0.9rem;
+  color: #666;
+  width: 100%;
+}
+
+.estrella {
+  color: #ffb400;
+}
+
+.texto_reseña {
+  font-size: 1.3rem;
+  line-height: 1.5;
+  font-weight: 200;
+  color: #1f1f1f;
+  width: 100%;
+  text-align: left;
+}
+
+@media (min-width: 1024px) {
+  .inspeccionar_reseñas {
+    padding: 20px;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+  }
+}
+
+@media (max-width: 768px) {
+  .header {
+    height: 250px;
+  }
+
+  .titulo_locacion h2 {
+    font-size: 2rem;
+    font-weight: 500;
+  }
+
+  .info_locacion h4 {
+    font-size: 1rem;
+    font-weight: 400;
+  }
+
+  .contenido_reseña {
+    max-width: 95%;
+  }
+}
+
+@media (max-width: 480px) {
+  .header {
+    height: 200px;
+  }
+
+  .inspeccionar_reseñas {
+    width: 100%;
+    height: 100%;
+  }
+
+  .titulo_locacion {
+    bottom: 70px;
+    left: 20px;
+  }
+
+  .titulo_locacion h2 {
+    font-size: 1.5rem;
+    font-weight: 400;
+    letter-spacing: 0.2px;
+    line-height: 1.3;
+  }
+
+  .info_locacion {
+    bottom: 45px;
+    left: 20px;
+  }
+
+  .info_locacion h4 {
+    font-size: 1.1rem;
+    font-weight: 300;
+    letter-spacing: 0.5px;
+  }
+
+  .text {
+    bottom: 15px;
+    left: 20px;
+  }
+
+  .text h2 {
+    font-size: 0.9rem;
+  }
+}

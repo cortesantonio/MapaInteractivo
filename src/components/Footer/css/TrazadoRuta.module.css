@@ -1,0 +1,154 @@
+.PanelActivo {
+    padding: 20px;
+    position: relative;
+    height: 100%;
+}
+
+.ButtonClose {
+    position: absolute;
+    top: 1px;
+    right: 1px;
+    background: transparent;
+    padding: 10px;
+    border: none;
+    cursor: pointer;
+}
+
+.ContenUno {
+    display: flex;
+    align-items: center;
+    margin-bottom: 8px;
+}
+
+.ContenInterUno {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-right: 8px;
+    color: green;
+}
+
+.Input {
+    background: transparent;
+    color: black;
+    font-size: 14px;
+    width: 100%;
+    border: 1px solid gray;
+    border-radius: 20px;
+    padding: 7px 12px;
+    outline: none;
+}
+
+.ContenDos {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.ContenInterDos {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-right: 12px;
+    color: red;
+}
+
+.PositionIcons {
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    gap: 50px;
+    margin: 12px 0;
+}
+
+.ButttonIcons {
+    background: transparent;
+    padding: 0px;
+    outline: none;
+    border: none;
+}
+
+.Lineahr {
+    border: 0;
+    border-top: 1px solid rgb(202, 191, 191);
+    margin: 10px auto;
+}
+
+.TituloDestin {
+    color: rgb(130, 127, 127);
+    text-align: center;
+    font: 100% sans-serif;
+}
+
+.MensajeP {
+    font-size: 15px;
+    text-align: center;
+    margin-top: 12px;
+    color: rgb(34, 33, 33);
+}
+
+.ContenInfo {
+    display: flex;
+    align-items: center;
+    font-size: 13px;
+    text-align-last: left;
+    margin-top: 15px;
+    cursor: pointer;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.226);
+    padding-bottom: 10px;
+    
+}
+
+.IconsClock {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-right: 10px;
+}
+
+
+.activa {
+    background-color: #d1f7d6;
+    color: #0a8a0a;
+    animation: pulseActive 2s infinite;
+}
+
+.desactivada {
+    background-color: #fbe1e1;
+    color: #b80000;
+    animation: fadeInactive 3s infinite;
+}
+
+@keyframes pulseActive {
+    0% {
+        box-shadow: 0 0 5px #4caf50;
+    }
+
+    50% {
+        box-shadow: 0 0 10px #4caf50;
+    }
+
+    100% {
+        box-shadow: 0 0 5px #4caf50;
+    }
+}
+
+@keyframes fadeInactive {
+
+    0%,
+    100% {
+        opacity: 1;
+    }
+
+    50% {
+        opacity: 0.6;
+    }
+}
+
+
+.TituloIndi {
+    color: rgb(130, 127, 127);
+    text-align: center;
+    padding: 3px;
+    font: 100% sans-serif;
+}

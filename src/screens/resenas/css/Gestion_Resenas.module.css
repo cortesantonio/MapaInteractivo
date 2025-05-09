@@ -1,17 +1,10 @@
-* {
-    padding: 0;
-    margin: 0;
-}
-
 .container {
     position: relative;
     width: 100%;
-
     background-color: white;
     display: flex;
-    flex-direction: column;
     color: black;
-
+    flex-direction: column;
 }
 
 .header {
@@ -29,42 +22,9 @@
     justify-content: left;
     flex-direction: column;
     margin-bottom: 25px;
-}
-
-.add_user button {
-    margin: 0 0 5px 5px;
-    padding: 10px;
-    color: #ffffff;
-    border: solid 1px gray;
-    background: linear-gradient(90deg, #ff0000, #ff6100);
-    border-radius: 30px;
-    height: 20px;
-    display: flex;
+    padding-left: 50px;
     align-items: center;
-    justify-content: center;
-} 
-
-.filtros .buscar {
-    display: flex;
-    justify-content: lef1;
-}
-
-.filtros .buscar  {
-    display: flex;
-    gap: 5px;
-}
-
-.filtros .buscar input {
-    padding: 2px;
-    border-radius: 5px;
-    border: 1px solid gray;
-}
-
-.filtros .buscar  button {
-    background-color: transparent;
-    border: none;
-    outline: none;
-
+    /*Agregado por Mati*/
 }
 
 .filtroCard {
@@ -78,12 +38,62 @@
     background-color: transparent;
 }
 
-.filtroCard  select {
+.filtroCard select {
     border: none;
+    background-color: transparent;
 }
 
 .filtroCard:hover {
     transform: scale(98%);
+}
+
+.filtros .buscar {
+    display: flex;
+    justify-content: lef1;
+}
+
+.filtros .buscar {
+    display: flex;
+    gap: 5px;
+}
+
+.filtros .buscar input {
+    padding: 2px;
+    border-radius: 5px;
+    border: 1px solid gray;
+}
+
+.filtros .buscar button {
+    background-color: transparent;
+    border: none;
+    outline: none;
+}
+
+.add_user button {
+    margin: 0 0 5px 5px;
+    padding: 10px;
+    color: #ffffff;
+    border: solid 1px gray;
+    background: linear-gradient(90deg, #ff0000, #ff6100);
+    border-radius: 30px;
+    height: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.SubTitulo {
+    text-align: center;
+    color: gray;
+    justify-items: center;
+}
+
+.content {
+    display: flex;
+    justify-content: start;
+    flex-wrap: wrap;
+    padding: 25px;
+    gap: 10px;
 }
 
 .card {
@@ -96,17 +106,6 @@
     width: auto;
     border-bottom: 1px solid rgb(209, 209, 209);
     width: fit-content;
-    
-
-}
-
-.cardContent p {
-    width: 200px;
-    text-align: left;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-
 }
 
 .card .estado {
@@ -116,7 +115,14 @@
     align-items: center;
     justify-content: center;
     border-radius: 50%;
+}
 
+.cardContent p {
+    width: 200px;
+    text-align: left;
+    white-space: wrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .card .opciones button {
@@ -129,7 +135,6 @@
     transition: 0.5s all;
     border: none;
     cursor: pointer;
-
 }
 
 .card .opciones button:hover {
@@ -139,13 +144,4 @@
 
 .cardContent p {
     font-size: 1rem;
-
-}
-
-
-.content {
-    display: flex;
-    justify-content: center;
-    flex-direction: column;
-    align-items: center;
 }

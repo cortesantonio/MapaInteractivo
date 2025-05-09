@@ -1,0 +1,253 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 30px 20px;
+  box-sizing: border-box;
+  max-width: 600px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+.botonatras {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  font-size: 1.5rem;
+  background-color: transparent;
+  color: rgb(0, 0, 0);
+  border: none;
+  cursor: pointer;
+  z-index: 3;
+}
+
+.titulo {
+  font-size: 1.5rem;
+  color: #000;
+  margin-top: 40px;
+  text-align: center;
+}
+
+.perfil_icono {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: #ff0000;
+  background: linear-gradient(90deg, rgba(255, 0, 0, 1) 0%, rgba(253, 175, 29, 1) 70%, rgba(249, 252, 69, 1) 100%);
+  border-radius: 50%;
+  width: 120px;
+  height: 120px;
+  margin: 20px 0;
+  padding: 5px;
+}
+
+.imgUsuario {
+  border-radius: 50%;
+  width: 100%;
+  height: 100%;
+}
+
+
+
+.info {
+  width: 100%;
+}
+
+.campo {
+  margin-bottom: 20px;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.label {
+  font-weight: bold;
+  color: #000;
+  font-size: 16px;
+}
+
+.valor {
+  color: #333;
+  font-size: 16px;
+  margin-top: 5px;
+  width: 100%;
+  word-break: break-word;
+}
+
+.campo hr {
+  border: 0;
+  border-top: 1px solid #ccc;
+  margin: 10px 0;
+  width: 100%;
+}
+
+.perfil_info {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+}
+
+.informacion_campos {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+}
+
+.contenedor_botones_perfil {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 15px;
+  margin-top: 15px;
+  flex-wrap: wrap;
+  width: 100%;
+}
+
+.reseñas_usuario {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+  width: 100%;
+}
+
+.reseñas_usuario button {
+  background-color: #fff;
+  border: none;
+  width: 100px;
+  cursor: pointer;
+}
+
+.informacion_campos_de_resena {
+  display: flex;
+  align-items: flex-start;
+  flex-direction: column;
+  width: 100%;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  padding: 15px;
+  margin-bottom: 20px;
+  box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+}
+
+.calificacion_fecha_reseña {
+  display: flex;
+  gap: 5px;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.informacion_campos_de_resena label {
+  border-bottom: solid 1px #000;
+}
+
+.texto_reseña {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+  font-size: 15px;
+  line-height: 1.5;
+  color: #333;
+  width: 100%;
+}
+
+.texto_reseña span {
+  font-size: 15px;
+  font-weight: 300;
+  margin: 5px 0 5px 2px;
+  padding-top: 5px;
+  width: 100%;
+}
+
+.texto_reseña label {
+  font-size: 17px;
+  color: #000;
+}
+
+.estrella {
+  color: #ffcc00;
+  font-size: 20px;
+  margin-right: 3px;
+}
+
+.boton_editar,
+.boton_desactivar {
+  background-color: #fff;
+  color: red;
+  padding: 10px;
+  font-size: 16px;
+  cursor: pointer;
+  border: none;
+  width: 210px;
+  text-align: center;
+}
+
+.separador_botones {
+  width: 100%;
+  border: 0;
+  border-top: 1px solid #ccc;
+  margin: 0 0 20px 0;
+}
+
+.nombre_usuario {
+  width: 100%;
+  text-align: center;
+}
+
+.sin_resenas {
+  text-align: center;
+  font-size: 20px;
+  width: 100%;
+}
+
+/* Responsive para móviles */
+@media (max-width: 600px) {
+  .perfil_icono {
+    width: 100px;
+    height: 100px;
+  }
+
+  .icono_usuario {
+    font-size: 50px;
+  }
+
+  .titulo {
+    font-size: 20px;
+  }
+
+  .label,
+  .valor {
+    font-size: 14px;
+  }
+
+  .reseñas_usuario {
+    flex-direction: row;
+    justify-content: space-between;
+  }
+
+  .reseñas_usuario button {
+    width: 48%;
+    font-size: 14px;
+    padding: 8px 0;
+  }
+
+  .boton_editar,
+  .boton_desactivar {
+    width: 100%;
+    margin: 5px 0;
+  }
+
+  .contenedor_botones_perfil {
+    flex-direction: column;
+    width: 100%;
+  }
+
+  .informacion_campos_de_resena {
+    padding: 10px;
+  }
+}

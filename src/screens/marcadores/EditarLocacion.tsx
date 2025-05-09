@@ -1,148 +1,299 @@
 import styles from './css/EditarLocacion.module.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { useState, useEffect } from 'react';
 import { faReply } from '@fortawesome/free-solid-svg-icons';
-import { useNavigate } from 'react-router-dom';
+import { Marcador } from '../../interfaces/Marcador';
+import { Accesibilidad } from '../../interfaces/Accesibilidad';
+import { Tipo_Recinto } from '../../interfaces/Tipo_Recinto';
+import { supabase } from '../../services/supabase';
+import { useNavigate, useParams } from 'react-router-dom';
 
-function EditarLocation() {
+interface TipoDeAccesibilidades {
+    [tipo: string]: Accesibilidad[];
+}
+
+export default function EditarLocacion() {
     const navigate = useNavigate()
-    return (
-        <div className={styles.container}>
+    const { id } = useParams();
+    const [accesibilidades, setAccesibilidades] = useState<TipoDeAccesibilidades>({});
+    const estadoInicialMarcadores: Partial<Marcador> = {
+        nombre_recinto: '',
+        tipo_recinto: '',
+        direccion: '',
+        pagina_web: '',
+        telefono: '',
+        url_img: '',
+        latitud: undefined,
+        longitud: undefined,
+        activo: true,
+    };
+    const [dataMarcador, setDataMarcador] = useState<Partial<Marcador>>(estadoInicialMarcadores);
+    const [selecciones, setSelecciones] = useState<number[]>([]);
+    const [tipoRecinto, setTipoRecinto] = useState<Tipo_Recinto[]>([]);
 
-            <div className={styles.HeaderFijo}>
-                <img src="https://lh3.googleusercontent.com/gps-cs-s/AB5caB9eZeqiYZh_N6HddUd7JMb6o7pqX4RRnEi7nILjYXDI7kkYSnjc_vaeigx7oH_ya-PravH6AY-cDaK_Whg_xln3BIzCQQYzWkoH6xltRO771yV22JQs9BVH0mIQMcRyRveNe0Sd=w426-h240-k-no"
-                    alt=""
+    useEffect(() => { //Busca todos los tipo de recintos registradas en la base de datos
+        const fetchTipos = async () => {
+            const { data, error } = await supabase
+                .from('tipo_recinto')
+                .select('*');
+
+            if (error) {
+                console.error('Error al obtener tipos de recinto:', error);
+            } else {
+                setTipoRecinto(data as Tipo_Recinto[]);
+            }
+        };
+        fetchTipos();
+    }, []);
+
+    useEffect(() => { // LLAMADO A LA API PARA OBTNER TODOAS LAS ACCESIBILIDADES QUE HAY EN LA BASE DE DATOS Y LA CLASIFICA POR TIPO
+        const fetchAccesibilidades = async () => {
+            const { data, error } = await supabase.from('accesibilidad').select('*');
+            if (error) console.error('Error al obtener accesibilidades:', error);
+            else {
+                const agrupadas: TipoDeAccesibilidades = {};
+                data.forEach((acc: Accesibilidad) => {
+                    if (!agrupadas[acc.tipo]) agrupadas[acc.tipo] = [];
+                    agrupadas[acc.tipo].push(acc);
+                });
+                setAccesibilidades(agrupadas);
+            }
+        };
+        fetchAccesibilidades();
+    }, []);
+
+    const handleCheckboxChange = (id: number) => { //MANEJA LOS IDS DE LAS ACCESIBILIDADES SELECIONADAS
+        setSelecciones(prev =>
+            prev.includes(id) ? prev.filter(i => i !== id) : [...prev, id]
+        );
+    };
+
+    const handleAgregarMarcador = (e: React.FormEvent<HTMLFormElement>) => {
+        e.preventDefault();
+        actualizarMarcador();
+    };
+
+
+    useEffect(() => { // Usa el id de forma dinamica obteniendolo desde el id que se encuentra en la URL
+        const fetchMarcador = async () => {
+            const { data, error } = await supabase
+                .from('marcador')
+                .select('*')
+                .eq('id', id)
+                .single();
+
+            if (error) {
+                console.error('Error al obtener el marcador:', error);
+            } else {
+                setDataMarcador(data);
+
+                const { data: relaciones, error: errorRelaciones } = await supabase
+                    .from('accesibilidad_marcador')
+                    .select('id_accesibilidad')
+                    .eq('id_marcador', id);
+
+                if (errorRelaciones) {
+                    console.error('Error al obtener relaciones de accesibilidad:', errorRelaciones);
+                } else {
+                    const ids = relaciones.map((r) => r.id_accesibilidad);
+                    setSelecciones(ids);
+                }
+            }
+        };
+
+        if (id) {
+            fetchMarcador();
+        }
+    }, [id]);
+
+    const actualizarMarcador = async () => {
+        if (!id) return;
+
+        try {
+            // 1. Actualiza la tabla 'marcador'
+            const { error: errorMarcador } = await supabase
+                .from('marcador')
+                .update({
+                    ...dataMarcador,
+                    tipo_recinto: dataMarcador.tipo_recinto,
+                })
+                .eq('id', id);
+
+            if (errorMarcador) {
+                console.error('Error al actualizar el marcador:', errorMarcador);
+                return;
+            }
+
+            // 2. Elimina las relaciones antiguas en 'accesibilidad_marcador'
+            const { error: errorDelete } = await supabase
+                .from('accesibilidad_marcador')
+                .delete()
+                .eq('id_marcador', id);
+
+            if (errorDelete) {
+                console.error('Error al eliminar relaciones anteriores:', errorDelete);
+                return;
+            }
+
+            // 3. Inserta las nuevas relaciones
+            const nuevasRelaciones = selecciones.map(idAcc => ({
+                id_marcador: id,
+                id_accesibilidad: idAcc,
+            }));
+
+            const { error: errorInsert } = await supabase
+                .from('accesibilidad_marcador')
+                .insert(nuevasRelaciones);
+
+            if (errorInsert) {
+                console.error('Error al insertar nuevas relaciones:', errorInsert);
+                return;
+            }
+
+            alert('Marcador actualizado correctamente.');
+            navigate(-1);
+        } catch (err) {
+            console.error('Error inesperado:', err);
+        }
+    };
+
+    return (
+
+
+        <div className={styles.container}>
+            <div className={styles.header}>
+
+                <img
+                    src={dataMarcador.url_img}
+                    alt="Imagen del recinto"
                     className={styles.imagenMarcador}
                 />
-                <button className={styles.VolverAtras} onClick={() => { navigate(-1) }}>
+
+                <button className={styles.VolverAtras}
+                    type="submit" onClick={() => { navigate(-1) }}>
                     <FontAwesomeIcon icon={faReply} size='2xl' />
                 </button>
-
                 <div className={styles.Titulo} >
-                    <h2>Editar Locación</h2>
+                    <h2>Editar Locacion</h2>
                 </div>
-                <div className={styles.locacionTitulo}><h4>Teatro Provincial De Curico</h4></div>
-                <div className={styles.locacionSubtitulo}><h4>&gt; Anfiteatro</h4></div>
-
-
-
-                <div className={styles.container}>
-                    <div className={styles.FormContainer}>
-                        <form action="">
-                            <div className={styles.formGrid}>
-                                {/*Primer Grupo*/}
-                                <div className={styles.FormSection} style={{ display: 'flex', flexDirection: 'column', maxWidth: '100%', margin: "5px" }}>
-
-                                    <label className={styles.labelSeccion} htmlFor="">Nombre Locacion</label>
-                                    <input type="text" className={styles.inputText} />
-                                    <label className={styles.labelSeccion} htmlFor="">Descripcion</label>
-                                    <input type="text" className={styles.inputText} />
-                                    <label className={styles.labelSeccion} htmlFor="">Direccion</label>
-                                    <input type="text" className={styles.inputText} />
-                                    <select className={styles.formselect}>
-                                        <option selected>Seleccione el Tipo Recinto</option>
-                                        <option value="1">One</option>
-                                        <option value="2">Two</option>
-                                        <option value="3">Three</option>
-                                    </select>
-                                </div>
-
-                                {/*Segundo Grupo*/}
-                                <div className={styles.sectionContainer}>
-                                    <p>Accesibilidad Arquitectónica</p>
-
-                                    <div className={styles.opt}>
-                                        <input type="checkbox" value='rampa' id="" />
-                                        <label htmlFor=""> Rampa</label><br />
-                                    </div>
-
-                                    <div className={styles.opt}>
-                                        <input type="checkbox" value='Ascensores' id="" />
-                                        <label htmlFor=""> Ascensores</label><br />
-                                    </div>
-
-                                    <div className={styles.opt}>
-                                        <input type="checkbox" value='Estacionamientos' id="" />
-                                        <label htmlFor=""> Estacionamientos para persona con discapacidad (Ley del tránsito)</label><br />
-                                    </div>
-                                </div>
-
-                                {/*Tercer Grupo*/}
-                                <div className={styles.sectionContainer}>
-                                    <p>Accesibilidad Física</p>
-
-                                    <div className={styles.opt}>
-                                        <input type="checkbox" value='braille' id="" />
-                                        <label htmlFor=""> Señalización en braille</label> <br />
-                                    </div>
-
-                                    <div className={styles.opt}>
-                                        <input type="checkbox" value='auditiva' id="" />
-                                        <label htmlFor=""> Señalización auditiva</label><br />
-                                    </div>
-
-                                    <div className={styles.opt}>
-                                        <input type="checkbox" value='Luces' id="" />
-                                        <label htmlFor=""> Luces intermitentes</label><br />
-                                    </div>
-
-                                    <div className={styles.opt}>
-                                        <input type="checkbox" value='Mapas' id="" />
-                                        <label htmlFor=""> Mapas táctiles</label><br />
-                                    </div>
-                                </div>
-
-                                {/*Cuarto Grupo*/}
-                                <div className={styles.sectionContainer}>
-
-                                    <p>Accesibilidad Cognitiva</p>
-
-                                    <div className={styles.opt}>
-                                        <input type="checkbox" name="" id="" />
-                                        <label htmlFor=""> Símbolos universales</label><br />
-                                    </div>
-
-                                    <div className={styles.opt}>
-                                        <input type="checkbox" name="" id="" />
-                                        <label htmlFor=""> Rutas intuitivas</label><br />
-                                    </div>
-
-                                    <div className={styles.opt}>
-                                        <input type="checkbox" name="" id="" />
-                                        <label htmlFor=""> Atención con personal capacitado</label><br />
-                                    </div>
-                                </div>
-
-                                {/*Quinto Grupo*/}
-                                <div className={styles.sectionContainer}>
-                                    <p>Accesibilidad CA</p>
-
-                                    <div className={styles.opt}>
-                                        <input type="checkbox" name="" id="" />
-                                        <label htmlFor=""> Sala de calma</label><br />
-                                    </div>
-
-                                    <div className={styles.opt} style={{ marginBottom: '15px' }}>
-                                        <input type="checkbox" name="" id="" />
-                                        <label htmlFor=""> Fono aislante de ruido</label><br />
-                                    </div>
-                                </div>
-                            </div>
-
-                        </form>
-                        <div className={styles.acciones}>
-                            <button type="button" style={{ backgroundColor: "transparent", color: "red" }} onClick={() => { navigate(-1) }} >
-                                CANCELAR CAMBIOS
-                            </button>
-                            <button type="submit">Guardar Cambios</button>
-                        </div>
-                    </div>
+                <div className={styles.locacionTitulo}>
+                    <h4>{dataMarcador.nombre_recinto}</h4>
+                    <p> {/*Muestra todos los tipos recintos, busca que el tipo id conincida con tipo_recinto, si coinside muestra el nombre, si no muestra una cadena vacia*/}
+                        {tipoRecinto.find(t => t.id === Number(dataMarcador.tipo_recinto))?.tipo || ''}
+                    </p>
                 </div>
-
             </div>
+            <div className={styles.Conten}>
+                <div className={styles.FormContainer}>
+                    <form onSubmit={handleAgregarMarcador}>
+                        <div className={styles.formGrid}>
+                            {/*Primer Grupo*/}
+                            <div className={styles.FormSection} style={{ display: 'flex', flexDirection: 'column', maxWidth: '100%', margin: "5px" }}>
+                                <label className={styles.labelSeccion} >Nombre Locacion</label>
+                                <input
+                                    type="text"
+                                    value={dataMarcador.nombre_recinto}
+                                    onChange={(e) => setDataMarcador({ ...dataMarcador, nombre_recinto: e.target.value })}
+                                    className={styles.inputText} required />
 
+                                <label className={styles.labelSeccion}>Tipo de Recinto</label>
+                                <select
+                                    name="tipo_recinto"
+                                    className={styles.inputOpt}
+                                    required
+                                    value={dataMarcador.tipo_recinto}
+                                    onChange={(e) => {
+                                        const newTipoRecinto = e.target.value;
+                                        setDataMarcador({ ...dataMarcador, tipo_recinto: newTipoRecinto });
+                                        console.log('Nuevo tipo seleccionado:', newTipoRecinto);
+                                    }}
+                                >
+                                    <option value="">Selecciona un tipo de recinto</option>
+                                    {tipoRecinto?.map((tipo) => (
+                                        <option key={tipo.id} value={tipo.id}>
+                                            {tipo.tipo}
+                                        </option>
+                                    ))}
+                                </select>
+
+                                <label className={styles.labelSeccion} htmlFor="">Direccion</label>
+                                <input
+                                    type="text"
+                                    value={dataMarcador.direccion}
+                                    onChange={(e) => setDataMarcador({ ...dataMarcador, direccion: e.target.value })}
+                                    className={styles.inputText} required />
+                                <label className={styles.labelSeccion} htmlFor="">Pagina Web</label>
+                                <input
+                                    type="text"
+                                    value={dataMarcador.pagina_web}
+                                    onChange={(e) => setDataMarcador({ ...dataMarcador, pagina_web: e.target.value })}
+                                    className={styles.inputText} required />
+
+                                <label className={styles.labelSeccion} htmlFor="">URL de imagen</label>
+                                <input
+                                    type="text"
+                                    value={dataMarcador.url_img}
+                                    onChange={(e) => setDataMarcador({ ...dataMarcador, url_img: e.target.value })}
+                                    className={styles.inputText} required />
+
+
+                                <label className={styles.labelSeccion} htmlFor="">Telefono</label>
+                                <div className={styles.ContainerinputTelefono}>
+                                    <p className={styles.codTelfono}>+569</p>
+                                    <input
+                                        type="number" value={dataMarcador.telefono}
+                                        onChange={(e) => setDataMarcador({ ...dataMarcador, telefono: e.target.value })} required />
+                                </div>
+                                <label className={styles.labelSeccion} htmlFor="">Latitud</label>
+                                <input className={styles.inputText} //Crear 
+                                    type="number"
+                                    value={dataMarcador.latitud}
+                                    onChange={(e) => setDataMarcador({ ...dataMarcador, latitud: parseFloat(e.target.value) })} required />
+                                <label className={styles.labelSeccion} htmlFor="">Longitud</label>
+                                <input className={styles.inputText}
+                                    type="number"
+                                    value={dataMarcador.longitud}
+                                    onChange={(e) => setDataMarcador({ ...dataMarcador, longitud: parseFloat(e.target.value) })} required />
+
+                            </div>
+                            {/*Segundo Grupo*/}
+                            <div className={styles.gridContainer}>
+                                {Object.entries(accesibilidades).map(([tipo, lista]) => (
+                                    <div key={tipo} className={styles.accesibilidadGrupo}>
+                                        <p><strong>{`Accesibilidad ${tipo}`}</strong></p>
+                                        {lista.map(acc => (
+                                            <div className={styles.opt} key={acc.id}>
+                                                <input
+                                                    type="checkbox"
+                                                    value={acc.id}
+                                                    checked={selecciones.includes(acc.id)}
+                                                    onChange={() => handleCheckboxChange(acc.id)}
+                                                    id={acc.nombre}
+                                                />
+                                                <label htmlFor={acc.nombre}>{acc.nombre}</label>
+                                            </div>
+                                        ))}
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+                        <div className={styles.acciones}>
+                            <button type="submit"
+                                style={{ backgroundColor: "transparent", color: "red" }}
+                                onClick={() => {
+                                    setSelecciones([]);
+                                    setDataMarcador(estadoInicialMarcadores);
+                                    navigate(-1); // Para volver atrás
+                                }}
+                            >CANCELAR
+                            </button>
+                            <button    >Guardar Cambios</button>
+                        </div>
+                    </form>
+
+                </div>
+            </div>
         </div>
     )
 }
 
-
-export default EditarLocation;

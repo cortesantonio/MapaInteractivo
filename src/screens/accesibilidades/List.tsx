@@ -6,6 +6,7 @@ import { Accesibilidad } from '../../interfaces/Accesibilidad';
 import { supabase } from '../../services/supabase';
 import EditarAccesibilidad from './Editar';
 import { useNavigate } from "react-router-dom";
+import NavbarAdmin from '../../components/NavbarAdmin';
 
 function ListAccesibilidad() {
     const [accesibilidades, setAccesibilidades] = useState<Accesibilidad[]>([]);
@@ -43,14 +44,14 @@ function ListAccesibilidad() {
     }
     const handleDelete = async (id: number) => {
         const confirmDelete = window.confirm('¿Estás seguro que deseas eliminar este registro?');
-    
+
         if (!confirmDelete) return;
-    
+
         const { error } = await supabase
             .from('accesibilidad')
             .delete()
             .eq('id', id);
-    
+
         if (error) {
             console.error('Error al eliminar:', error);
             alert('Hubo un error al eliminar el registro.');
@@ -66,71 +67,75 @@ function ListAccesibilidad() {
 
 
     return (
-        <div className={styles.container}>
-            <button style={{ position: "absolute", left: "15px", top: "4px", border: "none", background: "transparent", fontSize: "25px", alignItems: "start" }} onClick={() => { navigate(-1) }}>
-                <FontAwesomeIcon icon={faReply} />
-            </button>
-            <header className={styles.header}>
-                <hr style={{ maxWidth: '70%', minWidth: '150px', width: '60%' }} />
-                <h2 style={{ textAlign: 'right' }} >Gestion de Accesibilidades</h2>
-            </header>
-            <div className={styles.filtros}>
-                <div style={{ display: 'flex', gap: '5px', justifyContent: 'right' }}>
 
-                    <button className={styles.filtroCard} onClick={() => handleBuscador()} >
-                        <FontAwesomeIcon icon={faMagnifyingGlass} /> Buscador
-                    </button>
-                    <button className={styles.agregarCard} style={{backgroundColor:'red'}}>
-                        <FontAwesomeIcon icon={faPlus} color='white'  /> Agregar
-                    </button>
+        <>
+            <NavbarAdmin />
+            <div className={styles.container}>
+
+                <header className={styles.header} style={{ paddingTop: '40px', gap: '15px' }}>
+                    <hr style={{ flexGrow: "1" }} />
+                    <h2 style={{ textAlign: 'right', paddingRight: "15px", whiteSpace: "nowrap" }} >Gestion de Accesibilidades</h2>
+                </header>
+                <div className={styles.filtros}>
+                    <div style={{ display: 'flex', gap: '5px' }}>
+
+                        <button className={styles.filtroCard} onClick={() => handleBuscador()} >
+                            <FontAwesomeIcon icon={faMagnifyingGlass} /> Buscador
+                        </button>
+                        <button className={styles.agregarCard} style={{ backgroundColor: 'red' }} onClick={() => navigate('/panel-administrativo/accesibilidades/agregar')}>
+                            <FontAwesomeIcon icon={faPlus} color='white' /> Agregar
+                        </button>
+                    </div>
+                    {isActiveBuscador &&
+                        <div className={styles.buscar}>
+                            <form action="">
+                                <input type="text" placeholder='Buscar'
+                                    onChange={(e) => setQuery(e.target.value)}
+                                    value={query}
+
+                                />
+                                <button type='submit'><FontAwesomeIcon icon={faMagnifyingGlass} /></button>
+                            </form>
+                        </div>
+                    }
                 </div>
-                {isActiveBuscador &&
-                    <div className={styles.buscar}>
-                        <form action="">
-                            <input type="text" placeholder='Buscar'
-                                onChange={(e) => setQuery(e.target.value)}
-                                value={query}
 
-                            />
-                            <button type='submit'><FontAwesomeIcon icon={faMagnifyingGlass} /></button>
-                        </form>
-                    </div>
-                }
-            </div>
+                <div className={styles.SubTitulo}>
+                    <p>Listado</p>
+                    <hr style={{ width: '25%', marginTop: '10px', marginBottom: '10px ', opacity: '50%' }} />
+                </div>
+                <div className={styles.content}>
 
-            <div className={styles.content}>
-                <p style={{ color: 'gray' }}>Listado</p>
 
-                <hr style={{ width: '25%', marginTop: '10px', marginBottom: '10px ', opacity: '50%' }} />
+                    {filteredAccesibilidades.map((accesibilidad) => (
+                        <div key={accesibilidad.id} className={styles.card} >
+                            <div className={styles.estado}
+                                style={{ backgroundColor: 'rgb(0, 97, 223)', }}
+                            >
+                                <FontAwesomeIcon icon={faUniversalAccess} size='xl' style={{ color: 'white' }} />
+                            </div>
+                            <div className={styles.cardContent}>
+                                <p style={{ color: 'black', textTransform: 'capitalize' }}>{accesibilidad.nombre}</p>
+                                <p style={{ color: 'gray', fontSize: '0.9rem', textTransform: 'capitalize' }}>{accesibilidad.tipo}</p>
+                            </div>
 
-                {filteredAccesibilidades.map((accesibilidad) => (
-                    <div key={accesibilidad.id} className={styles.card} >
-                        <div className={styles.estado}
-                            style={{ backgroundColor: 'rgb(0, 97, 223)', }}
-                        >
-                            <FontAwesomeIcon icon={faUniversalAccess} size='xl' style={{ color: 'white' }} />
+                            <div className={styles.opciones}>
+                                <button title='Editar' onClick={() => setSelectedId(accesibilidad.id)}>
+                                    <FontAwesomeIcon icon={faPenToSquare} />
+                                </button>
+                                <button title='Borrar filtro' onClick={() => handleDelete(accesibilidad.id)} ><FontAwesomeIcon icon={faDeleteLeft} /></button>
+                            </div>
                         </div>
-                        <div className={styles.cardContent}>
-                            <p style={{ color: 'black', textTransform: 'capitalize' }}>{accesibilidad.nombre}</p>
-                            <p style={{ color: 'gray', fontSize: '0.9rem', textTransform: 'capitalize' }}>{accesibilidad.tipo}</p>
-                        </div>
-
-                        <div className={styles.opciones}>
-                            <button title='Editar' onClick={() => setSelectedId(accesibilidad.id)}>
-                                <FontAwesomeIcon icon={faPenToSquare} />
-                            </button>
-                            <button title='Borrar filtro'  onClick={() => handleDelete(accesibilidad.id)} ><FontAwesomeIcon icon={faDeleteLeft} /></button>
-                        </div>
-                    </div>
-                ))}
+                    ))}
 
 
 
 
+
+                </div>
 
             </div>
-
-        </div>
+        </>
     )
 
 }

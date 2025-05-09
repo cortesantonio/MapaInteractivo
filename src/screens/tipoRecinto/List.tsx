@@ -1,12 +1,12 @@
 import styles from './css/List.module.css'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faMagnifyingGlass, faPenToSquare, faUniversalAccess, faDeleteLeft, faPlus, faReply } from '@fortawesome/free-solid-svg-icons';
+import { faMagnifyingGlass, faPenToSquare, faUniversalAccess, faDeleteLeft, faPlus } from '@fortawesome/free-solid-svg-icons';
 import { useState, useEffect } from 'react';
 import { supabase } from '../../services/supabase';
 import { Tipo_Recinto } from '../../interfaces/Tipo_Recinto';
 import EditarTipoRecinto from './Editar';
 import { useNavigate } from "react-router-dom";
-
+import NavbarAdmin from '../../components/NavbarAdmin';
 function ListTipoRecinto() {
     const [tiposRecintos, setTiposRecintos] = useState<Tipo_Recinto[]>([]);
     const [selectedId, setSelectedId] = useState<number | null>(null);
@@ -65,14 +65,13 @@ function ListTipoRecinto() {
     );
 
 
-    return (
+    return (<>
+        <NavbarAdmin />
         <div className={styles.container}>
-            <button style={{ position: "absolute", left: "15px", top: "4px", border: "none", background: "transparent", fontSize: "25px", alignItems: "start" }} onClick={() => { navigate(-1)}}>
-                <FontAwesomeIcon icon={faReply} />
-            </button>
-            <header className={styles.header} style={{paddingTop:'20px'}}>
-                <hr style={{ maxWidth: '70%', minWidth: '150px', width: '60%' }} />
-                <h2 style={{ textAlign: 'right' }} >Gestion de Accesibilidades</h2>
+
+            <header className={styles.header} style={{ paddingTop: '40px', gap: '15px' }}>
+                <hr style={{ flexGrow: "1" }} />
+                <h2 style={{ textAlign: 'right', paddingRight: "15px", whiteSpace: "nowrap" }} >Gestion de Recinto</h2>
             </header>
             <div className={styles.filtros}>
                 <div style={{ display: 'flex', gap: '5px', justifyContent: 'right' }}>
@@ -98,10 +97,12 @@ function ListTipoRecinto() {
                 }
             </div>
 
-            <div className={styles.content}>
-                <p style={{ color: 'gray' }}>Listado</p>
-
+            <div className={styles.SubTitulo}>
+                <p>Listado</p>
                 <hr style={{ width: '25%', marginTop: '10px', marginBottom: '10px ', opacity: '50%' }} />
+            </div>
+            <div className={styles.content}>
+
 
                 {TipoRecintosFiltrados.map((tRecinto) => (
                     <div key={tRecinto.id} className={styles.card} >
@@ -130,6 +131,8 @@ function ListTipoRecinto() {
             </div>
 
         </div>
+    </>
+
     )
 
 }

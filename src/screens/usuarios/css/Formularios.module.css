@@ -1,0 +1,178 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  max-width: 500px;
+  padding: 30px;
+  margin: 0 auto;
+  box-sizing: border-box;
+  border-radius: 10px;
+}
+
+.botonatras {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  color: #000;
+  cursor: pointer;
+  z-index: 1000;
+  font-size: 25px;
+  background-color: transparent;
+  border: none;
+}
+
+.titulo h1 {
+  font-weight: 450;
+  font-size: 25px;
+  text-align: center;
+  padding: 10px;
+  margin: 0 0 20px 0;
+}
+
+.text h1 {
+  font-size: 25px;
+  color: #000;
+  font-weight: 500;
+  text-align: center;
+  margin-bottom: 30px;
+  width: 100%;
+}
+
+.div_formulario {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.espacio {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  width: 100%;
+  max-width: 400px;
+  margin-bottom: 20px;
+}
+
+.etiquetas {
+  display: block;
+  text-align: left;
+  color: #000000;
+  margin-bottom: 8px;
+  font-weight: 400;
+}
+
+.formulario {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #bfbfbf;
+  border-radius: 5px;
+  box-sizing: border-box;
+  color: #000;
+  background-color: #fff;
+}
+
+.botones {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  max-width: 400px;
+  margin-top: 40px;
+}
+
+.btn1,
+.btn2 {
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+  border: none;
+  font-weight: 500;
+  margin: 10px;
+}
+
+.btn1 {
+  display: block;
+  color: red;
+  background-color: #fff;
+  padding: 10px;
+}
+
+.btn2 {
+  display: block;
+  color: #fff;
+  background: linear-gradient(90deg, #ff0000, #ff6100);
+  border-radius: 5px;
+}
+
+.input_contraseña {
+  position: relative;
+  width: 100%;
+}
+
+.formulario {
+  padding-right: 40px;
+}
+
+.boton_ojito {
+  position: absolute;
+  top: 50%;
+  right: 10px;
+  transform: translateY(-50%);
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+}
+
+
+
+.btn_desactivar_usuario button {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.checkbox_input {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-width: 400px;
+  margin-bottom: 20px;
+}
+
+
+.checkbox_container {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.checkbox_container input[type="checkbox"] {
+  width: 15px;
+  height: 15px;
+  cursor: pointer;
+  margin-right: 10px;
+}
+
+
+.elementos_label {
+  display: inline-block;
+  margin-bottom: 5px;
+  width: auto;
+  max-width: 400px;
+}
+.checkbox_input label {
+  font-size: 1rem;
+  color: #000;
+  font-weight: 300;
+}
+
+.elementos_label {
+  display: flex;
+  align-items: center;
+  margin-bottom: 5px;
+  width: 100%;
+  max-width: 400px;
+}
+
+

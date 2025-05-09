@@ -80,7 +80,17 @@ export default function AgregarSolicitud() {
             [name]: type === 'checkbox' ? checked : value
         });
     };
+    const handleSelectChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+        const { name, value } = e.target;
+        setFormData({
+            ...formData,
+            [name]: value
+        });
+    };
 
+
+
+    
     const [usuarioEncontrado, setUsuarioEncontrado] = useState(false); // SEMAFORO PARA SABER SI EL USUARIO SE ENCONTRO O NO Y ASI SABER CUANDO CREAR EL USUARIO O CUANDO PASAR EL ID
 
     const handleCorreoBlur = async () => { // AQUI SE BUSCA EL USUARIO POR EL CORREO EN LA BASE DE DATOS, SI EXISTE SE SETEA EN EL FORM Y SE AUTO COMPLETA. SI NO, SE CREA.
@@ -133,14 +143,14 @@ export default function AgregarSolicitud() {
             setUsuario({ ...usuario, id: newUser.id });
         }
 
-        const { data: solicitud } = await supabase
+        const { data: solicitud, error: errrosol } = await supabase
             .from('solicitudes')
             .insert({
                 id_usuario: idUsuario,
                 nombre_locacion: formData.nombre_locacion,
                 direccion: formData.direccion,
                 descripcion: formData.descripcion,
-                tipo_recinto: 1,
+                tipo_recinto: formData.tipo_recinto,
                 documentacion: formData.documentacion,
                 estado: 'pendiente',
                 fecha_ingreso: new Date().toISOString(),
@@ -149,7 +159,7 @@ export default function AgregarSolicitud() {
             })
             .select()
             .single();
-
+        console.log(errrosol)
         for (const accId of seleccionadas) {
             await supabase.from('accesibilidad_solicitud').insert({
                 id_solicitud: solicitud.id,
@@ -157,15 +167,16 @@ export default function AgregarSolicitud() {
             });
         }
         alert('Solicitud enviada correctamente');
+        navigate(-1);
     };
 
     return (
         <div className={styles.container}>
             <div className={styles.titulo}>
-                <button style={{ backgroundColor: 'transparent', border: 'none', cursor: 'pointer' }} onClick={() => { navigate(-1) }}>
+                <button style={{ position: "absolute", backgroundColor: 'transparent', border: 'none', cursor: 'pointer', left: "10px" }} onClick={() => { navigate(-1) }}>
                     <FontAwesomeIcon icon={faReply} size='2xl' />
                 </button>
-                <h2 style={{ textAlign: 'center' }}>Colaborar <FontAwesomeIcon icon={faInfo} style={{ border: '1px solid gray', borderRadius: '50%', width: '20px', height: '20px', padding: '5px', color: 'gray' }} /></h2>
+                <h2 style={{ textAlign: 'center' }}>Colaborar <FontAwesomeIcon icon={faInfo} style={{ border: '1px solid gray', borderRadius: '50%', width: '20px', height: '20px', padding: '5px', color: 'gray',cursor:'pointer'} } onClick={() => { navigate("/info") }}/></h2>
             </div>
 
             <form onSubmit={handleSubmit}>
@@ -239,12 +250,19 @@ export default function AgregarSolicitud() {
                         required
                     />
                     <label className={styles.labelSeccion}>Tipo de Recinto</label>
-                    <select name="tipo_recinto" className={styles.inputText} required>
-                        <option>Selecciona un tipo de recinto</option>
+                    <select
+                        name="tipo_recinto"
+                        className={styles.inputText}
+                        required
+                        value={formData.tipo_recinto || ''}
+                        onChange={handleSelectChange}
+                    >
+                        <option value="">Selecciona un tipo de recinto</option>
                         {tipoRecinto?.map((tipo) => (
                             <option key={tipo.id} value={tipo.id}>{tipo.tipo}</option>
                         ))}
                     </select>
+
                     <label className={styles.labelSeccion}>Mensaje</label>
                     <input
                         type="text"

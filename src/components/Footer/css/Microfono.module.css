@@ -1,0 +1,32 @@
+.PanelActivo {
+    padding: 15px;
+    position: relative;
+    height: 80%;
+    overflow: auto;
+}
+
+.ButtonClose {
+    position: absolute;
+    top: 1px;
+    right: 1px;
+    background: transparent;
+    padding: 10px;
+    border: none;
+    cursor: pointer;
+}
+
+.Titulo {
+    color: black;
+    font: 120% sans-serif;
+    margin-top: 50px;
+    text-align: center;
+}
+
+.MicroActive {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 30px;
+    flex-direction: column;
+    gap: 20px;
+}

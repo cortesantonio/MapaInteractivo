@@ -9,6 +9,7 @@ import { useEffect } from 'react';
 import { Usuarios } from '../../interfaces/Usuarios';
 import { Tipo_Recinto } from '../../interfaces/Tipo_Recinto';
 import { Accesibilidad_Solicitud } from '../../interfaces/Accesibilidad_Solicitud';
+import { useNavigate, useParams } from 'react-router-dom';
 
 interface AccesibilidadesPorTipo {
     [tipo: string]: Accesibilidad[];
@@ -21,11 +22,14 @@ type SolicitudCompleta = Solicitudes & {
 };
 
 
-export default function Ver({ idSolicitud }: { idSolicitud: number }) {
+export default function Ver() {
+    const navigate = useNavigate()
+    const { id } = useParams()
     const [solicitud, setSolicitud] = useState<Partial<SolicitudCompleta>>({});
     const [accesibilidades, setAccesibilidades] = useState<AccesibilidadesPorTipo>({});
     const [isActiveModal, setIsActiveModal] = useState(false)
     const [respuestaRechazo, setRespuestaRechazo] = useState('');
+
     function handleModal() {
         setIsActiveModal(!isActiveModal)
     }
@@ -42,7 +46,7 @@ export default function Ver({ idSolicitud }: { idSolicitud: number }) {
                         id_accesibilidad:accesibilidad(*)
                     )
                 `)
-                .eq('id', idSolicitud) // Reemplaza por ID dinámico si hace falta
+                .eq('id', id) // Reemplaza por ID dinámico si hace falta
                 .single();
 
             if (solicitudError) {
@@ -66,7 +70,7 @@ export default function Ver({ idSolicitud }: { idSolicitud: number }) {
         };
 
         fetchData();
-    }, []);
+    }, [id]);
 
     function colorState(estado: string) {
         switch (estado) {
@@ -85,7 +89,7 @@ export default function Ver({ idSolicitud }: { idSolicitud: number }) {
         const { error } = await supabase
             .from('solicitudes')
             .update({ estado: 'aprobada' })
-            .eq('id', idSolicitud);
+            .eq('id', id);
 
         if (error) {
             console.error('Error al aprobar la solicitud:', error);
@@ -100,7 +104,7 @@ export default function Ver({ idSolicitud }: { idSolicitud: number }) {
         const { error } = await supabase
             .from('solicitudes')
             .update({ estado: 'rechazada', respuesta_rechazo: respuestaRechazo, fecha_revision: new Date() })
-            .eq('id', idSolicitud);
+            .eq('id', id);
 
         if (error) {
             console.error('Error al rechazar la solicitud:', error);
@@ -116,7 +120,7 @@ export default function Ver({ idSolicitud }: { idSolicitud: number }) {
         <div className={styles.container}>
 
             <div className={styles.titulo} >
-                <button style={{ backgroundColor: 'transparent', border: 'none', cursor: 'pointer' }}>
+                <button onClick={() => { navigate(-1) }} style={{ backgroundColor: 'transparent', border: 'none', cursor: 'pointer' }}>
                     <FontAwesomeIcon icon={faReply} size='2xl' />
                 </button>
                 <h2>

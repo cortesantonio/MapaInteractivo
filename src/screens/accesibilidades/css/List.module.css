@@ -1,18 +1,10 @@
-* {
-    padding: 0;
-    margin: 0;
-    box-sizing: border-box;
-}
-
 .container {
     position: relative;
     width: 100%;
-
     background-color: white;
     display: flex;
     flex-direction: column;
     color: black;
-
 }
 
 .header {
@@ -30,6 +22,7 @@
     justify-content: left;
     flex-direction: column;
     margin-bottom: 25px;
+    align-items: center;
 }
 
 .filtros .buscar {
@@ -52,7 +45,6 @@
     background-color: transparent;
     border: none;
     outline: none;
-
 }
 
 .filtroCard {
@@ -80,7 +72,6 @@
     border: none;
 }
 
-
 .filtroCard form select {
     border: none;
 }
@@ -99,7 +90,6 @@
     width: auto;
     border-bottom: 1px solid rgb(209, 209, 209);
     width: fit-content;
-
 }
 
 .cardContent p {
@@ -108,7 +98,6 @@
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-
 }
 
 .card .estado {
@@ -118,7 +107,6 @@
     align-items: center;
     justify-content: center;
     border-radius: 50%;
-
 }
 
 .card .opciones {
@@ -136,7 +124,6 @@
     transition: 0.5s all;
     border: none;
     cursor: pointer;
-
 }
 
 .card .opciones button:hover {
@@ -146,12 +133,18 @@
 
 .cardContent p {
     font-size: 1rem;
+}
 
+.SubTitulo {
+    text-align: center;
+    color: gray;
+    justify-items: center;
 }
 
 .content {
     display: flex;
-    justify-content: center;
-    flex-direction: column;
-    align-items: center;
+    justify-content: start;
+    flex-wrap: wrap;
+    padding: 25px;
+    gap: 10px;
 }

@@ -135,3 +135,17 @@
     margin-top: 20px;
 }
 
+.fechaVerMas{
+    background-color: transparent;
+    width: 60%;
+    max-width: 200px;
+    color: #6a6a6b;
+    border: none;
+}
+
+.tercerdia {
+    color: #aaa5a5;
+  }
+
+
+
