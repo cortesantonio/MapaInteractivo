@@ -56,32 +56,13 @@ function Gestion_Usuarios() {
 
   return (
     <div className={styles.container}>
-      <button
-        style={{
-          position: "absolute",
-          left: "15px",
-          top: "10px",
-          border: "none",
-          background: "transparent",
-          fontSize: "25px",
-          alignItems: "start",
-        }}
-        onClick={() => {
-          navigate(-1);
-        }}
-      >
+      <button className={styles.ButtonIconAtras} onClick={() => { navigate(-1); }}>
         <FontAwesomeIcon icon={faReply} />
       </button>
 
       <header className={styles.header} style={{ paddingTop: "40px", gap: "15px" }}>
         <hr style={{ flexGrow: "1" }} />
-        <h2
-          style={{
-            textAlign: "right",
-            paddingRight: "15px",
-            whiteSpace: "nowrap",
-          }}
-        >
+        <h2 className={styles.Titulo}>
           Gestion de Usuarios
         </h2>
       </header>
@@ -93,24 +74,20 @@ function Gestion_Usuarios() {
           </button>
 
           <div className={styles.filtroCard}>
-            <form action="">
-              <label htmlFor="filtro">
-                <FontAwesomeIcon icon={faFilter} />
-              </label>
-              <select
-                value={rolSeleccionado}
-                onChange={(e) => setRolSeleccionado(e.target.value)}
-              >
-                <option value="">Todos</option>
-                {[...new Set(usuarios.map((usuario) => usuario.rol))].map(
-                  (rolUnico, index) => (
-                    <option key={index} value={rolUnico}>
-                      {rolUnico}
-                    </option>
-                  )
-                )}
-              </select>
-            </form>
+            <label htmlFor="filtro">
+              <FontAwesomeIcon icon={faFilter} />
+            </label>
+            <select value={rolSeleccionado} onChange={(e) => setRolSeleccionado(e.target.value)}
+            >
+              <option value="">Todos</option>
+              {[...new Set(usuarios.map((usuario) => usuario.rol))].map(
+                (rolUnico, index) => (
+                  <option key={index} value={rolUnico}>
+                    {rolUnico}
+                  </option>
+                )
+              )}
+            </select>
           </div>
 
           <div
@@ -146,17 +123,11 @@ function Gestion_Usuarios() {
         )}
       </div>
 
+      <div className={styles.SubTitulo}>
+        <p>Gestion Usuarios</p>
+        <hr style={{ width: "25%", marginTop: "10px", marginBottom: "10px ", opacity: "50%", }} />
+      </div>
       <div className={styles.content}>
-        <p style={{ color: "gray" }}>Gestion Usuarios</p>
-        <hr
-          style={{
-            width: "25%",
-            marginTop: "10px",
-            marginBottom: "10px ",
-            opacity: "50%",
-          }}
-        />
-
         <div className={styles.gridUsuarios}>
           {usuariosFiltrados.map((usuario, index) => (
             <div className={styles.card} key={index}>
