@@ -1,7 +1,7 @@
 
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import { faUser, faStar } from "@fortawesome/free-solid-svg-icons"
+import { faStar } from "@fortawesome/free-solid-svg-icons"
 import styles from "../usuarios/css/Perfil_Usuario.module.css"
 import { supabase } from "../../services/supabase"
 import { useEffect, useState } from "react"
@@ -56,8 +56,8 @@ function Perfil_Usuario() {
   // Renderizado del perfil de usuario
   const renderPerfilUsuario = () => {
     return (
-      <div>
-        <div className={styles.perfil_info}>
+      <div className={styles.perfil_info}>
+        <div>
           <div className={styles.reseñas_usuario}>
             <button onClick={() => setVistaActual("resenas")}>Reseñas usuario</button>
             <button onClick={() => setVistaActual("aportes")}>Aportes Usuario</button>
@@ -108,16 +108,9 @@ function Perfil_Usuario() {
         <hr className={styles.separador_botones} />
 
         {resenas.length > 0 ? (
-          <div>
+          <div style={{ maxHeight: "380px", overflowY: "auto", padding: "0 15px" }}>
             {resenas.map((resena) => (
               <div className={styles.informacion_campos_de_resena} key={resena.id}>
-                <div>
-                  <label>Nombre:</label>
-                </div>
-                <div className={styles.campo}>
-                  <p className={styles.valor}>{resena.id_usuario?.nombre}</p>
-                </div>
-
                 <div>
                   <label>Nombre Recinto:</label>
                 </div>
@@ -132,14 +125,21 @@ function Perfil_Usuario() {
                   <span>{resena.comentario}</span>
                 </div>
 
-                <div style={{ marginBottom: "10px" }}>
+                <div className={styles.campo}>
                   <label>Calificación:</label>
                 </div>
                 <div className={styles.calificacion_fecha_reseña}>
                   <FontAwesomeIcon className={styles.estrella} icon={faStar} />
                   <span>{resena.calificacion}</span>
-                  <span>{new Date(resena.fecha).toLocaleDateString()}</span>
                 </div>
+                <div>
+                  <label>Fecha Reseña:</label>
+                </div>
+                <div className={styles.texto_reseña}>
+                <span> {new Date(resena.fecha).toLocaleDateString()}</span>
+                </div>
+
+               
               </div>
             ))}
           </div>
@@ -164,19 +164,25 @@ function Perfil_Usuario() {
         <hr className={styles.separador_botones} />
 
         {solicitud.length > 0 ? (
-          <div>
+          <div style={{ maxHeight: "380px", overflowY: "auto", padding: "0 15px" }}>
             {solicitud.map((aporte) => (
               <div className={styles.informacion_campos_de_resena} key={aporte.id}>
+
                 <div>
-                  <label>Tipo de solicitud:</label>
+                  <label>Nombre Locación:</label>
                 </div>
                 <div className={styles.campo}>
                   <p className={styles.valor}>{aporte.nombre_locacion}</p>
                 </div>
 
+
+
+                {/* <div>
+                  <label>Tipo de solicitud:</label>
+                </div>
                 <div className={styles.campo}>
                   <p className={styles.valor}>{aporte.nombre_locacion}</p>
-                </div>
+                </div> */}
 
                 <div>
                   <label>Descripción</label>
@@ -197,31 +203,31 @@ function Perfil_Usuario() {
                   <label>Estado:</label>
                 </div>
                 <div className={styles.campo}>
-                  <p className={styles.valor}>{aporte.tipo_recinto}</p>
+                  <p className={styles.valor}>{aporte.estado}</p>
                 </div>
 
-                <div>
+                {/* <div>
                   <label>Documentación:</label>
                 </div>
                 <div className={styles.campo}>
                   <p className={styles.valor}>{aporte.documentacion}</p>
-                </div>
+                </div> */}
 
-                <div>
+                {/* <div>
                   <label>Fecha Ingreso:</label>
                 </div>
                 <div className={styles.campo}>
                   <p className={styles.valor}>{new Date(aporte.fecha_ingreso).toLocaleDateString()}</p>
-                </div>
+                </div> */}
 
-                <div>
+                {/* <div>
                   <label>Respuesta Rechazo:</label>
                 </div>
                 <div className={styles.campo}>
                   <p className={styles.valor}>{aporte.respuesta_rechazo}</p>
-                </div>
+                </div> */}
 
-                <div>
+                {/* <div>
                   <label>Fecha Revisión:</label>
                 </div>
                 <div className={styles.campo}>
@@ -234,7 +240,7 @@ function Perfil_Usuario() {
 
                 <div className={styles.campo}>
                   <p className={styles.valor}>{aporte.accesibilidad_certificada}</p>
-                </div>
+                </div> */}
               </div>
             ))}
           </div>

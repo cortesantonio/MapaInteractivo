@@ -6,7 +6,6 @@ import {
   faUser,
   faUserPen,
   faUserPlus,
-  faReply,
 } from "@fortawesome/free-solid-svg-icons";
 import { useState, useEffect } from "react";
 import { supabase } from "../../services/supabase";
@@ -58,11 +57,7 @@ function Gestion_Usuarios() {
     <NavbarAdmin />
     <div className={styles.container}>
 
-      <button className={styles.ButtonIconAtras} onClick={() => { navigate(-1); }}>
-        <FontAwesomeIcon icon={faReply} />
-      </button>
-
-      <header className={styles.header} style={{ paddingTop: "40px", gap: "15px" }}>
+      <header className={styles.header} style={{ paddingTop: "25px", gap: "15px" }}>
         <hr style={{ flexGrow: "1" }} />
         <h2 className={styles.Titulo}>
           Gestion de Usuarios

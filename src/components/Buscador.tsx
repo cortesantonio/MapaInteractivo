@@ -18,7 +18,7 @@ interface BuscadorProps {
 function Buscador({ onSeleccionMarcador }: BuscadorProps) {
 
     const [filtroIsVisible, setFiltroIsVisible] = useState(false);
-    const [width, setWidth] = useState(window.innerWidth <= 768 ? "80%" : "300px");
+    const [width, setWidth] = useState(window.innerWidth <= 768 ? "65%" : "300px");
     const [height, setHeight] = useState("0px");
     const [opacity, setOpacity] = useState(0);
     const [displayFiltro, setDisplayFiltro] = useState("none");
@@ -83,7 +83,7 @@ function Buscador({ onSeleccionMarcador }: BuscadorProps) {
 
     useEffect(() => {
         const handleResize = () => {
-            setWidth(window.innerWidth <= 768 ? "80%" : "300px");
+            setWidth(window.innerWidth <= 768 ? "65%" : "300px");
         };
 
         window.addEventListener("resize", handleResize);
