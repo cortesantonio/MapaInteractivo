@@ -1,5 +1,3 @@
-
-
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faStar } from "@fortawesome/free-solid-svg-icons"
 import styles from "../usuarios/css/Perfil_Usuario.module.css"
@@ -77,12 +75,16 @@ function Perfil_Usuario() {
                 <p className={styles.valor}>{usuario.correo}</p>
                 <hr />
               </div>
+              {/*Esta funcion hace que No se muestre el rol en el perfil si el usuario es de rol Usuario,
+              solo se podran visualizar en el perfil del Gestor o Admnistrador */}
+              {usuario.rol !== "usuario" && (
+                <div className={styles.campo}>
+                  <span className={styles.label}>Rol:</span>
+                  <p className={styles.valor}>{usuario.rol}</p>
+                  <hr />
+                </div>
+              )}
 
-              <div className={styles.campo}>
-                <span className={styles.label}>Rol:</span>
-                <p className={styles.valor}>{usuario.rol}</p>
-                <hr />
-              </div>
             </div>
           ))}
         </div>
@@ -136,10 +138,10 @@ function Perfil_Usuario() {
                   <label>Fecha Reseña:</label>
                 </div>
                 <div className={styles.texto_reseña}>
-                <span> {new Date(resena.fecha).toLocaleDateString()}</span>
+                  <span> {new Date(resena.fecha).toLocaleDateString()}</span>
                 </div>
 
-               
+
               </div>
             ))}
           </div>
