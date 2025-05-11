@@ -4,7 +4,6 @@ import { Marcador } from '../../interfaces/Marcador';
 import { Accesibilidad } from '../../interfaces/Accesibilidad';
 import { Tipo_Recinto } from '../../interfaces/Tipo_Recinto';
 import { supabase } from '../../services/supabase';
-import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../hooks/useAuth';
 import NavbarAdmin from '../../components/NavbarAdmin';
 interface TipoDeAccesibilidades {
@@ -12,7 +11,7 @@ interface TipoDeAccesibilidades {
 }
 
 export default function AgregarMarcador() {
-    const navigate = useNavigate();
+
     const { user } = useAuth();
     const [accesibilidades, setAccesibilidades] = useState<TipoDeAccesibilidades>({});
     const [dataMarcador, setDataMarcador] = useState<Partial<Marcador>>({
