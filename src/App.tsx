@@ -97,7 +97,7 @@ function App() {
         } />
 
         <Route path='/usuarios/editar/:id' element={
-          <ProtectedRoute allowedRoles={['administrador', 'gestor', 'usuario']}> // se debe respetar la jerarquia, admin puede modificar todo, gestor solo usuarios.
+          <ProtectedRoute allowedRoles={['administrador', 'gestor', 'usuario']}> 
             <Editar_Usuarios />
           </ProtectedRoute>
         } />
