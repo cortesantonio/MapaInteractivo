@@ -3,7 +3,6 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
     faMagnifyingGlass,
     faFilter,
-    faEllipsisVertical,
     faBuilding,
     faLocationDot
 } from '@fortawesome/free-solid-svg-icons';

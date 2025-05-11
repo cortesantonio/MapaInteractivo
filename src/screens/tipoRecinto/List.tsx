@@ -5,13 +5,11 @@ import { useState, useEffect } from 'react';
 import { supabase } from '../../services/supabase';
 import { Tipo_Recinto } from '../../interfaces/Tipo_Recinto';
 import EditarTipoRecinto from './Editar';
-import { useNavigate } from "react-router-dom";
 import NavbarAdmin from '../../components/NavbarAdmin';
 function ListTipoRecinto() {
     const [tiposRecintos, setTiposRecintos] = useState<Tipo_Recinto[]>([]);
     const [selectedId, setSelectedId] = useState<number | null>(null);
     const [query, setQuery] = useState('');
-    const navigate = useNavigate()
 
     const fetchData = async () => {
         const { data, error } = await supabase
