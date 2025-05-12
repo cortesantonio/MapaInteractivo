@@ -4,7 +4,7 @@ import { faEye, faMagnifyingGlass, faFilter, faSort, faCheck, faX, faInfo } from
 import { useEffect, useState } from 'react';
 import { Solicitudes } from '../../interfaces/Solicitudes';
 import { supabase } from '../../services/supabase';
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams	 } from "react-router-dom";
 import NavbarAdmin from '../../components/NavbarAdmin';
 function ListSolicitudes() {
     const [isActiveBuscador, setIsActiveBuscador] = useState(false);
@@ -13,7 +13,13 @@ function ListSolicitudes() {
     const [filtroEstado, setFiltroEstado] = useState('');
     const [orden, setOrden] = useState('desc');
     const navigate = useNavigate()
+    const { estado } = useParams<{ estado?: string }>();
 
+    useEffect(() => {
+        if (estado) {
+            setFiltroEstado(estado); 
+        }
+    }, [estado]);
     useEffect(() => {
         const fetchSolicitudes = async () => {
             const { data, error } = await supabase
@@ -62,6 +68,11 @@ function ListSolicitudes() {
             filtroEstado ? sol.estado === filtroEstado : true
         );
 
+        const handleFiltroCambio = (e: React.ChangeEvent<HTMLSelectElement>) => {
+        const nuevoEstado = e.target.value;
+        setFiltroEstado(nuevoEstado);
+        navigate(`/panel-administrativo/solicitudes/${nuevoEstado}`); 
+    };
     return (
         <>
             <NavbarAdmin />
@@ -79,11 +90,11 @@ function ListSolicitudes() {
 
                         <div className={styles.filtroCard}>
                             <label htmlFor="filtro"><FontAwesomeIcon icon={faFilter} /> </label>
-                            <select id="filtro" onChange={(e) => setFiltroEstado(e.target.value)}>
+                            <select id="filtro" value={filtroEstado} onChange={handleFiltroCambio} >
                                 <option value="">Todos</option>
                                 <option value="pendiente">Pendiente</option>
-                                <option value="aprobado">Aprobado</option>
-                                <option value="rechazado">Rechazado</option>
+                                <option value="aprobada">Aprobado</option>
+                                <option value="rechazada">Rechazado</option>
                             </select>
                         </div>
 

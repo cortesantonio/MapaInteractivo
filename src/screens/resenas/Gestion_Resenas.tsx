@@ -37,7 +37,6 @@ function Gestion_Resenas() {
       } else {
         setTipoRecinto(tipoRecintoData || []);
         Set_Resenas(gestionResenasData || []);
-        console.log('Datos de reseñas obtenidos:', gestionResenasData);
       }
     };
 

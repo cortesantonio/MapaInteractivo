@@ -324,7 +324,7 @@ export default function AgregarSolicitud() {
             /> */}
 
                 <div className={styles.acciones}>
-                    <button type="reset" style={{ color: 'red', background: 'transparent' }}>Cancelar</button>
+                    <button type="reset" style={{ color: 'red', background: 'transparent' }} onClick={() => { navigate(-1) }} >Cancelar</button>
                     <button type="submit" >Enviar Solicitud</button>
                 </div>
             </form>

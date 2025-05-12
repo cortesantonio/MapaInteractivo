@@ -142,7 +142,7 @@ function App() {
         } />
 
         {/* Solicitudes protegidas */}
-        <Route path='/panel-administrativo/solicitudes' element={
+        <Route path='/panel-administrativo/solicitudes/:estado?' element={
           <ProtectedRoute allowedRoles={['administrador', 'gestor']}>
             <ListSolicitudes />
           </ProtectedRoute>
