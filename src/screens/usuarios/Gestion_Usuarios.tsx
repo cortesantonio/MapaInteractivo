@@ -4,7 +4,6 @@ import {
   faMagnifyingGlass,
   faFilter,
   faUser,
-  faUserPen,
   faUserPlus,
 } from "@fortawesome/free-solid-svg-icons";
 import { useState, useEffect } from "react";
@@ -142,7 +141,11 @@ function Gestion_Usuarios() {
               <div
                 className={styles.cardContent}
               >
-                <p style={{ color: "gray", fontSize: "0.6rem", textTransform: 'uppercase' }}>{usuario.rol}</p>
+                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                  <p style={{ color: "gray", fontSize: "0.8rem", textTransform: 'uppercase', textAlign: 'left' }}>{usuario.rol} </p>
+                  <div>{usuario.activo ? (<p style={{ backgroundColor: 'rgba(186, 255, 130, 0.73)', borderRadius: '10px', padding: '2px 10px 2px 10px' }}>Activo</p>) : (<p style={{ backgroundColor: 'rgba(255, 145, 130, 0.73)', borderRadius: '10px', padding: '2px 10px 2px 10px' }} >Desactivado</p>)}</div>
+                </div>
+
                 <p style={{ color: "black" }}>{usuario.nombre}</p>
                 <p style={{ color: "gray", fontSize: "0.9rem" }}>{usuario.correo}</p>
                 {usuario.rut != null ? <p style={{ color: "gray", fontSize: "0.8rem" }}>{usuario.rut}</p> : <p style={{ color: 'gray', fontSize: '0.8rem' }}>RUT no ingresado.</p>}

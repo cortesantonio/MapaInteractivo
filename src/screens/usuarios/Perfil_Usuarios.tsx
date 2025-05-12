@@ -8,6 +8,7 @@ import type { Resenas } from "../../interfaces/Resenas"
 import type { Solicitudes } from "../../interfaces/Solicitudes"
 import { useNavigate, useParams } from "react-router-dom"
 import NavbarAdmin from "../../components/NavbarAdmin"
+import { useAuth } from "../../hooks/useAuth"
 
 interface UsuarioExtendido extends Usuarios {
   discapacidadNombre?: string;
@@ -25,7 +26,7 @@ function Perfil_Usuario() {
 
   const navigate = useNavigate()
   const { id } = useParams()
-
+  const { userRole } = useAuth()
   useEffect(() => {
     const fetchData = async () => {
       // Obtener datos de reseñas
@@ -59,8 +60,8 @@ function Perfil_Usuario() {
 
           return {
             ...usuario,
-            discapacidadNombre: discapacidadData?.nombre ,
-            discapacidadTipo: discapacidadData?.tipo ,
+            discapacidadNombre: discapacidadData?.nombre,
+            discapacidadTipo: discapacidadData?.tipo,
           };
         });
         console.log(usuariosFormateados)
@@ -79,68 +80,103 @@ function Perfil_Usuario() {
     fetchData()
   }, [id])
 
+
+  const switchEstados = async () => {
+    try {
+      const usuario = usuarios[0];
+      if (!usuario) {
+        console.error("No se encontró el usuario");
+        return;
+      }
+
+      const nuevoEstado = !usuario.activo;
+
+      const { error } = await supabase
+        .from("usuarios")
+        .update({ activo: nuevoEstado })
+        .eq("id", id);
+
+      if (error) {
+        console.error("Error al cambiar el estado del usuario:", error);
+      } else {
+        navigate("/panel-administrativo/usuarios");
+      }
+    } catch (error) {
+      console.error("Error inesperado al cambiar el estado del usuario:", error);
+    }
+  };
+
+
   // Renderizado del perfil de usuario
   const renderPerfilUsuario = () => {
     return (
       <div className={styles.perfil_info}>
-          <div className={styles.reseñas_usuario}>
-            <button onClick={() => setVistaActual("resenas")}>Reseñas usuario</button>
-            <button onClick={() => setVistaActual("aportes")}>Aportes Usuario</button>
-          </div>
-          <hr className={styles.separador_botones} />
+        <div className={styles.reseñas_usuario}>
+          <button onClick={() => setVistaActual("resenas")}>Reseñas usuario</button>
+          <button onClick={() => setVistaActual("aportes")}>Aportes Usuario</button>
+        </div>
+        <hr className={styles.separador_botones} />
 
-          {usuarios.map((usuario) => (
-            <div key={usuario.id} className={styles.containerDatos}>
-              <div className={styles.containeritemdatos}>
-                <span className={styles.titulosdatos}>Nombre:</span>
-                <span className={styles.valorDato}>{usuario.nombre || "Sin información"}</span>
-              </div>
-
-              <div className={styles.containeritemdatos}>
-                <span className={styles.titulosdatos}>Correo:</span>
-                <span className={styles.valorDato}>{usuario.correo || "Sin información"}</span>
-              </div>
-
-              <div className={styles.containeritemdatos}>
-                <span className={styles.titulosdatos}>Rut:</span>
-                <span className={styles.valorDato}>{usuario.rut || "Sin información"}</span>
-              </div>
-
-              <div className={styles.containeritemdatos}>
-                <span className={styles.titulosdatos}>Género:</span>
-                <span className={styles.valorDato}>{usuario.genero || "Sin información"}</span>
-              </div>
-
-              {usuario.discapacidadNombre && usuario.discapacidadTipo && (
-                <>
-                  <div className={styles.containeritemdatos}>
-                    <span className={styles.titulosdatos}>Discapacidad:</span>
-                    <span className={styles.valorDato}>{usuario.discapacidadNombre}</span>
-                  </div>
-
-                  <div className={styles.containeritemdatos}>
-                    <span className={styles.titulosdatos}>Tipo:</span>
-                    <span className={styles.valorDato}>{usuario.discapacidadTipo}</span>
-                  </div>
-                </>
-              )}
-
-              {/*Esta funcion hace que No se muestre el rol en el perfil si el usuario es de rol Usuario,
-              solo se podran visualizar en el perfil del Gestor o Admnistrador */}
-              {usuario.rol !== "usuario" && (
-                <div className={styles.containeritemdatos}>
-                  <span className={styles.titulosdatos}>Rol:</span>
-                  <span className={styles.valorDato}>{usuario.rol}</span>
-                </div>
-              )}
+        {usuarios.map((usuario) => (
+          <div key={usuario.id} className={styles.containerDatos}>
+            <div className={styles.containeritemdatos}>
+              <span className={styles.titulosdatos}>Usuario Activo:</span>
+              <span className={styles.valorDato}>{usuario.activo ? (<p>Si</p>) : (<p>No</p>)}</span>
             </div>
-          ))}
+            <div className={styles.containeritemdatos}>
+              <span className={styles.titulosdatos}>Nombre:</span>
+              <span className={styles.valorDato}>{usuario.nombre || "Sin información"}</span>
+            </div>
+
+            <div className={styles.containeritemdatos}>
+              <span className={styles.titulosdatos}>Correo:</span>
+              <span className={styles.valorDato}>{usuario.correo || "Sin información"}</span>
+            </div>
+
+            <div className={styles.containeritemdatos}>
+              <span className={styles.titulosdatos}>Rut:</span>
+              <span className={styles.valorDato}>{usuario.rut || "Sin información"}</span>
+            </div>
+
+            <div className={styles.containeritemdatos}>
+              <span className={styles.titulosdatos}>Género:</span>
+              <span className={styles.valorDato}>{usuario.genero || "Sin información"}</span>
+            </div>
+
+            {usuario.discapacidadNombre && usuario.discapacidadTipo && (
+              <>
+                <div className={styles.containeritemdatos}>
+                  <span className={styles.titulosdatos}>Discapacidad:</span>
+                  <span className={styles.valorDato}>{usuario.discapacidadNombre}</span>
+                </div>
+
+                <div className={styles.containeritemdatos}>
+                  <span className={styles.titulosdatos}>Tipo:</span>
+                  <span className={styles.valorDato}>{usuario.discapacidadTipo}</span>
+                </div>
+              </>
+            )}
+
+            {/*Esta funcion hace que No se muestre el rol en el perfil si el usuario es de rol Usuario,
+              solo se podran visualizar en el perfil del Gestor o Admnistrador */}
+            {usuario.rol !== "usuario" && (
+              <div className={styles.containeritemdatos}>
+                <span className={styles.titulosdatos}>Rol:</span>
+                <span className={styles.valorDato}>{usuario.rol}</span>
+              </div>
+            )}
+          </div>
+        ))}
 
         <div className={styles.contenedor_botones_perfil}>
           <button className={styles.boton_editar} onClick={() => navigate(`/usuarios/editar/${id}`)}>
             Editar Usuario
           </button>
-          <button className={styles.boton_desactivar}>Desactivar Usuario</button>
+          {userRole === "administrador" || userRole === 'gestor' ? (
+            <button onClick={switchEstados} className={styles.boton_desactivar}>
+              {usuarios[0]?.activo ? "Desactivar Usuario" : "Activar Usuario"}
+            </button>
+          ) : (<></>)}
         </div>
       </div>
     )
@@ -162,7 +198,7 @@ function Perfil_Usuario() {
               <div className={styles.informacion_campos_de_resena} key={resena.id}>
                 <div style={{ display: "flex", flexDirection: "row", justifyContent: "space-between", width: "100%" }}>
                   <div>
-                    <h3 style={{fontWeight:"400"}}>{resena.id_marcador?.nombre_recinto}</h3>
+                    <h3 style={{ fontWeight: "400" }}>{resena.id_marcador?.nombre_recinto}</h3>
                   </div>
 
                   <div className={styles.calificacion_fecha_reseña}>
@@ -207,7 +243,7 @@ function Perfil_Usuario() {
               <div className={styles.informacion_campos_de_resena} key={aporte.id} onClick={() => { navigate(`/panel-administrativo/solicitud/${aporte.id}`) }}>
                 <div style={{ display: "flex", flexDirection: "row", justifyContent: "space-between", width: "100%" }}>
                   <div style={{ flex: 1 }}>
-                    <h3 style={{fontWeight:"400"}}>{aporte.nombre_locacion}</h3>
+                    <h3 style={{ fontWeight: "400" }}>{aporte.nombre_locacion}</h3>
                   </div>
 
                   <div style={{ flex: 1, textAlign: "right" }}>
@@ -240,7 +276,7 @@ function Perfil_Usuario() {
                   </div>
                 </div>
 
-                <div className={styles.campo}>  
+                <div className={styles.campo}>
                   <p className={styles.valor}>&bull; {aporte.direccion}</p>
                 </div>
 
