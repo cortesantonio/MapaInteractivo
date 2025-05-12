@@ -73,17 +73,21 @@ export default function Home() {
       {!isStreetViewActive && (
         <>
           <div style={{
-            position: 'absolute', top: 0, right: 0, zIndex: 1, width: '100%', display: 'flex', justifyContent: 'space-between', padding: 25, pointerEvents: 'none', flexWrap: 'wrap'
+            position: 'absolute', top: 0, right: 0, zIndex: 1, width: '100%', display: 'flex', justifyContent: 'space-between', padding: 25, pointerEvents: 'none'
           }}>
-            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'start', gap: 10, pointerEvents: 'auto' }}>
+            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'start', gap: 10, pointerEvents: 'auto', width:"85%" }}>
               <Buscador onSeleccionMarcador={(id: number) => {
                 setMarcadorSeleccionadoId(id);
                 setMostrarMarcador(true);
               }} />
               <BotonEventos />
             </div>
+            <div style={{position:"absolute", right:"25px"}}>
+              <NavbarUser />
 
-            <NavbarUser />
+            </div>
+
+            
           </div>
 
           <Footer onSeleccionMarcador={(id: number) => {

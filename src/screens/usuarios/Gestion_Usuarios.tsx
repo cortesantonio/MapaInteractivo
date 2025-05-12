@@ -6,7 +6,6 @@ import {
   faUser,
   faUserPen,
   faUserPlus,
-  faReply,
 } from "@fortawesome/free-solid-svg-icons";
 import { useState, useEffect } from "react";
 import { supabase } from "../../services/supabase";
@@ -53,19 +52,13 @@ function Gestion_Usuarios() {
     const coincideRol = rolSeleccionado === "" || usuario.rol === rolSeleccionado;
     return coincideNombre && coincideRol;
   });
-
   return (<>
     <NavbarAdmin />
     <div className={styles.container}>
-      <header className={styles.header} style={{ paddingTop: "40px", gap: "15px" }}>
+
+      <header className={styles.header} style={{ paddingTop: "25px", gap: "15px" }}>
         <hr style={{ flexGrow: "1" }} />
-        <h2
-          style={{
-            textAlign: "right",
-            paddingRight: "15px",
-            whiteSpace: "nowrap",
-          }}
-        >
+        <h2 className={styles.Titulo}>
           Gestion de Usuarios
         </h2>
       </header>
@@ -77,24 +70,20 @@ function Gestion_Usuarios() {
           </button>
 
           <div className={styles.filtroCard}>
-            <form action="">
-              <label htmlFor="filtro">
-                <FontAwesomeIcon icon={faFilter} />
-              </label>
-              <select
-                value={rolSeleccionado}
-                onChange={(e) => setRolSeleccionado(e.target.value)}
-              >
-                <option value="">Todos</option>
-                {[...new Set(usuarios.map((usuario) => usuario.rol))].map(
-                  (rolUnico, index) => (
-                    <option key={index} value={rolUnico}>
-                      {rolUnico}
-                    </option>
-                  )
-                )}
-              </select>
-            </form>
+            <label htmlFor="filtro">
+              <FontAwesomeIcon icon={faFilter} />
+            </label>
+            <select value={rolSeleccionado} onChange={(e) => setRolSeleccionado(e.target.value)}
+            >
+              <option value="">Todos</option>
+              {[...new Set(usuarios.map((usuario) => usuario.rol))].map(
+                (rolUnico, index) => (
+                  <option key={index} value={rolUnico}>
+                    {rolUnico}
+                  </option>
+                )
+              )}
+            </select>
           </div>
 
           <div
@@ -130,45 +119,37 @@ function Gestion_Usuarios() {
         )}
       </div>
 
+      <div className={styles.SubTitulo}>
+        <p>Gestion Usuarios</p>
+        <hr style={{ width: "25%", marginTop: "10px", marginBottom: "10px ", opacity: "50%", }} />
+      </div>
       <div className={styles.content}>
-        <p style={{ color: "gray" }}>Gestion Usuarios</p>
-        <hr
-          style={{
-            width: "25%",
-            marginTop: "10px",
-            marginBottom: "10px ",
-            opacity: "50%",
-          }}
-        />
-
         <div className={styles.gridUsuarios}>
           {usuariosFiltrados.map((usuario, index) => (
-            <div className={styles.card} key={index}>
+            <div className={styles.card}
+              onClick={() => navigate(`/usuario/perfil/${usuario.id}`)}
+              style={{ cursor: "pointer" }}
+
+              key={index}>
               <div
                 className={styles.estado}
                 style={{ backgroundColor: "#0397fc" }}
+
               >
                 <FontAwesomeIcon icon={faUser} size="xl" style={{ color: "white" }} />
               </div>
 
               <div
                 className={styles.cardContent}
-                style={{ cursor: "pointer" }}
-                onClick={() => navigate(`/usuario/perfil/${usuario.id}`)}
               >
+                <p style={{ color: "gray", fontSize: "0.6rem", textTransform: 'uppercase' }}>{usuario.rol}</p>
                 <p style={{ color: "black" }}>{usuario.nombre}</p>
-                <p style={{ color: "gray", fontSize: "0.9rem" }}>{usuario.rol}</p>
+                <p style={{ color: "gray", fontSize: "0.9rem" }}>{usuario.correo}</p>
+                {usuario.rut != null ? <p style={{ color: "gray", fontSize: "0.8rem" }}>{usuario.rut}</p> : <p style={{ color: 'gray', fontSize: '0.8rem' }}>RUT no ingresado.</p>}
+
               </div>
 
-              <div className={styles.opciones}>
-                <button
-                  onClick={() => {
-                    navigate(`/usuarios/editar/${usuario.id}`);
-                  }}
-                >
-                  <FontAwesomeIcon icon={faUserPen} />
-                </button>
-              </div>
+
             </div>
           ))}
         </div>
