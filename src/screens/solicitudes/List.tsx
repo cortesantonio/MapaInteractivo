@@ -119,23 +119,31 @@ function ListSolicitudes() {
 
 
                     {solicitudesFiltradas.map((solicitud) => (
-                        <div className={styles.card} key={solicitud.id}>
+                        <div className={styles.card} key={solicitud.id} style={{ cursor: 'pointer' }} onClick={() => { navigate(`/panel-administrativo/solicitud/${solicitud.id}`) }}>
                             <div className={styles.estado}
                                 style={{ backgroundColor: bgcolor(solicitud.estado) }}
                             >
                                 <FontAwesomeIcon icon={iconos(solicitud.estado)} size='xl' style={{ color: 'white' }} />
                             </div>
                             <div className={styles.cardContent}>
+                                <p style={{ color: bgcolor(solicitud.estado), fontSize: '0.7rem', fontWeight: '500', textTransform: 'uppercase' }}>{solicitud.estado}</p>
                                 <p style={{ color: solicitud.nombre_locacion.length > 0 ? 'black' : 'red' }}>
                                     {solicitud.nombre_locacion.length > 0 ? solicitud.nombre_locacion : 'Sin nombre'}
                                 </p>
                                 <p style={{ color: solicitud.direccion.length > 0 ? 'gray' : 'red', fontSize: '0.9rem' }}>
                                     {solicitud.direccion.length > 0 ? solicitud.direccion : 'Sin dirección'}
                                 </p>
+                                <p style={{ color: 'gray', fontSize: '0.8rem' }}>
+                                    Fecha Ingreso: {new Date(solicitud.fecha_ingreso).toLocaleDateString('es-CL', {
+                                        year: 'numeric',
+                                        month: '2-digit',
+                                        day: '2-digit',
+                                    })}
+                                </p>
+                                
+
                             </div>
-                            <div className={styles.opciones} onClick={() => { navigate(`/panel-administrativo/solicitud/${solicitud.id}`) }}>
-                                <button><FontAwesomeIcon icon={faInfo} /> Revisar</button>
-                            </div>
+
                         </div>
                     ))}
                 </div>

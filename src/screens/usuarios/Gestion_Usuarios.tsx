@@ -52,7 +52,6 @@ function Gestion_Usuarios() {
     const coincideRol = rolSeleccionado === "" || usuario.rol === rolSeleccionado;
     return coincideNombre && coincideRol;
   });
-
   return (<>
     <NavbarAdmin />
     <div className={styles.container}>
@@ -127,32 +126,30 @@ function Gestion_Usuarios() {
       <div className={styles.content}>
         <div className={styles.gridUsuarios}>
           {usuariosFiltrados.map((usuario, index) => (
-            <div className={styles.card} key={index}>
+            <div className={styles.card}
+              onClick={() => navigate(`/usuario/perfil/${usuario.id}`)}
+              style={{ cursor: "pointer" }}
+
+              key={index}>
               <div
                 className={styles.estado}
                 style={{ backgroundColor: "#0397fc" }}
+
               >
                 <FontAwesomeIcon icon={faUser} size="xl" style={{ color: "white" }} />
               </div>
 
               <div
                 className={styles.cardContent}
-                style={{ cursor: "pointer" }}
-                onClick={() => navigate(`/usuario/perfil/${usuario.id}`)}
               >
+                <p style={{ color: "gray", fontSize: "0.6rem", textTransform: 'uppercase' }}>{usuario.rol}</p>
                 <p style={{ color: "black" }}>{usuario.nombre}</p>
-                <p style={{ color: "gray", fontSize: "0.9rem" }}>{usuario.rol}</p>
+                <p style={{ color: "gray", fontSize: "0.9rem" }}>{usuario.correo}</p>
+                {usuario.rut != null ? <p style={{ color: "gray", fontSize: "0.8rem" }}>{usuario.rut}</p> : <p style={{ color: 'gray', fontSize: '0.8rem' }}>RUT no ingresado.</p>}
+
               </div>
 
-              <div className={styles.opciones}>
-                <button
-                  onClick={() => {
-                    navigate(`/usuarios/editar/${usuario.id}`);
-                  }}
-                >
-                  <FontAwesomeIcon icon={faUserPen} />
-                </button>
-              </div>
+
             </div>
           ))}
         </div>

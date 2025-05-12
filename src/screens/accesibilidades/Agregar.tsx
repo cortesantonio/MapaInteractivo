@@ -4,8 +4,9 @@ import { faReply } from '@fortawesome/free-solid-svg-icons';
 import { useState } from 'react';
 import { Accesibilidad } from '../../interfaces/Accesibilidad';
 import { supabase } from '../../services/supabase';
-
+import { useNavigate } from 'react-router-dom';
 export default function AgregarAccesibilidad() {
+    const navigate = useNavigate();
     const [formData, setFormData] = useState<Accesibilidad>({
         id: 0,
         tipo: '',
@@ -35,7 +36,7 @@ export default function AgregarAccesibilidad() {
             .from('accesibilidad')
             .select('*')
             .eq('nombre', formData.nombre)
-            .single(); 
+            .single();
 
         if (fetchError && fetchError.code !== 'PGRST116') {
             console.error('Error al verificar existencia:', fetchError);
@@ -61,7 +62,8 @@ export default function AgregarAccesibilidad() {
         if (error) {
             console.error('Error al insertar en Supabase:', error);
         } else {
-            console.log('Insertado correctamente:', data);
+            alert('Insertado correctamente: ' + data[0].nombre);
+            navigate(-1);
         }
     };
 
@@ -69,7 +71,7 @@ export default function AgregarAccesibilidad() {
     return (
         <div className={styles.container}>
             <div className={styles.titulo} >
-                <button style={{ backgroundColor: 'transparent', border: 'none', cursor: 'pointer' }}>
+                <button onClick={() => { navigate(-1) }} style={{ backgroundColor: 'transparent', border: 'none', cursor: 'pointer' }}>
                     <FontAwesomeIcon icon={faReply} size='2xl' />
                 </button>
                 <h2 style={{ textAlign: 'center' }}>
@@ -87,13 +89,13 @@ export default function AgregarAccesibilidad() {
                         <option value="Cognitiva">Cognitiva </option>
                         <option value="CA">CA </option>
                     </select>
-                    <label className={styles.labelSeccion} >Nombre</label>
+                    <label className={styles.labelSeccion} style={{ marginTop: '10px' }} >Nombre</label>
                     <input name="nombre" onChange={handleChange}
                         className={styles.inputText} />
                 </div>
 
                 <div className={styles.acciones}>
-                    <button style={{ color: 'red', background: 'transparent', }}>Cancelar</button>
+                    <button onClick={() => { navigate(-1) }} style={{ color: 'red', background: 'transparent', }}>Cancelar</button>
                     <button onClick={handleSubmit} >Agregar</button>
                 </div>
             </div>

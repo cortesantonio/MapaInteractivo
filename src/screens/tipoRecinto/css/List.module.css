@@ -88,12 +88,21 @@
     background-color: white;
     gap: 30px;
     width: auto;
-    border-bottom: 1px solid rgb(209, 209, 209);
     width: fit-content;
+    border: 1px solid rgba(128, 128, 128, 0.075);
+    border-radius: 15px;
+    transition: 0.2s all;
+    box-shadow: 0px 0px 5px 0px rgba(128, 128, 128, 0.562);
+}
+
+.card:hover {
+    transform: scale(98%);
+    box-shadow: 0px 0px 10px 0px rgba(128, 128, 128, 0.562);
+
 }
 
 .cardContent p {
-    width: 200px;
+    width: 100px;
     text-align: left;
     white-space: nowrap;
     overflow: hidden;
@@ -147,4 +156,13 @@
     flex-wrap: wrap;
     padding: 25px;
     gap: 10px;
+    width: 90%;
+    margin: auto;
+}
+
+@media (max-width: 768px) {
+    .content {
+        justify-content: center;
+        flex-wrap: wrap;
+    }
 }

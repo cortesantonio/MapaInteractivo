@@ -115,15 +115,18 @@ function Gestion_Resenas() {
         </div>
         <div className={styles.content}>
           {Edificio.map((locacion: { id: number, nombre_recinto: string; direccion: string; tipo_recinto: string; }, index: number) => (
-            <div className={styles.card} key={index}>
+            <div className={styles.card} key={index} onClick={() => { navigate(`/panel-administrativo/resenas/inspeccionar/${locacion.id}`) }}
+              style={{ cursor: 'pointer' }}
+            >
               <div className={styles.estado} style={{ backgroundColor: '#0397fc' }}>
                 <FontAwesomeIcon icon={faBuilding} size="xl" style={{ color: 'white' }} />
               </div>
 
-              <div className={styles.cardContent} style={{ cursor: 'pointer' }} onClick={() => { navigate(`/panel-administrativo/resenas/inspeccionar/${locacion.id}`) }}>
+              <div className={styles.cardContent}  >
+                <p style={{ color: 'gray', fontSize: '0.7rem', textTransform: 'uppercase' }}>{(locacion.tipo_recinto as any)?.tipo}</p>
+
                 <p style={{ color: 'black' }}>{locacion.nombre_recinto || "Cargando..."}</p>
                 <p style={{ color: 'gray', fontSize: '0.9rem' }}>{locacion.direccion}</p>
-                <p style={{ color: 'gray', fontSize: '0.9rem' }}>{(locacion.tipo_recinto as any)?.tipo}</p>
               </div>
             </div>
           ))}

@@ -102,20 +102,28 @@
 
 .card {
     display: flex;
-    padding: 15px;
-    justify-content: space-between;
+    padding: 20px;
+    justify-content: center;
     align-items: center;
     background-color: white;
-    gap: 15px;
-    border-bottom: 1px solid rgb(209, 209, 209);
-    width: 100%;
-    box-sizing: border-box;
-    transition: all 0.2s ease;
+    gap: 30px;
+    width: auto;
+    border: 1px solid rgba(128, 128, 128, 0.075);
+    border-radius: 15px;
+    transition: 0.2s all;
+    box-shadow: 0px 0px 5px 0px rgba(128, 128, 128, 0.562);
+}
+
+.card:hover {
+    transform: scale(98%);
+    box-shadow: 0px 0px 10px 0px rgba(128, 128, 128, 0.562);
+
 }
 
 .cardContent {
     flex: 1;
     min-width: 0;
+    width: 90%;
 }
 
 .cardContent p {
@@ -191,4 +199,11 @@
     align-items: start;
     cursor: pointer;
     z-index: 10;
+}
+
+@media (max-width: 768px) {
+    .content {
+        justify-content: center;
+        flex-wrap: wrap;
+    }
 }

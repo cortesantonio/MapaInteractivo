@@ -126,16 +126,19 @@ function ListMarcadores() {
                 <div className={styles.content}>
 
 
-                    {Edificio.map((locacion: { id: number; nombre_recinto: string; direccion: string; tipo_recinto: string; activo: boolean }, index: number) => (
-                        <div className={styles.card} key={index}>
+                    {Edificio.map((locacion: { id: number; nombre_recinto: string; direccion: string; tipo_recinto: string; activo: boolean; pagina_web: string; }, index: number) => (
+                        <div className={styles.card} key={index}
+                            style={{ cursor: 'pointer' }}
+                            onClick={() => { navigate(`/panel-administrativo/marcadores/informacion/${locacion.id}`) }}>
+
                             <div className={styles.estado} style={{ backgroundColor: '#0397fc' }}>
                                 <FontAwesomeIcon icon={faBuilding} size="xl" style={{ color: 'white' }} />
                             </div>
 
-                            <div className={styles.cardContent} style={{ cursor: 'pointer' }} onClick={() => { navigate(`/panel-administrativo/marcadores/informacion/${locacion.id}`) }}>
+                            <div className={styles.cardContent}  >
+                                <p style={{ color: 'gray', fontSize: '0.7rem', textTransform: 'uppercase' }}>{(locacion.tipo_recinto as any)?.tipo}</p>
                                 <p style={{ color: 'black' }}>{locacion.nombre_recinto || "Cargando..."}</p>
                                 <p style={{ color: 'gray', fontSize: '0.9rem' }}>{locacion.direccion}</p>
-                                <p style={{ color: 'gray', fontSize: '0.9rem' }}>{(locacion.tipo_recinto as any)?.tipo}</p>
                             </div>
 
                             <div className={styles.opciones}>

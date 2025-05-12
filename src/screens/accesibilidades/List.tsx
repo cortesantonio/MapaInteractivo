@@ -116,7 +116,7 @@ function ListAccesibilidad() {
                             </div>
                             <div className={styles.cardContent}>
                                 <p style={{ color: 'black', textTransform: 'capitalize' }}>{accesibilidad.nombre}</p>
-                                <p style={{ color: 'gray', fontSize: '0.9rem', textTransform: 'capitalize' }}>{accesibilidad.tipo}</p>
+                                <p style={{ color: 'gray', fontSize: '0.9rem', textTransform: 'capitalize' }}>Tipo: {accesibilidad.tipo}</p>
                             </div>
 
                             <div className={styles.opciones}>

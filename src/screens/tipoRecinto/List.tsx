@@ -6,7 +6,10 @@ import { supabase } from '../../services/supabase';
 import { Tipo_Recinto } from '../../interfaces/Tipo_Recinto';
 import EditarTipoRecinto from './Editar';
 import NavbarAdmin from '../../components/NavbarAdmin';
+import { useNavigate } from 'react-router-dom';
+
 function ListTipoRecinto() {
+    const navigate = useNavigate();
     const [tiposRecintos, setTiposRecintos] = useState<Tipo_Recinto[]>([]);
     const [selectedId, setSelectedId] = useState<number | null>(null);
     const [query, setQuery] = useState('');
@@ -77,7 +80,7 @@ function ListTipoRecinto() {
                     <button className={styles.filtroCard} onClick={() => handleBuscador()} >
                         <FontAwesomeIcon icon={faMagnifyingGlass} /> Buscador
                     </button>
-                    <button className={styles.agregarCard} style={{ backgroundColor: 'red' }}>
+                    <button className={styles.agregarCard} style={{ backgroundColor: 'red' }} onClick={() => navigate('/panel-administrativo/tipo-recinto/agregar')}>
                         <FontAwesomeIcon icon={faPlus} color='white' /> Agregar
                     </button>
                 </div>
@@ -110,7 +113,7 @@ function ListTipoRecinto() {
                             <FontAwesomeIcon icon={faUniversalAccess} size='xl' style={{ color: 'white' }} />
                         </div>
                         <div className={styles.cardContent}>
-                            <p style={{ color: 'gray', fontSize: '0.9rem', textTransform: 'capitalize' }}>{tRecinto.tipo}</p>
+                            <p style={{ color: 'black', fontSize: '1rem', textTransform: 'capitalize' }}>{tRecinto.tipo}</p>
                         </div>
 
                         <div className={styles.opciones}>

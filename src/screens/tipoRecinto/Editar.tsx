@@ -4,9 +4,9 @@ import { faReply } from '@fortawesome/free-solid-svg-icons';
 import { useState, useEffect } from 'react';
 import { supabase } from '../../services/supabase';
 import { Tipo_Recinto } from '../../interfaces/Tipo_Recinto';
-
+import NavbarAdmin from '../../components/NavbarAdmin';
 interface EditarTipoRecintoProps {
-    idTipoRecinto: number; 
+    idTipoRecinto: number;
     onCancel: () => void;
     onUpdate: () => void;
 }
@@ -46,7 +46,7 @@ export default function EditarTipoRecinto({ idTipoRecinto, onCancel, onUpdate }:
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
 
-        if ( formData.tipo === '') {
+        if (formData.tipo === '') {
             alert('Todos los campos son obligatorios');
             return;
         }
@@ -63,33 +63,34 @@ export default function EditarTipoRecinto({ idTipoRecinto, onCancel, onUpdate }:
             alert('Ocurrió un error al actualizar el registro.');
         } else {
             alert('Registro actualizado correctamente');
-            onUpdate(); 
+            onUpdate();
         }
     };
 
     return (
-        <div className={styles.container}>
-            <div className={styles.titulo}>
-                <button style={{ backgroundColor: 'transparent', border: 'none', cursor: 'pointer' }} onClick={onCancel}>
-                    <FontAwesomeIcon icon={faReply} size='2xl' />
-                </button>
-                <h2 style={{ textAlign: 'center' }}>
-                    Editar Accesibilidad
-                </h2>
-            </div>
+        <>
+            <NavbarAdmin />
+            <div className={styles.container}>
+                <div className={styles.titulo}>
 
-            <div style={{ margin: '20px auto', width: '40%', display: 'flex', justifyContent: 'center', flexDirection: 'column', minWidth: '250px' }}>
-                <div style={{ display: 'flex', flexDirection: 'column', maxWidth: '600px' }}>
-                    <label className={styles.labelSeccion} >TIPO</label>
-                    <input name="tipo"  onChange={handleChange} value={formData.tipo}
-                        className={styles.inputText} />
+                    <h2 style={{ textAlign: 'center' }}>
+                        Editar Accesibilidad
+                    </h2>
                 </div>
 
-                <div className={styles.acciones}>
-                    <button style={{ color: 'red', background: 'transparent' }} onClick={onCancel}>Cancelar</button>
-                    <button onClick={handleSubmit}>Guardar Cambios</button>
+                <div style={{ margin: '20px auto', width: '40%', display: 'flex', justifyContent: 'center', flexDirection: 'column', minWidth: '250px' }}>
+                    <div style={{ display: 'flex', flexDirection: 'column', maxWidth: '600px' }}>
+                        <label className={styles.labelSeccion} >TIPO</label>
+                        <input name="tipo" onChange={handleChange} value={formData.tipo}
+                            className={styles.inputText} />
+                    </div>
+
+                    <div className={styles.acciones}>
+                        <button style={{ color: 'red', background: 'transparent' }} onClick={onCancel}>Cancelar</button>
+                        <button onClick={handleSubmit}>Guardar Cambios</button>
+                    </div>
                 </div>
             </div>
-        </div>
+        </>
     );
 }
