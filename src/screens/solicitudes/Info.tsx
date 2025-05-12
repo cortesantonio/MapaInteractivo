@@ -1,20 +1,90 @@
 import styles from "./info.module.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faReply, faWheelchair, faRoad, faSquareParking, faPuzzlePiece, faPersonWalkingWithCane} from "@fortawesome/free-solid-svg-icons";
+import { faReply, 
+  faWheelchair, 
+  faRoad, 
+  faSquareParking, 
+  faPuzzlePiece, 
+  faPersonWalkingWithCane,
+  faInfo,
+  faChevronUp ,
+  faChevronDown,faTimes} from "@fortawesome/free-solid-svg-icons";
 import { useNavigate } from "react-router-dom";
+import { useState } from "react";
+import Especificacion1 from "../../assets/Especificacion_1.webp";
+import Especificacion2 from "../../assets/Especificacion_2.webp";
+import Especificacion3 from "../../assets/Especificacion_3.webp";
+import Especificacion4 from "../../assets/Especificacion_4.webp";
+import Especificacion5 from "../../assets/Especificacion_5.webp";
+import Especificacion8 from "../../assets/Especificacion_8.webp";
+import Especificacion9 from "../../assets/Especificacion_9.webp";
+import Especificacion10 from "../../assets/Especificacion_10.webp";
+import Especificacion11 from "../../assets/Especificacion_11.webp";
+import Especificacion12 from "../../assets/Especificacion_12.webp";
+import Especificacion14 from "../../assets/Especificacion_14.webp";
+import Especificacion15 from "../../assets/Especificacion_15.webp";
+import Especificacion16 from "../../assets/Especificacion_16.webp";
+import Especificacion17 from "../../assets/Especificacion_17.webp";
+
+
 
 function Info() {
   const navigate = useNavigate();
+  const [lightboxImage, setLightboxImage] = useState<string | null>(null);
+
+// Función para abrir la imagen en el lightbox
+  const openLightbox = (imageSrc: string) => {
+  setLightboxImage(imageSrc);
+};
+
+// Función para cerrar el lightbox
+const closeLightbox = () => {
+  setLightboxImage(null);
+};
+
+  type SectionState = {
+  [key: string]: boolean;
+};
+  const [visibleSections, setVisibleSections] = useState<SectionState>({
+  banos: false,
+  rampas: false,
+  estacionamiento: false,
+  zonaCalma: false,
+  discapacidadVisual: false
+});
+  
+ const toggleSection = (section: string) => {
+    setVisibleSections({
+      ...visibleSections,
+      [section]: !visibleSections[section]
+    });
+  };
+ 
 
   return (
+    
+
+
     <div className={styles.container_principal}>
+        {lightboxImage && (
+          <div className={styles.lightbox_overlay} onClick={closeLightbox}>
+          <div className={styles.lightbox_container} onClick={(e) => e.stopPropagation()}>
+        <button className={styles.lightbox_close} onClick={closeLightbox} style={{border:"1px solid black",marginTop:"5px",marginLeft:"5px",background:"#fff",fontSize:"20px",borderRadius:"15px",width:"30px"}} >
+          <FontAwesomeIcon icon={faTimes} />
+        </button>
+        <img src={lightboxImage} alt="Imagen ampliada" className={styles.lightbox_image} />
+      </div>
+    </div>
+    )}
+
       <div>
         <button className={styles.botonatras} onClick={() => navigate(-1)} aria-label="Volver atrás"><FontAwesomeIcon icon={faReply} /></button>
       </div>
       <div className={styles.container}>
         <div className={styles.titulo}>
-          <h1>Normas Para Poder Colaborar</h1>
-          <hr />
+          <h1>Manual De Accesibilidad Universal;</h1>
+          <h2>Normas para Poder Colaborar</h2>
+          
         </div>
         <div className={styles.contentenido_principal_Seccion}>
           <section className={styles.Seccion_de_Accesibilidad}>
@@ -28,11 +98,12 @@ function Info() {
             
             <div>
               <div className={styles.Pre_Descripcion}>
-                <h4>Deben cumplir con diseño universal (art. 4.1.7 numeral 6) y el recinto debe cumplir con estas Medidas:</h4>
+                <FontAwesomeIcon icon = {faInfo}/> <a href="https://www.bcn.cl/leychile/navegar?idNorma=1088117">art. 4.1.7 numeral 6</a> 
+                <h4>Deben cumplir con diseño universal y el recinto debe cumplir con estas Medidas:</h4>
               </div>
               
               <div className={styles.especificacion_de_contenido}>
-                <h5>Especificaciones Arquitectónicas:</h5>
+                <h5>Especificaciones Arquitectónicas:</h5>        
                 <hr />
                 <h4>Dimensiones Mínimas del Recinto:</h4>
                 <h4>El Baño debe permitir un Giro de 360° de una silla de ruedas:</h4>
@@ -58,6 +129,22 @@ function Info() {
                   <li>Debe haber al menos 0,80 m de ancho por 1,20 m de largo junto al inodoro para permitir transferencia lateral</li>
                 </ul>
               </div>
+
+              <div className={styles.contenedor_imagenes}>
+                <div className={styles.imagenes}  onClick={() => toggleSection("banos")} style={{cursor:"pointer"}}>
+                    <FontAwesomeIcon icon={visibleSections.banos ? faChevronUp : faChevronDown} />
+                    <h4>Imagenes Accesibilidad Universal</h4>
+                </div>
+                {visibleSections.banos && (
+                  <div className={styles.imagen_container}>
+                    <img src={Especificacion1} onClick={()=> openLightbox(Especificacion1)} />
+                    <img src={Especificacion2}  onClick={()=> openLightbox(Especificacion2)}/>
+                    <img src={Especificacion3} onClick={()=> openLightbox(Especificacion3)} />
+                    <img src={Especificacion4} onClick={()=> openLightbox(Especificacion4)} />
+                    <img src={Especificacion5} onClick={()=> openLightbox(Especificacion5)} />
+                  </div>
+                )}
+              </div>
             </div>
           </section>
           <section className={styles.Seccion_de_Accesibilidad}>
@@ -68,7 +155,9 @@ function Info() {
             
             <div>
               <div className={styles.Pre_Descripcion}>
-                <h4>Las Rampas deben cumplir con diseño universal (art. 4.1.7 numeral 6) y el recinto debe cumplir con estas Medidas:</h4>
+                <FontAwesomeIcon icon = {faInfo}/>
+                <a href="https://www.bcn.cl/leychile/navegar?idNorma=1088117"> art. 4.1.7 numeral 6</a>
+                <h4>Las Rampas deben cumplir con diseño universal  y el recinto debe cumplir con estas Medidas:</h4> 
                 <h4>En Cruces peatonales, accesos y desniveles debe cumplir con estos Requisitos:</h4>
               </div>
               
@@ -84,6 +173,21 @@ function Info() {
                 </ul>
               </div>
             </div>
+            <div className={styles.contenedor_imagenes}>
+                <div className={styles.imagenes} onClick={() => toggleSection("rampas")} style={{cursor:"pointer"}}>
+                    <FontAwesomeIcon icon={visibleSections.rampas ? faChevronUp : faChevronDown} />
+                    <h4>Imagenes Accesibilidad Universal</h4>
+                </div>
+                  {visibleSections.rampas && (
+                  <div className={styles.imagen_container}>
+                      <img src={Especificacion10} onClick= {()=> openLightbox(Especificacion10)} alt="Especificación de accesibilidad 1" />
+                      <img src={Especificacion11}  onClick= {()=> openLightbox(Especificacion11)} alt="Especificación de accesibilidad 2" />
+                      <img src={Especificacion12}  onClick= {()=> openLightbox(Especificacion12)} alt="Especificación de accesibilidad 3" />
+                      
+                      
+                    </div>
+                    )}
+                  </div>
           </section>
           <section className={styles.Seccion_de_Accesibilidad}>
             <div className={styles.featureHeader}>
@@ -93,6 +197,8 @@ function Info() {
             
             <div>
               <div className={styles.Pre_Descripcion}>
+                 <FontAwesomeIcon icon = {faInfo}/>
+                  <a href="https://www.ciudadaccesible.cl/wp-content/uploads/2021/04/Ficha-3-Estacionamientos-Accesibles_2021.pdf">art. 2.2.8 n°11</a>
                 <h4>Los estacionamientos accesibles deben cumplir con normativa específica para garantizar su uso adecuado:</h4>
               </div>
               
@@ -100,7 +206,7 @@ function Info() {
                 <h5>Especificaciones Arquitectónicas:</h5>
                 <hr />
                 <ul>
-                  <li>Al menos el 1% del total de estacionamientos debe ser accesible, con un mínimo obligatorio de 2 unidades (art. 2.2.8 n°11)</li>
+                  <li>Al menos el 1% del total de estacionamientos debe ser accesible, con un mínimo obligatorio de 2 unidades</li>
                   <small >* Fuente: Decreto DS N°50 / 2015 - OGUC</small>
 
                 </ul>
@@ -118,6 +224,18 @@ function Info() {
                 </ul>
               </div>
             </div>
+            <div className={styles.contenedor_imagenes}>
+                <div className={styles.imagenes} onClick={() => toggleSection("estacionamiento")} style={{cursor:"pointer"}}>
+                    <FontAwesomeIcon icon={visibleSections.estacionamiento ? faChevronUp : faChevronDown} />
+                    <h4>Imagenes Accesibilidad Universal</h4>
+                </div>
+                {visibleSections.estacionamiento && (
+                  <div className={styles.imagen_container}>
+                    <img src={Especificacion8}  onClick= {()=> openLightbox(Especificacion8)} alt="Especificación de accesibilidad 1" />
+                    <img src={Especificacion9}  onClick= {()=> openLightbox(Especificacion9)} alt="Especificación de accesibilidad 2" />            
+                  </div>
+                )}
+              </div>
           </section>
           <section className={styles.Seccion_de_Accesibilidad}>
             <div className={styles.featureHeader}>
@@ -127,6 +245,8 @@ function Info() {
             
             <div>
               <div className={styles.Pre_Descripcion}>
+                <FontAwesomeIcon icon={faInfo} />
+                <a href="https://www.bcn.cl/leychile/navegar?idNorma=1088117&idParte=10027833">art. 2.2.8 y 2.6.17</a>
                 <h4>Las zonas de calma son espacios esenciales para personas con Trastorno del Espectro Autista:</h4>
               </div>
               
@@ -136,10 +256,21 @@ function Info() {
                 <ul>
                   <li>Rutas accesibles claras y señalizadas.</li>
                   <li>Espacios de regulación emocional o descanso sensorial.</li>
-                  <li>Acceso conectado mediante la ruta accesible (art. 2.2.8 y 2.6.17).</li>
+                  <li>Acceso conectado mediante la ruta accesible</li>
                 </ul>
               </div>
             </div>
+            <div className={styles.contenedor_imagenes}>
+                <div className={styles.imagenes} onClick={() => toggleSection("zonaCalma")} style={{cursor:"pointer"}}>
+                    <FontAwesomeIcon icon={visibleSections.zonaCalma ? faChevronUp : faChevronDown} />
+                    <h4>Imagenes Accesibilidad Universal</h4>
+                </div>
+                {visibleSections.zonaCalma && (
+                  <div className={styles.imagen_container}>
+                    <img src={Especificacion17}  onClick= {()=> openLightbox(Especificacion17)} alt="Especificación de accesibilidad 3" />
+                  </div>
+                )}
+              </div>
           </section>
           <section className={styles.Seccion_de_Accesibilidad}>
             <div className={styles.featureHeader}>
@@ -149,7 +280,7 @@ function Info() {
             
             <div>
               <div className={styles.Pre_Descripcion}>
-                <h4>Las zonas de calma son espacios esenciales para personas con Trastorno del Espectro Autista:</h4>
+                <h4>Los espacios accesibles también deben considerar a personas con discapacidad visual:</h4>
               </div>
               
               <div className={styles.especificacion_de_contenido}>
@@ -164,15 +295,24 @@ function Info() {
                 </ul>
               </div>
             </div>
-          </section>
-
-           
+            <div className={styles.contenedor_imagenes}>
+                <div className={styles.imagenes} onClick={() => toggleSection("discapacidadVisual")} style={{cursor:"pointer"}}>
+                    <FontAwesomeIcon icon={visibleSections.discapacidadVisual ? faChevronUp : faChevronDown} />
+                    <h4>Imagenes Accesibilidad Universal</h4>
+                </div>
+                {visibleSections.discapacidadVisual && (
+                  <div className={styles.imagen_container}>
+                     <img src={Especificacion14}  onClick= {()=> openLightbox(Especificacion14)} alt="Especificación de accesibilidad 1" />
+                    <img src={Especificacion15}  onClick= {()=> openLightbox(Especificacion15)} alt="Especificación de accesibilidad 2" />
+                    <img src={Especificacion16}  onClick= {()=> openLightbox(Especificacion16)} alt="Especificación de accesibilidad 3" />
+                  </div>
+                )}
+              </div>
+          </section>  
         </div>
       </div>
     </div>
   );
 }
-
-
 
 export default Info;
