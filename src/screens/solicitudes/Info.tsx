@@ -11,20 +11,20 @@ import { faReply,
   faChevronDown,faTimes} from "@fortawesome/free-solid-svg-icons";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
-import Especificacion1 from "../../assets/Especificacion_1_.webp";
-import Especificacion2 from "../../assets/Especificacion_2_.webp";
-import Especificacion3 from "../../assets/Especificacion_3_.webp";
-import Especificacion4 from "../../assets/Especificacion_4_.webp";
-import Especificacion5 from "../../assets/Especificacion_5_.webp";
-import Especificacion8 from "../../assets/Especificacion_8_.webp";
-import Especificacion9 from "../../assets/Especificacion_9_.webp";
-import Especificacion10 from "../../assets/Especificacion_10_.webp";
-import Especificacion11 from "../../assets/Especificacion_11_.webp";
-import Especificacion12 from "../../assets/Especificacion_12_.webp";
-import Especificacion14 from "../../assets/Especificacion_14_.webp";
-import Especificacion15 from "../../assets/Especificacion_15_.webp";
-import Especificacion16 from "../../assets/Especificacion_16_.webp";
-import Especificacion17 from "../../assets/Especificacion_17_.webp";
+import Especificacion_Baño_Discapacitados_1 from "../../assets/Especificacion_Baño_Discapacitados_1_.webp";
+import Especificacion_Baño_Discapacitados_2 from "../../assets/Especificacion_Baño_Discapacitados_2_.webp";
+import Especificacion_Baño_Discapacitados_3 from "../../assets/Especificacion_Baño_Discapacitados_3_.webp";
+import Especificacion_Baño_Discapacitados_4 from "../../assets/Especificacion_Baño_Discapacitados_4_.webp";
+import Especificacion_Baño_Discapacitados_5 from "../../assets/Especificacion_Baño_Discapacitados_5_.webp";
+import Especificacion_Estacionamiento_Discapacitados_8 from "../../assets/Especificacion_Estacionamiento_Discapacitados_8_.webp";
+import Especificacion_Estacionamiento_Discapacitados_9 from "../../assets/Especificacion_Estacionamiento_Discapacitados_9_.webp";
+import Especificacion_Rampas_Discapacitados_10 from "../../assets/Especificacion_Rampas_Discapacitados_10_.webp";
+import Especificacion_Rampas_Discapacitados_11 from "../../assets/Especificacion_Rampas_Discapacitados_11_.webp";
+import Especificacion_Rampas_Discapacitados_12 from "../../assets/Especificacion_Rampas_Discapacitados_12_.webp";
+import Especificacion_Señalizacion_Discapacitados_Visual_14 from "../../assets/Especificacion_Señalizacion_Discapacitados_Visual_14_.webp";
+import Especificacion_Señalizacion_Discapacitados_Visual_15 from "../../assets/Especificacion_Señalizacion_Discapacitados_Visual_15_.webp";
+import Especificacion_Señalizacion_Discapacitados_Visual_16 from "../../assets/Especificacion_Señalizacion_Discapacitados_Visual_16_.webp";
+import Especificacion_Zona_de_Calma_17 from "../../assets/Especificacion_Zona_de_Calma_17_.webp";
 
 
 
@@ -138,11 +138,11 @@ const closeLightbox = () => {
                 </div>
                 {visibleSections.banos && (
                   <div className={styles.imagen_container}>
-                    <img src={Especificacion1} onClick={()=> openLightbox(Especificacion1)} />
-                    <img src={Especificacion2}  onClick={()=> openLightbox(Especificacion2)}/>
-                    <img src={Especificacion3} onClick={()=> openLightbox(Especificacion3)} />
-                    <img src={Especificacion4} onClick={()=> openLightbox(Especificacion4)} />
-                    <img src={Especificacion5} onClick={()=> openLightbox(Especificacion5)} />
+                    <img src={Especificacion_Baño_Discapacitados_1} onClick={()=> openLightbox(Especificacion_Baño_Discapacitados_1)} />
+                    <img src={Especificacion_Baño_Discapacitados_2}  onClick={()=> openLightbox(Especificacion_Baño_Discapacitados_2)}/>
+                    <img src={Especificacion_Baño_Discapacitados_3} onClick={()=> openLightbox(Especificacion_Baño_Discapacitados_3)} />
+                    <img src={Especificacion_Baño_Discapacitados_4} onClick={()=> openLightbox(Especificacion_Baño_Discapacitados_4)} />
+                    <img src={Especificacion_Baño_Discapacitados_5} onClick={()=> openLightbox(Especificacion_Baño_Discapacitados_5)} />
                   </div>
                 )}
               </div>
@@ -181,9 +181,9 @@ const closeLightbox = () => {
                 </div>
                   {visibleSections.rampas && (
                   <div className={styles.imagen_container}>
-                      <img src={Especificacion10} onClick= {()=> openLightbox(Especificacion10)} alt="Especificación de accesibilidad 1" />
-                      <img src={Especificacion11}  onClick= {()=> openLightbox(Especificacion11)} alt="Especificación de accesibilidad 2" />
-                      <img src={Especificacion12}  onClick= {()=> openLightbox(Especificacion12)} alt="Especificación de accesibilidad 3" />
+                      <img src={Especificacion_Rampas_Discapacitados_10} onClick= {()=> openLightbox(Especificacion_Rampas_Discapacitados_10)} alt="Especificación de accesibilidad 1" />
+                      <img src={Especificacion_Rampas_Discapacitados_11}  onClick= {()=> openLightbox(Especificacion_Rampas_Discapacitados_11)} alt="Especificación de accesibilidad 2" />
+                      <img src={Especificacion_Rampas_Discapacitados_12}  onClick= {()=> openLightbox(Especificacion_Rampas_Discapacitados_12)} alt="Especificación de accesibilidad 3" />
                       
                       
                     </div>
@@ -232,8 +232,8 @@ const closeLightbox = () => {
                 </div>
                 {visibleSections.estacionamiento && (
                   <div className={styles.imagen_container}>
-                    <img src={Especificacion8}  onClick= {()=> openLightbox(Especificacion8)} alt="Especificación de accesibilidad 1" />
-                    <img src={Especificacion9}  onClick= {()=> openLightbox(Especificacion9)} alt="Especificación de accesibilidad 2" />            
+                    <img src={Especificacion_Estacionamiento_Discapacitados_8}  onClick= {()=> openLightbox(Especificacion_Estacionamiento_Discapacitados_8)} alt="Especificación de accesibilidad 1" />
+                    <img src={Especificacion_Estacionamiento_Discapacitados_9}  onClick= {()=> openLightbox(Especificacion_Estacionamiento_Discapacitados_9)} alt="Especificación de accesibilidad 2" />            
                   </div>
                 )}
               </div>
@@ -268,7 +268,7 @@ const closeLightbox = () => {
                 </div>
                 {visibleSections.zonaCalma && (
                   <div className={styles.imagen_container}>
-                    <img src={Especificacion17}  onClick= {()=> openLightbox(Especificacion17)} alt="Especificación de accesibilidad 3" />
+                    <img src={Especificacion_Zona_de_Calma_17}  onClick= {()=> openLightbox(Especificacion_Zona_de_Calma_17)} alt="Especificación de accesibilidad 3" />
                   </div>
                 )}
               </div>
@@ -303,9 +303,9 @@ const closeLightbox = () => {
                 </div>
                 {visibleSections.discapacidadVisual && (
                   <div className={styles.imagen_container}>
-                     <img src={Especificacion14}  onClick= {()=> openLightbox(Especificacion14)} alt="Especificación de accesibilidad 1" />
-                    <img src={Especificacion15}  onClick= {()=> openLightbox(Especificacion15)} alt="Especificación de accesibilidad 2" />
-                    <img src={Especificacion16}  onClick= {()=> openLightbox(Especificacion16)} alt="Especificación de accesibilidad 3" />
+                     <img src={Especificacion_Señalizacion_Discapacitados_Visual_14}  onClick= {()=> openLightbox(Especificacion_Señalizacion_Discapacitados_Visual_14)} alt="Especificación de accesibilidad 1" />
+                    <img src={Especificacion_Señalizacion_Discapacitados_Visual_15}  onClick= {()=> openLightbox(Especificacion_Señalizacion_Discapacitados_Visual_15)} alt="Especificación de accesibilidad 2" />
+                    <img src={Especificacion_Señalizacion_Discapacitados_Visual_16}  onClick= {()=> openLightbox(Especificacion_Señalizacion_Discapacitados_Visual_16)} alt="Especificación de accesibilidad 3" />
                   </div>
                 )}
               </div>
