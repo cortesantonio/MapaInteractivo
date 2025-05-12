@@ -5,8 +5,9 @@ import { formatDistanceToNow } from 'date-fns';
 import { es } from 'date-fns/locale'; // para español
 import styles from './css/VerMarcador.module.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faShareNodes, faRoute, faCommentDots, faStar, faLocationDot, faPhone, faEarthAmericas, faChevronUp, faChevronDown } from '@fortawesome/free-solid-svg-icons';
+import { faShareNodes, faRoute, faCommentDots, faStar, faLocationDot, faPhone, faEarthAmericas, faChevronUp, faChevronDown,faInfo } from '@fortawesome/free-solid-svg-icons';
 import EscribirResena from '../components/EscribirResena';
+import Compartir from './Compartir';
 import { supabase } from '../services/supabase';
 import { Horarios } from '../interfaces/Horarios';
 import { Accesibilidad } from '../interfaces/Accesibilidad';
@@ -27,7 +28,13 @@ export default function VerMarcador({ MarcadorSelectId, CerrarMarcador, establec
     const [resenasMarcador, setResenasMarcador] = useState<Review[]>([]);
     const [tabActiva, setTabActiva] = useState<'general' | 'resenas'>('general');
     const [mostrarFormulario, setMostrarFormulario] = useState(false);
+    const [MostrarCompartir, setMostrarCompartir] = useState(false);
 
+    // Función para volver a la vista del marcador
+    const volverAMarcador = () => {
+        setMostrarCompartir(false);
+        setMostrarFormulario(false);
+    };
 
     useEffect(() => {
         const fetchMarcador = async () => {
@@ -239,24 +246,50 @@ export default function VerMarcador({ MarcadorSelectId, CerrarMarcador, establec
                         </p>
                     </div>
                     <div className={styles.containerButtons}>
-                        <button >
-                            <FontAwesomeIcon icon={faShareNodes} className={styles.icon} /> <p>Compartir</p>
-                        </button>
-                        <button onClick={() => {
-                            establecerIdRutaMarcador(Marcador.id as number);
-                            CerrarMarcador();
-                        }}>
-
-                            <FontAwesomeIcon icon={faRoute} className={styles.icon} />
-                            <p>Cómo llegar</p>
-                        </button>
-                        {!mostrarFormulario &&
-                            <button onClick={() => setMostrarFormulario(true)}>
-                                <FontAwesomeIcon icon={faCommentDots} className={styles.icon} />
-                                <p>Escribir Reseña</p>
-                            </button>
-                        }
-
+                        {MostrarCompartir ? (
+                            // Botones cuando estás en modo Compartir
+                            <>
+                                <button onClick={volverAMarcador}>
+                                    <FontAwesomeIcon icon={faInfo} style={{width:"13px"}} className={styles.icon}  /> 
+                                    <p>Informacion</p>
+                                </button>
+                                <button onClick={() => {
+                                    establecerIdRutaMarcador(Marcador.id as number); 
+                                    CerrarMarcador();
+                                }}>
+                                    <FontAwesomeIcon icon={faRoute} className={styles.icon} />
+                                    <p>Cómo llegar</p>
+                                </button>
+                                <button onClick={() => {
+                                    setMostrarCompartir(false);
+                                    setMostrarFormulario(true);
+                                }}>
+                                    <FontAwesomeIcon icon={faCommentDots} className={styles.icon} />
+                                    <p>Escribir Reseña</p>
+                                </button>
+                            </>
+                        ) : (
+                            // Botones normales cuando NO estás en modo Compartir
+                            <>
+                                <button onClick={() => setMostrarCompartir(true)}>
+                                    <FontAwesomeIcon icon={faShareNodes} className={styles.icon} /> 
+                                    <p>Compartir</p>
+                                </button>
+                                <button onClick={() => {
+                                    establecerIdRutaMarcador(Marcador.id as number); 
+                                    CerrarMarcador();
+                                }}>
+                                    <FontAwesomeIcon icon={faRoute} className={styles.icon} />
+                                    <p>Cómo llegar</p>
+                                </button>
+                                {!mostrarFormulario && (
+                                    <button onClick={() => setMostrarFormulario(true)}>
+                                        <FontAwesomeIcon icon={faCommentDots} className={styles.icon} />
+                                        <p>Escribir Reseña</p>
+                                    </button>
+                                )}
+                            </>
+                        )}
                     </div>
                 </div>
 
@@ -264,8 +297,18 @@ export default function VerMarcador({ MarcadorSelectId, CerrarMarcador, establec
 
 
             <div className={styles.ContenedorInfo}>
-
-                {!mostrarFormulario && (
+                {MostrarCompartir ? (
+                    <Compartir />
+                ) : mostrarFormulario ? (
+                    <EscribirResena
+                        onSubmit={(resena) => {
+                            console.log('Reseña enviada:', resena);
+                            setMostrarFormulario(false);
+                        }}
+                        onCancel={() => setMostrarFormulario(false)}
+                        idMarcador={MarcadorSelectId}
+                    />
+                ) : (
                     <>
                         <div className={styles.headerInfo}>
                             <button
@@ -285,16 +328,6 @@ export default function VerMarcador({ MarcadorSelectId, CerrarMarcador, establec
                             {tabActiva === 'general' ? <InfoMarcador /> : <ListReviews />}
                         </div>
                     </>
-                )}
-                {mostrarFormulario && (
-                    <EscribirResena
-                        onSubmit={(resena) => {
-                            console.log('Reseña enviada:', resena,);
-                            setMostrarFormulario(false);
-                        }}
-                        onCancel={() => setMostrarFormulario(false)}
-                        idMarcador={MarcadorSelectId}
-                    />
                 )}
             </div>
 
