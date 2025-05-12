@@ -25,6 +25,7 @@ function VistaAdministrador() {
 
         fetchData();
     }, []);
+    const pendientes = datosGrafico.filter(item => item.estado === "pendiente").length;
 
     return (
 
@@ -174,7 +175,7 @@ function VistaAdministrador() {
                             border: "none",
                             fontSize: "17px",
                             padding: "4px"
-                        }} onClick={() => { navigate('/panel-administrativo/solicitudes') }}  >* nuevas solicitudes.</button>
+                        }} onClick={() => { navigate('/panel-administrativo/solicitudes') }}  >({pendientes}) nuevas solicitudes.</button>
 
                         <button
                             style={{
