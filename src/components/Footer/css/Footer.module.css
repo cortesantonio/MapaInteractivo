@@ -11,6 +11,7 @@
     position: fixed;
     transition: width 0.3s ease;
     left: 50%;
+    min-height: 45px;
 }
 
 .ContenButton {

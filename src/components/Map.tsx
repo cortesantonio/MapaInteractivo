@@ -45,7 +45,8 @@ const CustomMap = ({
           position: window.google.maps.ControlPosition.RIGHT_CENTER,
         },
         gestureHandling: "greedy",
-        clickableIcons: false
+        clickableIcons: false,
+        keyboardShortcuts: false
         
       });
 
@@ -93,8 +94,6 @@ const CustomMap = ({
       }
     });
 
-
-  
     directionsRenderer.setMap(map);
   
     directionsService.route(
@@ -194,8 +193,6 @@ const CustomMap = ({
         </div>
       </AdvancedMarker>
 
-
-
       )}
     </>
   );
@@ -230,7 +227,8 @@ const Map = ({
     const fetchMarcador = async () => {
       const { data, error } = await supabase
         .from("marcador")
-        .select("id, latitud, longitud");
+        .select("id, latitud, longitud")
+        .eq("activo", true); 
   
       if (error) {
         console.error("Error al obtener los marcadores:", error);
@@ -238,6 +236,7 @@ const Map = ({
         setMarcadores(data);
       }
     };
+    
   
     fetchMarcador();
   
