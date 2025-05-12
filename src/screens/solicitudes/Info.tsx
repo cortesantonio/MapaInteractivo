@@ -11,20 +11,21 @@ import { faReply,
   faChevronDown,faTimes} from "@fortawesome/free-solid-svg-icons";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
-import Especificacion1 from "../../assets/Especificacion_1.webp";
-import Especificacion2 from "../../assets/Especificacion_2.webp";
-import Especificacion3 from "../../assets/Especificacion_3.webp";
-import Especificacion4 from "../../assets/Especificacion_4.webp";
-import Especificacion5 from "../../assets/Especificacion_5.webp";
-import Especificacion8 from "../../assets/Especificacion_8.webp";
-import Especificacion9 from "../../assets/Especificacion_9.webp";
-import Especificacion10 from "../../assets/Especificacion_10.webp";
-import Especificacion11 from "../../assets/Especificacion_11.webp";
-import Especificacion12 from "../../assets/Especificacion_12.webp";
-import Especificacion14 from "../../assets/Especificacion_14.webp";
-import Especificacion15 from "../../assets/Especificacion_15.webp";
-import Especificacion16 from "../../assets/Especificacion_16.webp";
-import Especificacion17 from "../../assets/Especificacion_17.webp";
+import Especificacion1 from "../../assets/Especificacion_1_.webp";
+import Especificacion2 from "../../assets/Especificacion_2_.webp";
+import Especificacion3 from "../../assets/Especificacion_3_.webp";
+import Especificacion4 from "../../assets/Especificacion_4_.webp";
+import Especificacion5 from "../../assets/Especificacion_5_.webp";
+import Especificacion8 from "../../assets/Especificacion_8_.webp";
+import Especificacion9 from "../../assets/Especificacion_9_.webp";
+import Especificacion10 from "../../assets/Especificacion_10_.webp";
+import Especificacion11 from "../../assets/Especificacion_11_.webp";
+import Especificacion12 from "../../assets/Especificacion_12_.webp";
+import Especificacion14 from "../../assets/Especificacion_14_.webp";
+import Especificacion15 from "../../assets/Especificacion_15_.webp";
+import Especificacion16 from "../../assets/Especificacion_16_.webp";
+import Especificacion17 from "../../assets/Especificacion_17_.webp";
+
 
 
 

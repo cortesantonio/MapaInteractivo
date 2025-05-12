@@ -96,6 +96,8 @@
     to { opacity: 1; transform: translateY(0); }
 }
 
+
+
 .imagen_container img {
     width: 100%;
     border-radius: 8px;
