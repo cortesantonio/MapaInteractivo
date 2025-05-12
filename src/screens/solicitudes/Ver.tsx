@@ -1,6 +1,6 @@
 import styles from './Ver.module.css'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faReply, faTriangleExclamation } from '@fortawesome/free-solid-svg-icons';
+import { faReply, faTriangleExclamation, faArrowUpRightFromSquare, faCheck } from '@fortawesome/free-solid-svg-icons';
 import { useState } from 'react';
 import { Solicitudes } from '../../interfaces/Solicitudes';
 import { supabase } from '../../services/supabase';
@@ -10,6 +10,8 @@ import { Usuarios } from '../../interfaces/Usuarios';
 import { Tipo_Recinto } from '../../interfaces/Tipo_Recinto';
 import { Accesibilidad_Solicitud } from '../../interfaces/Accesibilidad_Solicitud';
 import { useNavigate, useParams } from 'react-router-dom';
+import { useAuth } from '../../hooks/useAuth';
+
 
 interface AccesibilidadesPorTipo {
     [tipo: string]: Accesibilidad[];
@@ -19,12 +21,14 @@ type SolicitudCompleta = Solicitudes & {
     id_usuario: Usuarios;
     tipo_recinto: Tipo_Recinto;
     accesibilidades: Accesibilidad[]; // solo si lo traes anidado
+    id_supervisor: Usuarios;
 };
 
 
 export default function Ver() {
     const navigate = useNavigate()
     const { id } = useParams()
+    const { user } = useAuth()
     const [solicitud, setSolicitud] = useState<Partial<SolicitudCompleta>>({});
     const [accesibilidades, setAccesibilidades] = useState<AccesibilidadesPorTipo>({});
     const [isActiveModal, setIsActiveModal] = useState(false)
@@ -40,14 +44,16 @@ export default function Ver() {
                 .from('solicitudes')
                 .select(`
                     *,
-                    id_usuario:usuarios(*),
+                    id_usuario:usuarios!solicitudes_id_usuario_fkey(*),
+                    id_supervisor:usuarios!solicitudes_supervisor_fkey(*),
                     tipo_recinto(*),
                     accesibilidad_solicitud (
-                        id_accesibilidad:accesibilidad(*)
+                    id_accesibilidad:accesibilidad(*)
                     )
                 `)
-                .eq('id', id) // Reemplaza por ID dinámico si hace falta
+                .eq('id', id)
                 .single();
+
 
             if (solicitudError) {
                 console.error('Error cargando la solicitud:', solicitudError);
@@ -88,7 +94,10 @@ export default function Ver() {
     const handleAprobar = async () => {
         const { error } = await supabase
             .from('solicitudes')
-            .update({ estado: 'aprobada' })
+            .update({
+                estado: 'aprobada', fecha_revision: new Date(),
+                id_supervisor: user?.id
+            })
             .eq('id', id);
 
         if (error) {
@@ -97,13 +106,16 @@ export default function Ver() {
         }
 
         alert('Solicitud aprobada exitosamente');
-        // Opcional: volver a cargar los datos o navegar a otra vista
+        navigate(-1)
     };
 
     const handleRechazar = async () => {
         const { error } = await supabase
             .from('solicitudes')
-            .update({ estado: 'rechazada', respuesta_rechazo: respuestaRechazo, fecha_revision: new Date() })
+            .update({
+                estado: 'rechazada', respuesta_rechazo: respuestaRechazo, fecha_revision: new Date(),
+                id_supervisor: user?.id
+            })
             .eq('id', id);
 
         if (error) {
@@ -112,6 +124,7 @@ export default function Ver() {
         }
 
         alert('Solicitud rechazada exitosamente');
+        navigate(-1)
     };
 
 
@@ -134,6 +147,7 @@ export default function Ver() {
                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                         <h2>Informacion</h2>
                         <span style={{ color: colorState(solicitud.estado as string), fontWeight: 500, fontSize: '0.8rem', textTransform: 'uppercase' }}>• {solicitud.estado}</span>
+
                     </div>
 
                     {solicitud.estado == 'rechazada' && (
@@ -141,16 +155,31 @@ export default function Ver() {
                             <div style={{ position: 'absolute', right: 5, top: 5 }}><FontAwesomeIcon icon={faTriangleExclamation} size='xl' /></div>
                             <h4>Respuesta de rechazo</h4>
                             <p>{solicitud.respuesta_rechazo} </p>
-                            <h4>Supervisor</h4>
-                            <p>Nombre, falta agregar la relacion</p>
+                            <h4>Supervisor </h4>
+                            <p>{solicitud.id_supervisor?.nombre + ' '} <button style={{ color: 'white', background: 'transparent', border: 'none' }} onClick={() => { navigate(`/usuario/perfil/${solicitud.id_supervisor?.id}`) }}><FontAwesomeIcon icon={faArrowUpRightFromSquare} /></button></p>
                             <h4>Fecha de revision</h4>
                             <p>{new Date(solicitud.fecha_revision as Date).toLocaleString()}</p>
                         </div>
                     )}
+                    {solicitud.estado == 'aprobada' && (
+                        <div style={{
+                            position: 'relative', backgroundColor: 'rgba(0, 122, 0, 0.58)', borderRadius: '5px', padding: 10,
+                            paddingBottom: 20, marginBottom: '10px', color: 'white', boxShadow: '1px 1px 5px rgba(0, 0, 0, 0.53)'
+                        }}>
+                            <div style={{ position: 'absolute', right: 5, top: 5 }}><FontAwesomeIcon icon={faCheck} size='xl' /></div>
+                            <h4 style={{ fontWeight: 200 }}> {'> '}Solicitud aprobada</h4>
+                            <h4>Supervisor </h4>
+                            <p>{solicitud.id_supervisor?.nombre + ' '} <button style={{ color: 'white', background: 'transparent', border: 'none' }} onClick={() => { navigate(`/usuario/perfil/${solicitud.id_supervisor?.id}`) }}><FontAwesomeIcon icon={faArrowUpRightFromSquare} /></button></p>
+                            <h4>Fecha de revision</h4>
+                            <p>{new Date(solicitud.fecha_revision as Date).toLocaleString()}</p>
+
+
+                        </div>)}
                     <hr style={{ opacity: '50%' }} />
                     <h4>ID Solicitud</h4>
                     <p>{solicitud?.id}</p>
                     <h4>Fecha ingreso</h4>
+
                     {solicitud.fecha_ingreso && (
                         <p>{new Date(solicitud.fecha_ingreso).toLocaleDateString()}</p>
                     )}
