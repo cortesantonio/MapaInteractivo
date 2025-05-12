@@ -21,6 +21,8 @@ export default function EscribirResena({ onSubmit, onCancel, idMarcador }: Props
     const { user } = useAuth()
     const navigate = useNavigate()
 
+    
+
     const obtenerFechaChile = () => {
         const ahora = new Date();
         const fechaChile = new Intl.DateTimeFormat('es-CL', {
