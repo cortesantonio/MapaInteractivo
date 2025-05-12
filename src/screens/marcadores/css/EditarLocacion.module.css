@@ -53,7 +53,7 @@
     padding: 25px;
     background-color: white;
     overflow-y: auto;
-    height: 70vh;
+    height: fit-content;
 }
 
 .FormContainer {
