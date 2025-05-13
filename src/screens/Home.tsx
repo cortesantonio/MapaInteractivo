@@ -6,6 +6,8 @@ import BotonEventos from "../components/botoneventos";
 import VerMarcador from "../components/VerMarcador";
 import NavbarUser from "../components/NavbarUser";
 import { useAuth } from "../hooks/useAuth";
+import { faLocationCrosshairs } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 
 
@@ -21,6 +23,7 @@ export default function Home() {
   const [onIndicaciones, setOnIndicaciones] = useState<string[]>([]);
   const { userEstado, signOut } = useAuth()
   const [yaVerificado, setYaVerificado] = useState(false);
+  const [mapacentrado, setMapacentrado] = useState(false);
 
   useEffect(() => {
     if (userEstado === false && !yaVerificado) {
@@ -80,6 +83,9 @@ export default function Home() {
         destinoRuta={destino}
         onUbicacionActiva={handleUbicacionActiva}
         onIndicaciones={setOnIndicaciones}
+        mapacentrado={mapacentrado}
+        setMapacentrado={setMapacentrado}
+
       />
 
       {!isStreetViewActive && (
@@ -99,7 +105,6 @@ export default function Home() {
 
             </div>
 
-
           </div>
 
           <Footer onSeleccionMarcador={(id: number) => {
@@ -115,6 +120,50 @@ export default function Home() {
             onIndicaciones={onIndicaciones}
           />
 
+          <div style={{
+            position: "absolute",
+            bottom: window.innerWidth < 768 ? "20%" : "15%",
+            right: "15px",
+          }}>
+            <button
+              onClick={() => {
+                if (ubicacionActiva) {
+                  setMapacentrado(!mapacentrado);
+                }
+              }}
+              title={
+                !ubicacionActiva
+                  ? "Ubicación desactivada"
+                  : mapacentrado
+                    ? "Desactivar seguimiento"
+                    : "Activar seguimiento"
+              }
+              disabled={!ubicacionActiva}
+              style={{
+                backgroundColor: !ubicacionActiva
+                  ? "#ccc"
+                  : mapacentrado
+                    ? "#4285F4"
+                    : "#fff",
+                border: "none",
+                borderRadius: "5px",
+                boxShadow: "0 1px 4px rgba(0,0,0,0.3)",
+                width: "40px",
+                height: "40px",
+                cursor: ubicacionActiva ? "pointer" : "not-allowed",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                transition: "background-color 0.3s",
+              }}
+            >
+              <FontAwesomeIcon
+                icon={faLocationCrosshairs}
+                color={!ubicacionActiva ? "#888" : mapacentrado ? "#fff" : "#666"}
+                style={{ width: "22px", height: "22px" }}
+              />
+            </button>
+          </div>
 
           {mostrarMarcador && marcadorSeleccionadoId !== null && (
             <div style={estilosMarcador}>

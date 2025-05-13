@@ -21,6 +21,7 @@
   z-index: 3;
 }
 
+
 .titulo {
   font-size: 1.5rem;
   color: #000;
@@ -106,18 +107,36 @@
 }
 
 .reseñas_usuario {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 10px;
   margin-bottom: 10px;
   width: 100%;
+  place-items: center;
 }
 
-.reseñas_usuario button {
-  background-color: #fff;
+.botonAcciones {
+  width: 80%;
+  padding: 0.5rem 1rem;
   border: none;
-  width: 100px;
+  border-radius: 8px;
+  background-color: white;
+  color: #333;
+  font-weight: 400;
   cursor: pointer;
+  transition: all 0.25s ease;
+}
+
+.botonAcciones:hover {
+  border-color: #888;
+  background-color: #f9f9f9;
+}
+
+.botonActivo {
+  color: #248af7;
+  font-weight: 600;
+  background-color: #eef6ff;
+  box-shadow: 0 0 6px rgba(6, 121, 243, 0.3);
 }
 
 .informacion_campos_de_resena {

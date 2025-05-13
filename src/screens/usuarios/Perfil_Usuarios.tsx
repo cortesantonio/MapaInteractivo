@@ -64,7 +64,6 @@ function Perfil_Usuario() {
             discapacidadTipo: discapacidadData?.tipo,
           };
         });
-        console.log(usuariosFormateados)
         setUsuarios(usuariosFormateados);
       }
 
@@ -111,12 +110,6 @@ function Perfil_Usuario() {
   const renderPerfilUsuario = () => {
     return (
       <div className={styles.perfil_info}>
-        <div className={styles.reseñas_usuario}>
-          <button onClick={() => setVistaActual("resenas")}>Reseñas usuario</button>
-          <button onClick={() => setVistaActual("aportes")}>Aportes Usuario</button>
-        </div>
-        <hr className={styles.separador_botones} />
-
         {usuarios.map((usuario) => (
           <div key={usuario.id} className={styles.containerDatos}>
             <div className={styles.containeritemdatos}>
@@ -186,12 +179,6 @@ function Perfil_Usuario() {
   const renderResenasUsuario = () => {
     return (
       <div className={styles.perfil_info}>
-        <div className={styles.reseñas_usuario}>
-          <button onClick={() => setVistaActual("perfil")}>Perfil Usuario</button>
-          <button onClick={() => setVistaActual("aportes")}>Aportes Usuario</button>
-        </div>
-        <hr className={styles.separador_botones} />
-
         {resenas.length > 0 ? (
           <div style={{ maxHeight: "380px", overflowY: "auto", padding: "0 15px" }}>
             {resenas.map((resena) => (
@@ -231,12 +218,6 @@ function Perfil_Usuario() {
   const renderAportesUsuario = () => {
     return (
       <div className={styles.perfil_info}>
-        <div className={styles.reseñas_usuario}>
-          <button onClick={() => setVistaActual("perfil")}>Perfil Usuario</button>
-          <button onClick={() => setVistaActual("resenas")}>Reseñas usuario</button>
-        </div>
-        <hr className={styles.separador_botones} />
-
         {solicitud.length > 0 ? (
           <div style={{ maxHeight: "380px", overflowY: "auto", padding: "0 15px" }}>
             {solicitud.map((aporte) => (
@@ -327,6 +308,34 @@ function Perfil_Usuario() {
             </h2>
           )}
         </div>
+
+        <div className={styles.reseñas_usuario}>
+          <button
+            className={`${styles.botonAcciones} ${vistaActual === "resenas" ? styles.botonActivo : ""}`}
+            style={{ gridColumn: "1" }}
+            onClick={() => setVistaActual("resenas")}
+          >
+            Reseñas usuario
+          </button>
+
+          <button
+            className={`${styles.botonAcciones} ${vistaActual === "perfil" ? styles.botonActivo : ""}`}
+            style={{ gridColumn: "2" }}
+            onClick={() => setVistaActual("perfil")}
+          >
+            Perfil Usuario
+          </button>
+
+          <button
+            className={`${styles.botonAcciones} ${vistaActual === "aportes" ? styles.botonActivo : ""}`}
+            style={{ gridColumn: "3" }}
+            onClick={() => setVistaActual("aportes")}
+          >
+            Aportes Usuario
+          </button>
+        </div>
+
+        <hr className={styles.separador_botones} />
 
         {renderContenido()}
       </div>

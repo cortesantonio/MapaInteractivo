@@ -1,6 +1,4 @@
 import styles from './css/Agregar.module.css'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faReply } from '@fortawesome/free-solid-svg-icons';
 import { useState, useEffect } from 'react';
 import { supabase } from '../../services/supabase';
 import { Tipo_Recinto } from '../../interfaces/Tipo_Recinto';
