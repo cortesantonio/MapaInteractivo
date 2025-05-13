@@ -6,6 +6,8 @@ import { Tipo_Recinto } from '../../interfaces/Tipo_Recinto';
 import { supabase } from '../../services/supabase';
 import { useAuth } from '../../hooks/useAuth';
 import NavbarAdmin from '../../components/NavbarAdmin';
+
+
 interface TipoDeAccesibilidades {
     [tipo: string]: Accesibilidad[];
 }
