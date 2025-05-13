@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { Session, User } from '@supabase/supabase-js'
 import { supabase } from '../services/supabase'
-import { set } from 'date-fns'
+
 
 export const useAuth = () => {
   const [session, setSession] = useState<Session | null>(null)

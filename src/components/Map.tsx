@@ -15,6 +15,8 @@ const CustomMap = ({
   modoViaje,
   onUbicacionActiva,
   onIndicaciones,
+  mapacentrado,
+  setMapacentrado
 }: {
   marcadores: any[],
   SeleccionMarcador: (id: number) => void,
@@ -23,7 +25,9 @@ const CustomMap = ({
   onStreetViewChange?: (isActive: boolean) => void
   modoViaje: 'DRIVING' | 'BICYCLING' | 'WALKING' | 'TRANSIT'
   onUbicacionActiva: (activa: boolean) => void,
-  onIndicaciones: (instrucciones: string[]) => void
+  onIndicaciones: (instrucciones: string[]) => void,
+  mapacentrado: boolean;
+  setMapacentrado: (valor: boolean) => void;
 
 }) => {
 
@@ -125,11 +129,31 @@ const CustomMap = ({
 
   useEffect(() => {
     if (ubicacionUsuario) {
-      onUbicacionActiva(true); 
+      onUbicacionActiva(true);
     } else {
-      onUbicacionActiva(false); 
+      onUbicacionActiva(false);
     }
   }, [ubicacionUsuario, onUbicacionActiva]);
+
+  useEffect(() => {
+    if (mapacentrado && map && ubicacionUsuario) {
+      map.panTo(ubicacionUsuario); 
+    }
+  }, [ubicacionUsuario, mapacentrado, map]);
+
+  useEffect(() => {
+    if (!map) return;
+
+    const listener = map.addListener("dragstart", () => {
+      if (mapacentrado) {
+        setMapacentrado(false); 
+      }
+    });
+
+    return () => {
+      listener.remove();
+    };
+  }, [map, mapacentrado]);
 
 
   return (
@@ -206,7 +230,9 @@ const Map = ({
   modoViaje,
   destinoRuta,
   onUbicacionActiva,
-  onIndicaciones
+  onIndicaciones,
+  mapacentrado,
+  setMapacentrado
 
 }: {
   center?: { lat: number, lng: number },
@@ -216,7 +242,9 @@ const Map = ({
   destinoRuta?: { lat: number, lng: number } | null,
   modoViaje: 'DRIVING' | 'BICYCLING' | 'WALKING' | 'TRANSIT',
   onUbicacionActiva: (activa: boolean) => void,
-  onIndicaciones: (instrucciones: string[]) => void
+  onIndicaciones: (instrucciones: string[]) => void,
+  mapacentrado: boolean;
+  setMapacentrado: (valor: boolean) => void;
 
 }) => {
   const [marcadores, setMarcadores] = useState<any[]>([]);
@@ -278,6 +306,8 @@ const Map = ({
           destinoRuta={destinoRuta}
           onUbicacionActiva={onUbicacionActiva}
           onIndicaciones={onIndicaciones} 
+          mapacentrado={mapacentrado}
+          setMapacentrado={setMapacentrado}
 
         />
       </GoogleMap>
