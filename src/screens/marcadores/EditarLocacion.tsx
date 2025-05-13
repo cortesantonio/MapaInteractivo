@@ -7,6 +7,7 @@ import { Accesibilidad } from '../../interfaces/Accesibilidad';
 import { Tipo_Recinto } from '../../interfaces/Tipo_Recinto';
 import { supabase } from '../../services/supabase';
 import { useNavigate, useParams } from 'react-router-dom';
+import ImagenConFallback from '../../components/ImagenConFallback';
 
 interface TipoDeAccesibilidades {
     [tipo: string]: Accesibilidad[];
@@ -163,8 +164,8 @@ export default function EditarLocacion() {
         <div className={styles.container}>
             <div className={styles.header}>
 
-                <img
-                    src={dataMarcador.url_img}
+                <ImagenConFallback
+                    src={dataMarcador?.url_img}
                     alt="Imagen del recinto"
                     className={styles.imagenMarcador}
                 />

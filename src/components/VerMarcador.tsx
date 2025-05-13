@@ -5,12 +5,13 @@ import { formatDistanceToNow } from 'date-fns';
 import { es } from 'date-fns/locale'; // para español
 import styles from './css/VerMarcador.module.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faShareNodes, faRoute, faCommentDots, faStar, faLocationDot, faPhone, faEarthAmericas, faChevronUp, faChevronDown,faInfo } from '@fortawesome/free-solid-svg-icons';
+import { faShareNodes, faRoute, faCommentDots, faStar, faLocationDot, faPhone, faEarthAmericas, faChevronUp, faChevronDown, faInfo } from '@fortawesome/free-solid-svg-icons';
 import EscribirResena from '../components/EscribirResena';
 import Compartir from './Compartir';
 import { supabase } from '../services/supabase';
 import { Horarios } from '../interfaces/Horarios';
 import { Accesibilidad } from '../interfaces/Accesibilidad';
+import ImagenConFallback from './ImagenConFallback';
 
 interface Props {
     MarcadorSelectId: number;
@@ -228,7 +229,7 @@ export default function VerMarcador({ MarcadorSelectId, CerrarMarcador, establec
                 {cargando ? (
                     <p>Cargando imagen...</p>
                 ) : (
-                    <img
+                    <ImagenConFallback
                         src={Marcador?.url_img}
                         alt="Imagen del recinto"
                         className={styles.imagenMarcador}
@@ -250,11 +251,11 @@ export default function VerMarcador({ MarcadorSelectId, CerrarMarcador, establec
                             // Botones cuando estás en modo Compartir
                             <>
                                 <button onClick={volverAMarcador}>
-                                    <FontAwesomeIcon icon={faInfo} style={{width:"13px"}} className={styles.icon}  /> 
+                                    <FontAwesomeIcon icon={faInfo} style={{ width: "13px" }} className={styles.icon} />
                                     <p>Informacion</p>
                                 </button>
                                 <button onClick={() => {
-                                    establecerIdRutaMarcador(Marcador.id as number); 
+                                    establecerIdRutaMarcador(Marcador.id as number);
                                     CerrarMarcador();
                                 }}>
                                     <FontAwesomeIcon icon={faRoute} className={styles.icon} />
@@ -272,11 +273,11 @@ export default function VerMarcador({ MarcadorSelectId, CerrarMarcador, establec
                             // Botones normales cuando NO estás en modo Compartir
                             <>
                                 <button onClick={() => setMostrarCompartir(true)}>
-                                    <FontAwesomeIcon icon={faShareNodes} className={styles.icon} /> 
+                                    <FontAwesomeIcon icon={faShareNodes} className={styles.icon} />
                                     <p>Compartir</p>
                                 </button>
                                 <button onClick={() => {
-                                    establecerIdRutaMarcador(Marcador.id as number); 
+                                    establecerIdRutaMarcador(Marcador.id as number);
                                     CerrarMarcador();
                                 }}>
                                     <FontAwesomeIcon icon={faRoute} className={styles.icon} />
