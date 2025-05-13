@@ -11,7 +11,7 @@
     height: 100vh;
     overflow-y: auto;
     padding: 0 50px;
-    
+
 }
 
 .acciones {
@@ -42,6 +42,7 @@
 
 .opt {
     display: flex;
+    align-items: center;
     gap: 10px;
 }
 
@@ -59,4 +60,25 @@ form p {
 
 form .labelSeccion {
     font-weight: 500;
+    margin-bottom: 5px;
+
+}
+
+.welcomeMessage {
+    margin-top: 10px;
+    text-align: justify;
+    font-size: 1.2rem;
+    font-weight: 500;
+    color: #333;
+}
+
+.subText {
+    text-align: left;
+    font-size: 1rem;
+    font-weight: 400;
+    color: #555;
+    margin-top: 0;
+    opacity: 0.85;
+    margin-left: 20px;
+    margin-bottom: 20px;
 }

@@ -1,4 +1,4 @@
-import styles from './Ver.module.css'
+import styles from './css/Ver.module.css'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faReply, faTriangleExclamation, faArrowUpRightFromSquare, faCheck } from '@fortawesome/free-solid-svg-icons';
 import { useState } from 'react';

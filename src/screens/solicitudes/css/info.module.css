@@ -259,3 +259,40 @@
     object-fit: contain;
 }
 
+/* Ejemplo para Info.module.css */
+.toast {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  background-color: #323232;
+  color: white;
+  padding: 10px 20px;
+  border-radius: 5px;
+  box-shadow: 0 0 10px rgba(0,0,0,0.2);
+  z-index: 1000;
+  opacity: 1;
+  transition: opacity 1s ease-in-out;
+}
+
+.toast.hide {
+  opacity: 0;
+}
+.confirmButton {
+  background-color: #007BFF;
+  color: white;
+  border: none;
+  padding: 12px 24px;
+  border-radius: 6px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  font-weight: 500;
+}
+
+.confirmButton:hover {
+  background-color: #0056b3;
+}
+
+.confirmButton:active {
+  background-color: #00408d;
+}

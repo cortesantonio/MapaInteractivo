@@ -1,4 +1,4 @@
-import styles from './List.module.css'
+import styles from './css/List.module.css'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faEye, faMagnifyingGlass, faFilter, faSort, faCheck, faX, faInfo } from '@fortawesome/free-solid-svg-icons';
 import { useEffect, useState } from 'react';

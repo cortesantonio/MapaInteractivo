@@ -1,18 +1,22 @@
-import styles from './AgregarSolicitud.module.css'
+import styles from './css/AgregarSolicitud.module.css'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faInfo, faReply } from '@fortawesome/free-solid-svg-icons'
 import { useState, useEffect } from 'react';
-import { Usuarios } from '../../interfaces/Usuarios';
 import { Solicitudes } from '../../interfaces/Solicitudes';
 import { Accesibilidad } from '../../interfaces/Accesibilidad';
 import { supabase } from '../../services/supabase';
 import { Tipo_Recinto } from '../../interfaces/Tipo_Recinto';
 import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../../hooks/useAuth';
+import Info from './Info';
+
+import { faGoogle } from '@fortawesome/free-brands-svg-icons'; // Asegúrate de importar esto
 interface AccesibilidadesPorTipo {
     [tipo: string]: Accesibilidad[];
 }
 
 export default function AgregarSolicitud() {
+    const { user } = useAuth();
     const navigate = useNavigate()
     const [accesibilidades, setAccesibilidades] = useState<AccesibilidadesPorTipo>({});
     const [formData, setFormData] = useState<Partial<Solicitudes>>({
@@ -24,16 +28,11 @@ export default function AgregarSolicitud() {
         accesibilidad_certificada: false,
     });
 
+    const [instruccionesleidas, setInstruccionesLeidas] = useState(false); // semaforo para saber si el usuario leyo las instrucciones
+
+
     const [seleccionadas, setSeleccionadas] = useState<number[]>([]); // ids de accesibilidad seleccionada
 
-    // pensado para obtener el usuario que esta rellenando el formulario o tomar los datos del form y crear el usuario.
-    const [usuario, setUsuario] = useState<Partial<Usuarios>>({
-        correo: '',
-        nombre: '',
-        telefono: 0,
-        genero: '',
-        fecha_nacimiento: new Date(),
-    });
 
     const [tipoRecinto, setTipoRecinto] = useState<Tipo_Recinto[]>(); // almacena los recintos del llamado a la api
 
@@ -48,7 +47,29 @@ export default function AgregarSolicitud() {
 
         fetchTipoRecinto();
     }, []);
+    const [usuario, setUsuario] = useState<any>(null); // Almacena los datos del usuario
 
+    useEffect(() => {
+        // Verifica si hay un usuario cargado
+        if (user?.id) {
+            const fetchUsuario = async () => {
+                const { data, error } = await supabase
+                    .from('usuarios')
+                    .select('*')
+                    .eq('id', user.id) // Usas el id del usuario logueado
+                    .single();
+
+                if (error) {
+                    console.error('Error al obtener usuario:', error);
+                } else {
+                    setUsuario(data); // Actualiza el estado con los datos del usuario
+                    console.log('Usuario:', data);
+                }
+            };
+
+            fetchUsuario();
+        }
+    }, [user]);
 
     useEffect(() => { // LLAMADO A LA API PARA OBTNER TODOAS LAS ACCESIBILIDADES QUE HAY EN LA BASE DE DATOS Y LA CLASIFICA POR TIPO
         const fetchAccesibilidades = async () => {
@@ -90,57 +111,13 @@ export default function AgregarSolicitud() {
 
 
 
-    
-    const [usuarioEncontrado, setUsuarioEncontrado] = useState(false); // SEMAFORO PARA SABER SI EL USUARIO SE ENCONTRO O NO Y ASI SABER CUANDO CREAR EL USUARIO O CUANDO PASAR EL ID
-
-    const handleCorreoBlur = async () => { // AQUI SE BUSCA EL USUARIO POR EL CORREO EN LA BASE DE DATOS, SI EXISTE SE SETEA EN EL FORM Y SE AUTO COMPLETA. SI NO, SE CREA.
-        if (!usuario.correo) return;
-
-        const { data, error } = await supabase
-            .from('usuarios')
-            .select('*')
-            .eq('correo', usuario.correo)
-            .single();
-
-        if (error || !data) {
-            console.warn("Usuario no encontrado");
-            return;
-        }
-        setUsuario({
-            id: data.id,
-            correo: data.correo,
-            nombre: data.nombre,
-            telefono: data.telefono,
-        });
-        setUsuarioEncontrado(true);
-    };
-
     const handleSubmit = async (e: React.FormEvent) => { // SE ENVIAN LOS DATOS A LA BASE DE DATOS. 
         e.preventDefault();
-        let idUsuario = usuario.id;
 
-        if (!usuarioEncontrado) {
-            const { data: newUser, error: userError } = await supabase
-                .from('usuarios')
-                .insert([{
-                    correo: usuario.correo,
-                    nombre: usuario.nombre,
-                    telefono: usuario.telefono,
-                    rol: 'usuario',
-                    activo: true,
-                    fecha_nacimiento: usuario.fecha_nacimiento,
-                    genero: usuario.genero
-                }])
-                .select()
-                .single();
-
-            if (userError) {
-                console.error('Error al insertar usuario:', userError);
-                return;
-            }
-
-            idUsuario = newUser.id;
-            setUsuario({ ...usuario, id: newUser.id });
+        const idUsuario = user?.id;
+        if (!idUsuario) {
+            alert('Error: No se ha encontrado el usuario');
+            return;
         }
 
         const { data: solicitud, error: errrosol } = await supabase
@@ -170,84 +147,87 @@ export default function AgregarSolicitud() {
         navigate(-1);
     };
 
+
+    if (!instruccionesleidas) {
+        return <Info onConfirmarLectura={() => setInstruccionesLeidas(true)} />;
+    }
     return (
         <div className={styles.container}>
             <div className={styles.titulo}>
                 <button style={{ position: "absolute", backgroundColor: 'transparent', border: 'none', cursor: 'pointer', left: "10px" }} onClick={() => { navigate(-1) }}>
                     <FontAwesomeIcon icon={faReply} size='2xl' />
                 </button>
-                <h2 style={{ textAlign: 'center' }}>Colaborar <FontAwesomeIcon icon={faInfo} style={{ border: '1px solid gray', borderRadius: '50%', width: '20px', height: '20px', padding: '5px', color: 'gray',cursor:'pointer'} } onClick={() => { navigate("/info") }}/></h2>
+                <h2 style={{ textAlign: 'center' }}>Colaborar <FontAwesomeIcon icon={faInfo} style={{ border: '1px solid gray', borderRadius: '50%', width: '20px', height: '20px', padding: '5px', color: 'gray', cursor: 'pointer' }} onClick={() => { navigate("/info") }} /></h2>
             </div>
+
+            {
+                user ? (<div>
+
+                    <p className={styles.welcomeMessage}>Hola, {usuario?.nombre}, colabora con la comunidad</p>
+                    <p className={styles.subText}>{'> '} Con esto ayudas a mejorar la accesibilidad en tu ciudad.</p>
+
+
+                </div>) : (
+                    <div style={{
+                        display: 'flex',
+                        flexDirection: 'column',
+                        alignItems: 'center',
+                        gap: '1rem',
+                        backgroundColor: '#f9f9f9',
+                        padding: '2rem',
+                        borderRadius: '10px',
+                        boxShadow: '0 2px 10px rgba(0,0,0,0.1)',
+                        maxWidth: '400px',
+                        margin: '2rem auto'
+                    }}>
+                        <p style={{
+                            fontSize: '1.1rem',
+                            textAlign: 'center',
+                            color: '#333'
+                        }}>
+                            Para colaborar debes estar registrado
+                        </p>
+
+                        <button
+                            onClick={() => { navigate('/login') }}
+                            style={{
+                                display: 'flex',
+                                alignItems: 'center',
+                                gap: '0.5rem',
+                                backgroundColor: '#4285F4',
+                                color: 'white',
+                                border: 'none',
+                                padding: '0.8rem 1.5rem',
+                                fontSize: '1rem',
+                                borderRadius: '5px',
+                                cursor: 'pointer',
+                                fontWeight: 500,
+                                boxShadow: '0 2px 4px rgba(0, 0, 0, 0.2)'
+                            }}
+                        >
+                            <FontAwesomeIcon icon={faGoogle} />
+                            CONTINUAR CON GOOGLE
+                        </button>
+                    </div>
+                )
+            }
+
 
             <form onSubmit={handleSubmit}>
                 <div style={{ display: 'flex', flexDirection: 'column', maxWidth: '500px' }}>
-                    <label className={styles.labelSeccion}>Correo de contacto</label>
-                    <input
-                        type="email"
-                        name="correo"
-                        className={styles.inputText}
-                        value={usuario.correo}
-                        disabled={usuarioEncontrado}
-                        required
-                        onChange={(e) => setUsuario({ ...usuario, correo: e.target.value })}
-                        onBlur={handleCorreoBlur}
-                    />
 
-                    <label className={styles.labelSeccion}>Nombre</label>
-                    <input
-                        type="text"
-                        value={usuario.nombre}
-                        disabled={usuarioEncontrado}
-                        required
-                        onChange={(e) => setUsuario({ ...usuario, nombre: e.target.value })}
-                        className={styles.inputText}
-                        style={{ textTransform: 'uppercase' }}
-
-                    />
-
-                    <label className={styles.labelSeccion} >Teléfono</label>
-                    <input
-                        type="text"
-                        value={usuario.telefono}
-                        disabled={usuarioEncontrado}
-                        required
-                        className={styles.inputText}
-                        onChange={(e) => setUsuario({ ...usuario, telefono: Number(e.target.value) })}
-                    />
-                    {usuarioEncontrado ? (
-                        <p style={{ color: 'green', fontWeight: 300, textAlign: 'right', fontSize: '0.8rem' }}>{"> "}Usuario encontrado</p>
-                    ) : (
-                        <>
-
-                            <label className={styles.labelSeccion}>Genero</label>
-                            <select
-                                name="genero"
-                                className={styles.inputText}
-                                value={usuario.genero}
-                                onChange={(e) => setUsuario({ ...usuario, genero: e.target.value })}
-                            >
-                                <option value="">Selecciona un género</option>
-                                <option value="masculino">Masculino</option>
-                                <option value="femenino">Femenino</option>
-                                <option value="otro">Otro</option>
-                            </select>
-
-                            <label className={styles.labelSeccion}>fecha de nacimiento</label>
-
-                            <input type="date" name="fecha_nacimiento" className={styles.inputText} onChange={(e) => setUsuario({ ...usuario, fecha_nacimiento: new Date(e.target.value) })} />
-
-
-                        </>
-                    )}
-
-                    <label className={styles.labelSeccion}>Nombre Locación</label>
+                    <label className={styles.labelSeccion}>Nombre Locación <span style={{ fontSize: '0.8rem', color: 'gray', fontStyle: 'italic' }}> - ¿Como se llama su negocio?</span></label>
                     <input
                         type="text"
                         name="nombre_locacion"
                         className={styles.inputText}
                         value={formData.nombre_locacion}
                         onChange={handleInputChange}
+
+                        disabled={!usuario?.nombre} // Deshabilitar el campo si no hay usuario
+
                         required
+
                     />
                     <label className={styles.labelSeccion}>Tipo de Recinto</label>
                     <select
@@ -256,6 +236,8 @@ export default function AgregarSolicitud() {
                         required
                         value={formData.tipo_recinto || ''}
                         onChange={handleSelectChange}
+                        disabled={!usuario?.nombre} // Deshabilitar el campo si no hay usuario
+
                     >
                         <option value="">Selecciona un tipo de recinto</option>
                         {tipoRecinto?.map((tipo) => (
@@ -263,7 +245,12 @@ export default function AgregarSolicitud() {
                         ))}
                     </select>
 
-                    <label className={styles.labelSeccion}>Mensaje</label>
+                    <label className={styles.labelSeccion}>
+                        Mensaje
+                        <span style={{ fontSize: '0.8rem', color: 'gray', fontStyle: 'italic' }}>
+                            {' '} - Describa brevemente la accesibilidad de su negocio.
+                        </span>
+                    </label>
                     <input
                         type="text"
                         name="descripcion"
@@ -271,8 +258,15 @@ export default function AgregarSolicitud() {
                         className={styles.inputText}
                         value={formData.descripcion}
                         onChange={handleInputChange}
+                        disabled={!usuario?.nombre} // Deshabilitar el campo si no hay usuario
+
                     />
-                    <label className={styles.labelSeccion}>Dirección</label>
+                    <label className={styles.labelSeccion}>
+                        Dirección
+                        <span style={{ fontSize: '0.8rem', color: 'gray', fontStyle: 'italic' }}>
+                            {' '} - ¿Dónde está ubicado su negocio? (Dirección completa)
+                        </span>
+                    </label>
                     <input
                         type="text"
                         name="direccion"
@@ -280,20 +274,24 @@ export default function AgregarSolicitud() {
                         value={formData.direccion}
                         onChange={handleInputChange}
                         required
+                        disabled={!usuario?.nombre} // Deshabilitar el campo si no hay usuario
+
                     />
                 </div>
 
                 <div className={styles.opt}>
-                    <label htmlFor='cumple_ley_21015' style={{ fontWeight: 500 }}>Cumple con la ley nro. 21015</label>
-                    <input type="checkbox" name="cumple_ley_21015" id='cumple_ley_21015' onChange={handleInputChange} />
+                    <label htmlFor='cumple_ley_21015' style={{ fontWeight: 500, display: 'flex', flexDirection: 'column' }}>
+                        <p>Cumple con la <a target='_blank' href="https://www.bcn.cl/leychile/navegar?idNorma=1103997" style={{ color: 'black', fontWeight: 500, textTransform: 'capitalize' }}>ley nro. 21015 </a></p>
+                        <span style={{ fontSize: '0.8rem', color: 'gray', fontStyle: 'italic', maxWidth: '200px', }}>
+                            - Indique si su negocio cumple con  la inclusion al mundo laboral.
+                        </span>
+                    </label>
+                    <input type="checkbox" name="cumple_ley_21015" id='cumple_ley_21015' onChange={handleInputChange} disabled={!usuario?.nombre} // Deshabilitar el campo si no hay usuario
+                    />
 
                 </div>
 
-                <div className={styles.opt}>
-                    <label htmlFor='accesibilidad_certificada' style={{ fontWeight: 500 }}>Accesibilidad certificada -{">"} mover a marcador</label>
-                    <input type="checkbox" name="accesibilidad_certificada" id='accesibilidad_certificada' onChange={handleInputChange} />
 
-                </div>
 
                 {Object.entries(accesibilidades).map(([tipo, lista]) => (
                     <div key={tipo}>
@@ -306,26 +304,40 @@ export default function AgregarSolicitud() {
                                     checked={seleccionadas.includes(acc.id)}
                                     onChange={() => handleCheckboxChange(acc.id)}
                                     id={acc.nombre}
+                                    disabled={!usuario?.nombre} // Deshabilitar el campo si no hay usuario
+
                                 />
-                                <label htmlFor={acc.nombre} >{acc.nombre}</label>
+                                <label htmlFor={acc.nombre} style={{ maxWidth: '400px' }} >{acc.nombre}</label>
                             </div>
                         ))}
                     </div>
                 ))}
 
-                <label className={styles.labelSeccion}>Documentación (opcional)</label>
-                {/* <input
-                type="file"
-                onChange={(e) => {
-                    if (e.target.files && e.target.files[0]) {
-                        setFormData({ ...formData, documentacion: e.target.files[0].name }); //subir a storage
-                    }
-                }}
-            /> */}
+
+                <div style={{ marginTop: '20px', display: 'flex', flexDirection: 'column' }}>
+                    <label className={styles.labelSeccion} style={{}}>
+                        Documentación
+                    </label>
+
+                    <input
+                        type="file"
+                        onChange={(e) => {
+                            if (e.target.files && e.target.files[0]) {
+                                setFormData({ ...formData, documentacion: e.target.files[0].name }); //subir a storage
+                            }
+                        }}
+                        disabled={!usuario?.nombre} // Deshabilitar el campo si no hay usuario
+
+                    />
+                    <span style={{ fontSize: '0.8rem', color: 'gray', fontStyle: 'italic' }}>
+                        {' '} - Suba una foto o documento que respalde su solicitud. </span>
+                </div>
+
+
 
                 <div className={styles.acciones}>
                     <button type="reset" style={{ color: 'red', background: 'transparent' }} onClick={() => { navigate(-1) }} >Cancelar</button>
-                    <button type="submit" >Enviar Solicitud</button>
+                    <button type="submit" disabled={!usuario?.nombre} >Enviar Solicitud</button>
                 </div>
             </form>
 
