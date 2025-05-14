@@ -67,7 +67,6 @@ export default function VerMarcador({ MarcadorSelectId, CerrarMarcador, establec
                     };
 
                     setMarcador(marcadorFormateado);
-                    console.log(data)
                 }
 
                 if (marcador.horarios && marcador.horarios.length > 0) {

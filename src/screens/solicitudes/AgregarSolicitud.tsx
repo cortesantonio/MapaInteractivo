@@ -1,7 +1,7 @@
 import styles from './css/AgregarSolicitud.module.css'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faInfo, faReply } from '@fortawesome/free-solid-svg-icons'
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { Solicitudes } from '../../interfaces/Solicitudes';
 import { Accesibilidad } from '../../interfaces/Accesibilidad';
 import { supabase } from '../../services/supabase';
@@ -9,15 +9,20 @@ import { Tipo_Recinto } from '../../interfaces/Tipo_Recinto';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../hooks/useAuth';
 import Info from './Info';
+import { faGoogle } from '@fortawesome/free-brands-svg-icons'; 
+import { useLoadScript, Autocomplete, } from "@react-google-maps/api";
+import { APIProvider, Map as VisMap, AdvancedMarker } from "@vis.gl/react-google-maps";
 
-import { faGoogle } from '@fortawesome/free-brands-svg-icons'; // Asegúrate de importar esto
 interface AccesibilidadesPorTipo {
     [tipo: string]: Accesibilidad[];
 }
 
+const LIBRARIES: ("places")[] = ['places'];
+
 export default function AgregarSolicitud() {
     const { user } = useAuth();
     const navigate = useNavigate()
+    const apiKey = import.meta.env.VITE_GOOGLE_APIKEY;
     const [accesibilidades, setAccesibilidades] = useState<AccesibilidadesPorTipo>({});
     const [formData, setFormData] = useState<Partial<Solicitudes>>({
         nombre_locacion: '',
@@ -63,7 +68,6 @@ export default function AgregarSolicitud() {
                     console.error('Error al obtener usuario:', error);
                 } else {
                     setUsuario(data); // Actualiza el estado con los datos del usuario
-                    console.log('Usuario:', data);
                 }
             };
 
@@ -120,6 +124,11 @@ export default function AgregarSolicitud() {
             return;
         }
 
+        if (!direccionValida) {
+            alert('Por favor, selecciona una dirección desde las sugerencias de Google Places.');
+            return;
+        }
+
         const { data: solicitud, error: errrosol } = await supabase
             .from('solicitudes')
             .insert({
@@ -146,6 +155,20 @@ export default function AgregarSolicitud() {
         alert('Solicitud enviada correctamente');
         navigate(-1);
     };
+
+    const { isLoaded, loadError } = useLoadScript({
+        googleMapsApiKey: apiKey,
+        libraries: LIBRARIES,
+    });
+
+
+    const [autocomplete, setAutocomplete] = useState<google.maps.places.Autocomplete | null>(null);
+    const [position, setPosition] = useState<{ lat: number; lng: number } | null>(null);
+    const [direccionValida, setDireccionValida] = useState(false);
+    const inputRef = useRef<HTMLInputElement>(null);
+
+    if (loadError) return <div>Error cargando Places</div>;
+    if (!isLoaded) return <div>Cargando Autocomplete...</div>;
 
 
     if (!instruccionesleidas) {
@@ -221,9 +244,7 @@ export default function AgregarSolicitud() {
                         className={styles.inputText}
                         value={formData.nombre_locacion}
                         onChange={handleInputChange}
-
                         disabled={!usuario?.nombre} // Deshabilitar el campo si no hay usuario
-
                         required
 
                     />
@@ -252,12 +273,11 @@ export default function AgregarSolicitud() {
                     <input
                         type="text"
                         name="descripcion"
-                        required
                         className={styles.inputText}
                         value={formData.descripcion}
                         onChange={handleInputChange}
                         disabled={!usuario?.nombre} // Deshabilitar el campo si no hay usuario
-
+                        required
                     />
                     <label className={styles.labelSeccion}>
                         Dirección
@@ -265,16 +285,68 @@ export default function AgregarSolicitud() {
                             {' '} - ¿Dónde está ubicado su negocio? (Dirección completa)
                         </span>
                     </label>
-                    <input
-                        type="text"
-                        name="direccion"
-                        className={styles.inputText}
-                        value={formData.direccion}
-                        onChange={handleInputChange}
-                        required
-                        disabled={!usuario?.nombre} // Deshabilitar el campo si no hay usuario
+                    <Autocomplete
+                        onLoad={(ac) => setAutocomplete(ac)}
+                        onPlaceChanged={() => {
+                            if (!autocomplete) return;
+                            const place = autocomplete.getPlace();
+                            if (place.geometry?.location) {
+                                const lat = place.geometry.location.lat();
+                                const lng = place.geometry.location.lng();
+                                setPosition({ lat, lng }); 
+                                setDireccionValida(true);
+                                
+                                const nuevaDireccion = place.formatted_address || '';
+                                setFormData((prev) => ({
+                                    ...prev,
+                                    direccion: nuevaDireccion,
+                                }));
 
-                    />
+                                if (inputRef.current) {
+                                    inputRef.current.value = nuevaDireccion;
+                                }
+                            }
+                        }}
+                        options={{
+                            types: ['address'],
+                            fields: ['geometry', 'formatted_address'],
+                            componentRestrictions: { country: 'cl' },
+                        }}
+                    >
+                        <input
+                            ref={inputRef}
+                            type="text"
+                            name="direccion"
+                            placeholder="Escribe una dirección…"
+                            className={styles.inputText}
+                            value={formData.direccion}
+                            onChange={(e) => {
+                                handleInputChange(e);
+                                setDireccionValida(false);
+                                setPosition(null); 
+                            }}
+                            style={{width:'100%', padding:'0 10px'}}
+                            required
+                            disabled={!usuario?.nombre} // Deshabilitar el campo si no hay usuario
+                        />
+                    </Autocomplete>
+
+                    <APIProvider apiKey={apiKey}>
+                        {position && (
+                            <VisMap
+                                mapId="bf51a910020fa25a"
+                                center={position} 
+                                defaultZoom={16}
+                                disableDefaultUI={true}
+                                zoomControl={true}
+                                gestureHandling="greedy"
+                                keyboardShortcuts={false}
+                                style={{ width: '100%', height: '200px' }}
+                            >
+                                <AdvancedMarker position={position} />
+                            </VisMap>
+                        )}
+                    </APIProvider>
                 </div>
 
                 <div className={styles.opt}>

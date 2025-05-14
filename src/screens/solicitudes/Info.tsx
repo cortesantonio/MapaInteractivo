@@ -29,7 +29,7 @@ import Especificacion_Señalizacion_Discapacitados_Visual_16 from "../../assets/
 import Especificacion_Zona_de_Calma_17 from "../../assets/Especificacion_Zona_de_Calma_17_.webp";
 
 type InfoProps = {
-  onConfirmarLectura: () => void;
+  onConfirmarLectura?: () => void;
 };
 
 function Info({ onConfirmarLectura }: InfoProps) {
