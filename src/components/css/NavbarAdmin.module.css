@@ -1,14 +1,14 @@
 .container {
     width: 100%;
-    display: flex;
-    flex-direction: row;
-    justify-content: start;
     align-items: center;
-    gap: 25px;
-    padding-left: 25px;
-    padding-top: 10px;
-    padding-bottom: 10px;
+    padding: 10px 25px;
     background-color: rgba(0, 0, 0, 0.068);
+}
+
+.leftSection {
+    display: flex;
+    align-items: center;
+    gap: 15px;
 }
 
 .boxIcon {
@@ -22,6 +22,10 @@
     align-items: center;
 }
 
+.InfoUser {
+    width: 150px;
+}
+
 .boxIcon img {
     width: 40px;
     height: 40px;
@@ -33,4 +37,86 @@
     bottom: 0px;
     right: -12px;
     color: rgb(0, 0, 0);
+}
+
+.ButtonCruds {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    padding-top: 10px;
+    padding-bottom: 10px;
+}
+
+.ButtonCruds button {
+    font-size: 18px;
+    padding: 10px 25px;
+    border: none;
+    cursor: pointer;
+    align-items: center;
+    display: flex;
+    gap: 5px;
+}
+
+.navMenuContainer {
+    display: flex;
+    flex: 1;
+    width: 100%;
+    justify-content: space-between;
+}
+
+.ButtonBars {
+    display: none;
+    background: transparent;
+    border: none;
+    padding: 25px;
+    cursor: pointer;
+    margin-left: auto;
+}
+
+@media screen and (max-width:1084px) {
+    .container {
+        flex-wrap: wrap;
+        position: relative;
+    }
+    .ButtonBars {
+        display: block;
+    }
+    .navMenuContainer {
+        position: absolute;
+        top: 100%;
+        left: 0;
+        width: 100%;
+        background-color: rgba(34, 33, 33, 0.9);
+        max-height: 0;
+        overflow: hidden;
+        transition: max-height 0.3s ease-in-out;
+        z-index: 100
+    }
+    .menuOpen {
+        max-height: 300px;
+    }
+    .ButtonCruds {
+        flex-direction: column;
+        width: 100%;
+        padding: 10px 0;
+        gap: 0;
+    }
+    .ButtonCruds div {
+        width: 100%;
+    }
+    .ButtonCruds button {
+        width: 100%;
+        text-align: left;
+        padding: 15px 25px;
+        color: white;
+        background-color: transparent;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        transition: background-color 0.2s;
+    }
+    .ButtonCruds button:hover {
+        background-color: rgba(255, 255, 255, 0.1);
+    }
 }
