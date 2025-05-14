@@ -53,7 +53,7 @@ export default function EditarAccesibilidad({ accesibilidadId, onCancel, onUpdat
             return;
         }
 
-        const { data, error } = await supabase
+        const { error } = await supabase
             .from('accesibilidad')
             .update({
                 tipo: formData.tipo,

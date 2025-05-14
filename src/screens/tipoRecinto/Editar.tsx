@@ -49,7 +49,7 @@ export default function EditarTipoRecinto({ idTipoRecinto, onCancel, onUpdate }:
             return;
         }
 
-        const { data, error } = await supabase
+        const {  error } = await supabase
             .from('tipo_recinto')
             .update({
                 tipo: formData.tipo,
