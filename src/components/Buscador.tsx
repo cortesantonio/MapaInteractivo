@@ -4,6 +4,8 @@ import { faFilter, faFilterCircleXmark, faLocationDot } from "@fortawesome/free-
 import styles from "./css/Buscador.module.css";
 import { supabase } from "../services/supabase";
 import { Accesibilidad } from "../interfaces/Accesibilidad";
+import { useTheme } from "../components/Footer/Modo_Nocturno";
+
 interface Marcador {
     id: number;
     nombre: string;
@@ -16,23 +18,20 @@ interface BuscadorProps {
 }
 
 function Buscador({ onSeleccionMarcador }: BuscadorProps) {
-
+    const { modoNocturno } = useTheme();
     const [filtroIsVisible, setFiltroIsVisible] = useState(false);
     const [width, setWidth] = useState(window.innerWidth <= 768 ? "65%" : "300px");
     const [height, setHeight] = useState("0px");
     const [opacity, setOpacity] = useState(0);
     const [displayFiltro, setDisplayFiltro] = useState("none");
     const [filtrosActivos, setFiltrosActivos] = useState<Record<string, boolean>>({});
-
     const [marcadores, setMarcadores] = useState<Marcador[]>([]);
     const [resultados, setResultados] = useState<Marcador[]>([]);
     const [busqueda, setBusqueda] = useState<string>("");
     const [opcionesAccesibilidad, setOpcionesAccesibilidad] = useState<Accesibilidad[]>([]);
 
-
     useEffect(() => {
         const fetchMarcadores = async () => {
-            // 1. Traer marcadores y relaciones con accesibilidad
             const { data: marcadoresData, error: marcadoresError } = await supabase
                 .from('marcador')
                 .select(`
@@ -46,7 +45,6 @@ function Buscador({ onSeleccionMarcador }: BuscadorProps) {
                     )
                 `).eq('activo', true);
 
-            // 2. Traer accesibilidades
             const { data: accesibilidadesData, error: accesibilidadesError } = await supabase
                 .from('accesibilidad')
                 .select('id, nombre, tipo');
@@ -56,7 +54,6 @@ function Buscador({ onSeleccionMarcador }: BuscadorProps) {
                 return;
             }
 
-            // 3. Formatear marcadores
             const marcadoresFormateados = marcadoresData.map((item: any) => ({
                 id: item.id,
                 nombre: item.nombre_recinto,
@@ -64,7 +61,6 @@ function Buscador({ onSeleccionMarcador }: BuscadorProps) {
                 filtros: item.accesibilidad_marcador.map((am: any) => am.accesibilidad.nombre)
             }));
 
-            // 4. Inicializar filtros activos con todos en true. OPCIONAL, PARA DESPUES DEJARLE COMO PREDETERMINADO SI EL USUARIO TIENE DISCAPACIDAD REGISTRADA.
             const filtrosIniciales: Record<string, boolean> = {};
             accesibilidadesData.forEach((a) => {
                 filtrosIniciales[a.nombre] = false;
@@ -78,8 +74,6 @@ function Buscador({ onSeleccionMarcador }: BuscadorProps) {
 
         fetchMarcadores();
     }, []);
-
-
 
     useEffect(() => {
         const handleResize = () => {
@@ -96,7 +90,6 @@ function Buscador({ onSeleccionMarcador }: BuscadorProps) {
             [filtro]: !prev[filtro]
         }));
     };
-
 
     useEffect(() => {
         const texto = busqueda.toLowerCase();
@@ -119,7 +112,6 @@ function Buscador({ onSeleccionMarcador }: BuscadorProps) {
         setResultados(filtrados);
     }, [busqueda, marcadores, filtrosActivos]);
 
-
     const ampliarBuscador = () => {
         if (filtroIsVisible) {
             setHeight("0px");
@@ -136,22 +128,23 @@ function Buscador({ onSeleccionMarcador }: BuscadorProps) {
         }
     };
 
-
-
-
     return (
-        <div className={styles.container}
+        <div className={`${styles.container} ${modoNocturno ? styles.darkMode : ''}`}
             style={{
                 width: width,
                 transition: "width 0.3s ease",
             }}
         >
-            <div
-                className={styles.distribucionContainer}>
-                <FontAwesomeIcon icon={faLocationDot} size="xl" />
+            <div style={{backgroundColor: modoNocturno ? "#2d2d2d" : ""}} className={styles.distribucionContainer}>
+                <FontAwesomeIcon 
+                    icon={faLocationDot} 
+                    size="xl" 
+                    style={{ color: modoNocturno ? "red" : "" }} 
+                />
                 <input
                     type="text"
-                    className={styles.inpBuscar}
+                    className={`${styles.inpBuscar}`}
+                    style={{backgroundColor:modoNocturno ? "#2d2d2d" : "", color: modoNocturno ? "white": ""}}
                     placeholder="Buscador"
                     onChange={(e) => setBusqueda(e.target.value)}
                     value={busqueda}
@@ -161,11 +154,10 @@ function Buscador({ onSeleccionMarcador }: BuscadorProps) {
                     {filtroIsVisible ? (
                         <FontAwesomeIcon icon={faFilterCircleXmark} size="lg" style={{ color: "red" }} />
                     ) : (
-                        <FontAwesomeIcon icon={faFilter} size="lg" style={{ color: "black" }} />
+                        <FontAwesomeIcon icon={faFilter} size="lg" style={{ color: modoNocturno ? "#888" : "black" }} />
                     )}
                 </button>
             </div>
-
 
             {filtroIsVisible && (
                 <div
@@ -174,19 +166,20 @@ function Buscador({ onSeleccionMarcador }: BuscadorProps) {
                         height: height,
                         opacity: opacity,
                         transition: "height 0.3s ease, opacity 0.3s ease",
-                        backgroundColor: "white",
+                        backgroundColor: modoNocturno ? "#333" : "white",
                         marginTop: '10px',
                         borderRadius: '15px',
                         padding: '15px',
                         display: displayFiltro
-
                     }}
                 >
                     <div style={{ textAlign: "left" }}>
-                        <p style={{ color: "black", fontWeight: 550 }}>Filtros de Accesibilidad</p>
+                        <p style={{ color: modoNocturno ? "white" : "black", fontWeight: 550 }}>
+                            Filtros de Accesibilidad
+                        </p>
                         {opcionesAccesibilidad.map((acces) => (
                             <div key={acces.id}>
-                                <label style={{ color: "black" }}>
+                                <label style={{ color: modoNocturno ? "white" : "black" }}>
                                     <input
                                         type="checkbox"
                                         checked={filtrosActivos[acces.nombre] || false}
@@ -199,20 +192,29 @@ function Buscador({ onSeleccionMarcador }: BuscadorProps) {
                         ))}
                     </div>
                 </div>
-
             )}
 
             {busqueda.length > 0 && (
                 <div style={{
-                    marginTop: "10px", textAlign: "left", maxHeight: "200px", overflowY: "auto",
-                    backgroundColor: 'white', borderRadius: '10px', padding: '10px'
+                    marginTop: "10px", 
+                    textAlign: "left", 
+                    maxHeight: "200px", 
+                    overflowY: "auto",
+                    backgroundColor: modoNocturno ? '#333' : 'white', 
+                    borderRadius: '10px', 
+                    padding: '10px',
+                    color: modoNocturno ? 'white' : 'black'
                 }}>
                     <p>Resultados</p>
-                    <hr />
+                    <hr style={{ borderColor: modoNocturno ? '#555' : '#ccc' }} />
                     {resultados.map((item) => (
                         <div
                             key={item.id}
-                            style={{ padding: "5px 0", borderBottom: "1px solid #ccc", cursor: "pointer" }}
+                            style={{ 
+                                padding: "5px 0", 
+                                borderBottom: `1px solid ${modoNocturno ? '#555' : '#ccc'}`, 
+                                cursor: "pointer" 
+                            }}
                             onClick={() => {
                                 onSeleccionMarcador(item.id);
                                 setFiltroIsVisible(false);
@@ -225,8 +227,7 @@ function Buscador({ onSeleccionMarcador }: BuscadorProps) {
                     ))}
                 </div>
             )}
-        </div >
-
+        </div>
     );
 }
 
