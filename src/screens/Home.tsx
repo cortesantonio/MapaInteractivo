@@ -6,6 +6,7 @@ import BotonEventos from "../components/botoneventos";
 import VerMarcador from "../components/VerMarcador";
 import NavbarUser from "../components/NavbarUser";
 import { useAuth } from "../hooks/useAuth";
+import { ThemeProvider } from "../components/Footer/Modo_Nocturno";
 import { faLocationCrosshairs } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
@@ -71,8 +72,8 @@ export default function Home() {
   };
 
   return (
+<ThemeProvider>
     <div style={{ width: '100%', height: '100vh', position: 'relative' }}>
-
       <Map
         onSeleccionMarcador={(id: number) => {
           setMarcadorSeleccionadoId(id);
@@ -179,5 +180,6 @@ export default function Home() {
       )
       }
     </div >
+  </ThemeProvider>
   );
 }

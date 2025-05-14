@@ -3,6 +3,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faLocationPin, faLocationCrosshairs, faCar, faPersonWalking, faClockRotateLeft, faCircleXmark, faPersonBiking, faBus } from "@fortawesome/free-solid-svg-icons";
 import { supabase } from '../../services/supabase';
 import { useState, useEffect } from 'react';
+import { useTheme } from "./Modo_Nocturno";
 import { useAuth } from "../../hooks/useAuth";
 
 
@@ -38,6 +39,7 @@ export default function TrazadoRuta({
     const [mostrarResultados, setMostrarResultados] = useState(false);
     const [destinoEstablecido, setDestinoEstablecido] = useState<boolean>(false);
     const [modoViajeActual, setModoViajeActual] = useState<'DRIVING' | 'BICYCLING' | 'WALKING' | 'TRANSIT'>('DRIVING');
+    const {modoNocturno} = useTheme ();
 
 
     useEffect(() => {
@@ -171,6 +173,7 @@ export default function TrazadoRuta({
                             </div>
                             <div style={{ position: "relative", width: "100%" }}>
                             <input
+                                    style={{color: modoNocturno ? "white":""}}
                                     type="text"
                                     placeholder="Destino"
                                     className={styles.Input}
@@ -190,7 +193,7 @@ export default function TrazadoRuta({
                                     <div style={{
                                         position: "absolute",
                                         width: "100%",
-                                        backgroundColor: 'white',
+                                        backgroundColor: modoNocturno ? "#2d2d2d" : 'white',
                                         borderRadius: '10px',
                                         height: 'auto',
                                         padding: '10px',
@@ -230,7 +233,7 @@ export default function TrazadoRuta({
 
                     <div className={styles.PositionIcons}>
                         <button className={styles.ButttonIcons} onClick={() => handleCambiarModoViaje('DRIVING')}>
-                            <FontAwesomeIcon icon={faCar} size="lg" style={{ color: modoViajeActual === 'DRIVING' ? 'rgb(75, 127, 241)' : 'black' }}/>
+                            <FontAwesomeIcon icon={faCar} size="lg" style={{ color: modoViajeActual === 'DRIVING' ? 'rgb(75, 127, 241)' : 'black'  }}/>
                         </button>
                         <button className={styles.ButttonIcons}>
                             <FontAwesomeIcon icon={faBus} size="lg" style={{ color: "gray" }} />
@@ -248,11 +251,11 @@ export default function TrazadoRuta({
                     {/* Desde aqui en adelante realizar la funcion correspondiente con la tabla de busquedas */}
                     {(!ubicacionActiva || !destinoEstablecido) ? (
                         <div style={{ marginTop: "15px" }}>
-                            <h4 className={styles.TituloDestin}>
+                            <h4 style={{color:modoNocturno ? "#fff" : ""}} className={styles.TituloDestin}>
                                 DESTINOS RECIENTES
                             </h4>
                             {!destinosRecientes ? (
-                                <p className={styles.MensajeP}>No hay Destinos Recientes</p>
+                                <p style={{color:modoNocturno ? "#fff" : ""}} className={styles.MensajeP}>No hay Destinos Recientes</p>
                             ) : (
                                 busquedasRecientes.map((busquedas, index) => (
                                     <div key={index} className={styles.ContenInfo} onClick={() => onSeleccionMarcadorRecientes(busquedas.id_marcador?.id)}>
@@ -284,14 +287,14 @@ export default function TrazadoRuta({
                             <div key={index} className={styles.ContenInfo}>
                               <div>
                                 <p
-                                  style={{ margin: "0", fontWeight: "bold", color: "black" }}
+                                  style={{ margin: "0", fontWeight: "bold", color: modoNocturno ? "white" : "black" }}
                                   dangerouslySetInnerHTML={{ __html: instruccion }}
                                 />
                               </div>
                             </div>
                           ))
                         ) : (
-                          <p className={styles.MensajeP}>No hay instrucciones disponibles</p>
+                          <p style={{color:modoNocturno ? "#fff" : ""}} className={styles.MensajeP}>No hay instrucciones disponibles</p>
                         )}
 
                         </div>

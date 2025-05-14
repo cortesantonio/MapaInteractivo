@@ -2,6 +2,8 @@ import styles from "./css/Microfono.module.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCircleXmark } from "@fortawesome/free-solid-svg-icons";
 import Reconocimiento from "../../components/Footer/reconocimientodevoz";
+import { useTheme } from "./Modo_Nocturno";
+
 
 
 export default function Microfono({
@@ -15,6 +17,9 @@ export default function Microfono({
     panelActivo: string;
     activarReconocimiento: boolean;
 }) {
+
+    const {modoNocturno} = useTheme ();
+
     return (
         <div>
             {panelActivo === "microphone" && ( //Vista de la funcion que realiza el Microphone
@@ -26,7 +31,7 @@ export default function Microfono({
                         </button>
                     )}
 
-                    <h3 className={styles.Titulo}>Te Escucho ¿Donde Quieres Ir...?</h3>
+                    <h3 style={{color: modoNocturno ? "#fff" : ""}} className={styles.Titulo}>Te Escucho ¿Donde Quieres Ir...?</h3>
 
                     <div className={styles.MicroActive}>
                         <Reconocimiento activarReconocimiento={activarReconocimiento} />

@@ -7,10 +7,12 @@ import {
   faLocationDot,
 } from "@fortawesome/free-solid-svg-icons";
 import useGetCalendario from "../hooks/GetCalendario";
+import { useTheme } from "../components/Footer/Modo_Nocturno";
 
 function BotonEventos() {
   const [EventoIsVisible, setEventoIsVisible] = useState(false);
   const { events, error } = useGetCalendario();
+  const {modoNocturno} = useTheme ();
 
   const toggleEventos = () => {
     setEventoIsVisible((prev) => !prev);
@@ -28,8 +30,8 @@ function BotonEventos() {
       <button
         onClick={toggleEventos}
         style={{
-          background: "white",
-          border: "1px solid #ccc",
+          background: modoNocturno ? "#2d2d2d" : "white",
+          border: modoNocturno ? "none" :  "1px solid #ccc",
           borderRadius: "5px",
           padding: "8px",
           display: "flex",
@@ -38,13 +40,13 @@ function BotonEventos() {
           cursor: "pointer",
         }}
       >
-        <FontAwesomeIcon icon={faCalendar} style={{ color: "black" }} />
-        <p style={{ margin: 0, color: "black", fontSize: "1rem" }}>Eventos</p>
+        <FontAwesomeIcon icon={faCalendar} style={{ color: modoNocturno ? "white": "black" }} />
+        <p style={{ margin: 0, color: modoNocturno ? "white" : "black", fontSize: "1rem" }}>Eventos</p>
       </button>
 
       <div
         style={{
-          backgroundColor: "white",
+          backgroundColor: modoNocturno ? "#2d2d2d" : "white",
           borderRadius: "5px",
           overflow: "hidden",
           width: window.innerWidth < 768 ? "85%" : "300px",
@@ -65,8 +67,8 @@ function BotonEventos() {
                 gap: "5px",
               }}
             >
-              <FontAwesomeIcon icon={faAngleUp} size="2x" style={{ color: "black" }} />
-              <p style={{ margin: 0, color: "black", fontSize: "1rem" }}>Ocultar</p>
+              <FontAwesomeIcon icon={faAngleUp} size="2x" style={{ color: modoNocturno ? "#fff" :"black" }} />
+              <p style={{ margin: 0, color: modoNocturno ? "white" : "black", fontSize: "1rem" }}>Ocultar</p>
             </button>
 
             {error ? (
@@ -124,7 +126,7 @@ function BotonEventos() {
                           marginTop: "15px",
                         }}
                       >
-                        <FontAwesomeIcon icon={faCalendar} size="xl" style={{ color: "black" }} />
+                        <FontAwesomeIcon icon={faCalendar} size="xl" style={{ color: modoNocturno ? "#fff" : "black" }} />
                       </div>
                       <div
                         style={{
