@@ -1,6 +1,6 @@
 import styles from './css/AgregarSolicitud.module.css'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faInfo, faReply } from '@fortawesome/free-solid-svg-icons'
+import { faInfo, faReply, faUpload } from '@fortawesome/free-solid-svg-icons'
 import { useState, useEffect, useRef } from 'react';
 import { Solicitudes } from '../../interfaces/Solicitudes';
 import { Accesibilidad } from '../../interfaces/Accesibilidad';
@@ -32,14 +32,17 @@ export default function AgregarSolicitud() {
         cumple_ley_21015: false,
         accesibilidad_certificada: false,
     });
-
     const [instruccionesleidas, setInstruccionesLeidas] = useState(false); // semaforo para saber si el usuario leyo las instrucciones
-
-
     const [seleccionadas, setSeleccionadas] = useState<number[]>([]); // ids de accesibilidad seleccionada
-
-
     const [tipoRecinto, setTipoRecinto] = useState<Tipo_Recinto[]>(); // almacena los recintos del llamado a la api
+    const [loading, setLoading] = useState(false); // Estado para manejar la carga de archivos
+    
+    const [file, setFile] = useState<File | null>(null);
+    const [filePreview, setFilePreview] = useState<string | null>(null);
+    const [uploading, setUploading] = useState(false);
+    const [uploadProgress, setUploadProgress] = useState(0);
+    const [uploadError, setUploadError] = useState<string | null>(null);
+
 
     useEffect(() => {
         const fetchTipoRecinto = async () => {
@@ -91,6 +94,25 @@ export default function AgregarSolicitud() {
 
         fetchAccesibilidades();
     }, []);
+    // Generar vista previa cuando se selecciona un archivo
+    useEffect(() => {
+        if (!file) {
+            setFilePreview(null);
+            return;
+        }
+
+        // Solo generar previsualizaciones para imágenes
+        if (file.type.startsWith('image/')) {
+            const reader = new FileReader();
+            reader.onloadend = () => {
+                setFilePreview(reader.result as string);
+            };
+            reader.readAsDataURL(file);
+        } else {
+            // Para PDFs u otros archivos, mostrar un icono o texto
+            setFilePreview('no-preview');
+        }
+    }, [file]);
 
     const handleCheckboxChange = (id: number) => { //MANEJA LOS IDS DE LAS ACCESIBILIDADES SELECIONADAS
         setSeleccionadas(prev =>
@@ -113,8 +135,61 @@ export default function AgregarSolicitud() {
         });
     };
 
+ const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        if (e.target.files && e.target.files.length > 0) {
+            const selectedFile = e.target.files[0];
+            // Validar tamaño del archivo (máximo 5MB)
+            if (selectedFile.size > 5 * 1024 * 1024) {
+                alert('El archivo no puede ser mayor a 5MB');
+                e.target.value = '';
+                return;
+            }
+            
+            setFile(selectedFile);
+            setUploadError(null);
+        }
+    };
 
+    const uploadFile = async () => {
+        if (!file) return null;
+        
+        try {
+            setUploading(true);
+            setUploadProgress(0);
+            setUploadError(null);
+            
+            // Crear un nombre de archivo único usando timestamp y nombre original
+            const fileExt = file.name.split('.').pop();
+            const fileName = `${Date.now()}_${Math.random().toString(36).substring(2, 15)}.${fileExt}`;
+            const filePath = `${fileName}`; // Usando la raíz del bucket para mayor simplicidad
+            
+            // Subir archivo a Supabase Storage
+            const { data, error } = await supabase.storage
+                .from('documentacion')
+                .upload(filePath, file, {
+                    cacheControl: '3600',
+                    upsert: true // Permitir sobrescribir si ya existe un archivo con el mismo nombre
+                });
 
+            if (error) {
+                throw error;
+            }
+
+            // Obtener URL pública del archivo
+            const { data: urlData } = supabase.storage
+                .from('documentacion')
+                .getPublicUrl(filePath);
+
+            setUploadProgress(100);
+            return urlData.publicUrl;
+        } catch (error: any) {
+            console.error('Error al subir archivo:', error.message);
+            setUploadError(error.message);
+            return null;
+        } finally {
+            setUploading(false);
+        }
+    };
     const handleSubmit = async (e: React.FormEvent) => { // SE ENVIAN LOS DATOS A LA BASE DE DATOS. 
         e.preventDefault();
 
@@ -128,32 +203,75 @@ export default function AgregarSolicitud() {
             alert('Por favor, selecciona una dirección desde las sugerencias de Google Places.');
             return;
         }
+        setUploading(true);
 
-        const { data: solicitud, error: errrosol } = await supabase
-            .from('solicitudes')
-            .insert({
-                id_usuario: idUsuario,
-                nombre_locacion: formData.nombre_locacion,
-                direccion: formData.direccion,
-                descripcion: formData.descripcion,
-                tipo_recinto: formData.tipo_recinto,
-                documentacion: formData.documentacion,
-                estado: 'pendiente',
-                fecha_ingreso: new Date().toISOString(),
-                cumple_ley_21015: formData.cumple_ley_21015,
-                accesibilidad_certificada: formData.accesibilidad_certificada,
-            })
-            .select()
-            .single();
-        console.log(errrosol)
-        for (const accId of seleccionadas) {
-            await supabase.from('accesibilidad_solicitud').insert({
-                id_solicitud: solicitud.id,
-                id_accesibilidad: accId
-            });
+        try {
+            // 1. Subir archivo si existe
+            let documentacionUrl = '';
+            if (file) {
+                const fileUrl = await uploadFile();
+                if (!fileUrl) {
+                    alert('Error al subir el archivo. Por favor, inténtelo de nuevo.');
+                    setUploading(false);
+                    return;
+                }
+                documentacionUrl = fileUrl;
+            }
+
+            // 2. Insertar la solicitud con la URL del archivo
+            const { data: solicitud, error: errorSolicitud } = await supabase
+                .from('solicitudes')
+                .insert({
+                    id_usuario: idUsuario,
+                    nombre_locacion: formData.nombre_locacion,
+                    direccion: formData.direccion,
+                    descripcion: formData.descripcion,
+                    tipo_recinto: formData.tipo_recinto,
+                    documentacion: documentacionUrl,
+                    estado: 'pendiente',
+                    fecha_ingreso: new Date().toISOString(),
+                    cumple_ley_21015: formData.cumple_ley_21015,
+                    accesibilidad_certificada: formData.accesibilidad_certificada,
+                })
+                .select();
+
+            if (errorSolicitud) {
+                console.error('Error al insertar solicitud:', errorSolicitud);
+                throw errorSolicitud;
+            }
+
+            // Si no hay error, solicitud.data[0] debería tener el ID de la solicitud insertada
+            const solicitudId = solicitud && solicitud[0] ? solicitud[0].id : null;
+            
+            if (!solicitudId) {
+                throw new Error('No se pudo obtener el ID de la solicitud creada');
+            }
+
+            // 3. Insertar accesibilidades seleccionadas
+            if (seleccionadas.length > 0) {
+                const accesibilidadesInsert = seleccionadas.map(accId => ({
+                    id_solicitud: solicitudId,
+                    id_accesibilidad: accId
+                }));
+                
+                const { error: errorAccesibilidades } = await supabase
+                    .from('accesibilidad_solicitud')
+                    .insert(accesibilidadesInsert);
+                
+                if (errorAccesibilidades) {
+                    console.error('Error al insertar accesibilidades:', errorAccesibilidades);
+                    // Continuamos sin interrumpir el flujo, ya que la solicitud principal se creó correctamente
+                }
+            }
+
+            alert('Solicitud enviada correctamente');
+            navigate(-1);
+        } catch (error: any) {
+            console.error('Error al procesar la solicitud:', error.message);
+            alert(`Error al enviar la solicitud: ${error.message}`);
+        } finally {
+            setUploading(false);
         }
-        alert('Solicitud enviada correctamente');
-        navigate(-1);
     };
 
     const { isLoaded, loadError } = useLoadScript({
@@ -384,30 +502,81 @@ export default function AgregarSolicitud() {
                 ))}
 
 
-                <div style={{ marginTop: '20px', display: 'flex', flexDirection: 'column' }}>
-                    <label className={styles.labelSeccion} style={{}}>
+                 <div style={{ marginTop: '20px', display: 'flex', flexDirection: 'column', gap: '10px' }}>
+                    <label className={styles.labelSeccion}>
                         Documentación
+                        <span style={{ fontSize: '0.8rem', color: 'gray', fontStyle: 'italic' }}>
+                            {' '} - Suba una foto o documento que respalde su solicitud (máx. 5MB)
+                        </span>
                     </label>
 
-                    <input
-                        type="file"
-                        onChange={(e) => {
-                            if (e.target.files && e.target.files[0]) {
-                                setFormData({ ...formData, documentacion: e.target.files[0].name }); //subir a storage
-                            }
-                        }}
-                        disabled={!usuario?.nombre} // Deshabilitar el campo si no hay usuario
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                        <label 
+                            htmlFor="file-upload" 
+                            style={{ 
+                                display: 'flex',
+                                alignItems: 'center',
+                                gap: '5px',
+                                padding: '8px 12px',
+                                backgroundColor: '#f0f0f0',
+                                borderRadius: '4px',
+                                cursor: usuario?.nombre ? 'pointer' : 'not-allowed',
+                                opacity: usuario?.nombre ? 1 : 0.6
+                            }}
+                        >
+                            <FontAwesomeIcon icon={faUpload} />
+                            Seleccionar archivo
+                        </label>
+                        <input
+                            id="file-upload"
+                            type="file"
+                            accept="image/*,.pdf"
+                            onChange={handleFileChange}
+                            disabled={!usuario?.nombre}
+                            style={{ display: 'none' }}
+                        />
+                        <span>{file ? file.name : 'Ningún archivo seleccionado'}</span>
+                    </div>
 
-                    />
-                    <span style={{ fontSize: '0.8rem', color: 'gray', fontStyle: 'italic' }}>
-                        {' '} - Suba una foto o documento que respalde su solicitud. </span>
+                    {filePreview && filePreview !== 'no-preview' && (
+                        <div style={{ marginTop: '10px', maxWidth: '250px' }}>
+                            <img 
+                                src={filePreview} 
+                                alt="Vista previa" 
+                                style={{ maxWidth: '100%', maxHeight: '200px', objectFit: 'contain' }} 
+                            />
+                        </div>
+                    )}
+                    
+                    {filePreview === 'no-preview' && (
+                        <div style={{ marginTop: '10px', display: 'flex', alignItems: 'center', gap: '5px' }}>
+                            <FontAwesomeIcon icon={faInfo} />
+                            <span>Archivo seleccionado (sin vista previa disponible)</span>
+                        </div>
+                    )}
+
+                    {uploadError && (
+                        <div style={{ color: 'red', marginTop: '5px' }}>
+                            Error: {uploadError}
+                        </div>
+                    )}
                 </div>
 
-
-
                 <div className={styles.acciones}>
-                    <button type="reset" style={{ color: 'red', background: 'transparent' }} onClick={() => { navigate(-1) }} >Cancelar</button>
-                    <button type="submit" disabled={!usuario?.nombre} >Enviar Solicitud</button>
+                    <button 
+                        type="button" 
+                        style={{ color: 'red', background: 'transparent' }} 
+                        onClick={() => { navigate(-1) }}
+                    >
+                        Cancelar
+                    </button>
+                    <button 
+                        type="submit" 
+                        disabled={!usuario?.nombre || uploading}
+                        style={{ opacity: uploading ? 0.7 : 1 }}
+                    >
+                        {uploading ? 'Enviando...' : 'Enviar Solicitud'}
+                    </button>
                 </div>
             </form>
 

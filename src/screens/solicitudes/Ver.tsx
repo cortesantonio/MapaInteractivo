@@ -225,7 +225,13 @@ export default function Ver() {
                         <p style={{ color: 'gray' }}>No hay accesibilidades seleccionadas.</p>
                     )}
                     <h4>Documentacion</h4>
-                    <p style={{ color: 'gray' }}>Sin archivos adjuntos.</p>
+                    {solicitud.documentacion != '' ? (
+                        <a href={solicitud.documentacion} target="_blank" rel="noopener noreferrer" style={{ color: 'black', paddingLeft:'25px',textDecoration: 'underline' }}>
+                            Ver Documentacion <FontAwesomeIcon icon={faArrowUpRightFromSquare} />
+                        </a>
+                    ) : (
+                        <p style={{ color: 'gray' }}>Sin archivos adjuntos.</p>
+                    )}
                 </div>
 
                 {solicitud.estado == 'pendiente' &&
