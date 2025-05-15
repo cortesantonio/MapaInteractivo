@@ -3,27 +3,26 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCircleXmark } from "@fortawesome/free-solid-svg-icons";
 import Reconocimiento from "../../components/Footer/reconocimientodevoz";
 import { useTheme } from "./Modo_Nocturno";
-
+import { useFontSize } from "./Modificador_Letras";
 
 
 export default function Microfono({
-    tamanoFuente,
     closePanel,
     panelActivo,
     activarReconocimiento,
 }: {
-    tamanoFuente: number;
     closePanel: () => void;
     panelActivo: string;
     activarReconocimiento: boolean;
 }) {
 
     const {modoNocturno} = useTheme ();
+    const {fontSize} = useFontSize ();
 
     return (
         <div>
             {panelActivo === "microphone" && ( //Vista de la funcion que realiza el Microphone
-                <div className={styles.PanelActivo} style={{ fontSize: `${tamanoFuente}rem` }}>
+                <div className={styles.PanelActivo} style={{ fontSize: `${fontSize}rem` }}>
                     {panelActivo !== null && (
                         <button
                             onClick={closePanel} className={styles.ButtonClose}>

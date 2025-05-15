@@ -8,11 +8,13 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import useGetCalendario from "../hooks/GetCalendario";
 import { useTheme } from "../components/Footer/Modo_Nocturno";
+import { useFontSize } from "./Footer/Modificador_Letras";
 
 function BotonEventos() {
   const [EventoIsVisible, setEventoIsVisible] = useState(false);
   const { events, error } = useGetCalendario();
   const {modoNocturno} = useTheme ();
+  const {fontSize} = useFontSize ();
 
   const toggleEventos = () => {
     setEventoIsVisible((prev) => !prev);
@@ -40,8 +42,8 @@ function BotonEventos() {
           cursor: "pointer",
         }}
       >
-        <FontAwesomeIcon icon={faCalendar} style={{ color: modoNocturno ? "white": "black" }} />
-        <p style={{ margin: 0, color: modoNocturno ? "white" : "black", fontSize: "1rem" }}>Eventos</p>
+        <FontAwesomeIcon icon={faCalendar} style={{ color: modoNocturno ? "white": "black", fontSize:`${fontSize}rem`}} />
+        <p style={{ margin: 0, color: modoNocturno ? "white" : "black", fontSize: `${fontSize}rem` }}>Eventos</p>
       </button>
 
       <div
@@ -67,8 +69,8 @@ function BotonEventos() {
                 gap: "5px",
               }}
             >
-              <FontAwesomeIcon icon={faAngleUp} size="2x" style={{ color: modoNocturno ? "#fff" :"black" }} />
-              <p style={{ margin: 0, color: modoNocturno ? "white" : "black", fontSize: "1rem" }}>Ocultar</p>
+              <FontAwesomeIcon icon={faAngleUp} size="2x" style={{ color: modoNocturno ? "#fff" :"black", fontSize:`${fontSize}rem` }} />
+              <p style={{ margin: 0, color: modoNocturno ? "white" : "black", fontSize: `${fontSize}rem`}}>Ocultar</p>
             </button>
 
             {error ? (
@@ -76,7 +78,7 @@ function BotonEventos() {
                 style={{
                   textAlign: "center",
                   color: "red",
-                  fontSize: "1.2rem",
+                  fontSize: `${fontSize}rem`,
                   fontWeight: "bold",
                 }}
               >
@@ -93,7 +95,7 @@ function BotonEventos() {
                 }}
               >
                 {events.length === 0 && (
-                  <div style={{ textAlign: "center", color: "gray", fontSize: "1rem" }}>
+                  <div style={{ textAlign: "center", color: "gray", fontSize: `${fontSize}rem` }}>
                     No hay eventos próximos
                   </div>
                 )}
@@ -102,6 +104,7 @@ function BotonEventos() {
                   <div key={event.id} style={{ paddingBottom: "10px" }}>
                     <div
                       style={{
+                        fontSize:`${fontSize}rem`,
                         width: "100%",
                         height: "1px",
                         backgroundColor: "black",
@@ -143,12 +146,12 @@ function BotonEventos() {
                             alignItems: "center",
                           }}
                         >
-                          <h3 style={{ margin: 0, fontSize: "1rem", fontWeight: "600" }}>
+                          <h3 style={{ margin: 0, fontSize: `${fontSize}`, fontWeight: "600" }}>
                             {event.title}
                           </h3>
                           <span
                             style={{
-                              fontSize: "0.7rem",
+                              fontSize: `${fontSize}rem`,
                               color: event.colorStatus,
                               textTransform: "uppercase",
                               textAlign: "center",
@@ -160,7 +163,7 @@ function BotonEventos() {
                         <p
                           style={{
                             margin: "5px 0",
-                            fontSize: "0.9rem",
+                            fontSize: `${fontSize}rem`,
                             opacity: 0.6,
                           }}
                         >
@@ -171,7 +174,7 @@ function BotonEventos() {
                             display: "flex",
                             alignItems: "center",
                             gap: "5px",
-                            fontSize: "0.9rem",
+                            fontSize: `${fontSize}rem`,
                             marginTop: "10px",
                             color: "#00570a",
                           }}
@@ -186,7 +189,7 @@ function BotonEventos() {
                             display: "flex",
                             alignItems: "center",
                             gap: "5px",
-                            fontSize: "0.9rem",
+                            fontSize: `${fontSize}rem`,
                             color: "#00570a",
                             marginTop: "10px",
                           }}
