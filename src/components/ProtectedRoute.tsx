@@ -1,6 +1,7 @@
 import { ReactNode } from 'react';
 import { Navigate } from 'react-router-dom';
 import { useAuth } from '../hooks/useAuth';
+import { PropagateLoader } from 'react-spinners';
 
 interface ProtectedRouteProps {
     children: ReactNode;
@@ -11,7 +12,17 @@ const ProtectedRoute = ({ children, allowedRoles }: ProtectedRouteProps) => {
     const { session, userRole, authLoading } = useAuth();
 
     if (authLoading) {
-        return <p>Cargando...</p>;
+        return <div style={{
+            display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh', width: '100vw', textAlign: 'center',
+            flexDirection: 'column'
+        }}>
+            <PropagateLoader
+                color="#a90000"
+                size={40}
+            />
+
+            <p style={{ color: '#a90000', fontSize: '1.2rem', marginTop: '50px', paddingLeft: '50px' }}>Cargando...</p>
+        </div>;
     }
 
     if (!session) {

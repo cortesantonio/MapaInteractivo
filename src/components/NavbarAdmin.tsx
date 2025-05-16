@@ -14,7 +14,6 @@ const NavbarAdmin = () => {
     const toggleMenu = () => {
         setIsMenuOpen(!isMenuOpen)
     }
-    console.log(user)
     return (
         <div className={styles.container}>
             <div className={styles.leftSection}>
