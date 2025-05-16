@@ -48,7 +48,8 @@ export default function User({
                                     )}
                                 </>
                             ) : (
-                                <button className={styles.ButtonSesion} 
+                                <button className={styles.ButtonSesion}
+                                        style={{fontSize: `${fontSize}rem`}}
                                         onClick={() => { navigate('/login') }}>
                                     INICIAR SESIÓN
                                 </button>
