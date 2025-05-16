@@ -5,6 +5,7 @@ import styles from "./css/Buscador.module.css";
 import { supabase } from "../services/supabase";
 import { Accesibilidad } from "../interfaces/Accesibilidad";
 import { useTheme } from "../components/Footer/Modo_Nocturno";
+import { useFontSize } from "./Footer/Modificador_Letras";
 
 interface Marcador {
     id: number;
@@ -19,6 +20,7 @@ interface BuscadorProps {
 
 function Buscador({ onSeleccionMarcador }: BuscadorProps) {
     const { modoNocturno } = useTheme();
+    const {fontSize} = useFontSize ();
     const [filtroIsVisible, setFiltroIsVisible] = useState(false);
     const [width, setWidth] = useState(window.innerWidth <= 768 ? "65%" : "300px");
     const [height, setHeight] = useState("0px");
@@ -132,7 +134,7 @@ function Buscador({ onSeleccionMarcador }: BuscadorProps) {
         <div className={`${styles.container} ${modoNocturno ? styles.darkMode : ''}`}
             style={{
                 width: width,
-                transition: "width 0.3s ease",
+                transition: "width 0.3s ease"
             }}
         >
             <div style={{backgroundColor: modoNocturno ? "#2d2d2d" : ""}} className={styles.distribucionContainer}>
@@ -144,7 +146,7 @@ function Buscador({ onSeleccionMarcador }: BuscadorProps) {
                 <input
                     type="text"
                     className={`${styles.inpBuscar}`}
-                    style={{backgroundColor:modoNocturno ? "#2d2d2d" : "", color: modoNocturno ? "white": ""}}
+                    style={{backgroundColor:modoNocturno ? "#2d2d2d" : "", color: modoNocturno ? "white": "",fontSize : `${fontSize}rem`}}
                     placeholder="Buscador"
                     onChange={(e) => setBusqueda(e.target.value)}
                     value={busqueda}
@@ -203,6 +205,7 @@ function Buscador({ onSeleccionMarcador }: BuscadorProps) {
                     backgroundColor: modoNocturno ? '#333' : 'white', 
                     borderRadius: '10px', 
                     padding: '10px',
+                    fontSize:  `${fontSize}rem` ,
                     color: modoNocturno ? 'white' : 'black'
                 }}>
                     <p>Resultados</p>

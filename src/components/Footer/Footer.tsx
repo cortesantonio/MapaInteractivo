@@ -8,6 +8,7 @@ import styles from "./css/Footer.module.css";
 import TrazadoRuta from './TrazadoRuta';
 import User from './User';
 import Microfono from "./Microfono";
+import { useFontSize } from "./Modificador_Letras";
 
 interface Props {
     onSeleccionMarcador: (id: number) => void;
@@ -34,11 +35,12 @@ export default function Footer({
     const { user } = useAuth();
     const { modoNocturno } = useTheme(); // Usar el contexto del tema
     const [panelActivo, setPanelActivo] = useState<"map" | "user" | "microphone" | null>(null);
-    const [tamanoFuente, setTamanoFuente] = useState(1)
+    
     const [width, setWidth] = useState(window.innerWidth <= 768 ? "80%" : "300px");
     const setHeight = useState("0px")[1];
     const [Isdisplay, setIsdisplay] = useState("none");
     const [activarReconocimiento, setactivarReconocimiento] = useState(false);
+    const {fontSize} = useFontSize ();
 
     useEffect(() => {
         const handleResize = () => {
@@ -99,21 +101,10 @@ export default function Footer({
         }, 300);
     };
 
-    const aumentarFuente = () => {
-        if (tamanoFuente < 1.5) {
-            setTamanoFuente(tamanoFuente + 0.1)
-        }
-    }
-
-    const disminuirFuente = () => {
-        if (tamanoFuente > 0.8) {
-            setTamanoFuente(tamanoFuente - 0.1)
-        }
-    }
-
+    
     return (
         <div className={`${styles.ContenPrin} ${modoNocturno ? styles.darkMode : ''}`} 
-             style={{ fontSize: `${tamanoFuente}rem`, width: width }}>
+             style={{ fontSize: `${fontSize}rem`, width: width }}>
 
             <div className={styles.ContenButton}>
                 <button onClick={() => togglePanel("map")} className={styles.Button}>
@@ -142,7 +133,7 @@ export default function Footer({
                 }}>
                 
                 {panelActivo === "map" && <TrazadoRuta 
-                    tamanoFuente={tamanoFuente} 
+                    
                     closePanel={closePanel} 
                     panelActivo={panelActivo}
                     onSeleccionMarcadorRecientes={onSeleccionMarcador} 
@@ -153,16 +144,15 @@ export default function Footer({
                     onIndicaciones={onIndicaciones}/>}
 
                 {panelActivo === "user" && <User 
-                    tamanoFuente={tamanoFuente} 
+                   
                     closePanel={closePanel} 
                     panelActivo={panelActivo} 
                     user={user} 
                     navigate={navigate}
-                    disminuirFuente={disminuirFuente} 
-                    aumentarFuente={aumentarFuente} />}
+                    
+                     />}
 
                 {panelActivo === "microphone" && <Microfono 
-                    tamanoFuente={tamanoFuente} 
                     closePanel={closePanel}
                     panelActivo={panelActivo} 
                     activarReconocimiento={activarReconocimiento} />}

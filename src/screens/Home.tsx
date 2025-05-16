@@ -6,7 +6,7 @@ import BotonEventos from "../components/botoneventos";
 import VerMarcador from "../components/VerMarcador";
 import NavbarUser from "../components/NavbarUser";
 import { useAuth } from "../hooks/useAuth";
-import { ThemeProvider } from "../components/Footer/Modo_Nocturno";
+import { useTheme } from "../components/Footer/Modo_Nocturno";
 import { faLocationCrosshairs } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
@@ -25,6 +25,7 @@ export default function Home() {
   const { userEstado, signOut } = useAuth()
   const [yaVerificado, setYaVerificado] = useState(false);
   const [mapacentrado, setMapacentrado] = useState(false);
+  const {modoNocturno} = useTheme ();
 
   useEffect(() => {
     if (userEstado === false && !yaVerificado) {
@@ -72,7 +73,7 @@ export default function Home() {
   };
 
   return (
-<ThemeProvider>
+
     <div style={{ width: '100%', height: '100vh', position: 'relative' }}>
       <Map
         onSeleccionMarcador={(id: number) => {
@@ -141,11 +142,9 @@ export default function Home() {
               }
               disabled={!ubicacionActiva}
               style={{
+                background: modoNocturno ? "#2d2d2d" : "",
                 backgroundColor: !ubicacionActiva
-                  ? "#ccc"
-                  : mapacentrado
-                    ? "#4285F4"
-                    : "#fff",
+                ? modoNocturno ? "#666" : "#ccc" : mapacentrado ? "#4285F4" : modoNocturno ? "#2d2d2d" : "#fff" ,
                 border: "none",
                 borderRadius: "5px",
                 boxShadow: "0 1px 4px rgba(0,0,0,0.3)",
@@ -160,7 +159,7 @@ export default function Home() {
             >
               <FontAwesomeIcon
                 icon={faLocationCrosshairs}
-                color={!ubicacionActiva ? "#888" : mapacentrado ? "#fff" : "#666"}
+                color={!ubicacionActiva ? "#888" : mapacentrado ? "#fff" :( modoNocturno ? "#ddd" : "#666")}
                 style={{ width: "22px", height: "22px" }}
               />
             </button>
@@ -180,6 +179,5 @@ export default function Home() {
       )
       }
     </div >
-  </ThemeProvider>
   );
 }

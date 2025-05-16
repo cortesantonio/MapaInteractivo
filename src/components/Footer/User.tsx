@@ -3,31 +3,28 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCircleXmark, faPlus, faMinus } from "@fortawesome/free-solid-svg-icons";
 import { useAuth } from "../../hooks/useAuth";
 import { useTheme } from "./Modo_Nocturno";
+import { useFontSize } from "./Modificador_Letras";
+
 
 export default function User({
-    tamanoFuente,
     closePanel,
     panelActivo,
     navigate,
-    disminuirFuente,
-    aumentarFuente,
 }: {
-    tamanoFuente: number;
     closePanel: () => void;
     panelActivo: string;
     user?: { email?: string };
     navigate: (path: string) => void;
-    disminuirFuente: () => void;
-    aumentarFuente: () => void;
 }) {
     const { userRole, user } = useAuth();
     const { modoNocturno, setModoNocturno } = useTheme();
+    const { fontSize, increaseFontSize, decreaseFontSize } = useFontSize(); // Usar el contexto
 
     return (
         <div>
             {panelActivo === "user" && (
                 <div className={`${styles.PanelActivo} ${modoNocturno ? styles.darkMode : ''}`} 
-                     style={{ fontSize: `${tamanoFuente}rem` }}>
+                     style={{ fontSize: `${fontSize}rem` }}>
                     <div style={{ flexDirection: "column" }}>
                         <button onClick={closePanel} className={styles.ButtonClose}>
                             <FontAwesomeIcon icon={faCircleXmark} style={{ color: "red" }} size="xl" />
@@ -57,7 +54,7 @@ export default function User({
                                 </button>
                             )}
                             <div>
-                                <button className={styles.ButtonColab} 
+                                <button style={{fontSize: `${fontSize}rem` }} className={styles.ButtonColab} 
                                         onClick={() => { navigate('/colaborar') }}>
                                     Colaborar
                                 </button>
@@ -72,21 +69,21 @@ export default function User({
                                           style={{ left: modoNocturno ? "22px" : "2px" }}></span>
                                 </div>
                             </div>
-                            <button className={styles.ButtonCompact}>
+                            <button style={{fontSize: `${fontSize}rem`}} className={styles.ButtonCompact}>
                                 Modo Compacto
                             </button>
                         </div>
                         <div className={styles.ContenFuncion}>
                             <div style={{ display: "flex" }}>
                                 <button
-                                    onClick={disminuirFuente} 
+                                    onClick={decreaseFontSize} 
                                     className={styles.MenosFuente}>
                                     <FontAwesomeIcon icon={faMinus} size="xs" style={{ color: modoNocturno ? "white" : "black" }} />
                                     <span className={styles.MenosA}>A</span>
                                 </button>
                                 <span className={styles.TituloFuente}>Tamaño de fuente</span>
                                 <button
-                                    onClick={aumentarFuente} 
+                                    onClick={increaseFontSize} 
                                     className={styles.MasFuente}>
                                     <span className={styles.MasA}>A</span>
                                     <FontAwesomeIcon icon={faPlus} size="xs" style={{ color: modoNocturno ? "white" : "black" }} />
