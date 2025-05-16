@@ -84,7 +84,13 @@ function Gestion_Resenas() {
               <label>
                 <FontAwesomeIcon icon={faFilter} />
               </label>
-              <select value={Tipo_Ubicacion_Seleccionado} onChange={e => setTipo_Ubicacion_Seleccionado(e.target.value)}>
+              <select value={Tipo_Ubicacion_Seleccionado} onChange={e => setTipo_Ubicacion_Seleccionado(e.target.value)}
+                style={{
+                  width: '100px',
+                  whiteSpace: 'nowrap',
+                  overflow: 'hidden',
+                  textOverflow: 'ellipsis'
+                }}>
                 <option value="">Todos</option>
                 {tipoRecinto?.map((tipo) => (
                   <option key={tipo.id} value={tipo.tipo}>

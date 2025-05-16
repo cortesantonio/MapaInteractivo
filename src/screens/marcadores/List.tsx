@@ -89,7 +89,16 @@ function ListMarcadores() {
                             <label>
                                 <FontAwesomeIcon icon={faFilter} />
                             </label>
-                            <select value={Tipo_Ubicacion_Seleccionado} onChange={e => setTipo_Ubicacion_Seleccionado(e.target.value)}>
+                            <select
+                                value={Tipo_Ubicacion_Seleccionado}
+                                onChange={e => setTipo_Ubicacion_Seleccionado(e.target.value)}
+                                style={{
+                                    width: '100px',
+                                    whiteSpace: 'nowrap',
+                                    overflow: 'hidden',
+                                    textOverflow: 'ellipsis'
+                                }}
+                            >
                                 <option value="">Todos</option>
                                 {tipoRecinto?.map((tipo) => (
                                     <option key={tipo.id} value={tipo.tipo}>
@@ -98,6 +107,7 @@ function ListMarcadores() {
                                 ))}
                             </select>
                         </div>
+
                         <div className={styles.add_user} style={{ paddingLeft: '10vw'/*Agregado Mati*/ }}>
                             <button onClick={() => { navigate('/panel-administrativo/marcadores/agregar') }}>
                                 <FontAwesomeIcon icon={faLocationDot} /> Nuevo

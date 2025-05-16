@@ -212,10 +212,6 @@ export default function InfoDetallada() {
                                 <p className={styles.codTelfono}>+569</p>
                                 <p>{dataMarcador.telefono}</p>
                             </div>
-                            <label className={styles.labelSeccion}>Latitud</label>
-                            <p>{dataMarcador.latitud}</p>
-                            <label className={styles.labelSeccion}>Longitud</label>
-                            <p>{dataMarcador.longitud}</p>
 
 
                         </div>
