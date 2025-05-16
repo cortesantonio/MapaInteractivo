@@ -7,6 +7,7 @@ import { Resenas } from '../../interfaces/Resenas';
 import { Marcador } from '../../interfaces/Marcador';
 import { useParams } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
+import ImagenConFallback from '../../components/ImagenConFallback';
 
 function Inspeccionar_Resenas() {
   const { id } = useParams();
@@ -65,7 +66,7 @@ function Inspeccionar_Resenas() {
     <div className={styles.container}>
       <div className={styles.header}>
         <div className={styles.imagen}>
-          <img
+          <ImagenConFallback
             src={marcador?.url_img}
             alt="Imagen del recinto"
             className={styles.imagenMarcador}

@@ -37,7 +37,6 @@ function Gestion_Resenas() {
       } else {
         setTipoRecinto(tipoRecintoData || []);
         Set_Resenas(gestionResenasData || []);
-        console.log('Datos de reseñas obtenidos:', gestionResenasData);
       }
     };
 
@@ -85,7 +84,13 @@ function Gestion_Resenas() {
               <label>
                 <FontAwesomeIcon icon={faFilter} />
               </label>
-              <select value={Tipo_Ubicacion_Seleccionado} onChange={e => setTipo_Ubicacion_Seleccionado(e.target.value)}>
+              <select value={Tipo_Ubicacion_Seleccionado} onChange={e => setTipo_Ubicacion_Seleccionado(e.target.value)}
+                style={{
+                  width: '100px',
+                  whiteSpace: 'nowrap',
+                  overflow: 'hidden',
+                  textOverflow: 'ellipsis'
+                }}>
                 <option value="">Todos</option>
                 {tipoRecinto?.map((tipo) => (
                   <option key={tipo.id} value={tipo.tipo}>
@@ -115,15 +120,18 @@ function Gestion_Resenas() {
         </div>
         <div className={styles.content}>
           {Edificio.map((locacion: { id: number, nombre_recinto: string; direccion: string; tipo_recinto: string; }, index: number) => (
-            <div className={styles.card} key={index}>
+            <div className={styles.card} key={index} onClick={() => { navigate(`/panel-administrativo/resenas/inspeccionar/${locacion.id}`) }}
+              style={{ cursor: 'pointer' }}
+            >
               <div className={styles.estado} style={{ backgroundColor: '#0397fc' }}>
                 <FontAwesomeIcon icon={faBuilding} size="xl" style={{ color: 'white' }} />
               </div>
 
-              <div className={styles.cardContent} style={{ cursor: 'pointer' }} onClick={() => { navigate(`/panel-administrativo/resenas/inspeccionar/${locacion.id}`) }}>
+              <div className={styles.cardContent}  >
+                <p style={{ color: 'gray', fontSize: '0.7rem', textTransform: 'uppercase' }}>{(locacion.tipo_recinto as any)?.tipo}</p>
+
                 <p style={{ color: 'black' }}>{locacion.nombre_recinto || "Cargando..."}</p>
                 <p style={{ color: 'gray', fontSize: '0.9rem' }}>{locacion.direccion}</p>
-                <p style={{ color: 'gray', fontSize: '0.9rem' }}>{(locacion.tipo_recinto as any)?.tipo}</p>
               </div>
             </div>
           ))}

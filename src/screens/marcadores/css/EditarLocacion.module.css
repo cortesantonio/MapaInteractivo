@@ -53,7 +53,7 @@
     padding: 25px;
     background-color: white;
     overflow-y: auto;
-    height: 70vh;
+    height: fit-content;
 }
 
 .FormContainer {
@@ -90,6 +90,7 @@
     font-size: 16px !important;
     color: #555;
     font-weight: 600;
+    padding-bottom: 5px;
 }
 
 .inputText {
@@ -143,7 +144,7 @@
     grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
     gap: 20px;
     width: 100%;
-    padding: 20px;
+    padding: 10px;
     border-radius: 10px;
 }
 

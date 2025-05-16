@@ -2,7 +2,7 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 30px 20px;
+  padding: 0 20px;
   box-sizing: border-box;
   max-width: 600px;
   margin: 0 auto;
@@ -20,6 +20,7 @@
   cursor: pointer;
   z-index: 3;
 }
+
 
 .titulo {
   font-size: 1.5rem;
@@ -47,14 +48,12 @@
   height: 100%;
 }
 
-
-
 .info {
   width: 100%;
 }
 
 .campo {
-  margin-bottom: 20px;
+  margin-bottom: 10px;
   width: 100%;
   display: flex;
   flex-direction: column;
@@ -94,6 +93,7 @@
   flex-direction: column;
   align-items: center;
   width: 100%;
+  
 }
 
 .contenedor_botones_perfil {
@@ -107,18 +107,36 @@
 }
 
 .reseñas_usuario {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 10px;
   margin-bottom: 10px;
   width: 100%;
+  place-items: center;
 }
 
-.reseñas_usuario button {
-  background-color: #fff;
+.botonAcciones {
+  width: 80%;
+  padding: 0.5rem 1rem;
   border: none;
-  width: 100px;
+  border-radius: 8px;
+  background-color: white;
+  color: #333;
+  font-weight: 400;
   cursor: pointer;
+  transition: all 0.25s ease;
+}
+
+.botonAcciones:hover {
+  border-color: #888;
+  background-color: #f9f9f9;
+}
+
+.botonActivo {
+  color: #248af7;
+  font-weight: 600;
+  background-color: #eef6ff;
+  box-shadow: 0 0 6px rgba(6, 121, 243, 0.3);
 }
 
 .informacion_campos_de_resena {
@@ -132,13 +150,64 @@
   margin-bottom: 20px;
   box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.1);
   overflow: hidden;
+  transition: box-shadow 0.2s ease;
+}
+
+.containerDatos{
+  display: flex; 
+  flex-direction: column;
+  gap: 6px;
+  border: 1px solid #e0e0e0;
+  border-radius: 15px;
+  padding: 20px;
+  box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.1);
+}
+
+.containeritemdatos{
+  display: flex;
+  justify-content: space-between;
+  border-bottom: 1px solid #eee;
+  margin-bottom: 10px;
+  flex-wrap: wrap;
+  gap: 5px;
+  max-width: 100%;
+}
+
+.titulosdatos{
+  font-weight: 600;
+  color: #333;
+  flex-shrink: 0; 
+  font-weight: bold;
+}
+
+.valorDato{
+  color: #555;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.informacion_campos_de_resena:hover {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  background-color: #f9f9f9;
+  cursor: pointer;
+}
+
+.informacion_campos_de_resena:active{
+  background-color: #ccc7c73a;
 }
 
 .calificacion_fecha_reseña {
   display: flex;
   gap: 5px;
   align-items: center;
-  margin-bottom: 10px;
+  font-size: 0.9rem;
+}
+
+.estrella {
+  color: #ffcc00;
+  font-size: 1rem;
+  margin-right: 3px;
 }
 
 .informacion_campos_de_resena label {
@@ -169,11 +238,7 @@
   color: #000;
 }
 
-.estrella {
-  color: #ffcc00;
-  font-size: 20px;
-  margin-right: 3px;
-}
+
 
 .boton_editar,
 .boton_desactivar {
@@ -192,6 +257,13 @@
   border: 0;
   border-top: 1px solid #ccc;
   margin: 0 0 20px 0;
+}
+
+.separador_datos {
+  width: 100%;
+  border: 0;
+  border-top: 1px solid #ccc;
+  margin: 0 0 10px 0;
 }
 
 .nombre_usuario {

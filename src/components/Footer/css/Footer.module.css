@@ -11,6 +11,7 @@
     position: fixed;
     transition: width 0.3s ease;
     left: 50%;
+    min-height: 45px;
 }
 
 .ContenButton {
@@ -61,3 +62,19 @@
     overflow: hidden;
     height: 450px;
 }
+
+.ContenPrin.darkMode {
+    background-color: #2d2d2d;
+    color: white;
+}
+
+.PanelInfo.darkMode {
+    background-color: #2d2d2d;
+    color: white;
+}
+
+.Button {
+    /* tus estilos existentes */
+    transition: all 0.3s ease;
+}
+

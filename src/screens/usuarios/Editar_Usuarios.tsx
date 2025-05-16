@@ -338,23 +338,28 @@ function Editar_Usuarios() {
               ))}
             </select>
           </div>
-
-          <div className={styles.espacio}>
-            {/* Permite cambiar el rol de un usuario*/}
-            <label className={styles.etiquetas}>Rol *</label>
-            <select
-              className={styles.formulario}
-              onChange={(e) => handleChange('rol', e.target.value)}
-              value={usuarios[0]?.rol || ""}
-              disabled={usuarioActual?.id === usuarios[0]?.id} // nadie puede cambiarse su propio rol
-            >
-              {rolesDisponibles.map((rol) => (
-                <option key={rol} value={rol}>
-                  {rol.charAt(0).toUpperCase() + rol.slice(1)}
-                </option>
-              ))}
-            </select>
-          </div>
+          {/*Esta funcion hace que solo administradores y gestores puedan cambiar roles o información de otros. 
+          Nadie puede modificar su propio rol ni el de su mismo nivel. */}
+          {usuarioActual &&
+            usuarios.length > 0 &&
+            usuarioActual.id !== usuarios[0].id && // Solo mostrar si el usuario actual NO está editando su propio perfil
+            (usuarioActual.rol === "administrador" || usuarioActual.rol === "gestor") && (
+              <div className={styles.espacio}>
+                {/* Permite cambiar el rol de un usuario */}
+                <label className={styles.etiquetas}>Rol *</label>
+                <select
+                  className={styles.formulario}
+                  onChange={(e) => handleChange('rol', e.target.value)}
+                  value={usuarios[0]?.rol || ""}
+                >
+                  {rolesDisponibles.map((rol) => (
+                    <option key={rol} value={rol}>
+                      {rol.charAt(0).toUpperCase() + rol.slice(1)}
+                    </option>
+                  ))}
+                </select>
+              </div>
+            )}
 
           <div className={styles.checkbox_input}>
             <div className={styles.checkbox_container}>

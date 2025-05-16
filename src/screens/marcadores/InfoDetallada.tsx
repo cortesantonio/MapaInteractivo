@@ -7,6 +7,7 @@ import { Marcador } from '../../interfaces/Marcador';
 import { Accesibilidad } from '../../interfaces/Accesibilidad';
 import { supabase } from '../../services/supabase';
 import { faArrowUpRightFromSquare } from '@fortawesome/free-solid-svg-icons';
+import ImagenConFallback from '../../components/ImagenConFallback';
 
 interface TipoDeAccesibilidades {
     [tipo: string]: Accesibilidad[];
@@ -145,18 +146,16 @@ export default function InfoDetallada() {
     };
 
 
-
-
     return (
         <div className={styles.container}>
-
-
             <div className={styles.header}>
-                <img
+                
+                <ImagenConFallback
                     src={dataMarcador?.url_img}
                     alt="Imagen del recinto"
                     className={styles.imagenMarcador}
                 />
+
                 <button style={{ zIndex: 10 }} className={styles.VolverAtras} onClick={() => { navigate(-1) }}>
                     <FontAwesomeIcon icon={faReply} size='2xl' />
                 </button>
@@ -166,8 +165,6 @@ export default function InfoDetallada() {
                 <div className={styles.locacionTitulo}>
                     <h4>{dataMarcador.nombre_recinto}</h4>
                     <p>{nombreTipoRecinto}</p>
-
-
                 </div>
             </div>
 
@@ -215,10 +212,6 @@ export default function InfoDetallada() {
                                 <p className={styles.codTelfono}>+569</p>
                                 <p>{dataMarcador.telefono}</p>
                             </div>
-                            <label className={styles.labelSeccion}>Latitud</label>
-                            <p>{dataMarcador.latitud}</p>
-                            <label className={styles.labelSeccion}>Longitud</label>
-                            <p>{dataMarcador.longitud}</p>
 
 
                         </div>

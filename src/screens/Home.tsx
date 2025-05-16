@@ -5,6 +5,10 @@ import Buscador from "../components/Buscador";
 import BotonEventos from "../components/botoneventos";
 import VerMarcador from "../components/VerMarcador";
 import NavbarUser from "../components/NavbarUser";
+import { useAuth } from "../hooks/useAuth";
+import { useTheme } from "../components/Footer/Modo_Nocturno";
+import { faLocationCrosshairs } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 
 
@@ -18,6 +22,19 @@ export default function Home() {
   const [ubicacionActiva, setUbicacionActiva] = useState(false);
   const [Idrutamarcador, setIdrutamarcador] = useState<number | null>(null);
   const [onIndicaciones, setOnIndicaciones] = useState<string[]>([]);
+  const { userEstado, signOut } = useAuth()
+  const [yaVerificado, setYaVerificado] = useState(false);
+  const [mapacentrado, setMapacentrado] = useState(false);
+  const {modoNocturno} = useTheme ();
+
+  useEffect(() => {
+    if (userEstado === false && !yaVerificado) {
+      setYaVerificado(true);
+      signOut();
+      alert("Su cuenta está desactivada, por favor contacta a soporte");
+    }
+  }, [userEstado]);
+
 
   const establecerDestino = useCallback((lat: number | null, lng: number | null) => {
     if (lat !== null && lng !== null) {
@@ -56,8 +73,8 @@ export default function Home() {
   };
 
   return (
-    <div style={{ width: '100%', height: '100vh', position: 'relative' }}>
 
+    <div style={{ width: '100%', height: '100vh', position: 'relative' }}>
       <Map
         onSeleccionMarcador={(id: number) => {
           setMarcadorSeleccionadoId(id);
@@ -68,37 +85,85 @@ export default function Home() {
         destinoRuta={destino}
         onUbicacionActiva={handleUbicacionActiva}
         onIndicaciones={setOnIndicaciones}
+        mapacentrado={mapacentrado}
+        setMapacentrado={setMapacentrado}
+
       />
 
       {!isStreetViewActive && (
         <>
           <div style={{
-            position: 'absolute', top: 0, right: 0, zIndex: 1, width: '100%', display: 'flex', justifyContent: 'space-between', padding: 25, pointerEvents: 'none', flexWrap: 'wrap'
+            position: 'absolute', top: 0, right: 0, zIndex: 1, width: '100%', display: 'flex', justifyContent: 'space-between', padding: 25, pointerEvents: 'none'
           }}>
-            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'start', gap: 10, pointerEvents: 'auto' }}>
+            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'start', gap: 10, pointerEvents: 'auto', width: "85%" }}>
               <Buscador onSeleccionMarcador={(id: number) => {
                 setMarcadorSeleccionadoId(id);
                 setMostrarMarcador(true);
               }} />
               <BotonEventos />
             </div>
+            <div style={{ position: "absolute", right: "25px" }}>
+              <NavbarUser />
 
-            <NavbarUser />
+            </div>
+
           </div>
 
           <Footer onSeleccionMarcador={(id: number) => {
             setMarcadorSeleccionadoId(id);
             setMostrarMarcador(true);
-            }}
+          }}
             cambiarModoViaje={setModoViaje}
             establecerDestino={establecerDestino}
             ubicacionActiva={ubicacionActiva}
-            Idrutamarcador={Idrutamarcador} 
+            Idrutamarcador={Idrutamarcador}
             limpiarRutaMarcador={() => setIdrutamarcador(null)}
-            InformacionDestino={destino} 
+            InformacionDestino={destino}
             onIndicaciones={onIndicaciones}
-             />
+          />
 
+          <div style={{
+            position: "absolute",
+            bottom: window.innerWidth < 768 ? "20%" : "15%",
+            right: "15px",
+          }}>
+            <button
+              onClick={() => {
+                if (ubicacionActiva) {
+                  setMapacentrado(!mapacentrado);
+                }
+              }}
+              title={
+                !ubicacionActiva
+                  ? "Ubicación desactivada"
+                  : mapacentrado
+                    ? "Desactivar seguimiento"
+                    : "Activar seguimiento"
+              }
+              disabled={!ubicacionActiva}
+              style={{
+                background: modoNocturno ? "#2d2d2d" : "",
+                backgroundColor: !ubicacionActiva
+                ? modoNocturno ? "#666" : "#ccc" : mapacentrado ? "#4285F4" : modoNocturno ? "#2d2d2d" : "#fff" ,
+                border: "none",
+                borderRadius: "5px",
+                boxShadow: "0 1px 4px rgba(0,0,0,0.3)",
+                width: "40px",
+                height: "40px",
+                cursor: ubicacionActiva ? "pointer" : "not-allowed",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                transition: "background-color 0.3s",
+              }}
+            >
+              <FontAwesomeIcon
+                icon={faLocationCrosshairs}
+                color={!ubicacionActiva ? "#888" : mapacentrado ? "#fff" :( modoNocturno ? "#ddd" : "#666")}
+                style={{ width: "22px", height: "22px" }}
+              />
+            </button>
+          </div>
 
           {mostrarMarcador && marcadorSeleccionadoId !== null && (
             <div style={estilosMarcador}>

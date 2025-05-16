@@ -5,6 +5,8 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { supabase } from '../services/supabase';
 import { useAuth } from '../hooks/useAuth';
 import { useNavigate } from 'react-router-dom';
+import { useTheme } from './Footer/Modo_Nocturno';
+
 
 
 
@@ -20,6 +22,9 @@ export default function EscribirResena({ onSubmit, onCancel, idMarcador }: Props
     const [comentario, setComentario] = useState('');
     const { user } = useAuth()
     const navigate = useNavigate()
+    const {modoNocturno} = useTheme ();
+
+    
 
     const obtenerFechaChile = () => {
         const ahora = new Date();
@@ -72,7 +77,7 @@ export default function EscribirResena({ onSubmit, onCancel, idMarcador }: Props
     return (
         <div className={styles.formContainer}>
             {user !== undefined ? (
-                <><h3>Comparte tu experiencia.</h3>
+                <><h3 style={{color: modoNocturno ?  "#fff":""}}>Comparte tu experiencia.</h3>
 
                     <div className={styles.stars}>
                         <div>
@@ -88,7 +93,7 @@ export default function EscribirResena({ onSubmit, onCancel, idMarcador }: Props
                             ))}
                         </div>
 
-                        <p style={{ fontSize: '0.9rem', color: 'gray', }}>¿Cómo calificarías tu experiencia?</p>
+                        <p style={{ fontSize: '0.9rem', color: modoNocturno ? "#fff": 'gray', }}>¿Cómo calificarías tu experiencia?</p>
                     </div>
 
                     <textarea

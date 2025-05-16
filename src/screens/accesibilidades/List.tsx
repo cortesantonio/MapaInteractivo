@@ -1,6 +1,6 @@
 import styles from './css/List.module.css'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faMagnifyingGlass, faPenToSquare, faUniversalAccess, faDeleteLeft, faPlus, faReply } from '@fortawesome/free-solid-svg-icons';
+import { faMagnifyingGlass, faPenToSquare, faUniversalAccess, faDeleteLeft, faPlus } from '@fortawesome/free-solid-svg-icons';
 import { useState, useEffect } from 'react';
 import { Accesibilidad } from '../../interfaces/Accesibilidad';
 import { supabase } from '../../services/supabase';
@@ -116,7 +116,7 @@ function ListAccesibilidad() {
                             </div>
                             <div className={styles.cardContent}>
                                 <p style={{ color: 'black', textTransform: 'capitalize' }}>{accesibilidad.nombre}</p>
-                                <p style={{ color: 'gray', fontSize: '0.9rem', textTransform: 'capitalize' }}>{accesibilidad.tipo}</p>
+                                <p style={{ color: 'gray', fontSize: '0.9rem', textTransform: 'capitalize' }}>Tipo: {accesibilidad.tipo}</p>
                             </div>
 
                             <div className={styles.opciones}>

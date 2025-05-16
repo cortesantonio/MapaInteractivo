@@ -1,0 +1,41 @@
+.contenedor_principal_iconos {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* Cambiado de flex-end a center */
+    padding:  20px;
+}
+
+.contenedor_de_iconos {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 5px;
+    justify-items: center;
+    align-items: center;
+}
+
+.seccion_icono {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+    padding: 10px;
+    border-radius: 8px;
+    transition: background-color 0.3s;
+}
+
+.icono_wrapper:hover {
+    background-color: #f0f0f0;
+}
+
+.icono {
+    font-size: 2rem; /* Tamaño del ícono */
+}
+
+.texto {
+    text-align: center;
+    font-size: 0.8rem;
+    font-weight: 400;
+    margin: 0;
+}

@@ -1,10 +1,10 @@
 import styles from './css/Agregar.module.css'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faReply } from '@fortawesome/free-solid-svg-icons';
 import { useState } from 'react';
 import { supabase } from '../../services/supabase';
-
+import { useNavigate } from 'react-router-dom';
+import NavbarAdmin from '../../components/NavbarAdmin';
 export default function AgregarTipoRecinto() {
+    const navigate = useNavigate();
     const [tipo, setTipo] = useState('')
 
     const handleSubmit = async (e: React.FormEvent) => {
@@ -45,36 +45,41 @@ export default function AgregarTipoRecinto() {
         if (error) {
             console.error('Error al insertar en ssupabase:', error);
         } else {
-            console.log('Insertado correctamente:', data);
+            alert('Insertado correctamente: ' + data[0].tipo);
+            navigate(-1);
         }
     };
 
 
     return (
-        <div className={styles.container}>
-            <div className={styles.titulo} >
-                <button style={{ backgroundColor: 'transparent', border: 'none', cursor: 'pointer' }}>
-                    <FontAwesomeIcon icon={faReply} size='2xl' />
-                </button>
-                <h2 style={{ textAlign: 'center' }}>
-                    Agregar Tipo de recinto
-                </h2>
-            </div>
 
-            <div style={{ margin: '20px auto', width: '40%', display: 'flex', justifyContent: 'center', flexDirection: 'column', minWidth: '250px' }}>
-                <div style={{ display: 'flex', flexDirection: 'column', maxWidth: '600px' }}>
+        <>
+            <NavbarAdmin />
+            <div className={styles.container}>
+                <div className={styles.titulo} >
 
-                    <label className={styles.labelSeccion} >TIPO</label>
-                    <input name="tipo" value={tipo} onChange={(e) => setTipo(e.target.value)}
-                        className={styles.inputText} />
+                    <h2 style={{ textAlign: 'center' }}>
+                        Agregar Tipo de recinto
+                    </h2>
                 </div>
 
-                <div className={styles.acciones}>
-                    <button style={{ color: 'red', background: 'transparent', }}>Cancelar</button>
-                    <button onClick={handleSubmit} >Agregar</button>
+                <div style={{ margin: '20px auto', width: '40%', display: 'flex', justifyContent: 'center', flexDirection: 'column', minWidth: '250px' }}>
+                    <div style={{ display: 'flex', flexDirection: 'column', maxWidth: '600px' }}>
+
+                        <label className={styles.labelSeccion} >Tipo de recinto</label>
+                        <input name="tipo" value={tipo} onChange={(e) => setTipo(e.target.value)}
+                            className={styles.inputText} style={{ marginTop: '10px' }} />
+                        <p style={{ fontSize: '0.8rem', color: 'gray' }}>*Debe ser en singular.</p>
+                    </div>
+
+                    <div className={styles.acciones}>
+                        <button style={{ color: 'red', background: 'transparent', }} onClick={() => navigate(-1)}>Cancelar</button>
+                        <button onClick={handleSubmit} >Agregar</button>
+                    </div>
                 </div>
             </div>
-        </div>
+        </>
+
 
 
     )

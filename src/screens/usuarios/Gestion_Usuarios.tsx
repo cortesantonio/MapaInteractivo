@@ -4,9 +4,7 @@ import {
   faMagnifyingGlass,
   faFilter,
   faUser,
-  faUserPen,
   faUserPlus,
-  faReply,
 } from "@fortawesome/free-solid-svg-icons";
 import { useState, useEffect } from "react";
 import { supabase } from "../../services/supabase";
@@ -53,16 +51,11 @@ function Gestion_Usuarios() {
     const coincideRol = rolSeleccionado === "" || usuario.rol === rolSeleccionado;
     return coincideNombre && coincideRol;
   });
-
   return (<>
     <NavbarAdmin />
     <div className={styles.container}>
 
-      <button className={styles.ButtonIconAtras} onClick={() => { navigate(-1); }}>
-        <FontAwesomeIcon icon={faReply} />
-      </button>
-
-      <header className={styles.header} style={{ paddingTop: "40px", gap: "15px" }}>
+      <header className={styles.header} style={{ paddingTop: "25px", gap: "15px" }}>
         <hr style={{ flexGrow: "1" }} />
         <h2 className={styles.Titulo}>
           Gestion de Usuarios
@@ -132,32 +125,34 @@ function Gestion_Usuarios() {
       <div className={styles.content}>
         <div className={styles.gridUsuarios}>
           {usuariosFiltrados.map((usuario, index) => (
-            <div className={styles.card} key={index}>
+            <div className={styles.card}
+              onClick={() => navigate(`/usuario/perfil/${usuario.id}`)}
+              style={{ cursor: "pointer" }}
+
+              key={index}>
               <div
                 className={styles.estado}
                 style={{ backgroundColor: "#0397fc" }}
+
               >
                 <FontAwesomeIcon icon={faUser} size="xl" style={{ color: "white" }} />
               </div>
 
               <div
                 className={styles.cardContent}
-                style={{ cursor: "pointer" }}
-                onClick={() => navigate(`/usuario/perfil/${usuario.id}`)}
               >
+                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                  <p style={{ color: "gray", fontSize: "0.8rem", textTransform: 'uppercase', textAlign: 'left' }}>{usuario.rol} </p>
+                  <div>{usuario.activo ? (<p style={{ backgroundColor: 'rgba(186, 255, 130, 0.73)', borderRadius: '10px', padding: '2px 10px 2px 10px' }}>Activo</p>) : (<p style={{ backgroundColor: 'rgba(255, 145, 130, 0.73)', borderRadius: '10px', padding: '2px 10px 2px 10px' }} >Desactivado</p>)}</div>
+                </div>
+
                 <p style={{ color: "black" }}>{usuario.nombre}</p>
-                <p style={{ color: "gray", fontSize: "0.9rem" }}>{usuario.rol}</p>
+                <p style={{ color: "gray", fontSize: "0.9rem" }}>{usuario.correo}</p>
+                {usuario.rut != null ? <p style={{ color: "gray", fontSize: "0.8rem" }}>{usuario.rut}</p> : <p style={{ color: 'gray', fontSize: '0.8rem' }}>RUT no ingresado.</p>}
+
               </div>
 
-              <div className={styles.opciones}>
-                <button
-                  onClick={() => {
-                    navigate(`/usuarios/editar/${usuario.id}`);
-                  }}
-                >
-                  <FontAwesomeIcon icon={faUserPen} />
-                </button>
-              </div>
+
             </div>
           ))}
         </div>

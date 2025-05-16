@@ -1,7 +1,5 @@
-
-
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import { faUser, faStar } from "@fortawesome/free-solid-svg-icons"
+import { faStar } from "@fortawesome/free-solid-svg-icons"
 import styles from "../usuarios/css/Perfil_Usuario.module.css"
 import { supabase } from "../../services/supabase"
 import { useEffect, useState } from "react"
@@ -10,8 +8,16 @@ import type { Resenas } from "../../interfaces/Resenas"
 import type { Solicitudes } from "../../interfaces/Solicitudes"
 import { useNavigate, useParams } from "react-router-dom"
 import NavbarAdmin from "../../components/NavbarAdmin"
+import { useAuth } from "../../hooks/useAuth"
+
+interface UsuarioExtendido extends Usuarios {
+  discapacidadNombre?: string;
+  discapacidadTipo?: string;
+}
+
+
 function Perfil_Usuario() {
-  const [usuarios, setUsuarios] = useState<Usuarios[]>([])
+  const [usuarios, setUsuarios] = useState<UsuarioExtendido[]>([]);
   const [resenas, setResenas] = useState<Resenas[]>([])
   const [solicitud, setSolicitud] = useState<Solicitudes[]>([])
 
@@ -20,7 +26,7 @@ function Perfil_Usuario() {
 
   const navigate = useNavigate()
   const { id } = useParams()
-
+  const { userRole } = useAuth()
   useEffect(() => {
     const fetchData = async () => {
       // Obtener datos de reseñas
@@ -33,12 +39,32 @@ function Perfil_Usuario() {
       setResenas((resenasData as any) || [])
 
       // Obtener datos del usuario
-      const { data: usuariosData, error } = await supabase.from("usuarios").select("*").eq("id", id)
+      const { data: usuariosData, error } = await supabase
+        .from("usuarios")
+        .select(`
+            *,
+            discapacidad (
+              nombre,
+              tipo
+            )
+          `)
+        .eq("id", id)
 
       if (error) {
-        console.error("Error al obtener datos:", error)
+        console.error("Error al obtener datos:", error);
       } else {
-        setUsuarios(usuariosData || [])
+        const usuariosFormateados = (usuariosData || []).map((usuario) => {
+          const discapacidadData = Array.isArray(usuario.discapacidad)
+            ? usuario.discapacidad[0]
+            : null;
+
+          return {
+            ...usuario,
+            discapacidadNombre: discapacidadData?.nombre,
+            discapacidadTipo: discapacidadData?.tipo,
+          };
+        });
+        setUsuarios(usuariosFormateados);
       }
 
       // Obtener datos de solicitudes
@@ -53,45 +79,97 @@ function Perfil_Usuario() {
     fetchData()
   }, [id])
 
+
+  const switchEstados = async () => {
+    try {
+      const usuario = usuarios[0];
+      if (!usuario) {
+        console.error("No se encontró el usuario");
+        return;
+      }
+
+      const nuevoEstado = !usuario.activo;
+
+      const { error } = await supabase
+        .from("usuarios")
+        .update({ activo: nuevoEstado })
+        .eq("id", id);
+
+      if (error) {
+        console.error("Error al cambiar el estado del usuario:", error);
+      } else {
+        navigate("/panel-administrativo/usuarios");
+      }
+    } catch (error) {
+      console.error("Error inesperado al cambiar el estado del usuario:", error);
+    }
+  };
+
+
   // Renderizado del perfil de usuario
   const renderPerfilUsuario = () => {
     return (
-      <div>
-        <div className={styles.perfil_info}>
-          <div className={styles.reseñas_usuario}>
-            <button onClick={() => setVistaActual("resenas")}>Reseñas usuario</button>
-            <button onClick={() => setVistaActual("aportes")}>Aportes Usuario</button>
-          </div>
-          <hr className={styles.separador_botones} />
-
-          {usuarios.map((usuario) => (
-            <div className={styles.informacion_campos} key={usuario.id}>
-              <div className={styles.campo}>
-                <span className={styles.label}>Nombre:</span>
-                <p className={styles.valor}>{usuario.nombre}</p>
-                <hr />
-              </div>
-
-              <div className={styles.campo}>
-                <span className={styles.label}>Correo:</span>
-                <p className={styles.valor}>{usuario.correo}</p>
-                <hr />
-              </div>
-
-              <div className={styles.campo}>
-                <span className={styles.label}>Rol:</span>
-                <p className={styles.valor}>{usuario.rol}</p>
-                <hr />
-              </div>
+      <div className={styles.perfil_info}>
+        {usuarios.map((usuario) => (
+          <div key={usuario.id} className={styles.containerDatos}>
+            <div className={styles.containeritemdatos}>
+              <span className={styles.titulosdatos}>Usuario Activo:</span>
+              <span className={styles.valorDato}>{usuario.activo ? (<p>Si</p>) : (<p>No</p>)}</span>
             </div>
-          ))}
-        </div>
+            <div className={styles.containeritemdatos}>
+              <span className={styles.titulosdatos}>Nombre:</span>
+              <span className={styles.valorDato}>{usuario.nombre || "Sin información"}</span>
+            </div>
+
+            <div className={styles.containeritemdatos}>
+              <span className={styles.titulosdatos}>Correo:</span>
+              <span className={styles.valorDato}>{usuario.correo || "Sin información"}</span>
+            </div>
+
+            <div className={styles.containeritemdatos}>
+              <span className={styles.titulosdatos}>Rut:</span>
+              <span className={styles.valorDato}>{usuario.rut || "Sin información"}</span>
+            </div>
+
+            <div className={styles.containeritemdatos}>
+              <span className={styles.titulosdatos}>Género:</span>
+              <span className={styles.valorDato}>{usuario.genero || "Sin información"}</span>
+            </div>
+
+            {usuario.discapacidadNombre && usuario.discapacidadTipo && (
+              <>
+                <div className={styles.containeritemdatos}>
+                  <span className={styles.titulosdatos}>Discapacidad:</span>
+                  <span className={styles.valorDato}>{usuario.discapacidadNombre}</span>
+                </div>
+
+                <div className={styles.containeritemdatos}>
+                  <span className={styles.titulosdatos}>Tipo:</span>
+                  <span className={styles.valorDato}>{usuario.discapacidadTipo}</span>
+                </div>
+              </>
+            )}
+
+            {/*Esta funcion hace que No se muestre el rol en el perfil si el usuario es de rol Usuario,
+              solo se podran visualizar en el perfil del Gestor o Admnistrador */}
+            {usuario.rol !== "usuario" && (
+              <div className={styles.containeritemdatos}>
+                <span className={styles.titulosdatos}>Rol:</span>
+                <span className={styles.valorDato}>{usuario.rol}</span>
+              </div>
+            )}
+          </div>
+        ))}
 
         <div className={styles.contenedor_botones_perfil}>
           <button className={styles.boton_editar} onClick={() => navigate(`/usuarios/editar/${id}`)}>
             Editar Usuario
           </button>
-          <button className={styles.boton_desactivar}>Desactivar Usuario</button>
+          {userRole === "administrador" || userRole === 'gestor' ? (
+            <button onClick={switchEstados} className={styles.boton_desactivar}>
+              {usuarios[0]?.activo ? "Desactivar Usuario" : "Activar Usuario"}
+            </button>
+          ) : (<></>)}
         </div>
       </div>
     )
@@ -101,45 +179,28 @@ function Perfil_Usuario() {
   const renderResenasUsuario = () => {
     return (
       <div className={styles.perfil_info}>
-        <div className={styles.reseñas_usuario}>
-          <button onClick={() => setVistaActual("perfil")}>Perfil Usuario</button>
-          <button onClick={() => setVistaActual("aportes")}>Aportes Usuario</button>
-        </div>
-        <hr className={styles.separador_botones} />
-
         {resenas.length > 0 ? (
-          <div>
+          <div style={{ maxHeight: "380px", overflowY: "auto", padding: "0 15px" }}>
             {resenas.map((resena) => (
               <div className={styles.informacion_campos_de_resena} key={resena.id}>
-                <div>
-                  <label>Nombre:</label>
-                </div>
-                <div className={styles.campo}>
-                  <p className={styles.valor}>{resena.id_usuario?.nombre}</p>
+                <div style={{ display: "flex", flexDirection: "row", justifyContent: "space-between", width: "100%" }}>
+                  <div>
+                    <h3 style={{ fontWeight: "400" }}>{resena.id_marcador?.nombre_recinto}</h3>
+                  </div>
+
+                  <div className={styles.calificacion_fecha_reseña}>
+                    <FontAwesomeIcon className={styles.estrella} icon={faStar} />
+                    <span>{resena.calificacion}</span>
+                    &bull;
+                    <span> {new Date(resena.fecha).toLocaleDateString()}</span>
+                  </div>
+
                 </div>
 
-                <div>
-                  <label>Nombre Recinto:</label>
-                </div>
-                <div className={styles.campo}>
-                  <p className={styles.valor}>{resena.id_marcador?.nombre_recinto}</p>
-                </div>
-
-                <div>
-                  <label>Comentario:</label>
-                </div>
                 <div className={styles.texto_reseña}>
                   <span>{resena.comentario}</span>
                 </div>
 
-                <div style={{ marginBottom: "10px" }}>
-                  <label>Calificación:</label>
-                </div>
-                <div className={styles.calificacion_fecha_reseña}>
-                  <FontAwesomeIcon className={styles.estrella} icon={faStar} />
-                  <span>{resena.calificacion}</span>
-                  <span>{new Date(resena.fecha).toLocaleDateString()}</span>
-                </div>
               </div>
             ))}
           </div>
@@ -157,84 +218,53 @@ function Perfil_Usuario() {
   const renderAportesUsuario = () => {
     return (
       <div className={styles.perfil_info}>
-        <div className={styles.reseñas_usuario}>
-          <button onClick={() => setVistaActual("perfil")}>Perfil Usuario</button>
-          <button onClick={() => setVistaActual("resenas")}>Reseñas usuario</button>
-        </div>
-        <hr className={styles.separador_botones} />
-
         {solicitud.length > 0 ? (
-          <div>
+          <div style={{ maxHeight: "380px", overflowY: "auto", padding: "0 15px" }}>
             {solicitud.map((aporte) => (
-              <div className={styles.informacion_campos_de_resena} key={aporte.id}>
-                <div>
-                  <label>Tipo de solicitud:</label>
-                </div>
-                <div className={styles.campo}>
-                  <p className={styles.valor}>{aporte.nombre_locacion}</p>
+              <div className={styles.informacion_campos_de_resena} key={aporte.id} onClick={() => { navigate(`/panel-administrativo/solicitud/${aporte.id}`) }}>
+                <div style={{ display: "flex", flexDirection: "row", justifyContent: "space-between", width: "100%" }}>
+                  <div style={{ flex: 1 }}>
+                    <h3 style={{ fontWeight: "400" }}>{aporte.nombre_locacion}</h3>
+                  </div>
+
+                  <div style={{ flex: 1, textAlign: "right" }}>
+                    <span
+                      style={{
+                        backgroundColor:
+                          aporte.estado === "aprobada"
+                            ? "rgba(65, 170, 17, 0.15)"
+                            : aporte.estado === "rechazada"
+                              ? "rgba(170, 17, 17, 0.15)"
+                              : "rgba(223, 171, 0, 0.15)",
+                        color:
+                          aporte.estado === "aprobada"
+                            ? "rgb(65, 170, 17)"
+                            : aporte.estado === "rechazada"
+                              ? "rgb(170, 17, 17)"
+                              : "rgb(223, 171, 0)",
+                        padding: "4px 10px",
+                        borderRadius: "20px",
+                        fontWeight: 500,
+                        fontSize: "0.9rem"
+                      }}
+                    >
+                      {aporte.estado === "aprobada"
+                        ? "Aprobada"
+                        : aporte.estado === "rechazada"
+                          ? "Rechazada"
+                          : "Pendiente"}
+                    </span>
+                  </div>
                 </div>
 
                 <div className={styles.campo}>
-                  <p className={styles.valor}>{aporte.nombre_locacion}</p>
+                  <p className={styles.valor}>&bull; {aporte.direccion}</p>
                 </div>
 
-                <div>
-                  <label>Descripción</label>
-                </div>
                 <div className={styles.campo}>
                   <p className={styles.valor}>{aporte.descripcion}</p>
                 </div>
 
-                <div>
-                  <label>Dirección</label>
-                </div>
-
-                <div className={styles.campo}>
-                  <p className={styles.valor}>{aporte.direccion}</p>
-                </div>
-
-                <div>
-                  <label>Estado:</label>
-                </div>
-                <div className={styles.campo}>
-                  <p className={styles.valor}>{aporte.tipo_recinto}</p>
-                </div>
-
-                <div>
-                  <label>Documentación:</label>
-                </div>
-                <div className={styles.campo}>
-                  <p className={styles.valor}>{aporte.documentacion}</p>
-                </div>
-
-                <div>
-                  <label>Fecha Ingreso:</label>
-                </div>
-                <div className={styles.campo}>
-                  <p className={styles.valor}>{new Date(aporte.fecha_ingreso).toLocaleDateString()}</p>
-                </div>
-
-                <div>
-                  <label>Respuesta Rechazo:</label>
-                </div>
-                <div className={styles.campo}>
-                  <p className={styles.valor}>{aporte.respuesta_rechazo}</p>
-                </div>
-
-                <div>
-                  <label>Fecha Revisión:</label>
-                </div>
-                <div className={styles.campo}>
-                  <p className={styles.valor}>{new Date(aporte.fecha_revision).toLocaleDateString()}</p>
-                </div>
-
-                <div className={styles.campo}>
-                  <p className={styles.valor}>{aporte.cumple_ley_21015}</p>
-                </div>
-
-                <div className={styles.campo}>
-                  <p className={styles.valor}>{aporte.accesibilidad_certificada}</p>
-                </div>
               </div>
             ))}
           </div>
@@ -261,7 +291,7 @@ function Perfil_Usuario() {
   }
 
   return (
-    <div>
+    <div style={{ minHeight: "100vh", display: "flex", flexDirection: "column" }}>
       <NavbarAdmin />
 
       <div className={styles.container}>
@@ -278,6 +308,34 @@ function Perfil_Usuario() {
             </h2>
           )}
         </div>
+
+        <div className={styles.reseñas_usuario}>
+          <button
+            className={`${styles.botonAcciones} ${vistaActual === "resenas" ? styles.botonActivo : ""}`}
+            style={{ gridColumn: "1" }}
+            onClick={() => setVistaActual("resenas")}
+          >
+            Reseñas usuario
+          </button>
+
+          <button
+            className={`${styles.botonAcciones} ${vistaActual === "perfil" ? styles.botonActivo : ""}`}
+            style={{ gridColumn: "2" }}
+            onClick={() => setVistaActual("perfil")}
+          >
+            Perfil Usuario
+          </button>
+
+          <button
+            className={`${styles.botonAcciones} ${vistaActual === "aportes" ? styles.botonActivo : ""}`}
+            style={{ gridColumn: "3" }}
+            onClick={() => setVistaActual("aportes")}
+          >
+            Aportes Usuario
+          </button>
+        </div>
+
+        <hr className={styles.separador_botones} />
 
         {renderContenido()}
       </div>

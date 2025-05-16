@@ -8,7 +8,7 @@ interface CalendarEvent {
   end: string;
   address: string;
   status: "En curso" | "Próximo";
-  colorStatus: "#666666" | "#24c116";
+  colorStatus: "#666666" | "#969595";
 }
 
 const useGetCalendario = () => {
@@ -63,7 +63,7 @@ const useGetCalendario = () => {
             return { status: "En curso", colorStatus: "#24c116" };
           }
 
-          return { status: "Próximo", colorStatus: "#666666" };
+          return { status: "Próximo", colorStatus: "#969595" };
         };
 
         const formattedEvents: CalendarEvent[] = data.items.map((event: any) => {

@@ -5,11 +5,14 @@ import { formatDistanceToNow } from 'date-fns';
 import { es } from 'date-fns/locale'; // para español
 import styles from './css/VerMarcador.module.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faShareNodes, faRoute, faCommentDots, faStar, faLocationDot, faPhone, faEarthAmericas, faChevronUp, faChevronDown } from '@fortawesome/free-solid-svg-icons';
+import { faShareNodes, faRoute, faCommentDots, faStar, faLocationDot, faPhone, faEarthAmericas, faChevronUp, faChevronDown, faInfo } from '@fortawesome/free-solid-svg-icons';
 import EscribirResena from '../components/EscribirResena';
+import Compartir from './Compartir';
 import { supabase } from '../services/supabase';
 import { Horarios } from '../interfaces/Horarios';
 import { Accesibilidad } from '../interfaces/Accesibilidad';
+import ImagenConFallback from './ImagenConFallback';
+import { useTheme } from "../components/Footer/Modo_Nocturno";
 
 interface Props {
     MarcadorSelectId: number;
@@ -27,7 +30,14 @@ export default function VerMarcador({ MarcadorSelectId, CerrarMarcador, establec
     const [resenasMarcador, setResenasMarcador] = useState<Review[]>([]);
     const [tabActiva, setTabActiva] = useState<'general' | 'resenas'>('general');
     const [mostrarFormulario, setMostrarFormulario] = useState(false);
+    const [MostrarCompartir, setMostrarCompartir] = useState(false);
+    const {modoNocturno} = useTheme ();
 
+    // Función para volver a la vista del marcador
+    const volverAMarcador = () => {
+        setMostrarCompartir(false);
+        setMostrarFormulario(false);
+    };
 
     useEffect(() => {
         const fetchMarcador = async () => {
@@ -57,7 +67,6 @@ export default function VerMarcador({ MarcadorSelectId, CerrarMarcador, establec
                     };
 
                     setMarcador(marcadorFormateado);
-                    console.log(data)
                 }
 
                 if (marcador.horarios && marcador.horarios.length > 0) {
@@ -124,17 +133,17 @@ export default function VerMarcador({ MarcadorSelectId, CerrarMarcador, establec
                 ) : (
                     Marcador && (
                         <>
-                            <p><FontAwesomeIcon icon={faLocationDot} style={{ color: "#74C0FC" }} /> {Marcador.direccion}</p>
-                            <p><FontAwesomeIcon icon={faPhone} style={{ color: "#74C0FC" }} /> {Marcador.telefono}</p>
-                            <p><FontAwesomeIcon icon={faEarthAmericas} style={{ color: "#74C0FC" }} /> <a href={Marcador.pagina_web}>{Marcador.pagina_web}</a></p>
+                            <p style={{color: modoNocturno ? "#fff" : "" }} ><FontAwesomeIcon icon={faLocationDot} style={{ color: "#74C0FC" }} /> {Marcador.direccion}</p>
+                            <p style={{color: modoNocturno ? "#fff" : "" }}><FontAwesomeIcon icon={faPhone} style={{ color: "#74C0FC" }} /> {Marcador.telefono}</p>
+                            <p style={{color: modoNocturno ? "#fff" : "" }}><FontAwesomeIcon icon={faEarthAmericas} style={{ color: "#74C0FC" }} /> <a href={Marcador.pagina_web}>{Marcador.pagina_web}</a></p>
 
-                            <h4>Horarios</h4>
+                            <h4 style={{color: modoNocturno ? "#fff" : "" }}>Horarios</h4>
                             <ul style={{ paddingLeft: '20px' }}>
                                 {diasAMostrar.map((dia, index) => {
                                     const horario = horariosMarcador.find((h: any) => h.dia.toLowerCase() === dia.toLowerCase());
                                     const esUltimoVisible = !mostrarTodos && index === 2;
                                     return (
-                                        <li
+                                        <li style={{color: modoNocturno ? "#fff" : "" }}
                                             key={index}
                                             className={esUltimoVisible ? styles.tercerdia : ''}
                                         >
@@ -157,14 +166,14 @@ export default function VerMarcador({ MarcadorSelectId, CerrarMarcador, establec
                                 </button>
                             </div>
 
-                            <h4>Accesibilidad</h4>
+                            <h4 style={{color: modoNocturno ? "#fff" : "" }} >Accesibilidad</h4>
                             {Object.keys(accesibilidadAgrupada).map((tipo, index) => (
                                 <div key={index}>
-                                    <p style={{ fontWeight: 400 }}>{tipo}:</p>
+                                    <p  style={{ fontWeight: 400, color: modoNocturno ? "#fff" : "" }}>{tipo}:</p>
                                     {accesibilidadAgrupada[tipo].length > 0 ? (
                                         <ul style={{ paddingLeft: '20px' }}>
                                             {accesibilidadAgrupada[tipo].map((nombre, i) => (
-                                                <li key={i}>{nombre}</li>
+                                                <li style={{color: modoNocturno ? "#fff" : "" }} key={i}>{nombre}</li>
                                             ))}
                                         </ul>
                                     ) : (
@@ -193,15 +202,15 @@ export default function VerMarcador({ MarcadorSelectId, CerrarMarcador, establec
 
                 {reseñasAMostrar.map((resena) => (
                     <div key={resena.idresena} style={{ textAlign: 'left', borderBottom: '1px solid #ccc', margin: '10px 0px 10px 0px', padding: '10px' }}>
-                        <p style={{ fontWeight: 400 }}>{resena.nombreusuario}</p>
+                        <p style={{ fontWeight: 400, color: modoNocturno ? "#fff" : "" }}>{resena.nombreusuario}</p>
                         <div style={{ display: 'flex', gap: 3 }}>
-                            <p> <FontAwesomeIcon icon={faStar} size="2xs" style={{ color: "#FFD43B", }} /> {resena.calificacion} </p>
+                            <p style={{color: modoNocturno ? "#fff" : ""}} > <FontAwesomeIcon icon={faStar} size="2xs" style={{ color: "#FFD43B", }} /> {resena.calificacion} </p>
 
-                            <p style={{ opacity: 0.5 }}> • <em>{formatDistanceToNow(new Date(resena.fecha), { addSuffix: true, locale: es })}</em></p>
+                            <p style={{ opacity: 0.5, color: modoNocturno ? "#fff" : "" }}> • <em>{formatDistanceToNow(new Date(resena.fecha), { addSuffix: true, locale: es })}</em></p>
 
                         </div>
 
-                        <p style={{ textAlign: 'justify', fontSize: '0.9rem', marginTop: '10px' }}>{resena.comentario}</p>
+                        <p style={{ color: modoNocturno ? "#fff" : "", textAlign: 'justify', fontSize: '0.9rem', marginTop: '10px' }}>{resena.comentario}</p>
                     </div>
                 ))}
 
@@ -215,48 +224,74 @@ export default function VerMarcador({ MarcadorSelectId, CerrarMarcador, establec
     }
 
     return (
-        <div className={styles.container} style={{ width: width, height: height }}>
+        <div className={styles.container} style={{ backgroundColor: modoNocturno ? "#2d2d2d" : "" ,width: width, height: height }}>
             <div className={styles.HeaderFijo}>
                 <button onClick={CerrarMarcador} className={styles.CerrarMarcador}>X</button>
                 {cargando ? (
                     <p>Cargando imagen...</p>
                 ) : (
-                    <img
+                    <ImagenConFallback
                         src={Marcador?.url_img}
                         alt="Imagen del recinto"
                         className={styles.imagenMarcador}
                     />
                 )}
-                <div className={styles.headerContenido}>
+                <div style={{backgroundColor: modoNocturno ? "#2d2d2d" : ""}} className={styles.headerContenido}>
                     <div className={styles.info}>
-                        <h2>{cargando ? 'Cargando...' : Marcador?.nombre_recinto}</h2>
-                        <h4>{cargando ? 'Cargando...' : '> ' + Marcador?.tipo_recinto}</h4>
-                        <p style={{ marginTop: '10px' }}> <FontAwesomeIcon icon={faStar} size="2xs" style={{ color: "#FFD43B", }} /> • 4.4 de la comunidad.</p>
+                        <h2 style={{color: modoNocturno ? "#fff" : ""}}>{cargando ? 'Cargando...' : Marcador?.nombre_recinto}</h2>
+                        <h4 style={{color: modoNocturno ? "#fff" : ""}} >{cargando ? 'Cargando...' : '> ' + Marcador?.tipo_recinto}</h4>
+                        <p style={{ marginTop: '10px', color: modoNocturno ? "#fff" : ""  }}> <FontAwesomeIcon icon={faStar} size="2xs" style={{ color: "#FFD43B", }} /> • 4.4 de la comunidad.</p>
                         <p>
-                            <span style={{ opacity: 0.5, fontSize: '0.9rem' }}>
+                            <span style={{ opacity: 0.5, fontSize: '0.9rem', color: modoNocturno ? "#fff" : ""  }}>
                                 <FontAwesomeIcon icon={faStar} size="2xs" style={{ color: "#FFD43B", }} /> • 4.6 en Google Maps.
                             </span>
                         </p>
                     </div>
-                    <div className={styles.containerButtons}>
-                        <button >
-                            <FontAwesomeIcon icon={faShareNodes} className={styles.icon} /> <p>Compartir</p>
-                        </button>
-                        <button onClick={() => {
-                            establecerIdRutaMarcador(Marcador.id as number);
-                            CerrarMarcador();
-                        }}>
-
-                            <FontAwesomeIcon icon={faRoute} className={styles.icon} />
-                            <p>Cómo llegar</p>
-                        </button>
-                        {!mostrarFormulario &&
-                            <button onClick={() => setMostrarFormulario(true)}>
-                                <FontAwesomeIcon icon={faCommentDots} className={styles.icon} />
-                                <p>Escribir Reseña</p>
-                            </button>
-                        }
-
+                    <div  className={styles.containerButtons}>
+                        {MostrarCompartir ? (
+                            // Botones cuando estás en modo Compartir
+                            <>
+                                <button onClick={volverAMarcador}>
+                                    <FontAwesomeIcon icon={faInfo} style={{ width: "13px" }} className={styles.icon} />
+                                    <p style={{color: modoNocturno ? "#fff" : "" }}>Informacion</p>
+                                </button>
+                                <button onClick={() => {
+                                    establecerIdRutaMarcador(Marcador.id as number);
+                                    CerrarMarcador();
+                                }}>
+                                    <FontAwesomeIcon icon={faRoute} className={styles.icon} />
+                                    <p style={{color: modoNocturno ? "#fff" : "" }}>Cómo llegar</p>
+                                </button>
+                                <button onClick={() => {
+                                    setMostrarCompartir(false);
+                                    setMostrarFormulario(true);
+                                }}>
+                                    <FontAwesomeIcon icon={faCommentDots} className={styles.icon} />
+                                    <p style={{color: modoNocturno ? "#fff" : "" }}>Escribir Reseña</p>
+                                </button>
+                            </>
+                        ) : (
+                            // Botones normales cuando NO estás en modo Compartir
+                            <>
+                                <button onClick={() => setMostrarCompartir(true)}>
+                                    <FontAwesomeIcon icon={faShareNodes} className={styles.icon} />
+                                    <p style={{color: modoNocturno ? "#fff" : "" }} >Compartir</p>
+                                </button>
+                                <button onClick={() => {
+                                    establecerIdRutaMarcador(Marcador.id as number);
+                                    CerrarMarcador();
+                                }}>
+                                    <FontAwesomeIcon icon={faRoute} className={styles.icon} />
+                                    <p style={{color: modoNocturno ? "#fff" : "" }}>Cómo llegar</p>
+                                </button>
+                                {!mostrarFormulario && (
+                                    <button onClick={() => setMostrarFormulario(true)}>
+                                        <FontAwesomeIcon icon={faCommentDots} className={styles.icon} />
+                                        <p style={{color: modoNocturno ? "#fff" : "" }}>Escribir Reseña</p>
+                                    </button>
+                                )}
+                            </>
+                        )}
                     </div>
                 </div>
 
@@ -264,17 +299,29 @@ export default function VerMarcador({ MarcadorSelectId, CerrarMarcador, establec
 
 
             <div className={styles.ContenedorInfo}>
-
-                {!mostrarFormulario && (
+                {MostrarCompartir ? (
+                    <Compartir />
+                ) : mostrarFormulario ? (
+                    <EscribirResena
+                        onSubmit={(resena) => {
+                            console.log('Reseña enviada:', resena);
+                            setMostrarFormulario(false);
+                        }}
+                        onCancel={() => setMostrarFormulario(false)}
+                        idMarcador={MarcadorSelectId}
+                    />
+                ) : (
                     <>
                         <div className={styles.headerInfo}>
                             <button
+                                
                                 className={tabActiva === 'general' ? styles.tabActiva : ''}
                                 onClick={() => setTabActiva('general')}
                             >
                                 General
                             </button>
                             <button
+                
                                 className={tabActiva === 'resenas' ? styles.tabActiva : ''}
                                 onClick={() => setTabActiva('resenas')}
                             >
@@ -285,16 +332,6 @@ export default function VerMarcador({ MarcadorSelectId, CerrarMarcador, establec
                             {tabActiva === 'general' ? <InfoMarcador /> : <ListReviews />}
                         </div>
                     </>
-                )}
-                {mostrarFormulario && (
-                    <EscribirResena
-                        onSubmit={(resena) => {
-                            console.log('Reseña enviada:', resena,);
-                            setMostrarFormulario(false);
-                        }}
-                        onCancel={() => setMostrarFormulario(false)}
-                        idMarcador={MarcadorSelectId}
-                    />
                 )}
             </div>
 

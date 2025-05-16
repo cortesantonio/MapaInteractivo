@@ -1,10 +1,10 @@
-import styles from './List.module.css'
+import styles from './css/List.module.css'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faEye, faMagnifyingGlass, faFilter, faSort, faCheck, faX, faInfo } from '@fortawesome/free-solid-svg-icons';
 import { useEffect, useState } from 'react';
 import { Solicitudes } from '../../interfaces/Solicitudes';
 import { supabase } from '../../services/supabase';
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams	 } from "react-router-dom";
 import NavbarAdmin from '../../components/NavbarAdmin';
 function ListSolicitudes() {
     const [isActiveBuscador, setIsActiveBuscador] = useState(false);
@@ -13,7 +13,13 @@ function ListSolicitudes() {
     const [filtroEstado, setFiltroEstado] = useState('');
     const [orden, setOrden] = useState('desc');
     const navigate = useNavigate()
+    const { estado } = useParams<{ estado?: string }>();
 
+    useEffect(() => {
+        if (estado) {
+            setFiltroEstado(estado); 
+        }
+    }, [estado]);
     useEffect(() => {
         const fetchSolicitudes = async () => {
             const { data, error } = await supabase
@@ -62,6 +68,11 @@ function ListSolicitudes() {
             filtroEstado ? sol.estado === filtroEstado : true
         );
 
+        const handleFiltroCambio = (e: React.ChangeEvent<HTMLSelectElement>) => {
+        const nuevoEstado = e.target.value;
+        setFiltroEstado(nuevoEstado);
+        navigate(`/panel-administrativo/solicitudes/${nuevoEstado}`); 
+    };
     return (
         <>
             <NavbarAdmin />
@@ -79,11 +90,11 @@ function ListSolicitudes() {
 
                         <div className={styles.filtroCard}>
                             <label htmlFor="filtro"><FontAwesomeIcon icon={faFilter} /> </label>
-                            <select id="filtro" onChange={(e) => setFiltroEstado(e.target.value)}>
+                            <select id="filtro" value={filtroEstado} onChange={handleFiltroCambio} >
                                 <option value="">Todos</option>
                                 <option value="pendiente">Pendiente</option>
-                                <option value="aprobado">Aprobado</option>
-                                <option value="rechazado">Rechazado</option>
+                                <option value="aprobada">Aprobado</option>
+                                <option value="rechazada">Rechazado</option>
                             </select>
                         </div>
 
@@ -119,23 +130,31 @@ function ListSolicitudes() {
 
 
                     {solicitudesFiltradas.map((solicitud) => (
-                        <div className={styles.card} key={solicitud.id}>
+                        <div className={styles.card} key={solicitud.id} style={{ cursor: 'pointer' }} onClick={() => { navigate(`/panel-administrativo/solicitud/${solicitud.id}`) }}>
                             <div className={styles.estado}
                                 style={{ backgroundColor: bgcolor(solicitud.estado) }}
                             >
                                 <FontAwesomeIcon icon={iconos(solicitud.estado)} size='xl' style={{ color: 'white' }} />
                             </div>
                             <div className={styles.cardContent}>
+                                <p style={{ color: bgcolor(solicitud.estado), fontSize: '0.7rem', fontWeight: '500', textTransform: 'uppercase' }}>{solicitud.estado}</p>
                                 <p style={{ color: solicitud.nombre_locacion.length > 0 ? 'black' : 'red' }}>
                                     {solicitud.nombre_locacion.length > 0 ? solicitud.nombre_locacion : 'Sin nombre'}
                                 </p>
                                 <p style={{ color: solicitud.direccion.length > 0 ? 'gray' : 'red', fontSize: '0.9rem' }}>
                                     {solicitud.direccion.length > 0 ? solicitud.direccion : 'Sin dirección'}
                                 </p>
+                                <p style={{ color: 'gray', fontSize: '0.8rem' }}>
+                                    Fecha Ingreso: {new Date(solicitud.fecha_ingreso).toLocaleDateString('es-CL', {
+                                        year: 'numeric',
+                                        month: '2-digit',
+                                        day: '2-digit',
+                                    })}
+                                </p>
+                                
+
                             </div>
-                            <div className={styles.opciones} onClick={() => { navigate(`/panel-administrativo/solicitud/${solicitud.id}`) }}>
-                                <button><FontAwesomeIcon icon={faInfo} /> Revisar</button>
-                            </div>
+
                         </div>
                     ))}
                 </div>

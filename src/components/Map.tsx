@@ -1,10 +1,12 @@
 import { useState, useEffect } from "react";
 import { supabase } from '../services/supabase';
 import { APIProvider, Map as GoogleMap, useMap, AdvancedMarker } from "@vis.gl/react-google-maps";
+import { useTheme } from "./Footer/Modo_Nocturno";
 
 const apiKey = import.meta.env.VITE_GOOGLE_APIKEY;
 const lugarCentrado = { lat: -34.985378, lng: -71.239395 };
 const zoomPorDefecto = 15;
+
 
 const CustomMap = ({
   marcadores,
@@ -15,6 +17,8 @@ const CustomMap = ({
   modoViaje,
   onUbicacionActiva,
   onIndicaciones,
+  mapacentrado,
+  setMapacentrado
 }: {
   marcadores: any[],
   SeleccionMarcador: (id: number) => void,
@@ -23,7 +27,9 @@ const CustomMap = ({
   onStreetViewChange?: (isActive: boolean) => void
   modoViaje: 'DRIVING' | 'BICYCLING' | 'WALKING' | 'TRANSIT'
   onUbicacionActiva: (activa: boolean) => void,
-  onIndicaciones: (instrucciones: string[]) => void
+  onIndicaciones: (instrucciones: string[]) => void,
+  mapacentrado: boolean;
+  setMapacentrado: (valor: boolean) => void;
 
 }) => {
 
@@ -45,7 +51,8 @@ const CustomMap = ({
           position: window.google.maps.ControlPosition.RIGHT_CENTER,
         },
         gestureHandling: "greedy",
-        clickableIcons: false
+        clickableIcons: false,
+        keyboardShortcuts: false
         
       });
 
@@ -93,8 +100,6 @@ const CustomMap = ({
       }
     });
 
-
-  
     directionsRenderer.setMap(map);
   
     directionsService.route(
@@ -126,11 +131,31 @@ const CustomMap = ({
 
   useEffect(() => {
     if (ubicacionUsuario) {
-      onUbicacionActiva(true); 
+      onUbicacionActiva(true);
     } else {
-      onUbicacionActiva(false); 
+      onUbicacionActiva(false);
     }
   }, [ubicacionUsuario, onUbicacionActiva]);
+
+  useEffect(() => {
+    if (mapacentrado && map && ubicacionUsuario) {
+      map.panTo(ubicacionUsuario); 
+    }
+  }, [ubicacionUsuario, mapacentrado, map]);
+
+  useEffect(() => {
+    if (!map) return;
+
+    const listener = map.addListener("dragstart", () => {
+      if (mapacentrado) {
+        setMapacentrado(false); 
+      }
+    });
+
+    return () => {
+      listener.remove();
+    };
+  }, [map, mapacentrado]);
 
 
   return (
@@ -194,8 +219,6 @@ const CustomMap = ({
         </div>
       </AdvancedMarker>
 
-
-
       )}
     </>
   );
@@ -209,7 +232,9 @@ const Map = ({
   modoViaje,
   destinoRuta,
   onUbicacionActiva,
-  onIndicaciones
+  onIndicaciones,
+  mapacentrado,
+  setMapacentrado
 
 }: {
   center?: { lat: number, lng: number },
@@ -219,18 +244,22 @@ const Map = ({
   destinoRuta?: { lat: number, lng: number } | null,
   modoViaje: 'DRIVING' | 'BICYCLING' | 'WALKING' | 'TRANSIT',
   onUbicacionActiva: (activa: boolean) => void,
-  onIndicaciones: (instrucciones: string[]) => void
+  onIndicaciones: (instrucciones: string[]) => void,
+  mapacentrado: boolean;
+  setMapacentrado: (valor: boolean) => void;
 
 }) => {
   const [marcadores, setMarcadores] = useState<any[]>([]);
   const [ubicacionUsuario, setUbicacionUsuario] = useState<{ lat: number, lng: number } | null>(null);
+  const {modoNocturno} = useTheme ();
   
 
   useEffect(() => {
     const fetchMarcador = async () => {
       const { data, error } = await supabase
         .from("marcador")
-        .select("id, latitud, longitud");
+        .select("id, latitud, longitud")
+        .eq("activo", true); 
   
       if (error) {
         console.error("Error al obtener los marcadores:", error);
@@ -238,6 +267,7 @@ const Map = ({
         setMarcadores(data);
       }
     };
+    
   
     fetchMarcador();
   
@@ -269,7 +299,7 @@ const Map = ({
 
   return (
     <APIProvider apiKey={apiKey}>
-      <GoogleMap defaultCenter={center} defaultZoom={zoom} style={{ height: "100%", width: "100%" }} colorScheme="DARK" mapId="e50cadbbb32f1efa">
+      <GoogleMap defaultCenter={center} defaultZoom={zoom} style={{ height: "100%", width: "100%" }} colorScheme= {modoNocturno ? "DARK": "LIGHT"} mapId="e50cadbbb32f1efa">
         <CustomMap
           marcadores={marcadores}
           SeleccionMarcador={onSeleccionMarcador}
@@ -279,6 +309,8 @@ const Map = ({
           destinoRuta={destinoRuta}
           onUbicacionActiva={onUbicacionActiva}
           onIndicaciones={onIndicaciones} 
+          mapacentrado={mapacentrado}
+          setMapacentrado={setMapacentrado}
 
         />
       </GoogleMap>

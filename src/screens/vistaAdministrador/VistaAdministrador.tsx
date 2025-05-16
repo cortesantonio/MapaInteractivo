@@ -25,6 +25,7 @@ function VistaAdministrador() {
 
         fetchData();
     }, []);
+    const pendientes = datosGrafico.filter(item => item.estado === "pendiente").length;
 
     return (
 
@@ -42,10 +43,9 @@ function VistaAdministrador() {
                 }}
             >
                 <div style={{
-                    marginTop: "10px",
-                    width: "65vw",
-                    height: "25vh",
-                    display: "flex",
+                    padding: "10px",
+                    width: "80%",
+                    height: "23vh",
                 }}>
 
                     < GraficoTorta datosGrafico={datosGrafico} />
@@ -175,7 +175,7 @@ function VistaAdministrador() {
                             border: "none",
                             fontSize: "17px",
                             padding: "4px"
-                        }} onClick={() => { navigate('/panel-administrativo/solicitudes') }}  >* nuevas solicitudes.</button>
+                        }} onClick={() => { navigate('/panel-administrativo/solicitudes') }}  >({pendientes}) nuevas solicitudes.</button>
 
                         <button
                             style={{
@@ -187,7 +187,7 @@ function VistaAdministrador() {
                                 border: "none",
                                 fontSize: "17px",
                                 padding: "4px"
-                            }} onClick={() => { navigate('/panel-administrativo/solicitudes') }}
+                            }} onClick={() => { navigate('/panel-administrativo/solicitudes/aprobada') }}
                         >Solicitudes aceptadas.
                         </button>
 
@@ -201,7 +201,7 @@ function VistaAdministrador() {
                                 border: "none",
                                 fontSize: "17px",
                                 padding: "4px"
-                            }} onClick={() => { navigate('/panel-administrativo/solicitudes') }}
+                            }} onClick={() => { navigate('/panel-administrativo/solicitudes/rechazada') }}
                         >Solicitudes rechazadas.
                         </button>
                     </div>

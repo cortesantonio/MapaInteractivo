@@ -146,3 +146,37 @@ button{cursor: pointer;}
     text-align: center;
     font-size: 18px;
 }
+
+.PanelActivo.darkMode {
+    color: white;
+}
+
+.darkMode .Titulo {
+    color: white;
+}
+
+.darkMode .ButtonSesion,
+.darkMode .ButtonColab,
+.darkMode .ButtonCompact {
+    color: white;
+}
+
+
+
+.darkMode .SpanNoctur {
+    color: white;
+}
+
+.darkMode .TituloFuente {
+    color: white;
+}
+
+.darkMode .MenosFuente,
+.darkMode .MasFuente {
+    color: white;
+}
+
+.darkMode .MenosA,
+.darkMode .MasA {
+    color: white;
+}
