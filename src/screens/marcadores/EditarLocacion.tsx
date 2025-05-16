@@ -1,19 +1,24 @@
 import styles from './css/EditarLocacion.module.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { faReply } from '@fortawesome/free-solid-svg-icons';
 import { Marcador } from '../../interfaces/Marcador';
 import { Accesibilidad } from '../../interfaces/Accesibilidad';
 import { Tipo_Recinto } from '../../interfaces/Tipo_Recinto';
 import { supabase } from '../../services/supabase';
 import { useNavigate, useParams } from 'react-router-dom';
+import { useLoadScript, Autocomplete } from "@react-google-maps/api";
+import { APIProvider, Map as VisMap, AdvancedMarker } from "@vis.gl/react-google-maps";
 import ImagenConFallback from '../../components/ImagenConFallback';
 
 interface TipoDeAccesibilidades {
     [tipo: string]: Accesibilidad[];
 }
 
+const LIBRARIES: ("places")[] = ['places'];
+
 export default function EditarLocacion() {
+    const apiKey = import.meta.env.VITE_GOOGLE_APIKEY;
     const navigate = useNavigate()
     const { id } = useParams();
     const [accesibilidades, setAccesibilidades] = useState<TipoDeAccesibilidades>({});
@@ -88,6 +93,11 @@ export default function EditarLocacion() {
             } else {
                 setDataMarcador(data);
 
+                if (data.latitud && data.longitud) {
+                    setPosition({ lat: data.latitud, lng: data.longitud });
+                    setDireccionValida(true);
+                }
+
                 const { data: relaciones, error: errorRelaciones } = await supabase
                     .from('accesibilidad_marcador')
                     .select('id_accesibilidad')
@@ -109,6 +119,11 @@ export default function EditarLocacion() {
 
     const actualizarMarcador = async () => {
         if (!id) return;
+
+        if (!direccionValida) {
+            alert('Por favor, selecciona una dirección desde las sugerencias de Google Places.');
+            return;
+        }
 
         try {
             // 1. Actualiza la tabla 'marcador'
@@ -157,6 +172,20 @@ export default function EditarLocacion() {
             console.error('Error inesperado:', err);
         }
     };
+    
+    const { isLoaded, loadError } = useLoadScript({
+        googleMapsApiKey: apiKey,
+        libraries: LIBRARIES,
+    });
+
+    const [autocomplete, setAutocomplete] = useState<google.maps.places.Autocomplete | null>(null);
+    const [position, setPosition] = useState<{ lat: number; lng: number } | null>(null);
+    const [direccionValida, setDireccionValida] = useState(false);
+    const inputRef = useRef<HTMLInputElement>(null);
+
+    if (loadError) return <div>Error cargando Places</div>;
+    if (!isLoaded) return <div>Cargando Autocomplete...</div>;
+
 
     return (
 
@@ -218,11 +247,67 @@ export default function EditarLocacion() {
                                 </select>
 
                                 <label className={styles.labelSeccion} htmlFor="">Direccion</label>
-                                <input
-                                    type="text"
-                                    value={dataMarcador.direccion}
-                                    onChange={(e) => setDataMarcador({ ...dataMarcador, direccion: e.target.value })}
-                                    className={styles.inputText} required />
+                                <Autocomplete
+                                    onLoad={ac => setAutocomplete(ac)}
+                                    onPlaceChanged={() => {
+                                        if (!autocomplete) return;
+                                        const place = autocomplete.getPlace();
+                                        if (place.geometry?.location) {
+                                            const lat = place.geometry.location.lat();
+                                            const lng = place.geometry.location.lng();
+
+                                            setPosition({ lat, lng });
+                                            setDireccionValida(true);
+
+                                            setDataMarcador(prev => ({
+                                                ...prev,
+                                                latitud: lat,
+                                                longitud: lng,
+                                                direccion: place.formatted_address || '',
+                                            }));
+                                        }
+                                    }}
+                                    options={{
+                                        types: ['address'],
+                                        fields: ['geometry', 'formatted_address'],
+                                        componentRestrictions: { country: 'cl' }
+                                    }}
+                                >
+                                    <input
+                                        ref={inputRef}
+                                        type="text"
+                                        value={dataMarcador.direccion}
+                                        placeholder="Escribe una dirección…"
+                                        className={styles.inputText}
+                                        onChange={(e) => {
+                                            const nuevaDireccion = e.target.value;
+                                            setDireccionValida(false);
+                                            setPosition(null);
+                                            setDataMarcador(prev => ({
+                                                ...prev,
+                                                direccion: nuevaDireccion,
+                                            }));
+                                        }}
+                                        required
+                                    />
+                                </Autocomplete>
+                                <APIProvider apiKey={apiKey}>
+                                    {position && (
+                                        <VisMap
+                                            mapId="bf51a910020fa25a"
+                                            center={position}
+                                            defaultZoom={16}
+                                            disableDefaultUI={true}
+                                            zoomControl={true}
+                                            gestureHandling="greedy"
+                                            keyboardShortcuts={false}
+                                            style={{ width: '100%', height: '200px', paddingBottom:"5px"}}
+                                        >
+                                            <AdvancedMarker position={position} />
+                                        </VisMap>
+                                    )}
+                                </APIProvider>
+
                                 <label className={styles.labelSeccion} htmlFor="">Pagina Web</label>
                                 <input
                                     type="text"
@@ -245,16 +330,6 @@ export default function EditarLocacion() {
                                         type="number" value={dataMarcador.telefono}
                                         onChange={(e) => setDataMarcador({ ...dataMarcador, telefono: e.target.value })} required />
                                 </div>
-                                <label className={styles.labelSeccion} htmlFor="">Latitud</label>
-                                <input className={styles.inputText} //Crear 
-                                    type="number"
-                                    value={dataMarcador.latitud}
-                                    onChange={(e) => setDataMarcador({ ...dataMarcador, latitud: parseFloat(e.target.value) })} required />
-                                <label className={styles.labelSeccion} htmlFor="">Longitud</label>
-                                <input className={styles.inputText}
-                                    type="number"
-                                    value={dataMarcador.longitud}
-                                    onChange={(e) => setDataMarcador({ ...dataMarcador, longitud: parseFloat(e.target.value) })} required />
 
                             </div>
                             {/*Segundo Grupo*/}
