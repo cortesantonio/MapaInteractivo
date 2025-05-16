@@ -51,7 +51,7 @@ function BotonEventos() {
           backgroundColor: modoNocturno ? "#2d2d2d" : "white",
           borderRadius: "5px",
           overflow: "hidden",
-          width: window.innerWidth < 768 ? "85%" : "300px",
+          width: window.innerWidth < 768 ? "100%" : "300px",
           transition: "width 0.3s ease-in-out",
           padding: EventoIsVisible ? "10px" : "0",
         }}

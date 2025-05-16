@@ -35,21 +35,11 @@ export default function Footer({
     const { user } = useAuth();
     const { modoNocturno } = useTheme(); // Usar el contexto del tema
     const [panelActivo, setPanelActivo] = useState<"map" | "user" | "microphone" | null>(null);
-    
-    const [width, setWidth] = useState(window.innerWidth <= 768 ? "80%" : "300px");
     const setHeight = useState("0px")[1];
     const [Isdisplay, setIsdisplay] = useState("none");
     const [activarReconocimiento, setactivarReconocimiento] = useState(false);
     const {fontSize} = useFontSize ();
 
-    useEffect(() => {
-        const handleResize = () => {
-            setWidth(window.innerWidth <= 768 ? "98%" : "300px");
-        };
-
-        window.addEventListener("resize", handleResize);
-        return () => window.removeEventListener("resize", handleResize);
-    });
 
     const togglePanel = (panel: "map" | "user" | "microphone") => {
         if (panelActivo === panel) {
@@ -103,28 +93,28 @@ export default function Footer({
 
     
     return (
-        <div className={`${styles.ContenPrin} ${modoNocturno ? styles.darkMode : ''}`} 
-             style={{ fontSize: `${fontSize}rem`, width: width }}>
+        <div className={`${styles.ContenPrin} ${modoNocturno ? styles.darkMode : ''}`}
+            style={{ fontSize: `${fontSize}rem`, width: window.innerWidth <= 768 ? "98%" : "300px" }}>
 
             <div className={styles.ContenButton}>
                 <button onClick={() => togglePanel("map")} className={styles.Button}>
-                    <FontAwesomeIcon icon={panelActivo === "map" ? faChevronDown : faMapLocation} 
-                                   size="xl" 
-                                   style={{ color: panelActivo === "map" ? "blue" : (modoNocturno ? "#fff" : "gray") }} />
+                    <FontAwesomeIcon icon={panelActivo === "map" ? faChevronDown : faMapLocation}
+                        size="xl"
+                        style={{ color: panelActivo === "map" ? "blue" : (modoNocturno ? "#fff" : "gray") }} />
                 </button>
                 <button onClick={() => togglePanel("user")} className={styles.Button}>
-                    <FontAwesomeIcon icon={faUser} 
-                                   size="xl" 
-                                   style={{ color: panelActivo === "user" ? "blue" : (modoNocturno ? "#fff" : "gray") }} />
+                    <FontAwesomeIcon icon={faUser}
+                        size="xl"
+                        style={{ color: panelActivo === "user" ? "blue" : (modoNocturno ? "#fff" : "gray") }} />
                 </button>
             </div>
-            
+
             <button onClick={() => togglePanel("microphone")} className={styles.ButtonMicro}>
-                <FontAwesomeIcon icon={panelActivo === "microphone" ? faCircleXmark : faMicrophone} 
-                               size="xl" 
-                               style={{ color: "white" }} />
+                <FontAwesomeIcon icon={panelActivo === "microphone" ? faCircleXmark : faMicrophone}
+                    size="xl"
+                    style={{ color: "white" }} />
             </button>
-            
+
             <div className={`${styles.PanelInfo} ${modoNocturno ? styles.darkMode : ''}`} 
                  style={{
                     display: Isdisplay, 
@@ -133,7 +123,6 @@ export default function Footer({
                 }}>
                 
                 {panelActivo === "map" && <TrazadoRuta 
-                    
                     closePanel={closePanel} 
                     panelActivo={panelActivo}
                     onSeleccionMarcadorRecientes={onSeleccionMarcador} 
@@ -144,7 +133,6 @@ export default function Footer({
                     onIndicaciones={onIndicaciones}/>}
 
                 {panelActivo === "user" && <User 
-                   
                     closePanel={closePanel} 
                     panelActivo={panelActivo} 
                     user={user} 
@@ -155,7 +143,9 @@ export default function Footer({
                 {panelActivo === "microphone" && <Microfono 
                     closePanel={closePanel}
                     panelActivo={panelActivo} 
-                    activarReconocimiento={activarReconocimiento} />}
+                    activarReconocimiento={activarReconocimiento}
+                    onSeleccionMarcador={onSeleccionMarcador} />}
+                    
             </div>
         </div>
     );

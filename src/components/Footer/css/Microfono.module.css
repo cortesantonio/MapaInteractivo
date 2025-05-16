@@ -30,3 +30,32 @@
     flex-direction: column;
     gap: 20px;
 }
+
+.EscuchandoTexto {
+    margin-top: 10px;
+    color: rgb(255, 3, 3);
+    font-weight: bold;
+    animation: parpadeo 1s infinite;
+    text-align: center;
+}
+
+@keyframes parpadeo {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0; }
+}
+
+.BotonReintentar {
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: white;
+    font-weight: bold;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    margin-top: 20px;
+}
+
+.BotonReintentar:hover {
+    background-color: #0056b3;
+}
