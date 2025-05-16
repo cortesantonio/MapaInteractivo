@@ -1,10 +1,12 @@
 import { useState, useEffect } from "react";
 import { supabase } from '../services/supabase';
 import { APIProvider, Map as GoogleMap, useMap, AdvancedMarker } from "@vis.gl/react-google-maps";
+import { useTheme } from "./Footer/Modo_Nocturno";
 
 const apiKey = import.meta.env.VITE_GOOGLE_APIKEY;
 const lugarCentrado = { lat: -34.985378, lng: -71.239395 };
 const zoomPorDefecto = 15;
+
 
 const CustomMap = ({
   marcadores,
@@ -249,6 +251,7 @@ const Map = ({
 }) => {
   const [marcadores, setMarcadores] = useState<any[]>([]);
   const [ubicacionUsuario, setUbicacionUsuario] = useState<{ lat: number, lng: number } | null>(null);
+  const {modoNocturno} = useTheme ();
   
 
   useEffect(() => {
@@ -296,7 +299,7 @@ const Map = ({
 
   return (
     <APIProvider apiKey={apiKey}>
-      <GoogleMap defaultCenter={center} defaultZoom={zoom} style={{ height: "100%", width: "100%" }} colorScheme="DARK" mapId="e50cadbbb32f1efa">
+      <GoogleMap defaultCenter={center} defaultZoom={zoom} style={{ height: "100%", width: "100%" }} colorScheme= {modoNocturno ? "DARK": "LIGHT"} mapId="e50cadbbb32f1efa">
         <CustomMap
           marcadores={marcadores}
           SeleccionMarcador={onSeleccionMarcador}

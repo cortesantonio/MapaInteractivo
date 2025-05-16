@@ -80,7 +80,7 @@
 .imagenes h4 {
     line-height: 1.0;
     margin-left: 5px;
-    font-size: clamp(0.9rem, 1.5vw, 1rem);
+    font-size: clamp(1.0rem, 1.5vw, 1rem);
 }
 
 .imagen_container {
@@ -163,11 +163,11 @@
 }
 
 .Pre_Descripcion h4 {
-    margin: 0 0 10px 0;
+    margin: 5px 0 10px 0;
     text-align: left;
     width: 100%;
     font-weight: 350;
-    font-size: clamp(0.9rem, 1.5vw, 1rem);
+    font-size: clamp(1.1rem, 1.5vw, 1rem);
     line-height: 1.4;
 }
 
@@ -190,7 +190,7 @@
 }
 
 .especificacion_de_contenido h5 {
-    font-size: clamp(0.95rem, 1.8vw, 1.05rem);
+    font-size: clamp(1.1rem, 1.8vw, 1.05rem);
     margin-bottom: 5px;
     font-weight: 500;
 }
@@ -203,7 +203,7 @@
 
 .especificacion_de_contenido h4 {
     margin: 10px 0 5px 0;
-    font-size: clamp(0.9rem, 1.5vw, 1rem);
+    font-size: clamp(1.1rem, 1.5vw, 1rem);
     font-weight: 400;
 }
 
@@ -218,7 +218,7 @@
     position: relative;
     padding-left: 15px;
     line-height: 1.4;
-    font-size: clamp(0.85rem, 1.4vw, 0.95rem);
+    font-size: clamp(1.1rem, 1.4vw, 0.95rem);
 }
 
 .especificacion_de_contenido li:before {
