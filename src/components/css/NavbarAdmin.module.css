@@ -1,7 +1,7 @@
 .container {
     width: 100%;
     align-items: center;
-    padding: 10px 25px;
+    padding: 20px 20px;
     background-color: rgba(0, 0, 0, 0.068);
 }
 
@@ -41,21 +41,29 @@
 
 .ButtonCruds {
     display: flex;
-    align-items: center;
-    justify-content: center;
+    align-items: right;
+    justify-content: right;
     width: 100%;
     padding-top: 10px;
     padding-bottom: 10px;
+    gap: 20px;
 }
 
 .ButtonCruds button {
     font-size: 18px;
-    padding: 10px 25px;
     border: none;
     cursor: pointer;
     align-items: center;
     display: flex;
     gap: 5px;
+    transition: 0.3s;
+    font-size: 1rem;
+
+}
+
+.ButtonCruds button:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+    transform: translateY(-1px);
 }
 
 .navMenuContainer {
@@ -79,32 +87,37 @@
         flex-wrap: wrap;
         position: relative;
     }
+
     .ButtonBars {
         display: block;
     }
+
     .navMenuContainer {
         position: absolute;
         top: 100%;
         left: 0;
         width: 100%;
-        background-color: rgba(34, 33, 33, 0.9);
+        background-color: rgba(121, 120, 120, 0.952);
         max-height: 0;
         overflow: hidden;
         transition: max-height 0.3s ease-in-out;
         z-index: 100
     }
+
     .menuOpen {
-        max-height: 300px;
+        max-height: 350px;
     }
+
     .ButtonCruds {
         flex-direction: column;
         width: 100%;
-        padding: 10px 0;
         gap: 0;
     }
+
     .ButtonCruds div {
         width: 100%;
     }
+
     .ButtonCruds button {
         width: 100%;
         text-align: left;
@@ -113,9 +126,9 @@
         background-color: transparent;
         display: flex;
         align-items: center;
-        gap: 10px;
         transition: background-color 0.2s;
     }
+
     .ButtonCruds button:hover {
         background-color: rgba(255, 255, 255, 0.1);
     }
