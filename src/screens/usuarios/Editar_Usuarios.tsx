@@ -7,9 +7,11 @@ import { Usuarios } from "../../interfaces/Usuarios"
 import { useNavigate, useParams } from "react-router-dom"
 import { Accesibilidad } from '../../interfaces/Accesibilidad';
 import { Discapacidad } from "../../interfaces/Discapacidad"
+import { useAuth } from '../../hooks/useAuth';
 
 function Editar_Usuarios() {
-  const { id } = useParams()
+  const { id } = useParams();
+  const { user } = useAuth();
   const [mostrarContraseña, setMostrarContraseña] = useState(false);
   const [usuarios, setUsuarios] = useState<Usuarios[]>([]);
   const [accesibilidad, setAccesibilidad] = useState<Accesibilidad[]>([]);
@@ -225,6 +227,29 @@ function Editar_Usuarios() {
       console.error('Error general al actualizar:', error);
       alert("Ocurrió un error al actualizar la información");
     }
+    Registro_cambios();
+  };
+
+  const fechaHoraActual = new Date().toISOString();
+
+  const Registro_cambios = async () => {
+    const { data: registro_logs, error: errorLog } = await supabase
+      .from('registro_logs')
+      .insert([
+        {
+          id_usuario: user?.id,
+          tipo_accion: 'Edición de Usuario',
+          detalle: `Se Editó información de un Usuario con ID ${id}`,
+          fecha_hora: fechaHoraActual,
+        }
+      ]);
+
+    if (errorLog) {
+      console.error('Error al registrar en los logs:', errorLog);
+      return;
+    }
+
+    console.log(' Registro insertado en registro_logs correctamente', registro_logs);
   };
 
   const handleDiscapacidadChange = (field: keyof Discapacidad, value: string) => { const updated = [{ ...discapacidad[0], [field]: value }]; setDiscapacidad(updated); };

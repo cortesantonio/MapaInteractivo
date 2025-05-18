@@ -7,8 +7,10 @@ import { supabase } from '../../services/supabase';
 import EditarAccesibilidad from './Editar';
 import { useNavigate } from "react-router-dom";
 import NavbarAdmin from '../../components/NavbarAdmin';
+import { useAuth } from '../../hooks/useAuth';
 
 function ListAccesibilidad() {
+    const { user } = useAuth();
     const [accesibilidades, setAccesibilidades] = useState<Accesibilidad[]>([]);
     const [selectedId, setSelectedId] = useState<number | null>(null);
     const [query, setQuery] = useState('');
@@ -42,6 +44,7 @@ function ListAccesibilidad() {
             />
         );
     }
+
     const handleDelete = async (id: number) => {
         const confirmDelete = window.confirm('¿Estás seguro que deseas eliminar este registro?');
 
@@ -56,10 +59,35 @@ function ListAccesibilidad() {
             console.error('Error al eliminar:', error);
             alert('Hubo un error al eliminar el registro.');
         } else {
-            alert('Registro eliminado correctamente.');
+            alert('Accesibilidad eliminada correctamente.');
             fetchData(); // refresca la lista
+            Registro_cambios(id);
         }
+
     };
+
+    const fechaHoraActual = new Date().toISOString();
+
+    const Registro_cambios = async (id: number) => {
+        const { data: registro_logs, error: errorLog } = await supabase
+            .from('registro_logs')
+            .insert([
+                {
+                    id_usuario: user?.id,
+                    tipo_accion: 'Eliminación de Accesibilidad',
+                    detalle: `Se eliminó una Accesibilidad con ID ${id}`,
+                    fecha_hora: fechaHoraActual,
+                }
+            ]);
+
+        if (errorLog) {
+            console.error('Error al registrar en los logs:', errorLog);
+            return;
+        }
+
+        console.log(' Registro insertado en registro_logs correctamente', registro_logs);
+    };
+
     const filteredAccesibilidades = accesibilidades.filter((a) =>
         a.nombre.toLowerCase().includes(query.toLowerCase()) ||
         a.tipo.toLowerCase().includes(query.toLowerCase())

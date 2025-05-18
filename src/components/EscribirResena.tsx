@@ -7,9 +7,6 @@ import { useAuth } from '../hooks/useAuth';
 import { useNavigate } from 'react-router-dom';
 import { useTheme } from './Footer/Modo_Nocturno';
 
-
-
-
 interface Props {
     onSubmit: (resena: { calificacion: number; comentario: string }) => void;
     onCancel?: () => void;
@@ -22,9 +19,9 @@ export default function EscribirResena({ onSubmit, onCancel, idMarcador }: Props
     const [comentario, setComentario] = useState('');
     const { user } = useAuth()
     const navigate = useNavigate()
-    const {modoNocturno} = useTheme ();
+    const { modoNocturno } = useTheme();
 
-    
+
 
     const obtenerFechaChile = () => {
         const ahora = new Date();
@@ -49,7 +46,6 @@ export default function EscribirResena({ onSubmit, onCancel, idMarcador }: Props
         return fechaFinal;
     };
 
-
     const handleSubmit = async () => {
         if (calificacion === 0 || comentario.trim() === '') return;
         onSubmit({ calificacion, comentario });
@@ -58,26 +54,54 @@ export default function EscribirResena({ onSubmit, onCancel, idMarcador }: Props
 
         const Fechahorachile = obtenerFechaChile();
 
-        const { data, error } = await supabase.from('resenas').insert({
+        const { data: nuevaReseña, error } = await supabase.from('resenas').insert({
             calificacion,
             comentario,
             fecha: Fechahorachile, // Fecha actual
             id_usuario: user?.id,
             id_marcador: idMarcador,
-        });
+        })
+            .select()
+            .single();
 
         if (error) {
             console.error("No se Puedieron Insertar los Datos", error)
         }
 
         else {
-            console.log("Datos Enviados con Exito", data)
+            console.log("Datos Enviados con Exito:" + nuevaReseña)
+            await Registro_cambios(nuevaReseña.id);
+
         }
+
+    };
+
+    const fechaHoraActual = new Date().toISOString();
+
+    const Registro_cambios = async (idReseña: number) => {
+
+        const { data: registro_logs, error: errorLog } = await supabase
+            .from('registro_logs')
+            .insert([
+                {
+                    id_usuario: user?.id,
+                    tipo_accion: 'Agregación de Reseña',
+                    detalle: `Se agregó una nueva Reseña con ID ${idReseña}`,
+                    fecha_hora: fechaHoraActual,
+                }
+            ]);
+
+        if (errorLog) {
+            console.error('Error al registrar en los logs:', errorLog);
+            return;
+        }
+
+        console.log(' Registro insertado en registro_logs correctamente', registro_logs);
     };
     return (
         <div className={styles.formContainer}>
             {user !== undefined ? (
-                <><h3 style={{color: modoNocturno ?  "#fff":""}}>Comparte tu experiencia.</h3>
+                <><h3 style={{ color: modoNocturno ? "#fff" : "" }}>Comparte tu experiencia.</h3>
 
                     <div className={styles.stars}>
                         <div>
@@ -93,7 +117,7 @@ export default function EscribirResena({ onSubmit, onCancel, idMarcador }: Props
                             ))}
                         </div>
 
-                        <p style={{ fontSize: '0.9rem', color: modoNocturno ? "#fff": 'gray', }}>¿Cómo calificarías tu experiencia?</p>
+                        <p style={{ fontSize: '0.9rem', color: modoNocturno ? "#fff" : 'gray', }}>¿Cómo calificarías tu experiencia?</p>
                     </div>
 
                     <textarea

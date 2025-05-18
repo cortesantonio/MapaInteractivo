@@ -107,6 +107,29 @@ export default function Ver() {
 
         alert('Solicitud aprobada exitosamente');
         navigate(-1)
+
+        const fechaHoraActual = new Date().toISOString();
+
+        const Registro_cambios = async () => {
+            const { data: registro_logs, error: errorLog } = await supabase
+                .from('registro_logs')
+                .insert([
+                    {
+                        id_usuario: user?.id,
+                        tipo_accion: 'Aceptación de una solicitud',
+                        detalle: `Se a aceptado una Solicitud con ID ${id}`,
+                        fecha_hora: fechaHoraActual,
+                    }
+                ]);
+
+            if (errorLog) {
+                console.error('Error al registrar en los logs:', errorLog);
+                return;
+            }
+
+            console.log(' Registro insertado en registro_logs correctamente', registro_logs);
+        };
+        Registro_cambios();
     };
 
     const handleRechazar = async () => {
@@ -125,6 +148,29 @@ export default function Ver() {
 
         alert('Solicitud rechazada exitosamente');
         navigate(-1)
+
+        const fechaHoraActual = new Date().toISOString();
+
+        const Registro_cambios = async () => {
+            const { data: registro_logs, error: errorLog } = await supabase
+                .from('registro_logs')
+                .insert([
+                    {
+                        id_usuario: user?.id,
+                        tipo_accion: 'Rechazo de una solicitud',
+                        detalle: `Se a rechazado una Solicitud con ID ${id}`,
+                        fecha_hora: fechaHoraActual,
+                    }
+                ]);
+
+            if (errorLog) {
+                console.error('Error al registrar en los logs:', errorLog);
+                return;
+            }
+
+            console.log(' Registro insertado en registro_logs correctamente', registro_logs);
+        };
+        Registro_cambios();
     };
 
 
@@ -226,7 +272,7 @@ export default function Ver() {
                     )}
                     <h4>Documentacion</h4>
                     {solicitud.documentacion != '' ? (
-                        <a href={solicitud.documentacion} target="_blank" rel="noopener noreferrer" style={{ color: 'black', paddingLeft:'25px',textDecoration: 'underline' }}>
+                        <a href={solicitud.documentacion} target="_blank" rel="noopener noreferrer" style={{ color: 'black', paddingLeft: '25px', textDecoration: 'underline' }}>
                             Ver Documentacion <FontAwesomeIcon icon={faArrowUpRightFromSquare} />
                         </a>
                     ) : (

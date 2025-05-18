@@ -1,10 +1,15 @@
 import styles from './css/Agregar.module.css'
 import { useState } from 'react';
 import { supabase } from '../../services/supabase';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import NavbarAdmin from '../../components/NavbarAdmin';
+import { useAuth } from '../../hooks/useAuth';
+import { Tipo_Recinto } from '../../interfaces/Tipo_Recinto';
+
 export default function AgregarTipoRecinto() {
     const navigate = useNavigate();
+    const { id } = useParams();
+    const { user } = useAuth();
     const [tipo, setTipo] = useState('')
 
     const handleSubmit = async (e: React.FormEvent) => {
@@ -33,22 +38,49 @@ export default function AgregarTipoRecinto() {
         }
 
 
-        const { data, error } = await supabase
+        const { data: nuevoTipoRecinto, error } = await supabase
             .from('tipo_recinto')
             .insert([
                 {
                     tipo: tipo,
                 },
             ])
-            .select(); // se quiererecibir el registro insertado
+            .select() // se quiererecibir el registro insertado
+            .single<Tipo_Recinto>();
 
         if (error) {
             console.error('Error al insertar en ssupabase:', error);
         } else {
-            alert('Insertado correctamente: ' + data[0].tipo);
+            alert('Agregado correctamente: ' + nuevoTipoRecinto.tipo);
+            await Registro_cambios(nuevoTipoRecinto.id);
             navigate(-1);
         }
+
     };
+
+    const fechaHoraActual = new Date().toISOString();
+
+    const Registro_cambios = async (idTipoRecinto: number) => {
+
+        const { data: registro_logs, error: errorLog } = await supabase
+            .from('registro_logs')
+            .insert([
+                {
+                    id_usuario: user?.id,
+                    tipo_accion: 'Agregación de Tipo Recinto',
+                    detalle: `Se agregó un nuevo Tipo Recinto con ID ${idTipoRecinto}`,
+                    fecha_hora: fechaHoraActual,
+                }
+            ]);
+
+        if (errorLog) {
+            console.error('Error al registrar en los logs:', errorLog);
+            return;
+        }
+
+        console.log(' Registro insertado en registro_logs correctamente', registro_logs);
+    };
+
 
 
     return (

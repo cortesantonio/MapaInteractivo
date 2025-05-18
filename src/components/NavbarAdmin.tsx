@@ -1,6 +1,6 @@
 import styles from './css/NavbarAdmin.module.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faReply, faScrewdriverWrench, faLocationDot, faUsersGear, faCity, faHouse, faBell, faBars, faSquarePollHorizontal } from '@fortawesome/free-solid-svg-icons';
+import { faReply, faScrewdriverWrench, faLocationDot, faUsersGear, faCity, faHouse, faListUl, faBars, faSquarePollHorizontal } from '@fortawesome/free-solid-svg-icons';
 import { useAuth } from '../hooks/useAuth';
 import { useNavigate } from 'react-router-dom';
 import { useState } from "react"
@@ -38,31 +38,31 @@ const NavbarAdmin = () => {
                     <div className={styles.ButtonCruds}>
 
                         <button onClick={() => { navigate('/') }}>
-                            <FontAwesomeIcon icon={faHouse}  />
+                            <FontAwesomeIcon icon={faHouse} />
                             Inicio
                         </button>
                         <button onClick={() => { navigate('/panel-administrativo/') }}>
-                            <FontAwesomeIcon icon={faSquarePollHorizontal}  />
+                            <FontAwesomeIcon icon={faSquarePollHorizontal} />
                             Panel Administrativo
                         </button>
                         <button onClick={() => { navigate('/panel-administrativo/marcadores/') }}>
-                            <FontAwesomeIcon icon={faLocationDot}  />
+                            <FontAwesomeIcon icon={faLocationDot} />
                             Marcadores
                         </button>
 
                         <button onClick={() => { navigate('/panel-administrativo/usuarios/') }}>
-                            <FontAwesomeIcon icon={faUsersGear}  />
+                            <FontAwesomeIcon icon={faUsersGear} />
                             Usuarios
                         </button>
 
                         <button onClick={() => { navigate('/panel-administrativo/tipo-recinto/') }}>
-                            <FontAwesomeIcon icon={faCity}  />
+                            <FontAwesomeIcon icon={faCity} />
                             Recintos
                         </button>
 
-                        <button onClick={() => { navigate('/panel-administrativo/tipo-recinto/') }}>
-                            <FontAwesomeIcon icon={faBell}  />
-                            Registros del sistema
+                        <button onClick={() => { navigate('/panel-administrativo/registrosLogs') }}>
+                            <FontAwesomeIcon icon={faListUl} size='lg' />
+                            Registros
                         </button>
                     </div>
 
