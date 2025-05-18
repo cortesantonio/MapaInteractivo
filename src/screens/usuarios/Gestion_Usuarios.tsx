@@ -1,11 +1,6 @@
 import styles from "../usuarios/css/Gestion_Usuarios.module.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faMagnifyingGlass,
-  faFilter,
-  faUser,
-  faUserPlus,
-} from "@fortawesome/free-solid-svg-icons";
+import { faMagnifyingGlass, faFilter, faUser, faUserPlus } from "@fortawesome/free-solid-svg-icons";
 import { useState, useEffect } from "react";
 import { supabase } from "../../services/supabase";
 import { Usuarios } from "../../interfaces/Usuarios";

@@ -4,14 +4,18 @@ import { faReply } from '@fortawesome/free-solid-svg-icons';
 import { useState, useEffect } from 'react';
 import { Accesibilidad } from '../../interfaces/Accesibilidad';
 import { supabase } from '../../services/supabase';
+import { useAuth } from '../../hooks/useAuth';
+import { useParams } from 'react-router-dom';
 
 interface EditarAccesibilidadProps {
-    accesibilidadId: number; 
+    accesibilidadId: number;
     onCancel: () => void;
     onUpdate: () => void;
 }
 
 export default function EditarAccesibilidad({ accesibilidadId, onCancel, onUpdate }: EditarAccesibilidadProps) {
+    const { id } = useParams();
+    const { user } = useAuth();
     const [formData, setFormData] = useState<Accesibilidad>({
         id: accesibilidadId,
         tipo: '',
@@ -61,13 +65,38 @@ export default function EditarAccesibilidad({ accesibilidadId, onCancel, onUpdat
             })
             .eq('id', formData.id);
 
+
         if (error) {
             console.error('Error al actualizar:', error);
             alert('Ocurrió un error al actualizar el registro.');
         } else {
-            alert('Registro actualizado correctamente');
-            onUpdate(); 
+            alert('Accesibilidad actualizada correctamente');
+            onUpdate();
+            Registro_cambios(formData.id);
         }
+
+    };
+
+    const fechaHoraActual = new Date().toISOString();
+
+    const Registro_cambios = async (id: number) => {
+        const { data: registro_logs, error: errorLog } = await supabase
+            .from('registro_logs')
+            .insert([
+                {
+                    id_usuario: user?.id,
+                    tipo_accion: 'Edición de Accesibilidad',
+                    detalle: `Se editó una Accesibilidad con ID ${id}`,
+                    fecha_hora: fechaHoraActual,
+                }
+            ]);
+
+        if (errorLog) {
+            console.error('Error al registrar en los logs:', errorLog);
+            return;
+        }
+
+        console.log(' Registro insertado en registro_logs correctamente', registro_logs);
     };
 
     return (

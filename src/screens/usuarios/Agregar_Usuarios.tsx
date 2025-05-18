@@ -1,11 +1,15 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
 import styles from "../usuarios/css/Formularios.module.css";
 import { supabase } from "../../services/supabase";
 import { useState, FormEvent } from "react";
 import NavbarAdmin from "../../components/NavbarAdmin";
+import { useAuth } from '../../hooks/useAuth';
+
 function Agregar_Usuarios() {
+  const { id } = useParams();
+  const { user } = useAuth();
   const [mostrarContraseña, setMostrarContraseña] = useState(false);
   const navigate = useNavigate();
   const [rut, setRut] = useState("");
@@ -104,6 +108,7 @@ function Agregar_Usuarios() {
       setRutValido(true);
     }
   };
+
   const handleSubmit = async (e: FormEvent): Promise<void> => {
     e.preventDefault();
     if (!validarRut(rut)) {
@@ -115,32 +120,74 @@ function Agregar_Usuarios() {
       return;
     }
     try {
-      const { data: userData, error: userError } = await supabase.from("usuarios").insert([{ nombre, rut, fecha_nacimiento: fechaNacimiento, correo, password, telefono, rol, genero }]).select();
-      if (userError) {
+      const { data: nuevoUsuario, error: userError } = await supabase
+        .from("usuarios")
+        .insert([{
+          nombre,
+          rut,
+          fecha_nacimiento: fechaNacimiento,
+          correo,
+          password,
+          telefono,
+          rol,
+          genero
+        }])
+        .select()
+        .single();
+
+      if (userError || !nuevoUsuario) {
         console.error(userError);
         alert("Error al añadir usuario");
         return;
       }
-      console.log(userData);
-      if (tiene_una_Discapacidad && userData && userData.length > 0) {
-        const userId = userData[0].id;
-        const { error: discapacidad_error } = await supabase.from("discapacidad").insert([{
-          id_usuario: userId,
-          nombre: nombreDiscapacidad,
-          tipo: tipo
-        }]);
+
+      if (tiene_una_Discapacidad) {
+        const { error: discapacidad_error } = await supabase
+          .from("discapacidad")
+          .insert([{
+            id_usuario: nuevoUsuario.id,
+            nombre: nombreDiscapacidad,
+            tipo: tipo
+          }]);
         if (discapacidad_error) {
           console.error("Error al añadir discapacidad:", discapacidad_error);
           alert("Usuario creado, pero hubo un error al registrar la discapacidad");
           return;
         }
       }
+
+      await Registro_cambios(nuevoUsuario.id);
       alert("Usuario añadido correctamente");
       navigate(-1);
+
     } catch (error) {
       console.error(error);
       alert("Error en el proceso de registro");
     }
+
+  };
+
+  const fechaHoraActual = new Date().toISOString();
+
+  const Registro_cambios = async (idUsuario: number) => {
+
+    const { data: registro_logs, error: errorLog } = await supabase
+      .from('registro_logs')
+      .insert([
+        {
+          id_usuario: user?.id,
+          tipo_accion: 'Agregación de Usuario',
+          detalle: `Se agregó un nuevo Usuario con ID ${idUsuario}`,
+          fecha_hora: fechaHoraActual,
+        }
+      ]);
+
+    if (errorLog) {
+      console.error('Error al registrar en los logs:', errorLog);
+      return;
+    }
+
+    console.log(' Registro insertado en registro_logs correctamente', registro_logs);
   };
 
   return (

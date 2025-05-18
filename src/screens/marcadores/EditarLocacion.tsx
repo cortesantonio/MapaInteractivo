@@ -10,6 +10,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { useLoadScript, Autocomplete } from "@react-google-maps/api";
 import { APIProvider, Map as VisMap, AdvancedMarker } from "@vis.gl/react-google-maps";
 import ImagenConFallback from '../../components/ImagenConFallback';
+import { useAuth } from '../../hooks/useAuth';
 
 interface TipoDeAccesibilidades {
     [tipo: string]: Accesibilidad[];
@@ -20,6 +21,7 @@ const LIBRARIES: ("places")[] = ['places'];
 export default function EditarLocacion() {
     const apiKey = import.meta.env.VITE_GOOGLE_APIKEY;
     const navigate = useNavigate()
+    const { user } = useAuth();
     const { id } = useParams();
     const [accesibilidades, setAccesibilidades] = useState<TipoDeAccesibilidades>({});
     const estadoInicialMarcadores: Partial<Marcador> = {
@@ -77,6 +79,29 @@ export default function EditarLocacion() {
     const handleAgregarMarcador = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         actualizarMarcador();
+        Registro_cambios();
+    };
+
+    const fechaHoraActual = new Date().toISOString();
+
+    const Registro_cambios = async () => {
+        const { data: registro_logs, error: errorLog } = await supabase
+            .from('registro_logs')
+            .insert([
+                {
+                    id_usuario: user?.id,
+                    tipo_accion: 'Edición de Marcador',
+                    detalle: `Se editó el marcador con ID ${id}`,
+                    fecha_hora: fechaHoraActual,
+                }
+            ]);
+
+        if (errorLog) {
+            console.error('Error al registrar en los logs:', errorLog);
+            return;
+        }
+
+        console.log(' Registro insertado en registro_logs correctamente', registro_logs);
     };
 
 
@@ -126,7 +151,18 @@ export default function EditarLocacion() {
         }
 
         try {
-            // 1. Actualiza la tabla 'marcador'
+
+            // 1. Se inserta el "registro_logs"
+            console.log('Entró a actualizarMarcador');
+            const { data: { user }, error: userError } = await supabase.auth.getUser();
+            console.log('Usuario obtenido:', user);
+
+            if (userError || !user) {
+                console.error('No se pudo obtener el usuario:', userError);
+                return;
+            }
+
+            // 2. Actualiza la tabla 'marcador'
             const { error: errorMarcador } = await supabase
                 .from('marcador')
                 .update({
@@ -140,7 +176,7 @@ export default function EditarLocacion() {
                 return;
             }
 
-            // 2. Elimina las relaciones antiguas en 'accesibilidad_marcador'
+            // 3. Elimina las relaciones antiguas en 'accesibilidad_marcador'
             const { error: errorDelete } = await supabase
                 .from('accesibilidad_marcador')
                 .delete()
@@ -151,7 +187,7 @@ export default function EditarLocacion() {
                 return;
             }
 
-            // 3. Inserta las nuevas relaciones
+            // 4. Inserta las nuevas relaciones
             const nuevasRelaciones = selecciones.map(idAcc => ({
                 id_marcador: id,
                 id_accesibilidad: idAcc,
@@ -172,7 +208,7 @@ export default function EditarLocacion() {
             console.error('Error inesperado:', err);
         }
     };
-    
+
     const { isLoaded, loadError } = useLoadScript({
         googleMapsApiKey: apiKey,
         libraries: LIBRARIES,
@@ -301,7 +337,7 @@ export default function EditarLocacion() {
                                             zoomControl={true}
                                             gestureHandling="greedy"
                                             keyboardShortcuts={false}
-                                            style={{ width: '100%', height: '200px', paddingBottom:"5px"}}
+                                            style={{ width: '100%', height: '200px', paddingBottom: "5px" }}
                                         >
                                             <AdvancedMarker position={position} />
                                         </VisMap>
