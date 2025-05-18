@@ -36,6 +36,27 @@ function Inspeccionar_Resenas() {
     fetchData();
   }, [id]);
 
+  const EliminarResena = async (idResena: number) => {
+    const confirmacion = window.confirm("¿Estás seguro de que quieres borrar esta reseña?");
+    if (!confirmacion) return;
+
+    try {
+      const { error } = await supabase
+        .from("resenas")
+        .delete()
+        .eq("id", idResena);
+
+      if (error) throw error;
+
+      setResenas((prevResenas) => prevResenas.filter(r => r.id !== idResena));
+
+      alert("Reseña eliminada con éxito");
+    } catch (error) {
+      console.error("Error al borrar la reseña:", error);
+      alert("Hubo un error al eliminar la reseña");
+    }
+  };
+
   const renderResenas = () => {
     if (loading) return <p>Cargando reseñas...</p>;
     if (resenas.length === 0) return <p>No hay Reseñas aún</p>;
@@ -46,7 +67,9 @@ function Inspeccionar_Resenas() {
           <h1>{r.id_usuario?.nombre} <button style={{ background: 'none', border: 'none' }}
             onClick={() => { navigate(`/usuario/perfil/${r.id_usuario.id}`) }}> <FontAwesomeIcon icon={faArrowUpRightFromSquare} /></button> </h1>
           <div className={styles.trash_button}>
-            <FontAwesomeIcon icon={faTrash} />
+            <button style={{ border:"none", color:"red", backgroundColor:"transparent", width: "100%", height: "100%"}} onClick={() => EliminarResena(r.id)}>
+              <FontAwesomeIcon icon={faTrash} />
+            </button>
           </div>
         </div>
 
