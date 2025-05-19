@@ -30,7 +30,6 @@ export default function AgregarSolicitud() {
         direccion: '',
         documentacion: '',
         cumple_ley_21015: false,
-        accesibilidad_certificada: false,
     });
     const [instruccionesleidas, setInstruccionesLeidas] = useState(false); // semaforo para saber si el usuario leyo las instrucciones
     const [seleccionadas, setSeleccionadas] = useState<number[]>([]); // ids de accesibilidad seleccionada
@@ -233,10 +232,9 @@ export default function AgregarSolicitud() {
                     estado: 'pendiente',
                     fecha_ingreso: new Date().toISOString(),
                     cumple_ley_21015: formData.cumple_ley_21015,
-                    accesibilidad_certificada: formData.accesibilidad_certificada,
                 }])
                 .select()
-                .single<Solicitudes>();
+                .single();
 
 
             if (errorSolicitud) {
@@ -251,16 +249,7 @@ export default function AgregarSolicitud() {
             // Ahora sí puedes usar:
             setSolicitudId(nuevaSolicitud.id);
 
-
-
-
-            // Si no hay error, solicitud.data[0] debería tener el ID de la solicitud insertada
-            const solicitudId = solicitud && solicitud[0] ? solicitud[0].id : null;
-
-            if (!solicitudId) {
-                throw new Error('No se pudo obtener el ID de la solicitud creada');
-            }
-            await Registro_cambios(solicitudId);
+            
 
             // 3. Insertar accesibilidades seleccionadas
             if (seleccionadas.length > 0) {
@@ -283,6 +272,9 @@ export default function AgregarSolicitud() {
 
 
             alert('Solicitud enviada correctamente');
+            // 4. Registrar en registro_logs
+            await Registro_cambios(nuevaSolicitud.id);
+            alert('Registro de cambios creado correctamente');
             navigate(-1);
         } catch (error: any) {
             console.error('Error al procesar la solicitud:', error.message);
@@ -497,7 +489,7 @@ export default function AgregarSolicitud() {
                                 setPosition(null);
                                 setPosition(null);
                             }}
-                            style={{  width:  '100%', padding:  '0 10px'  }}
+                            style={{ width: '100%', padding: '0 10px' }}
                             required
                             disabled={!usuario?.nombre} // Deshabilitar el campo si no hay usuario
                         />
@@ -507,7 +499,6 @@ export default function AgregarSolicitud() {
                         {position && (
                             <VisMap
                                 mapId="bf51a910020fa25a"
-                                center={position}
                                 center={position}
                                 defaultZoom={16}
                                 disableDefaultUI={true}
@@ -558,72 +549,72 @@ export default function AgregarSolicitud() {
 
 
                 <div style={{ marginTop: '20px', display: 'flex', flexDirection: 'column', gap: '10px' }}>
-                <div style={{ marginTop: '20px', display: 'flex', flexDirection: 'column', gap: '10px' }}>
-                    <label className={styles.labelSeccion}>
-                        Documentación
-                        <span style={{ fontSize: '0.8rem', color: 'gray', fontStyle: 'italic' }}>
-                            {' '} - Suba una foto o documento que respalde su solicitud (máx. 5MB)
-                        </span>
-                    </label>
-
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                        <label
-                            htmlFor="file-upload"
-                            style={{
-                        <label
-                            htmlFor="file-upload"
-                            style={{
-                                display: 'flex',
-                                alignItems: 'center',
-                                gap: '5px',
-                                padding: '8px 12px',
-                                backgroundColor: '#f0f0f0',
-                                borderRadius: '4px',
-                                cursor: usuario?.nombre ? 'pointer' : 'not-allowed',
-                                opacity: usuario?.nombre ? 1 : 0.6
-                            }}
-                        >
-                            <FontAwesomeIcon icon={faUpload} />
-                            Seleccionar archivo
+                    <div style={{ marginTop: '20px', display: 'flex', flexDirection: 'column', gap: '10px' }}>
+                        <label className={styles.labelSeccion}>
+                            Documentación
+                            <span style={{ fontSize: '0.8rem', color: 'gray', fontStyle: 'italic' }}>
+                                {' '} - Suba una foto o documento que respalde su solicitud (máx. 5MB)
+                            </span>
                         </label>
-                        <input
-                            id="file-upload"
-                            type="file"
-                            accept="image/*,.pdf"
-                            onChange={handleFileChange}
-                            disabled={!usuario?.nombre}
-                            style={{ display: 'none' }}
-                        />
-                        <span>{file ? file.name : 'Ningún archivo seleccionado'}</span>
-                    </div>
 
-                    {filePreview && filePreview !== 'no-preview' && (
-                        <div style={{ marginTop: '10px', maxWidth: '250px' }}>
-                            <img
-                                src={filePreview}
-                                alt="Vista previa"
-                                style={{ maxWidth: '100%', maxHeight: '200px', objectFit: 'contain' }}
-                            <img
-                                src={filePreview}
-                                alt="Vista previa"
-                                style={{ maxWidth: '100%', maxHeight: '200px', objectFit: 'contain' }}
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+
+                            <label
+                                htmlFor="file-upload"
+                                style={{
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    gap: '5px',
+                                    padding: '8px 12px',
+                                    backgroundColor: '#f0f0f0',
+                                    borderRadius: '4px',
+                                    cursor: usuario?.nombre ? 'pointer' : 'not-allowed',
+                                    opacity: usuario?.nombre ? 1 : 0.6
+                                }} >
+
+                                <FontAwesomeIcon icon={faUpload} />
+                                Seleccionar archivo
+                            </label>
+                            <input
+                                id="file-upload"
+                                type="file"
+                                accept="image/*,.pdf"
+                                onChange={handleFileChange}
+                                disabled={!usuario?.nombre}
+                                style={{ display: 'none' }}
                             />
+                            <span>{file ? file.name : 'Ningún archivo seleccionado'}</span>
                         </div>
-                    )}
+
+                        {filePreview && filePreview !== 'no-preview' && (
+                            <div style={{ marginTop: '10px', maxWidth: '250px' }}>
+                                <img
+                                    src={filePreview}
+                                    alt="Vista previa"
+                                    style={{ maxWidth: '100%', maxHeight: '200px', objectFit: 'contain' }}
+                                />
+                                <img
+                                    src={filePreview}
+                                    alt="Vista previa"
+                                    style={{ maxWidth: '100%', maxHeight: '200px', objectFit: 'contain' }}
+                                />
+                            </div>
+                        )}
 
 
-                    {filePreview === 'no-preview' && (
-                        <div style={{ marginTop: '10px', display: 'flex', alignItems: 'center', gap: '5px' }}>
-                            <FontAwesomeIcon icon={faInfo} />
-                            <span>Archivo seleccionado (sin vista previa disponible)</span>
-                        </div>
-                    )}
+                        {filePreview === 'no-preview' && (
+                            <div style={{ marginTop: '10px', display: 'flex', alignItems: 'center', gap: '5px' }}>
+                                <FontAwesomeIcon icon={faInfo} />
+                                <span>Archivo seleccionado (sin vista previa disponible)</span>
+                            </div>
+                        )}
 
-                    {uploadError && (
-                        <div style={{ color: 'red', marginTop: '5px' }}>
-                            Error: {uploadError}
-                        </div>
-                    )}
+                        {uploadError && (
+                            <div style={{ color: 'red', marginTop: '5px' }}>
+                                Error: {uploadError}
+                            </div>
+                        )}
+                    </div>
                 </div>
 
                 <div className={styles.acciones}>
