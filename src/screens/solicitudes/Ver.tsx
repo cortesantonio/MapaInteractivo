@@ -12,6 +12,7 @@ import { Accesibilidad_Solicitud } from '../../interfaces/Accesibilidad_Solicitu
 import { useNavigate, useParams } from 'react-router-dom';
 import { useAuth } from '../../hooks/useAuth';
 import { APIProvider, Map as VisMap, AdvancedMarker } from "@vis.gl/react-google-maps";
+import { sendEmail } from "../../utils/sendEmail";
 
 
 interface AccesibilidadesPorTipo {
@@ -37,7 +38,7 @@ export default function Ver() {
     const [respuestaRechazo, setRespuestaRechazo] = useState('');
     const [accesibilidadesRaw, setAccesibilidadesRaw] = useState([]);
     const [position, setPosition] = useState<{ lat: number; lng: number } | null>(null);
-
+    const [correoDestinario, setCorreoDestinario] = useState<string>('')
     function handleModal() {
         setIsActiveModal(!isActiveModal)
     }
@@ -63,9 +64,10 @@ export default function Ver() {
                 console.error('Error cargando la solicitud:', solicitudError);
                 return;
             }
-
+            console.log('Solicitud cargada:', solicitudData);
+            setCorreoDestinario(solicitudData.id_usuario.correo)
             setSolicitud(solicitudData);
-     
+
             const accesibilidadesRawData = solicitudData.accesibilidad_solicitud.map((item: Accesibilidad_Solicitud) => item.id_accesibilidad);
             setAccesibilidadesRaw(accesibilidadesRawData);
             const agrupadas: AccesibilidadesPorTipo = {};
@@ -88,7 +90,6 @@ export default function Ver() {
 
         fetchData();
     }, [id]);
-
     function colorState(estado: string) {
         switch (estado) {
             case 'pendiente':
@@ -121,8 +122,6 @@ export default function Ver() {
             .select()
             .single();
 
-        console.log("Respuesta del insert:", { newMarcador, errorMarcador });
-
         if (errorMarcador) {
             console.error('Error al crear el marcador:', errorMarcador.message, errorMarcador.details);
             alert(`Error al crear el marcador: ${errorMarcador.message}`);
@@ -144,7 +143,6 @@ export default function Ver() {
                 });
 
             if (errorAccesibilidad) {
-                console.error('Error al crear la accesibilidad del marcador:', errorAccesibilidad.message);
                 alert(`Error al registrar accesibilidad: ${errorAccesibilidad.message}`);
                 return;
             }
@@ -188,8 +186,22 @@ export default function Ver() {
             console.log(' Registro insertado en registro_logs correctamente', registro_logs);
         };
         Registro_cambios();
+
+        // Enviar notificacion por correo al usuario.
+        const html = `
+        <p>Tu solicitud fue aprobada. <a href="${id}">Haz clic aquí para verla</a>.</p>
+        <p>Gracias por tu interés en nuestro servicio.</p>
+        <p>Saludos,</p>
+        `;
+        sendEmail(correoDestinario,
+            "Solicitud aprobada",
+            html)
+            .then(res => console.log("Correo enviado", res))
+            .catch(err => console.error("Error", err))
+
+        navigate(-1)
+
     };
-    
 
     const handleRechazar = async () => {
         const { error } = await supabase
@@ -232,7 +244,7 @@ export default function Ver() {
         Registro_cambios();
     };
 
-    
+
 
 
 
@@ -312,7 +324,7 @@ export default function Ver() {
                     <h4>Direccion</h4>
                     <p>{solicitud.direccion != '' ? solicitud.direccion : <span style={{ color: 'gray' }}>No especificado</span>}</p>
 
-                    <div style={{ paddingTop:"10px", border:"1px solid rgba(0, 0, 0, 0.2)", borderRadius: '5px', padding: '10px', marginTop: '10px' }}>
+                    <div style={{ paddingTop: "10px", border: "1px solid rgba(0, 0, 0, 0.2)", borderRadius: '5px', padding: '10px', marginTop: '10px' }}>
                         <APIProvider apiKey={apiKey}>
                             <VisMap
                                 mapId="bf51a910020fa25a"
