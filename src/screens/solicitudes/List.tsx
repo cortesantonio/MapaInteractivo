@@ -4,7 +4,7 @@ import { faEye, faMagnifyingGlass, faFilter, faSort, faCheck, faX, faInfo } from
 import { useEffect, useState } from 'react';
 import { Solicitudes } from '../../interfaces/Solicitudes';
 import { supabase } from '../../services/supabase';
-import { useNavigate, useParams	 } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import NavbarAdmin from '../../components/NavbarAdmin';
 function ListSolicitudes() {
     const [isActiveBuscador, setIsActiveBuscador] = useState(false);
@@ -17,7 +17,7 @@ function ListSolicitudes() {
 
     useEffect(() => {
         if (estado) {
-            setFiltroEstado(estado); 
+            setFiltroEstado(estado);
         }
     }, [estado]);
     useEffect(() => {
@@ -68,10 +68,10 @@ function ListSolicitudes() {
             filtroEstado ? sol.estado === filtroEstado : true
         );
 
-        const handleFiltroCambio = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const handleFiltroCambio = (e: React.ChangeEvent<HTMLSelectElement>) => {
         const nuevoEstado = e.target.value;
         setFiltroEstado(nuevoEstado);
-        navigate(`/panel-administrativo/solicitudes/${nuevoEstado}`); 
+        navigate(`/panel-administrativo/solicitudes/${nuevoEstado}`);
     };
     return (
         <>
@@ -123,12 +123,12 @@ function ListSolicitudes() {
                 </div>
 
                 <div className={styles.SubTitulo}>
-                    <p>Listado de Solicitudes</p>
+                    <p>Listado de Solicitudes <span style={{ textTransform: 'capitalize', fontWeight: 400 }}>{estado}</span></p>
                     <hr style={{ width: '25%', marginTop: '10px', marginBottom: '10px ', opacity: '50%' }} />
                 </div>
                 <div className={styles.content}>
 
-
+                    {solicitudesFiltradas.length === 0 && (<p style={{ color: 'gray', margin: 'auto' }}> - Sin registros {estado}s -</p>)}
                     {solicitudesFiltradas.map((solicitud) => (
                         <div className={styles.card} key={solicitud.id} style={{ cursor: 'pointer' }} onClick={() => { navigate(`/panel-administrativo/solicitud/${solicitud.id}`) }}>
                             <div className={styles.estado}
@@ -151,7 +151,7 @@ function ListSolicitudes() {
                                         day: '2-digit',
                                     })}
                                 </p>
-                                
+
 
                             </div>
 

@@ -33,7 +33,7 @@ export default function Ver() {
     const [accesibilidades, setAccesibilidades] = useState<AccesibilidadesPorTipo>({});
     const [isActiveModal, setIsActiveModal] = useState(false)
     const [respuestaRechazo, setRespuestaRechazo] = useState('');
-
+    const [accesibilidadesRaw, setAccesibilidadesRaw] = useState([]);
     function handleModal() {
         setIsActiveModal(!isActiveModal)
     }
@@ -63,10 +63,11 @@ export default function Ver() {
             setSolicitud(solicitudData);
 
 
-            const accesibilidadesRaw = solicitudData.accesibilidad_solicitud.map((item: Accesibilidad_Solicitud) => item.id_accesibilidad);
+            const accesibilidadesRawData = solicitudData.accesibilidad_solicitud.map((item: Accesibilidad_Solicitud) => item.id_accesibilidad);
+            setAccesibilidadesRaw(accesibilidadesRawData);
             const agrupadas: AccesibilidadesPorTipo = {};
 
-            accesibilidadesRaw.forEach((acc: Accesibilidad) => {
+            accesibilidadesRawData.forEach((acc: Accesibilidad) => {
                 if (!agrupadas[acc.tipo]) agrupadas[acc.tipo] = [];
                 agrupadas[acc.tipo].push(acc);
             });
@@ -92,22 +93,78 @@ export default function Ver() {
     }
 
     const handleAprobar = async () => {
-        const { error } = await supabase
-            .from('solicitudes')
-            .update({
-                estado: 'aprobada', fecha_revision: new Date(),
-                id_supervisor: user?.id
-            })
-            .eq('id', id);
+        console.log("Enviando solicitud de creación de marcador...");
+        try {
+            const { data: newMarcador, error: errorMarcador } = await supabase
+                .from('marcador')
+                .insert({
+                    id_solicitud: id,
+                    id_usuario: solicitud.id_usuario?.id,
+                    activo: true,
+                    tipo_recinto: solicitud.tipo_recinto?.id,
+                    nombre_recinto: solicitud.nombre_locacion,
+                    direccion: solicitud.direccion,
+                    pagina_web: "sin especificar",
+                    telefono: "sin especificar",
+                    latitud: 0,
+                    longitud: 0,
+                })
+                .select()
+                .single();
 
-        if (error) {
-            console.error('Error al aprobar la solicitud:', error);
-            return;
+            console.log("Respuesta del insert:", { newMarcador, errorMarcador });
+
+            if (errorMarcador) {
+                console.error('Error al crear el marcador:', errorMarcador.message, errorMarcador.details);
+                alert(`Error al crear el marcador: ${errorMarcador.message}`);
+                return;
+            }
+
+            if (!newMarcador) {
+                console.error('No se pudo crear el marcador: sin datos devueltos');
+                alert('No se pudo crear el marcador: sin datos devueltos');
+                return;
+            }
+
+            for (const acc of accesibilidadesRaw) {
+                const { error: errorAccesibilidad } = await supabase
+                    .from('accesibilidad_marcador')
+                    .insert({
+                        id_marcador: newMarcador.id,
+                        id_accesibilidad: acc['id'],
+                    });
+
+                if (errorAccesibilidad) {
+                    console.error('Error al crear la accesibilidad del marcador:', errorAccesibilidad.message);
+                    alert(`Error al registrar accesibilidad: ${errorAccesibilidad.message}`);
+                    return;
+                }
+            }
+
+            const { error } = await supabase
+                .from('solicitudes')
+                .update({
+                    estado: 'aprobada',
+                    fecha_revision: new Date(),
+                    id_supervisor: user?.id
+                })
+                .eq('id', id);
+
+            if (error) {
+                console.error('Error al aprobar la solicitud:', error.message);
+                alert(`Error al aprobar la solicitud: ${error.message}`);
+                return;
+            }
+
+            alert('Solicitud aprobada exitosamente');
+            navigate(-1);
+
+        } catch (err) {
+            console.error("Error inesperado en handleAprobar:", err);
+            alert(`Error inesperado: ${err}`);
         }
-
-        alert('Solicitud aprobada exitosamente');
-        navigate(-1)
     };
+
 
     const handleRechazar = async () => {
         const { error } = await supabase
@@ -226,7 +283,7 @@ export default function Ver() {
                     )}
                     <h4>Documentacion</h4>
                     {solicitud.documentacion != '' ? (
-                        <a href={solicitud.documentacion} target="_blank" rel="noopener noreferrer" style={{ color: 'black', paddingLeft:'25px',textDecoration: 'underline' }}>
+                        <a href={solicitud.documentacion} target="_blank" rel="noopener noreferrer" style={{ color: 'black', paddingLeft: '25px', textDecoration: 'underline' }}>
                             Ver Documentacion <FontAwesomeIcon icon={faArrowUpRightFromSquare} />
                         </a>
                     ) : (

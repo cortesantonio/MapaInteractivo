@@ -9,7 +9,7 @@ import { Tipo_Recinto } from '../../interfaces/Tipo_Recinto';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../hooks/useAuth';
 import Info from './Info';
-import { faGoogle } from '@fortawesome/free-brands-svg-icons'; 
+import { faGoogle } from '@fortawesome/free-brands-svg-icons';
 import { useLoadScript, Autocomplete, } from "@react-google-maps/api";
 import { APIProvider, Map as VisMap, AdvancedMarker } from "@vis.gl/react-google-maps";
 
@@ -35,12 +35,9 @@ export default function AgregarSolicitud() {
     const [instruccionesleidas, setInstruccionesLeidas] = useState(false); // semaforo para saber si el usuario leyo las instrucciones
     const [seleccionadas, setSeleccionadas] = useState<number[]>([]); // ids de accesibilidad seleccionada
     const [tipoRecinto, setTipoRecinto] = useState<Tipo_Recinto[]>(); // almacena los recintos del llamado a la api
-    const [loading, setLoading] = useState(false); // Estado para manejar la carga de archivos
-    
     const [file, setFile] = useState<File | null>(null);
     const [filePreview, setFilePreview] = useState<string | null>(null);
     const [uploading, setUploading] = useState(false);
-    const [uploadProgress, setUploadProgress] = useState(0);
     const [uploadError, setUploadError] = useState<string | null>(null);
 
 
@@ -135,7 +132,7 @@ export default function AgregarSolicitud() {
         });
     };
 
- const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         if (e.target.files && e.target.files.length > 0) {
             const selectedFile = e.target.files[0];
             // Validar tamaño del archivo (máximo 5MB)
@@ -144,7 +141,7 @@ export default function AgregarSolicitud() {
                 e.target.value = '';
                 return;
             }
-            
+
             setFile(selectedFile);
             setUploadError(null);
         }
@@ -152,19 +149,18 @@ export default function AgregarSolicitud() {
 
     const uploadFile = async () => {
         if (!file) return null;
-        
+
         try {
             setUploading(true);
-            setUploadProgress(0);
             setUploadError(null);
-            
+
             // Crear un nombre de archivo único usando timestamp y nombre original
             const fileExt = file.name.split('.').pop();
             const fileName = `${Date.now()}_${Math.random().toString(36).substring(2, 15)}.${fileExt}`;
             const filePath = `${fileName}`; // Usando la raíz del bucket para mayor simplicidad
-            
+
             // Subir archivo a Supabase Storage
-            const { data, error } = await supabase.storage
+            const { error } = await supabase.storage
                 .from('documentacion')
                 .upload(filePath, file, {
                     cacheControl: '3600',
@@ -180,7 +176,6 @@ export default function AgregarSolicitud() {
                 .from('documentacion')
                 .getPublicUrl(filePath);
 
-            setUploadProgress(100);
             return urlData.publicUrl;
         } catch (error: any) {
             console.error('Error al subir archivo:', error.message);
@@ -242,7 +237,7 @@ export default function AgregarSolicitud() {
 
             // Si no hay error, solicitud.data[0] debería tener el ID de la solicitud insertada
             const solicitudId = solicitud && solicitud[0] ? solicitud[0].id : null;
-            
+
             if (!solicitudId) {
                 throw new Error('No se pudo obtener el ID de la solicitud creada');
             }
@@ -253,11 +248,11 @@ export default function AgregarSolicitud() {
                     id_solicitud: solicitudId,
                     id_accesibilidad: accId
                 }));
-                
+
                 const { error: errorAccesibilidades } = await supabase
                     .from('accesibilidad_solicitud')
                     .insert(accesibilidadesInsert);
-                
+
                 if (errorAccesibilidades) {
                     console.error('Error al insertar accesibilidades:', errorAccesibilidades);
                     // Continuamos sin interrumpir el flujo, ya que la solicitud principal se creó correctamente
@@ -411,9 +406,9 @@ export default function AgregarSolicitud() {
                             if (place.geometry?.location) {
                                 const lat = place.geometry.location.lat();
                                 const lng = place.geometry.location.lng();
-                                setPosition({ lat, lng }); 
+                                setPosition({ lat, lng });
                                 setDireccionValida(true);
-                                
+
                                 const nuevaDireccion = place.formatted_address || '';
                                 setFormData((prev) => ({
                                     ...prev,
@@ -441,9 +436,9 @@ export default function AgregarSolicitud() {
                             onChange={(e) => {
                                 handleInputChange(e);
                                 setDireccionValida(false);
-                                setPosition(null); 
+                                setPosition(null);
                             }}
-                            style={{width:'100%', padding:'0 10px'}}
+                            style={{ width: '100%', padding: '0 10px' }}
                             required
                             disabled={!usuario?.nombre} // Deshabilitar el campo si no hay usuario
                         />
@@ -453,7 +448,7 @@ export default function AgregarSolicitud() {
                         {position && (
                             <VisMap
                                 mapId="bf51a910020fa25a"
-                                center={position} 
+                                center={position}
                                 defaultZoom={16}
                                 disableDefaultUI={true}
                                 zoomControl={true}
@@ -502,7 +497,7 @@ export default function AgregarSolicitud() {
                 ))}
 
 
-                 <div style={{ marginTop: '20px', display: 'flex', flexDirection: 'column', gap: '10px' }}>
+                <div style={{ marginTop: '20px', display: 'flex', flexDirection: 'column', gap: '10px' }}>
                     <label className={styles.labelSeccion}>
                         Documentación
                         <span style={{ fontSize: '0.8rem', color: 'gray', fontStyle: 'italic' }}>
@@ -511,9 +506,9 @@ export default function AgregarSolicitud() {
                     </label>
 
                     <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                        <label 
-                            htmlFor="file-upload" 
-                            style={{ 
+                        <label
+                            htmlFor="file-upload"
+                            style={{
                                 display: 'flex',
                                 alignItems: 'center',
                                 gap: '5px',
@@ -540,14 +535,14 @@ export default function AgregarSolicitud() {
 
                     {filePreview && filePreview !== 'no-preview' && (
                         <div style={{ marginTop: '10px', maxWidth: '250px' }}>
-                            <img 
-                                src={filePreview} 
-                                alt="Vista previa" 
-                                style={{ maxWidth: '100%', maxHeight: '200px', objectFit: 'contain' }} 
+                            <img
+                                src={filePreview}
+                                alt="Vista previa"
+                                style={{ maxWidth: '100%', maxHeight: '200px', objectFit: 'contain' }}
                             />
                         </div>
                     )}
-                    
+
                     {filePreview === 'no-preview' && (
                         <div style={{ marginTop: '10px', display: 'flex', alignItems: 'center', gap: '5px' }}>
                             <FontAwesomeIcon icon={faInfo} />
@@ -563,15 +558,15 @@ export default function AgregarSolicitud() {
                 </div>
 
                 <div className={styles.acciones}>
-                    <button 
-                        type="button" 
-                        style={{ color: 'red', background: 'transparent' }} 
+                    <button
+                        type="button"
+                        style={{ color: 'red', background: 'transparent' }}
                         onClick={() => { navigate(-1) }}
                     >
                         Cancelar
                     </button>
-                    <button 
-                        type="submit" 
+                    <button
+                        type="submit"
                         disabled={!usuario?.nombre || uploading}
                         style={{ opacity: uploading ? 0.7 : 1 }}
                     >
