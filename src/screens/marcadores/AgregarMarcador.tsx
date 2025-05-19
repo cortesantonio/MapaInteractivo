@@ -262,18 +262,20 @@ export default function AgregarMarcador() {
 
               <APIProvider apiKey={apiKey}>
                 {position && (
-                  <VisMap
-                    mapId="bf51a910020fa25a"
-                    center={position}
-                    defaultZoom={16}
-                    disableDefaultUI={true}
-                    zoomControl={true}
-                    gestureHandling="greedy"
-                    keyboardShortcuts={false}
-                    style={{ width: '100%', height: '200px' }}
-                  >
-                    <AdvancedMarker position={position} />
-                  </VisMap>
+                  <div style={{ paddingTop: "10px", border: "1px solid rgba(0, 0, 0, 0.2)", borderRadius: '5px', padding: '10px', marginTop: '10px' }}>
+                    <VisMap
+                      mapId="bf51a910020fa25a"
+                      center={position}
+                      defaultZoom={16}
+                      disableDefaultUI={true}
+                      zoomControl={true}
+                      gestureHandling="greedy"
+                      keyboardShortcuts={false}
+                      style={{ width: '100%', height: '200px' }}
+                    >
+                      <AdvancedMarker position={position} />
+                    </VisMap>
+                  </div>
                 )}
               </APIProvider>
 
