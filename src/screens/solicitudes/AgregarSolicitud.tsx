@@ -29,6 +29,8 @@ export default function AgregarSolicitud() {
         descripcion: '',
         direccion: '',
         documentacion: '',
+        latitud: undefined,
+        longitud: undefined,
         cumple_ley_21015: false,
     });
     const [instruccionesleidas, setInstruccionesLeidas] = useState(false); // semaforo para saber si el usuario leyo las instrucciones
@@ -188,7 +190,6 @@ export default function AgregarSolicitud() {
             setUploading(false);
         }
     };
-    const [solicitudId, setSolicitudId] = useState<number | null>(null);
 
     const handleSubmit = async (e: React.FormEvent) => { // SE ENVIAN LOS DATOS A LA BASE DE DATOS. 
         e.preventDefault();
@@ -231,11 +232,12 @@ export default function AgregarSolicitud() {
                     documentacion: documentacionUrl,
                     estado: 'pendiente',
                     fecha_ingreso: new Date().toISOString(),
+                    latitud: formData.latitud,
+                    longitud: formData.longitud,
                     cumple_ley_21015: formData.cumple_ley_21015,
                 }])
                 .select()
                 .single();
-
 
             if (errorSolicitud) {
                 console.error('Error al insertar solicitud:', errorSolicitud);
@@ -246,15 +248,11 @@ export default function AgregarSolicitud() {
                 throw new Error('No se recibió el ID de la solicitud creada.');
             }
 
-            // Ahora sí puedes usar:
-            setSolicitudId(nuevaSolicitud.id);
-
-            
 
             // 3. Insertar accesibilidades seleccionadas
             if (seleccionadas.length > 0) {
                 const accesibilidadesInsert = seleccionadas.map(accId => ({
-                    id_solicitud: solicitudId,
+                    id_solicitud: nuevaSolicitud.id,
                     id_accesibilidad: accId
                 }));
 
@@ -274,7 +272,6 @@ export default function AgregarSolicitud() {
             alert('Solicitud enviada correctamente');
             // 4. Registrar en registro_logs
             await Registro_cambios(nuevaSolicitud.id);
-            alert('Registro de cambios creado correctamente');
             navigate(-1);
         } catch (error: any) {
             console.error('Error al procesar la solicitud:', error.message);
@@ -286,12 +283,6 @@ export default function AgregarSolicitud() {
 
     };
 
-    useEffect(() => {
-        if (solicitudId) {
-            console.log('Solicitud creada con ID:', solicitudId);
-            // Aquí puedes hacer lo que necesites
-        }
-    }, [solicitudId]);
 
 
     const fechaHoraActual = new Date().toISOString();
@@ -455,13 +446,14 @@ export default function AgregarSolicitud() {
                                 const lat = place.geometry.location.lat();
                                 const lng = place.geometry.location.lng();
                                 setPosition({ lat, lng });
-                                setPosition({ lat, lng });
                                 setDireccionValida(true);
 
 
                                 const nuevaDireccion = place.formatted_address || '';
                                 setFormData((prev) => ({
                                     ...prev,
+                                    latitud: lat,
+                                    longitud: lng,
                                     direccion: nuevaDireccion,
                                 }));
 
@@ -486,7 +478,6 @@ export default function AgregarSolicitud() {
                             onChange={(e) => {
                                 handleInputChange(e);
                                 setDireccionValida(false);
-                                setPosition(null);
                                 setPosition(null);
                             }}
                             style={{ width: '100%', padding: '0 10px' }}

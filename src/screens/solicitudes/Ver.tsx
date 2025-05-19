@@ -11,6 +11,7 @@ import { Tipo_Recinto } from '../../interfaces/Tipo_Recinto';
 import { Accesibilidad_Solicitud } from '../../interfaces/Accesibilidad_Solicitud';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useAuth } from '../../hooks/useAuth';
+import { APIProvider, Map as VisMap, AdvancedMarker } from "@vis.gl/react-google-maps";
 
 
 interface AccesibilidadesPorTipo {
@@ -27,6 +28,7 @@ type SolicitudCompleta = Solicitudes & {
 
 export default function Ver() {
     const navigate = useNavigate()
+    const apiKey = import.meta.env.VITE_GOOGLE_APIKEY;
     const { id } = useParams()
     const { user } = useAuth()
     const [solicitud, setSolicitud] = useState<Partial<SolicitudCompleta>>({});
@@ -34,6 +36,8 @@ export default function Ver() {
     const [isActiveModal, setIsActiveModal] = useState(false)
     const [respuestaRechazo, setRespuestaRechazo] = useState('');
     const [accesibilidadesRaw, setAccesibilidadesRaw] = useState([]);
+    const [position, setPosition] = useState<{ lat: number; lng: number } | null>(null);
+
     function handleModal() {
         setIsActiveModal(!isActiveModal)
     }
@@ -61,8 +65,7 @@ export default function Ver() {
             }
 
             setSolicitud(solicitudData);
-
-
+     
             const accesibilidadesRawData = solicitudData.accesibilidad_solicitud.map((item: Accesibilidad_Solicitud) => item.id_accesibilidad);
             setAccesibilidadesRaw(accesibilidadesRawData);
             const agrupadas: AccesibilidadesPorTipo = {};
@@ -73,6 +76,13 @@ export default function Ver() {
             });
 
             setAccesibilidades(agrupadas);
+
+            if (solicitudData?.latitud && solicitudData?.longitud) {
+                setPosition({
+                    lat: solicitudData.latitud,
+                    lng: solicitudData.longitud,
+                });
+            }
 
         };
 
@@ -179,6 +189,7 @@ export default function Ver() {
         };
         Registro_cambios();
     };
+    
 
     const handleRechazar = async () => {
         const { error } = await supabase
@@ -220,6 +231,8 @@ export default function Ver() {
         };
         Registro_cambios();
     };
+
+    
 
 
 
@@ -298,6 +311,23 @@ export default function Ver() {
 
                     <h4>Direccion</h4>
                     <p>{solicitud.direccion != '' ? solicitud.direccion : <span style={{ color: 'gray' }}>No especificado</span>}</p>
+
+                    <div style={{ paddingTop:"10px", border:"1px solid rgba(0, 0, 0, 0.2)", borderRadius: '5px', padding: '10px', marginTop: '10px' }}>
+                        <APIProvider apiKey={apiKey}>
+                            <VisMap
+                                mapId="bf51a910020fa25a"
+                                center={position}
+                                defaultZoom={16}
+                                disableDefaultUI={true}
+                                zoomControl={true}
+                                gestureHandling="greedy"
+                                keyboardShortcuts={false}
+                                style={{ width: '100%', height: '200px' }}
+                            >
+                                <AdvancedMarker position={position} />
+                            </VisMap>
+                        </APIProvider>
+                    </div>
 
                     <h4>Tipo de recinto</h4>
                     <p>{solicitud.tipo_recinto?.tipo}</p>

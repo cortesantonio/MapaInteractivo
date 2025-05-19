@@ -37,6 +37,9 @@ const GraficoTorta = ({ datosGrafico }: Props) => {
 
   const datosFiltrados = datos.filter(d => d.valor > 0);
 
+  const formatearNombre = (nombre: string) =>
+    nombre.charAt(0).toUpperCase() + nombre.slice(1);
+
 
   const containerRef = useRef<HTMLDivElement>(null);
   const [outerRadius, setOuterRadius] = useState(65);
@@ -115,10 +118,12 @@ const GraficoTorta = ({ datosGrafico }: Props) => {
                   <Cell key={`cell-${index}`} fill={coloresPorEstado[entry.nombre]} />
                 ))}
               </Pie>
-              <Tooltip />
+                <Tooltip
+                  formatter={(value, name) => [value, formatearNombre(name as string)]}
+                />
               <Legend
                 payload={datosFiltrados.map((entry) => ({
-                  value: entry.nombre,
+                  value: formatearNombre(entry.nombre),
                   type: 'square',
                   id: entry.nombre,
                   color: coloresPorEstado[entry.nombre],

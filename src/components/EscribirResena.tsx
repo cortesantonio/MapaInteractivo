@@ -71,6 +71,7 @@ export default function EscribirResena({ onSubmit, onCancel, idMarcador }: Props
         else {
             console.log("Datos Enviados con Exito:" + nuevaReseña)
             await Registro_cambios(nuevaReseña.id);
+            alert("¡Gracias por compartir tu reseña!");
 
         }
 
