@@ -13,20 +13,20 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
-import Especificacion_Baño_Discapacitados_1 from "../../assets/Especificacion_Baño_Discapacitados_1_.webp";
-import Especificacion_Baño_Discapacitados_2 from "../../assets/Especificacion_Baño_Discapacitados_2_.webp";
-import Especificacion_Baño_Discapacitados_3 from "../../assets/Especificacion_Baño_Discapacitados_3_.webp";
-import Especificacion_Baño_Discapacitados_4 from "../../assets/Especificacion_Baño_Discapacitados_4_.webp";
-import Especificacion_Baño_Discapacitados_5 from "../../assets/Especificacion_Baño_Discapacitados_5_.webp";
-import Especificacion_Estacionamiento_Discapacitados_8 from "../../assets/Especificacion_Estacionamiento_Discapacitados_8_.webp";
-import Especificacion_Estacionamiento_Discapacitados_9 from "../../assets/Especificacion_Estacionamiento_Discapacitados_9_.webp";
-import Especificacion_Rampas_Discapacitados_10 from "../../assets/Especificacion_Rampas_Discapacitados_10_.webp";
-import Especificacion_Rampas_Discapacitados_11 from "../../assets/Especificacion_Rampas_Discapacitados_11_.webp";
-import Especificacion_Rampas_Discapacitados_12 from "../../assets/Especificacion_Rampas_Discapacitados_12_.webp";
-import Especificacion_Señalizacion_Discapacitados_Visual_14 from "../../assets/Especificacion_Señalizacion_Discapacitados_Visual_14_.webp";
-import Especificacion_Señalizacion_Discapacitados_Visual_15 from "../../assets/Especificacion_Señalizacion_Discapacitados_Visual_15_.webp";
-import Especificacion_Señalizacion_Discapacitados_Visual_16 from "../../assets/Especificacion_Señalizacion_Discapacitados_Visual_16_.webp";
-import Especificacion_Zona_de_Calma_17 from "../../assets/Especificacion_Zona_de_Calma_17_.webp";
+import Especificacion_Baño_Discapacitados_1 from "../../../public/img/Especificacion_Baño_Discapacitados_1_.webp";
+import Especificacion_Baño_Discapacitados_2 from "../../../public/img/Especificacion_Baño_Discapacitados_2_.webp";
+import Especificacion_Baño_Discapacitados_3 from "../../../public/img/Especificacion_Baño_Discapacitados_3_.webp";
+import Especificacion_Baño_Discapacitados_4 from "../../../public/img/Especificacion_Baño_Discapacitados_4_.webp";
+import Especificacion_Baño_Discapacitados_5 from "../../../public/img/Especificacion_Baño_Discapacitados_5_.webp";
+import Especificacion_Estacionamiento_Discapacitados_8 from "../../../public/img/Especificacion_Estacionamiento_Discapacitados_8_.webp";
+import Especificacion_Estacionamiento_Discapacitados_9 from "../../../public/img/Especificacion_Estacionamiento_Discapacitados_9_.webp";
+import Especificacion_Rampas_Discapacitados_10 from "../../../public/img/Especificacion_Rampas_Discapacitados_10_.webp";
+import Especificacion_Rampas_Discapacitados_11 from "../../../public/img/Especificacion_Rampas_Discapacitados_11_.webp";
+import Especificacion_Rampas_Discapacitados_12 from "../../../public/img/Especificacion_Rampas_Discapacitados_12_.webp";
+import Especificacion_Señalizacion_Discapacitados_Visual_14 from "../../../public/img/Especificacion_Señalizacion_Discapacitados_Visual_14_.webp";
+import Especificacion_Señalizacion_Discapacitados_Visual_15 from "../../../public/img/Especificacion_Señalizacion_Discapacitados_Visual_15_.webp";
+import Especificacion_Señalizacion_Discapacitados_Visual_16 from "../../../public/img/Especificacion_Señalizacion_Discapacitados_Visual_16_.webp";
+import Especificacion_Zona_de_Calma_17 from "../../../public/img/Especificacion_Zona_de_Calma_17_.webp";
 import { useFontSize } from "../../components/Footer/Modificador_Letras";
 
 type InfoProps = {
