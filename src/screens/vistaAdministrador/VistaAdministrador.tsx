@@ -175,7 +175,7 @@ function VistaAdministrador() {
                             border: "none",
                             fontSize: "17px",
                             padding: "4px"
-                        }} onClick={() => { navigate('/panel-administrativo/solicitudes') }}  >({pendientes}) nuevas solicitudes.</button>
+                        }} onClick={() => { navigate('/panel-administrativo/solicitudes/pendiente') }}  >({pendientes}) nuevas solicitudes.</button>
 
                         <button
                             style={{
