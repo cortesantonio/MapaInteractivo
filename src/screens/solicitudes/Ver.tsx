@@ -115,8 +115,8 @@ export default function Ver() {
                 direccion: solicitud.direccion,
                 pagina_web: "sin especificar",
                 telefono: "sin especificar",
-                latitud: 0,
-                longitud: 0,
+                latitud: solicitud.latitud,
+                longitud: solicitud.longitud,
             })
             .select()
             .single();
