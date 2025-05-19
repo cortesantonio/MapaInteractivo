@@ -34,7 +34,7 @@ export default function AgregarSolicitud() {
     });
     const [instruccionesleidas, setInstruccionesLeidas] = useState(false); // semaforo para saber si el usuario leyo las instrucciones
     const [seleccionadas, setSeleccionadas] = useState<number[]>([]); // ids de accesibilidad seleccionada
-    const [tipoRecinto, setTipoRecinto] = useState<Tipo_Recinto[]>(); // almacena los recintos del llamado a la api
+    const [tipoRecinto, setTipoRecinto] = useState<Tipo_Recinto[]>(); // almacena los recintos del llamado a la api    
     const [file, setFile] = useState<File | null>(null);
     const [filePreview, setFilePreview] = useState<string | null>(null);
     const [uploading, setUploading] = useState(false);
@@ -142,6 +142,7 @@ export default function AgregarSolicitud() {
                 return;
             }
 
+
             setFile(selectedFile);
             setUploadError(null);
         }
@@ -150,14 +151,17 @@ export default function AgregarSolicitud() {
     const uploadFile = async () => {
         if (!file) return null;
 
+
         try {
             setUploading(true);
             setUploadError(null);
+
 
             // Crear un nombre de archivo único usando timestamp y nombre original
             const fileExt = file.name.split('.').pop();
             const fileName = `${Date.now()}_${Math.random().toString(36).substring(2, 15)}.${fileExt}`;
             const filePath = `${fileName}`; // Usando la raíz del bucket para mayor simplicidad
+
 
             // Subir archivo a Supabase Storage
             const { error } = await supabase.storage
@@ -185,6 +189,8 @@ export default function AgregarSolicitud() {
             setUploading(false);
         }
     };
+    const [solicitudId, setSolicitudId] = useState<number | null>(null);
+
     const handleSubmit = async (e: React.FormEvent) => { // SE ENVIAN LOS DATOS A LA BASE DE DATOS. 
         e.preventDefault();
 
@@ -214,9 +220,10 @@ export default function AgregarSolicitud() {
             }
 
             // 2. Insertar la solicitud con la URL del archivo
-            const { data: solicitud, error: errorSolicitud } = await supabase
+
+            const { data: nuevaSolicitud, error: errorSolicitud } = await supabase
                 .from('solicitudes')
-                .insert({
+                .insert([{
                     id_usuario: idUsuario,
                     nombre_locacion: formData.nombre_locacion,
                     direccion: formData.direccion,
@@ -227,13 +234,25 @@ export default function AgregarSolicitud() {
                     fecha_ingreso: new Date().toISOString(),
                     cumple_ley_21015: formData.cumple_ley_21015,
                     accesibilidad_certificada: formData.accesibilidad_certificada,
-                })
-                .select();
+                }])
+                .select()
+                .single<Solicitudes>();
+
 
             if (errorSolicitud) {
                 console.error('Error al insertar solicitud:', errorSolicitud);
                 throw errorSolicitud;
             }
+
+            if (!nuevaSolicitud) {
+                throw new Error('No se recibió el ID de la solicitud creada.');
+            }
+
+            // Ahora sí puedes usar:
+            setSolicitudId(nuevaSolicitud.id);
+
+
+
 
             // Si no hay error, solicitud.data[0] debería tener el ID de la solicitud insertada
             const solicitudId = solicitud && solicitud[0] ? solicitud[0].id : null;
@@ -241,6 +260,7 @@ export default function AgregarSolicitud() {
             if (!solicitudId) {
                 throw new Error('No se pudo obtener el ID de la solicitud creada');
             }
+            await Registro_cambios(solicitudId);
 
             // 3. Insertar accesibilidades seleccionadas
             if (seleccionadas.length > 0) {
@@ -249,15 +269,18 @@ export default function AgregarSolicitud() {
                     id_accesibilidad: accId
                 }));
 
+
                 const { error: errorAccesibilidades } = await supabase
                     .from('accesibilidad_solicitud')
                     .insert(accesibilidadesInsert);
+
 
                 if (errorAccesibilidades) {
                     console.error('Error al insertar accesibilidades:', errorAccesibilidades);
                     // Continuamos sin interrumpir el flujo, ya que la solicitud principal se creó correctamente
                 }
             }
+
 
             alert('Solicitud enviada correctamente');
             navigate(-1);
@@ -267,7 +290,40 @@ export default function AgregarSolicitud() {
         } finally {
             setUploading(false);
         }
+
+
     };
+
+    useEffect(() => {
+        if (solicitudId) {
+            console.log('Solicitud creada con ID:', solicitudId);
+            // Aquí puedes hacer lo que necesites
+        }
+    }, [solicitudId]);
+
+
+    const fechaHoraActual = new Date().toISOString();
+
+    const Registro_cambios = async (solicitudId: number) => {
+        const { data: registro_logs, error: errorLog } = await supabase
+            .from('registro_logs')
+            .insert([
+                {
+                    id_usuario: user?.id,
+                    tipo_accion: 'Agregación de una solicitud',
+                    detalle: `Se agregó una Solicitud con ID ${solicitudId}`,
+                    fecha_hora: fechaHoraActual,
+                }
+            ]);
+
+        if (errorLog) {
+            console.error('Error al registrar en los logs:', errorLog);
+            return;
+        }
+
+        console.log('Registro insertado en registro_logs correctamente', registro_logs);
+    };
+
 
     const { isLoaded, loadError } = useLoadScript({
         googleMapsApiKey: apiKey,
@@ -407,7 +463,9 @@ export default function AgregarSolicitud() {
                                 const lat = place.geometry.location.lat();
                                 const lng = place.geometry.location.lng();
                                 setPosition({ lat, lng });
+                                setPosition({ lat, lng });
                                 setDireccionValida(true);
+
 
                                 const nuevaDireccion = place.formatted_address || '';
                                 setFormData((prev) => ({
@@ -437,8 +495,9 @@ export default function AgregarSolicitud() {
                                 handleInputChange(e);
                                 setDireccionValida(false);
                                 setPosition(null);
+                                setPosition(null);
                             }}
-                            style={{ width: '100%', padding: '0 10px' }}
+                            style={{  width:  '100%', padding:  '0 10px'  }}
                             required
                             disabled={!usuario?.nombre} // Deshabilitar el campo si no hay usuario
                         />
@@ -448,6 +507,7 @@ export default function AgregarSolicitud() {
                         {position && (
                             <VisMap
                                 mapId="bf51a910020fa25a"
+                                center={position}
                                 center={position}
                                 defaultZoom={16}
                                 disableDefaultUI={true}
@@ -498,6 +558,7 @@ export default function AgregarSolicitud() {
 
 
                 <div style={{ marginTop: '20px', display: 'flex', flexDirection: 'column', gap: '10px' }}>
+                <div style={{ marginTop: '20px', display: 'flex', flexDirection: 'column', gap: '10px' }}>
                     <label className={styles.labelSeccion}>
                         Documentación
                         <span style={{ fontSize: '0.8rem', color: 'gray', fontStyle: 'italic' }}>
@@ -506,6 +567,9 @@ export default function AgregarSolicitud() {
                     </label>
 
                     <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                        <label
+                            htmlFor="file-upload"
+                            style={{
                         <label
                             htmlFor="file-upload"
                             style={{
@@ -539,9 +603,14 @@ export default function AgregarSolicitud() {
                                 src={filePreview}
                                 alt="Vista previa"
                                 style={{ maxWidth: '100%', maxHeight: '200px', objectFit: 'contain' }}
+                            <img
+                                src={filePreview}
+                                alt="Vista previa"
+                                style={{ maxWidth: '100%', maxHeight: '200px', objectFit: 'contain' }}
                             />
                         </div>
                     )}
+
 
                     {filePreview === 'no-preview' && (
                         <div style={{ marginTop: '10px', display: 'flex', alignItems: 'center', gap: '5px' }}>

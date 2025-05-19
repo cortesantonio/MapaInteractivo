@@ -94,77 +94,91 @@ export default function Ver() {
 
     const handleAprobar = async () => {
         console.log("Enviando solicitud de creación de marcador...");
-        try {
-            const { data: newMarcador, error: errorMarcador } = await supabase
-                .from('marcador')
-                .insert({
-                    id_solicitud: id,
-                    id_usuario: solicitud.id_usuario?.id,
-                    activo: true,
-                    tipo_recinto: solicitud.tipo_recinto?.id,
-                    nombre_recinto: solicitud.nombre_locacion,
-                    direccion: solicitud.direccion,
-                    pagina_web: "sin especificar",
-                    telefono: "sin especificar",
-                    latitud: 0,
-                    longitud: 0,
-                })
-                .select()
-                .single();
+        const { data: newMarcador, error: errorMarcador } = await supabase
+            .from('marcador')
+            .insert({
+                id_solicitud: id,
+                id_usuario: solicitud.id_usuario?.id,
+                activo: true,
+                tipo_recinto: solicitud.tipo_recinto?.id,
+                nombre_recinto: solicitud.nombre_locacion,
+                direccion: solicitud.direccion,
+                pagina_web: "sin especificar",
+                telefono: "sin especificar",
+                latitud: 0,
+                longitud: 0,
+            })
+            .select()
+            .single();
 
-            console.log("Respuesta del insert:", { newMarcador, errorMarcador });
+        console.log("Respuesta del insert:", { newMarcador, errorMarcador });
 
-            if (errorMarcador) {
-                console.error('Error al crear el marcador:', errorMarcador.message, errorMarcador.details);
-                alert(`Error al crear el marcador: ${errorMarcador.message}`);
-                return;
-            }
-
-            if (!newMarcador) {
-                console.error('No se pudo crear el marcador: sin datos devueltos');
-                alert('No se pudo crear el marcador: sin datos devueltos');
-                return;
-            }
-
-            for (const acc of accesibilidadesRaw) {
-                const { error: errorAccesibilidad } = await supabase
-                    .from('accesibilidad_marcador')
-                    .insert({
-                        id_marcador: newMarcador.id,
-                        id_accesibilidad: acc['id'],
-                    });
-
-                if (errorAccesibilidad) {
-                    console.error('Error al crear la accesibilidad del marcador:', errorAccesibilidad.message);
-                    alert(`Error al registrar accesibilidad: ${errorAccesibilidad.message}`);
-                    return;
-                }
-            }
-
-            const { error } = await supabase
-                .from('solicitudes')
-                .update({
-                    estado: 'aprobada',
-                    fecha_revision: new Date(),
-                    id_supervisor: user?.id
-                })
-                .eq('id', id);
-
-            if (error) {
-                console.error('Error al aprobar la solicitud:', error.message);
-                alert(`Error al aprobar la solicitud: ${error.message}`);
-                return;
-            }
-
-            alert('Solicitud aprobada exitosamente');
-            navigate(-1);
-
-        } catch (err) {
-            console.error("Error inesperado en handleAprobar:", err);
-            alert(`Error inesperado: ${err}`);
+        if (errorMarcador) {
+            console.error('Error al crear el marcador:', errorMarcador.message, errorMarcador.details);
+            alert(`Error al crear el marcador: ${errorMarcador.message}`);
+            return;
         }
-    };
 
+        if (!newMarcador) {
+            console.error('No se pudo crear el marcador: sin datos devueltos');
+            alert('No se pudo crear el marcador: sin datos devueltos');
+            return;
+        }
+
+        for (const acc of accesibilidadesRaw) {
+            const { error: errorAccesibilidad } = await supabase
+                .from('accesibilidad_marcador')
+                .insert({
+                    id_marcador: newMarcador.id,
+                    id_accesibilidad: acc['id'],
+                });
+
+            if (errorAccesibilidad) {
+                console.error('Error al crear la accesibilidad del marcador:', errorAccesibilidad.message);
+                alert(`Error al registrar accesibilidad: ${errorAccesibilidad.message}`);
+                return;
+            }
+        }
+
+        const { error } = await supabase
+            .from('solicitudes')
+            .update({
+                estado: 'aprobada',
+                fecha_revision: new Date(),
+                id_supervisor: user?.id
+            })
+            .eq('id', id);
+
+        if (error) {
+            console.error('Error al aprobar la solicitud:', error);
+            return;
+        }
+
+        alert('Solicitud aprobada exitosamente');
+
+        const fechaHoraActual = new Date().toISOString();
+
+        const Registro_cambios = async () => {
+            const { data: registro_logs, error: errorLog } = await supabase
+                .from('registro_logs')
+                .insert([
+                    {
+                        id_usuario: user?.id,
+                        tipo_accion: 'Aceptación de una solicitud',
+                        detalle: `Se a aceptado una Solicitud con ID ${id}`,
+                        fecha_hora: fechaHoraActual,
+                    }
+                ]);
+
+            if (errorLog) {
+                console.error('Error al registrar en los logs:', errorLog);
+                return;
+            }
+
+            console.log(' Registro insertado en registro_logs correctamente', registro_logs);
+        };
+        Registro_cambios();
+    };
 
     const handleRechazar = async () => {
         const { error } = await supabase
@@ -182,6 +196,29 @@ export default function Ver() {
 
         alert('Solicitud rechazada exitosamente');
         navigate(-1)
+
+        const fechaHoraActual = new Date().toISOString();
+
+        const Registro_cambios = async () => {
+            const { data: registro_logs, error: errorLog } = await supabase
+                .from('registro_logs')
+                .insert([
+                    {
+                        id_usuario: user?.id,
+                        tipo_accion: 'Rechazo de una solicitud',
+                        detalle: `Se a rechazado una Solicitud con ID ${id}`,
+                        fecha_hora: fechaHoraActual,
+                    }
+                ]);
+
+            if (errorLog) {
+                console.error('Error al registrar en los logs:', errorLog);
+                return;
+            }
+
+            console.log(' Registro insertado en registro_logs correctamente', registro_logs);
+        };
+        Registro_cambios();
     };
 
 

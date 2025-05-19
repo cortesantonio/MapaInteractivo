@@ -6,9 +6,12 @@ import { supabase } from '../../services/supabase';
 import { Tipo_Recinto } from '../../interfaces/Tipo_Recinto';
 import EditarTipoRecinto from './Editar';
 import NavbarAdmin from '../../components/NavbarAdmin';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
+import { useAuth } from '../../hooks/useAuth';
 
 function ListTipoRecinto() {
+    const { id } = useParams();
+    const { user } = useAuth();
     const navigate = useNavigate();
     const [tiposRecintos, setTiposRecintos] = useState<Tipo_Recinto[]>([]);
     const [selectedId, setSelectedId] = useState<number | null>(null);
@@ -57,10 +60,34 @@ function ListTipoRecinto() {
             console.error('Error al eliminar:', error);
             alert('Hubo un error al eliminar el registro.');
         } else {
-            alert('Registro eliminado correctamente.');
+            alert('Tipo Recinto eliminado correctamente.');
             fetchData(); // refresca la lista
+            Registro_cambios(id);
         }
+
     };
+
+    const fechaHoraActual = new Date().toISOString();
+    const Registro_cambios = async (id: number) => {
+        const { data: registro_logs, error: errorLog } = await supabase
+            .from('registro_logs')
+            .insert([
+                {
+                    id_usuario: user?.id,
+                    tipo_accion: 'Eliminación de un Tipo Recinto',
+                    detalle: `Se eliminó un Tipo de Recinto con ID ${id}`,
+                    fecha_hora: fechaHoraActual,
+                }
+            ]);
+
+        if (errorLog) {
+            console.error('Error al registrar en los logs:', errorLog);
+            return;
+        }
+
+        console.log(' Registro insertado en registro_logs correctamente', registro_logs);
+    };
+
     const TipoRecintosFiltrados = tiposRecintos.filter((a) =>
         a.tipo.toLowerCase().includes(query.toLowerCase())
     );

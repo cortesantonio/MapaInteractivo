@@ -26,6 +26,7 @@ function Perfil_Usuario() {
 
   const navigate = useNavigate()
   const { id } = useParams()
+  const { user } = useAuth();
   const { userRole } = useAuth()
   useEffect(() => {
     const fetchData = async () => {
@@ -81,29 +82,59 @@ function Perfil_Usuario() {
 
 
   const switchEstados = async () => {
-    try {
-      const usuario = usuarios[0];
-      if (!usuario) {
-        console.error("No se encontró el usuario");
+
+    const usuario = usuarios[0];
+    if (!usuario) {
+      console.error("No se encontró el usuario");
+      return;
+    }
+
+    const nuevoEstado = !usuario.activo;
+
+    const { error } = await supabase
+      .from("usuarios")
+      .update({ activo: nuevoEstado })
+      .eq("id", id);
+
+    if (error) {
+      console.error("Error al cambiar el estado del usuario:", error);
+    } else {
+      setUsuarios(prev => ({ ...prev, activo: nuevoEstado }));
+      alert(`Usuario ${nuevoEstado ? 'activado' : 'desactivado'} correctamente.`);
+      navigate("/panel-administrativo/usuarios");
+    }
+
+    const fechaHoraActual = new Date().toISOString();
+
+    const Registro_cambios = async () => {
+      const tipoAccion = nuevoEstado ? 'Activación de Uusario' : 'Desactivación de Usuario';
+      const detalleAccion = nuevoEstado
+        ? `Se activó el Usuario con ID ${id}`
+        : `Se desactivó el Usuario con ID ${id}`;
+
+      const { data: registro_logs, error: errorLog } = await supabase
+        .from('registro_logs')
+        .insert([
+          {
+            id_usuario: user?.id,
+            tipo_accion: tipoAccion,
+            detalle: detalleAccion,
+            fecha_hora: fechaHoraActual,
+          }
+        ]);
+
+      if (errorLog) {
+        console.error('Error al registrar en los logs:', errorLog);
         return;
       }
 
-      const nuevoEstado = !usuario.activo;
+      console.log('Registro insertado en registro_logs correctamente', registro_logs);
+    };
 
-      const { error } = await supabase
-        .from("usuarios")
-        .update({ activo: nuevoEstado })
-        .eq("id", id);
-
-      if (error) {
-        console.error("Error al cambiar el estado del usuario:", error);
-      } else {
-        navigate("/panel-administrativo/usuarios");
-      }
-    } catch (error) {
-      console.error("Error inesperado al cambiar el estado del usuario:", error);
-    }
+    Registro_cambios();
   };
+
+
 
 
   // Renderizado del perfil de usuario
