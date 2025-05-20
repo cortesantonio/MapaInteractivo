@@ -6,6 +6,9 @@ import { Routes, Route } from 'react-router-dom'
 import LoginUsuario from './screens/Login/loginUsuario'
 import Home from './screens/Home'
 
+// Modo Compacto
+import Modo_Compacto from './screens/modoCompacto/Home'
+
 // vistas administrador
 import VistaAdministrador from './screens/vistaAdministrador/VistaAdministrador'
 
@@ -51,6 +54,7 @@ function App() {
         <Route path='/login' element={<LoginUsuario />} />
         <Route path='/info' element={<Info />} />
         <Route path='/colaborar' element={<AgregarSolicitud />} />
+        <Route path='/modocompacto' element= {<Modo_Compacto/>} />
 
         {/* Panel administrativo protegido */}
         <Route path='/panel-administrativo' element={
