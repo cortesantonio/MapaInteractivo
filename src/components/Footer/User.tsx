@@ -70,7 +70,7 @@ export default function User({
                                           style={{ left: modoNocturno ? "22px" : "2px" }}></span>
                                 </div>
                             </div>
-                            <button style={{fontSize: `${fontSize}rem`}} className={styles.ButtonCompact}>
+                            <button onClick={() => {navigate("/modocompacto")}} style={{fontSize: `${fontSize}rem`}} className={styles.ButtonCompact}>
                                 Modo Compacto
                             </button>
                         </div>

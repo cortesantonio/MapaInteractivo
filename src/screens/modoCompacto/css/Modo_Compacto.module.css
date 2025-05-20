@@ -1,0 +1,312 @@
+/* Estilos base y contenedor principal */
+.container_principal {
+    width: 100%;
+    height: 100%;
+    overflow: none;
+}
+
+.container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin: 0 auto;
+    padding: clamp(10px, 3vw, 30px);
+    max-width: clamp(320px, 90vw, 1200px);
+}
+
+.botonatras {
+  position: absolute;
+  top: 5px;
+  left: 5px;
+  color: #000;
+  cursor: pointer;
+  z-index: 1000;
+  font-size: 20px;
+  background-color: transparent;
+  border: solid 3px black;
+  border-radius: 10px;
+  width: 200px;
+}
+
+/* Estilos del título */
+.Titulo {
+    align-self: flex-start;
+    margin-bottom: clamp(10px, 2vw, 20px);
+    width: 100%;
+}
+
+.Titulo h4 {
+    font-size: clamp(1.2rem, 4vw, 1.8rem);
+    font-weight: 500;
+    margin: 20px;
+}
+
+/* Estilos del buscador */
+.contenedor_buscador {
+    width: 100%;
+    margin-bottom: clamp(10px, 2vw, 20px);
+}
+
+.buscador {
+    display: flex;
+    align-items: center;
+    position: relative;
+    width: 100%;
+    max-width: clamp(280px, 80vw, 500px);
+    margin: 0 auto;
+}
+
+.buscador .icono {
+    position: absolute;
+    left: clamp(10px, 3%, 15px);
+    font-size: clamp(1rem, 3vw, 1.3rem);
+    color: #555;
+}
+
+.buscador input {
+    width: 100%;
+    border: 3px solid black;
+    border-radius: 10px;
+    padding: clamp(8px, 2vw, 12px);
+    padding-left: clamp(30px, 10%, 40px);
+    font-size: clamp(0.9rem, 2vw, 1rem);
+}
+
+/* Estilos de los botones de filtro y eventos */
+.contenedor_botones {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    gap: clamp(10px, 3vw, 20px);
+    width: 100%;
+    margin-bottom: clamp(15px, 3vw, 25px);
+}
+
+.contenedor_eventos,
+.contenedor_filtros {
+    flex: 1;
+    max-width: clamp(150px, 40vw, 250px);
+}
+
+.eventos,
+.filtros {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border: 3px solid black;
+    border-radius: 10px;
+    padding: clamp(5px, 1vw, 10px);
+    width: 100%;
+}
+
+.eventos button,
+.filtros button {
+    cursor: pointer;
+    background-color: transparent;
+    color: #000;
+    border: none;
+    font-size: clamp(0.8rem, 2vw, 1rem);
+    flex: 1;
+    text-align: left;
+    white-space: nowrap;
+}
+
+.icono_evento,
+.icono_filtro {
+    font-size: clamp(1rem, 2.5vw, 1.3rem);
+}
+
+/* Panel de filtros */
+.contenedor_resultados_filtros {
+    display: flex;
+    flex-direction: column;
+    background-color: #fff;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+    border-radius: clamp(10px, 3vw, 20px);
+    width: clamp(250px, 80vw, 400px);
+    padding: clamp(12px, 3vw, 20px);
+    margin-bottom: clamp(15px, 3vw, 25px);
+    z-index: 10;
+}
+
+.contenedor_resultados_filtros p {
+    font-size: clamp(1rem, 2.5vw, 1.2rem);
+    font-weight: 500;
+    margin-bottom: clamp(10px, 2vw, 15px);
+}
+
+/* Resultados de búsqueda */
+.resultados_busqueda {
+    width: 100%;
+    border: 1px solid #e0e0e0;
+    border-radius: clamp(8px, 2vw, 15px);
+    overflow: hidden;
+}
+
+.contenedor_titulo {
+    padding: clamp(10px, 2vw, 15px);
+    background-color: #f8f8f8;
+}
+
+.contenedor_titulo h4 {
+    font-size: clamp(1rem, 2.5vw, 1.3rem);
+    font-weight: 500;
+    margin: 0;
+}
+
+.contenedor_titulo hr {
+    border: none;
+    border-top: 1px solid #ddd;
+    margin: clamp(5px, 1vw, 10px) 0 0 0;
+}
+
+.contenedor_resultados {
+    width: 100%;
+    padding: clamp(10px, 2vw, 15px);
+    height: 100%;
+    overflow-y: auto;
+    max-height: clamp(300px, 60vh, 500px);
+}
+
+.marcador {
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.15);
+    background-color: #fff;
+    border-radius: clamp(10px, 2vw, 15px);
+    min-height: clamp(200px, 50vh, 350px);
+    margin-bottom: clamp(15px, 3vw, 25px);
+    padding: clamp(15px, 3vw, 25px);
+    transition: transform 0.2s, box-shadow 0.2s;
+    cursor: pointer;
+}
+
+.marcador:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+}
+
+.marcador h3 {
+    font-size: clamp(1.1rem, 3vw, 1.4rem);
+    font-weight: 500;
+    margin: 0 0 clamp(5px, 1vw, 10px) 0;
+}
+
+.marcador p {
+    font-size: clamp(0.9rem, 2vw, 1rem);
+    margin: clamp(3px, 1vw, 8px) 0;
+    color: #555;
+}
+
+.accesibilidad_marcador {
+    display: flex;
+    flex-direction: column;
+    margin: clamp(10px, 2vw, 20px) 0 0 0;
+    padding-top: clamp(10px, 2vw, 15px);
+    border-top: 1px solid #eee;
+}
+
+.accesibilidad_marcador h3 {
+    font-size: clamp(1rem, 2.5vw, 1.2rem);
+    margin: 0 0 clamp(8px, 2vw, 15px) 0;
+}
+
+.accesibilidad_marcador ul {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 clamp(10px, 2vw, 20px) 0;
+}
+
+.accesibilidad_marcador li {
+    font-size: clamp(0.85rem, 2vw, 0.95rem);
+    margin-bottom: clamp(3px, 1vw, 6px);
+    padding-left: clamp(10px, 2vw, 15px);
+    position: relative;
+}
+
+.accesibilidad_marcador li:before {
+    content: "•";
+    position: absolute;
+    left: 0;
+    color: #555;
+}
+
+.accesibilidad_marcador button {
+    align-self: flex-end;
+    background-color: black;
+    color: yellow;
+    border: none;
+    border-radius: clamp(4px, 1vw, 8px);
+    padding: clamp(6px, 1.5vw, 10px) clamp(12px, 3vw, 20px);
+    font-size: clamp(0.85rem, 2vw, 1rem);
+    cursor: pointer;
+    font-weight: 500;
+    transition: transform 0.2s;
+}
+
+.accesibilidad_marcador button:hover {
+    transform: scale(1.05);
+}
+
+
+.contenedor_de_opciones {
+    background-color: #fff;
+    width: 100%;
+    margin-top: clamp(15px, 3vw, 30px);
+    margin-bottom: clamp(15px, 3vw, 30px);
+    padding: clamp(10px, 2vw, 20px);
+}
+
+.contenedor_titulo_opciones {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: clamp(5px, 1.5vw, 12px);
+    margin-bottom: clamp(8px, 2vw, 15px);
+    border-bottom: 1px solid #eee;
+}
+
+.contenedor_titulo_opciones h3 {
+    font-size: clamp(1.1rem, 3vw, 1.5rem);
+    font-weight: 500;
+    margin: 0;
+}
+
+.contenedor_opciones {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    padding: clamp(5px, 1vw, 10px);
+}
+
+.contenedor_opciones .contenedor_opciones_iconos {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    gap: clamp(8px, 2vw, 15px);
+    padding: clamp(5px, 1vw, 10px);
+}
+
+.elementos {
+    cursor: pointer;
+    font-size: clamp(1rem, 2.5vw, 1.3rem);
+    margin-right: clamp(5px, 1vw, 8px);
+}
+
+.contenedor_opciones_iconos button {
+    background-color: transparent;
+    color: #000;
+    border: none;
+    font-size: clamp(0.9rem, 2vw, 1.1rem);
+    padding: clamp(3px, 1vw, 5px);
+    margin-right: clamp(10px, 2vw, 20px);
+    cursor: pointer;
+    transition: color 0.2s;
+}
+
+.contenedor_opciones_iconos button:hover {
+    color: #555;
+    text-decoration: underline;
+}
+
+
