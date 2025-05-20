@@ -15,6 +15,44 @@ import { APIProvider, Map as VisMap, AdvancedMarker } from "@vis.gl/react-google
 import { sendEmail } from "../../utils/sendEmail";
 
 
+function contentEmail(nombre: string, estado: string, solicitudId: string) {
+    const html = `
+        <!DOCTYPE html>
+        <html lang="es">
+        <head>
+            <meta charset="UTF-8">
+            <style>
+            body { font-family: Arial, sans-serif; background-color: #f0f0f0; padding: 20px; }
+            .container { background: white; padding: 20px; border-radius: 8px; max-width: 600px; margin: auto; }
+            .header { color: #007bff; font-size: 20px; margin-bottom: 20px; }
+            .content { font-size: 16px; color: #333; }
+            .footer { font-size: 12px; color: #999; margin-top: 30px; }
+            </style>
+        </head>
+        <body>
+            <div class="container">
+            <div class="header">Tu solicitud fue actualizada a: ${estado}</div>
+            <div class="content">
+                Hola ${nombre},<br/><br/>
+                Tu solicitud con ID <strong>${solicitudId}</strong> ha cambiado de estado.<br/>
+                Estado actual: <strong>${estado}</strong><br/><br/>
+
+                
+
+                ¡Gracias por tu paciencia!<br/>
+                El equipo de mapainteractivo.site
+            </div>
+            <div class="footer">
+                Este mensaje fue enviado automáticamente. Por favor no respondas.
+            </div>
+            </div>
+        </body>
+        </html>
+  `;
+    return html;
+}
+
+
 interface AccesibilidadesPorTipo {
     [tipo: string]: Accesibilidad[];
 }
@@ -187,15 +225,10 @@ export default function Ver() {
         };
         Registro_cambios();
 
-        // Enviar notificacion por correo al usuario.
-        const html = `
-        <p>Tu solicitud fue aprobada. <a href="${id}">Haz clic aquí para verla</a>.</p>
-        <p>Gracias por tu interés en nuestro servicio.</p>
-        <p>Saludos,</p>
-        `;
+
         sendEmail(correoDestinario,
             "Solicitud aprobada",
-            html)
+            contentEmail(solicitud.id_usuario?.nombre || '', 'Aprobada', id as string))
             .then(res => console.log("Correo enviado", res))
             .catch(err => console.error("Error", err))
 
@@ -221,6 +254,13 @@ export default function Ver() {
         navigate(-1)
 
         const fechaHoraActual = new Date().toISOString();
+
+        sendEmail(correoDestinario,
+            "Solicitud rechazada",
+            contentEmail(solicitud.id_usuario?.nombre || '', 'Rechazada', id as string))
+            .then(res => console.log("Correo enviado", res))
+            .catch(err => console.error("Error", err))
+
 
         const Registro_cambios = async () => {
             const { data: registro_logs, error: errorLog } = await supabase
