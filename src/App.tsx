@@ -82,7 +82,7 @@ function App() {
         } />
 
         <Route path='/panel-administrativo/marcadores/editar/:id' element={
-          <ProtectedRoute allowedRoles={['administrador', 'gestor']}>
+          <ProtectedRoute allowedRoles={['administrador', 'gestor', 'usuario']}>
             <EditarLocation />
           </ProtectedRoute>
         } />
@@ -165,7 +165,7 @@ function App() {
         } />
 
         <Route path='/panel-administrativo/solicitud/:id' element={
-          <ProtectedRoute allowedRoles={['administrador', 'gestor']}>
+          <ProtectedRoute allowedRoles={['administrador', 'gestor', 'usuario']}>
             <Ver />
           </ProtectedRoute>
         } />

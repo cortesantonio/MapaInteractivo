@@ -34,6 +34,7 @@ export default function InfoDetallada() {
         latitud: undefined,
         longitud: undefined,
         activo: true,
+        accesibilidad_certificada: false
     });
     const [selecciones, setSelecciones] = useState<number[]>([]);
     const [supervisor, setSupervisor] = useState({
@@ -214,6 +215,7 @@ export default function InfoDetallada() {
                 <div className={styles.locacionTitulo}>
                     <h4>{dataMarcador.nombre_recinto}</h4>
                     <p>{nombreTipoRecinto}</p>
+                    <p>{dataMarcador.accesibilidad_certificada ? ('si') : ('no')}</p>
                 </div>
             </div>
 
@@ -289,14 +291,11 @@ export default function InfoDetallada() {
                                     </div>
                                 );
                             })}
-
                         </div>
-
                     </div>
 
                     {marcadorPropio ? (
                         <div className={styles.acciones}>
-
                             <button
                                 type="button"
                                 onClick={toggleActivo}
