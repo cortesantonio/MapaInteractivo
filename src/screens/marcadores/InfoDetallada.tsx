@@ -210,7 +210,7 @@ export default function InfoDetallada() {
                             ) : (
                                 <p>{dataMarcador.id_solicitud}
                                     <button className={styles.btnLink} >
-                                        <FontAwesomeIcon onClick={() => { navigate(`/panel-administrativo/solicitud/${supervisor.id}`) }} size="sm" icon={faArrowUpRightFromSquare} />
+                                        <FontAwesomeIcon onClick={() => { navigate(`/panel-administrativo/solicitud/${dataMarcador.id_solicitud}`) }} size="sm" icon={faArrowUpRightFromSquare} />
 
                                     </button>
                                 </p>
