@@ -76,7 +76,7 @@ function App() {
         } />
 
         <Route path='/panel-administrativo/marcadores/informacion/:id' element={
-          <ProtectedRoute allowedRoles={['administrador', 'gestor']}>
+          <ProtectedRoute allowedRoles={['administrador', 'gestor', 'usuario']}>
             <InfoDetallada />
           </ProtectedRoute>
         } />

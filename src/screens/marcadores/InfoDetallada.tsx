@@ -17,9 +17,11 @@ interface TipoDeAccesibilidades {
 export default function InfoDetallada() {
     const navigate = useNavigate()
     const { id } = useParams();
-    const { user } = useAuth();
+    const { user, userRole } = useAuth();
     const [accesibilidades, setAccesibilidades] = useState<TipoDeAccesibilidades>({});
     const [nombreTipoRecinto, setNombreTipoRecinto] = useState('');
+    const [marcadorPropio, setMarcadorPropio] = useState(false);
+
     const [dataMarcador, setDataMarcador] = useState<Partial<Marcador>>({
         nombre_recinto: '',
         tipo_recinto: '',
@@ -176,6 +178,23 @@ export default function InfoDetallada() {
         Registro_cambios();
     };
 
+
+
+    // Verificar si el usuario es el dueño del marcador o tiene rol de administrador o gestor para permitir la edición
+    useEffect(() => {
+        if (!dataMarcador || !user) return;
+
+        const esDueño = String(dataMarcador.id_usuario) === String(user.id);
+        const esAdminOGestor = userRole === 'administrador' || userRole === 'gestor';
+
+        if (esDueño || esAdminOGestor) {
+            setMarcadorPropio(true); // Permitir edición
+        } else {
+            setMarcadorPropio(false)
+        }
+    }, [dataMarcador, user, userRole]);
+
+
     return (
         <div className={styles.container}>
             <div className={styles.header}>
@@ -275,17 +294,22 @@ export default function InfoDetallada() {
 
                     </div>
 
-                    <div className={styles.acciones}>
+                    {marcadorPropio ? (
+                        <div className={styles.acciones}>
 
-                        <button
-                            type="button"
-                            onClick={toggleActivo}
-                            style={{ color: dataMarcador.activo ? 'red' : 'green', backgroundColor: 'transparent' }}
-                        >
-                            {dataMarcador.activo ? 'Desactivar' : 'Activar'}
-                        </button>
-                        <button type="submit" onClick={() => { navigate(`/panel-administrativo/marcadores/editar/${dataMarcador.id}`) }}>Editar</button>
-                    </div>
+                            <button
+                                type="button"
+                                onClick={toggleActivo}
+                                style={{ color: dataMarcador.activo ? 'red' : 'green', backgroundColor: 'transparent' }}
+                            >
+                                {dataMarcador.activo ? 'Desactivar' : 'Activar'}
+                            </button>
+                            <button type="submit" onClick={() => { navigate(`/panel-administrativo/marcadores/editar/${dataMarcador.id}`) }}>Editar</button>
+                        </div>
+                    ) : (
+                        <p>No tienes permiso para editar este marcador.</p>
+                    )}
+
                 </div>
             </div>
 
