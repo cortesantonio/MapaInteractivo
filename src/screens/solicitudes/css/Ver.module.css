@@ -82,13 +82,13 @@
     border-radius: 5px;
 }
 
-.modal  {
+.modal {
     margin-top: 15px;
     display: flex;
     flex-direction: column;
 }
 
-.modal  textarea {
+.modal textarea {
     padding: 5px;
     height: 120px;
     margin-bottom: 15px;
@@ -106,5 +106,17 @@
     outline: none;
     color: white;
     border-radius: 3px;
+    cursor: pointer;
+}
+
+.btnVerMarcado {
+    width: 100%;
+    margin-top: 20px;
+    padding: 5px;
+    color: rgba(0, 122, 0, 0.58);
+    font-weight: 500;
+    font-size: 1.2rem;
+    border-radius: 5px;
+    border: none;
     cursor: pointer;
 }

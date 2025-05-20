@@ -13,7 +13,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { useAuth } from '../../hooks/useAuth';
 import { APIProvider, Map as VisMap, AdvancedMarker } from "@vis.gl/react-google-maps";
 import { sendEmail } from "../../utils/sendEmail";
-
+import { Marcador } from '../../interfaces/Marcador';
 
 function contentEmail(nombre: string, estado: string, solicitudId: string) {
     const html = `
@@ -77,6 +77,8 @@ export default function Ver() {
     const [accesibilidadesRaw, setAccesibilidadesRaw] = useState([]);
     const [position, setPosition] = useState<{ lat: number; lng: number } | null>(null);
     const [correoDestinario, setCorreoDestinario] = useState<string>('')
+    const [infoMarcador, setinfoMarcador] = useState<Partial<Marcador>>()
+
     function handleModal() {
         setIsActiveModal(!isActiveModal)
     }
@@ -102,7 +104,6 @@ export default function Ver() {
                 console.error('Error cargando la solicitud:', solicitudError);
                 return;
             }
-            console.log('Solicitud cargada:', solicitudData);
             setCorreoDestinario(solicitudData.id_usuario.correo)
             setSolicitud(solicitudData);
 
@@ -122,6 +123,21 @@ export default function Ver() {
                     lat: solicitudData.latitud,
                     lng: solicitudData.longitud,
                 });
+            }
+
+            if (solicitudData?.estado == 'aprobada') {
+                const { data: marcadorData, error: marcadorError } = await supabase
+                    .from('marcador')
+                    .select('*')
+                    .eq('id_solicitud', id)
+                    .single();
+
+                if (marcadorError) {
+                    console.error('Error cargando el marcador:', marcadorError);
+                    return;
+                }
+                setinfoMarcador(marcadorData)
+                console.log('marcado:', marcadorData)
             }
 
         };
@@ -326,11 +342,15 @@ export default function Ver() {
                             paddingBottom: 20, marginBottom: '10px', color: 'white', boxShadow: '1px 1px 5px rgba(0, 0, 0, 0.53)'
                         }}>
                             <div style={{ position: 'absolute', right: 5, top: 5 }}><FontAwesomeIcon icon={faCheck} size='xl' /></div>
-                            <h4 style={{ fontWeight: 200 }}> {'> '}Solicitud aprobada</h4>
+                            <h4 style={{ fontWeight: 400, fontSize: '1.2rem' }}>Solicitud aprobada</h4>
                             <h4>Supervisor </h4>
-                            <p>{solicitud.id_supervisor?.nombre + ' '} <button style={{ color: 'white', background: 'transparent', border: 'none' }} onClick={() => { navigate(`/usuario/perfil/${solicitud.id_supervisor?.id}`) }}><FontAwesomeIcon icon={faArrowUpRightFromSquare} /></button></p>
+                            <p>{solicitud.id_supervisor?.nombre + ' '} <button style={{ color: 'white', background: 'transparent', border: 'none' }}
+                                onClick={() => { navigate(`/usuario/perfil/${solicitud.id_supervisor?.id}`) }}><FontAwesomeIcon icon={faArrowUpRightFromSquare} /></button></p>
                             <h4>Fecha de revision</h4>
                             <p>{new Date(solicitud.fecha_revision as Date).toLocaleString()}</p>
+                            {infoMarcador && (
+                                <button className={styles.btnVerMarcado} onClick={() => { navigate(`/panel-administrativo/marcadores/informacion/${infoMarcador.id}`) }}>Revisa tu marcador</button>
+                            )}
 
 
                         </div>)}

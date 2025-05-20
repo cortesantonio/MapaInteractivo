@@ -251,53 +251,63 @@ function Perfil_Usuario() {
       <div className={styles.perfil_info}>
         {solicitud.length > 0 ? (
           <div style={{ maxHeight: "380px", overflowY: "auto", padding: "0 15px" }}>
-            {solicitud.map((aporte) => (
-              <div className={styles.informacion_campos_de_resena} key={aporte.id} onClick={() => { navigate(`/panel-administrativo/solicitud/${aporte.id}`) }}>
-                <div style={{ display: "flex", flexDirection: "row", justifyContent: "space-between", width: "100%" }}>
-                  <div style={{ flex: 1 }}>
-                    <h3 style={{ fontWeight: "400" }}>{aporte.nombre_locacion}</h3>
+            {solicitud
+              .sort((a, b) => {
+                if (a.estado === "aprobada" && b.estado !== "aprobada") return -1
+                if (a.estado !== "aprobada" && b.estado === "aprobada") return 1
+                return 0
+              })
+              .map((aporte) => (
+                <div className={styles.informacion_campos_de_resena} key={aporte.id} onClick={() => { navigate(`/panel-administrativo/solicitud/${aporte.id}`) }}>
+                  <div style={{ display: "flex", flexDirection: "row", justifyContent: "space-between", width: "100%" }}>
+                    <div style={{ flex: 1 }}>
+                      <h3 style={{ fontWeight: "400" }}>{aporte.nombre_locacion}</h3>
+                    </div>
+
+                    <div style={{ flex: 1, textAlign: "right" }}>
+                      <span
+                        style={{
+                          backgroundColor:
+                            aporte.estado === "aprobada"
+                              ? "rgba(65, 170, 17, 0.15)"
+                              : aporte.estado === "rechazada"
+                                ? "rgba(170, 17, 17, 0.15)"
+                                : "rgba(223, 171, 0, 0.15)",
+                          color:
+                            aporte.estado === "aprobada"
+                              ? "rgb(65, 170, 17)"
+                              : aporte.estado === "rechazada"
+                                ? "rgb(170, 17, 17)"
+                                : "rgb(223, 171, 0)",
+                          padding: "4px 10px",
+                          borderRadius: "20px",
+                          fontWeight: 500,
+                          fontSize: "0.9rem"
+                        }}
+                      >
+                        {aporte.estado === "aprobada"
+                          ? "Aprobada"
+                          : aporte.estado === "rechazada"
+                            ? "Rechazada"
+                            : "Pendiente"}
+                      </span>
+                    </div>
                   </div>
 
-                  <div style={{ flex: 1, textAlign: "right" }}>
-                    <span
-                      style={{
-                        backgroundColor:
-                          aporte.estado === "aprobada"
-                            ? "rgba(65, 170, 17, 0.15)"
-                            : aporte.estado === "rechazada"
-                              ? "rgba(170, 17, 17, 0.15)"
-                              : "rgba(223, 171, 0, 0.15)",
-                        color:
-                          aporte.estado === "aprobada"
-                            ? "rgb(65, 170, 17)"
-                            : aporte.estado === "rechazada"
-                              ? "rgb(170, 17, 17)"
-                              : "rgb(223, 171, 0)",
-                        padding: "4px 10px",
-                        borderRadius: "20px",
-                        fontWeight: 500,
-                        fontSize: "0.9rem"
-                      }}
-                    >
-                      {aporte.estado === "aprobada"
-                        ? "Aprobada"
-                        : aporte.estado === "rechazada"
-                          ? "Rechazada"
-                          : "Pendiente"}
-                    </span>
+                  <div className={styles.campo} style={{ display: "flex", flexDirection: "row", justifyContent: "space-between", width: "100%" }}>
+                    <p className={styles.valor}>&bull; {aporte.direccion}</p>
+                    {aporte.estado === "aprobada" && (
+                      <p className={styles.valor} style={{ textAlign: 'right' }}>Fecha revisión: {aporte.fecha_revision ? new Date(aporte.fecha_revision).toLocaleDateString() : "Sin fecha"}</p>
+
+                    )}
                   </div>
-                </div>
 
-                <div className={styles.campo}>
-                  <p className={styles.valor}>&bull; {aporte.direccion}</p>
-                </div>
+                  <div className={styles.campo}>
+                    <p className={styles.valor}>{aporte.descripcion}</p>
+                  </div>
 
-                <div className={styles.campo}>
-                  <p className={styles.valor}>{aporte.descripcion}</p>
                 </div>
-
-              </div>
-            ))}
+              ))}
           </div>
         ) : (
           <div className={styles.sin_resenas}>
