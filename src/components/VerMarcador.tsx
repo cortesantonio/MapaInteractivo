@@ -34,6 +34,7 @@ export default function VerMarcador({ MarcadorSelectId, CerrarMarcador, establec
     const [MostrarCompartir, setMostrarCompartir] = useState(false);
     const { modoNocturno } = useTheme();
 
+    const [calificacion, setCalificacion] = useState<number>(0.0);
     // Función para volver a la vista del marcador
     const volverAMarcador = () => {
         setMostrarCompartir(false);
@@ -93,6 +94,12 @@ export default function VerMarcador({ MarcadorSelectId, CerrarMarcador, establec
 
                     setResenasMarcador(resenasFormateadas);
                 }
+                let totalCalificaciones = marcador.resenas.length;
+                let sumaCalificaciones = marcador.resenas.reduce((acumulador: number, resena: Review) => {
+                    return acumulador + resena.calificacion;
+                }, 0);
+                let calificacionPromedio = totalCalificaciones > 0 ? sumaCalificaciones / totalCalificaciones : 0;
+                setCalificacion(calificacionPromedio);
             }
             setCargando(false);
         };
@@ -241,6 +248,7 @@ export default function VerMarcador({ MarcadorSelectId, CerrarMarcador, establec
                 )}
                 <div style={{ backgroundColor: modoNocturno ? "#2d2d2d" : "" }} className={styles.headerContenido}>
                     <div className={styles.info}>
+
                         <div className={styles.nombreVerificado}>
                             <h2 style={{ color: modoNocturno ? "#fff" : "" }}>
                                 {cargando ? 'Cargando...' : Marcador?.nombre_recinto}
@@ -265,7 +273,19 @@ export default function VerMarcador({ MarcadorSelectId, CerrarMarcador, establec
                             <span style={{ opacity: 0.5, fontSize: '0.9rem', color: modoNocturno ? "#fff" : "" }}>
                                 <FontAwesomeIcon icon={faStar} size="2xs" style={{ color: "#FFD43B", }} /> • 4.6 en Google Maps.
                             </span>
+
+                        <h2 style={{ color: modoNocturno ? "#fff" : "" }}>{cargando ? 'Cargando...' : Marcador?.nombre_recinto}</h2>
+                        <h4 style={{ color: modoNocturno ? "#fff" : "" }} >{cargando ? 'Cargando...' : '> ' + Marcador?.tipo_recinto}</h4>
+                        <p style={{ marginTop: '10px', color: modoNocturno ? "#fff" : "" }}>
+                            {calificacion > 0 ? (
+                                <><FontAwesomeIcon icon={faStar} size="2xs" style={{ color: "#FFD43B", }} /> • {calificacion} de la comunidad.</>
+
+                            ) : (
+                                <span style={{ color: 'gray', fontSize: '0.8rem' }}>Sin reseñas aún.</span>
+                            )}
+
                         </p>
+
                     </div>
                     <div className={styles.containerButtons}>
                         {MostrarCompartir ? (
@@ -274,6 +294,7 @@ export default function VerMarcador({ MarcadorSelectId, CerrarMarcador, establec
                                 <button onClick={volverAMarcador}>
                                     <FontAwesomeIcon icon={faInfo} style={{ width: "13px" }} className={styles.icon} />
                                     <p style={{ color: modoNocturno ? "#fff" : "" }}>Información</p>
+
                                 </button>
                                 <button onClick={() => {
                                     establecerIdRutaMarcador(Marcador.id as number);
