@@ -242,7 +242,7 @@ export default function EditarLocacion() {
     if (loadError) return <div>Error cargando Places</div>;
     if (!isLoaded) return <div>Cargando Autocomplete...</div>;
 
-    if(!marcadorPropio) {
+    if (!marcadorPropio) {
         return (
             <div className={styles.container}>
                 <div className={styles.header}>
@@ -285,8 +285,8 @@ export default function EditarLocacion() {
                         <div className={styles.formGrid}>
                             {/*Primer Grupo*/}
                             <div className={styles.FormSection} style={{ display: 'flex', flexDirection: 'column', maxWidth: '100%', margin: "5px" }}>
-                                
-                                {userRole === 'administrador' || userRole === 'gestor' && (
+
+                                {userRole === 'administrador' || userRole === 'gestor' ? (
                                     <>
                                         <label className={styles.labelSeccion} >Nombre Locacion</label>
                                         <input
@@ -378,7 +378,7 @@ export default function EditarLocacion() {
                                         </APIProvider>
                                     </>
 
-                                )}
+                                ) : null}
 
 
                                 < label className={styles.labelSeccion} htmlFor="">Pagina Web</label>
