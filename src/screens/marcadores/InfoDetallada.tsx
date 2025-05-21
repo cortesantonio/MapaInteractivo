@@ -210,7 +210,7 @@ export default function InfoDetallada() {
                     <FontAwesomeIcon icon={faReply} size='2xl' />
                 </button>
                 <div className={styles.Titulo} >
-                    <h2>Informacion Detallada</h2>
+                    <h2>Información detallada</h2>
                 </div>
                 <div className={styles.locacionTitulo}>
                     <h4>{dataMarcador.nombre_recinto}</h4>
@@ -250,15 +250,15 @@ export default function InfoDetallada() {
                             )}
 
 
-                            <label className={styles.labelSeccion} >Nombre Locacion</label>
+                            <label className={styles.labelSeccion} >Nombre locación</label>
                             <p>{dataMarcador.nombre_recinto}</p>
-                            <label className={styles.labelSeccion}>Tipo de Recinto</label>
+                            <label className={styles.labelSeccion}>Tipo de recinto</label>
                             <p>{nombreTipoRecinto}</p>
-                            <label className={styles.labelSeccion} htmlFor="">Direccion</label>
+                            <label className={styles.labelSeccion} htmlFor="">Dirección</label>
                             <p>{dataMarcador.direccion}</p>
-                            <label className={styles.labelSeccion} htmlFor="">Pagina Web</label>
+                            <label className={styles.labelSeccion} htmlFor="">Página web</label>
                             <p>{dataMarcador.pagina_web}</p>
-                            <label className={styles.labelSeccion} htmlFor="">Telefono</label>
+                            <label className={styles.labelSeccion} htmlFor="">Teléfono</label>
                             <div className={styles.ContainerinputTelefono}>
                                 <p className={styles.codTelfono}>+569</p>
                                 <p>{dataMarcador.telefono}</p>

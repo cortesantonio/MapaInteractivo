@@ -239,14 +239,14 @@ export default function EditarLocacion() {
     const [direccionValida, setDireccionValida] = useState(false);
     const inputRef = useRef<HTMLInputElement>(null);
 
-    if (loadError) return <div>Error cargando Places</div>;
-    if (!isLoaded) return <div>Cargando Autocomplete...</div>;
+    if (loadError) return <div>Error cargando places</div>;
+    if (!isLoaded) return <div>Cargando autocomplete...</div>;
 
     if (!marcadorPropio) {
         return (
             <div className={styles.container}>
                 <div className={styles.header}>
-                    <h2>Acceso Denegado</h2>
+                    <h2>Acceso denegado</h2>
                     <p>No tienes permiso para editar este marcador.</p>
                 </div>
             </div>
@@ -270,7 +270,7 @@ export default function EditarLocacion() {
                     <FontAwesomeIcon icon={faReply} size='2xl' />
                 </button>
                 <div className={styles.Titulo} >
-                    <h2>Editar Locacion</h2>
+                    <h2>Editar locación</h2>
                 </div>
                 <div className={styles.locacionTitulo}>
                     <h4>{dataMarcador.nombre_recinto}</h4>
@@ -288,7 +288,7 @@ export default function EditarLocacion() {
 
                                 {userRole === 'administrador' || userRole === 'gestor' ? (
                                     <>
-                                        <label className={styles.labelSeccion} >Nombre Locacion</label>
+                                        <label className={styles.labelSeccion} >Nombre locación</label>
                                         <input
                                             type="text"
                                             value={dataMarcador.nombre_recinto}
@@ -315,7 +315,7 @@ export default function EditarLocacion() {
                                             ))}
                                         </select>
 
-                                        <label className={styles.labelSeccion} htmlFor="">Direccion</label>
+                                        <label className={styles.labelSeccion} htmlFor="">Dirección</label>
                                         <Autocomplete
                                             onLoad={ac => setAutocomplete(ac)}
                                             onPlaceChanged={() => {
@@ -381,7 +381,7 @@ export default function EditarLocacion() {
                                 ) : null}
 
 
-                                < label className={styles.labelSeccion} htmlFor="">Pagina Web</label>
+                                < label className={styles.labelSeccion} htmlFor="">Página web</label>
                                 <input
                                     type="text"
                                     value={dataMarcador.pagina_web}
@@ -396,7 +396,7 @@ export default function EditarLocacion() {
                                     className={styles.inputText} required />
 
 
-                                <label className={styles.labelSeccion} htmlFor="">Telefono</label>
+                                <label className={styles.labelSeccion} htmlFor="">Teléfono</label>
                                 <div className={styles.ContainerinputTelefono}>
                                     <p className={styles.codTelfono}>+569</p>
                                     <input
@@ -431,7 +431,7 @@ export default function EditarLocacion() {
 
                         {/* EDICION AVANZAD DEL MARCADOR, DISPONIBLE PARA ADMIN O GESTOR */}
                         {userRole === 'administrador' || user?.role === 'gestor' ? (<>
-                            <h3>Edicion Avanzada</h3>
+                            <h3>Edicion avanzada</h3>
                             <div >
                                 <label className={styles.labelSeccion} style={{ marginRight: '20px' }} htmlFor="">Activo</label>
                                 <input
@@ -465,9 +465,9 @@ export default function EditarLocacion() {
                                     setDataMarcador(estadoInicialMarcadores);
                                     navigate(-1); // Para volver atrás
                                 }}
-                            >CANCELAR
+                            >Cancelar
                             </button>
-                            <button    >Guardar Cambios</button>
+                            <button>Guardar cambios</button>
                         </div>
                     </form>
                     {/* Botones de guardar y cancelar */}

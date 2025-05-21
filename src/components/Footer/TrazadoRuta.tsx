@@ -8,13 +8,13 @@ import { useAuth } from "../../hooks/useAuth";
 import { useFontSize } from "./Modificador_Letras";
 
 
-export default function TrazadoRuta({ 
-    closePanel, 
-    panelActivo, 
-    onSeleccionMarcadorRecientes, 
-    cambiarModoViaje, 
-    establecerDestino, 
-    ubicacionActiva, 
+export default function TrazadoRuta({
+    closePanel,
+    panelActivo,
+    onSeleccionMarcadorRecientes,
+    cambiarModoViaje,
+    establecerDestino,
+    ubicacionActiva,
     Idrutamarcador,
     onIndicaciones
 }: {
@@ -25,8 +25,8 @@ export default function TrazadoRuta({
     establecerDestino: (lat: number | null, lng: number | null) => void;
     ubicacionActiva: boolean
     Idrutamarcador: number | null;
-    onIndicaciones?: string[]; 
-    
+    onIndicaciones?: string[];
+
 }) {
 
     const { user } = useAuth();
@@ -38,8 +38,8 @@ export default function TrazadoRuta({
     const [mostrarResultados, setMostrarResultados] = useState(false);
     const [destinoEstablecido, setDestinoEstablecido] = useState<boolean>(false);
     const [modoViajeActual, setModoViajeActual] = useState<'DRIVING' | 'BICYCLING' | 'WALKING' | 'TRANSIT'>('DRIVING');
-    const {modoNocturno} = useTheme ();
-    const {fontSize} = useFontSize ();
+    const { modoNocturno } = useTheme();
+    const { fontSize } = useFontSize();
 
 
     useEffect(() => {
@@ -73,7 +73,7 @@ export default function TrazadoRuta({
                 }));
                 setBusquedasRecientes(busquedasRecientesFormateadas);
                 setDestinosRecientes(busquedasRecientesFormateadas.length > 0)
-   
+
             } else {
                 console.error("Error al obtener búsquedas con marcadores:", error);
             }
@@ -104,29 +104,29 @@ export default function TrazadoRuta({
             } else {
                 console.error("Error al obtener búsquedas con marcadores:", error);
             }
-    
+
         };
-        obtenerMarcadores(); 
-        
+        obtenerMarcadores();
+
     }, []);
 
     useEffect(() => {
         const buscarMarcadores = () => {
             const textoBusqueda = busqueda.toLowerCase();
-    
+
             const resultadosFiltrados = marcadorUbicacion.filter((marcador: any) =>
                 marcador.nombre.toLowerCase().includes(textoBusqueda) ||
                 marcador.direccion.toLowerCase().includes(textoBusqueda)
             );
             setResultados(resultadosFiltrados);
         };
-    
+
         buscarMarcadores();
     }, [busqueda, marcadorUbicacion]);
 
     useEffect(() => {
         if (Idrutamarcador === null) return;
-    
+
         const marcador = marcadorUbicacion.find(item => item.id === Idrutamarcador);
         if (marcador) {
             establecerDestino(marcador.lat, marcador.lng);
@@ -134,11 +134,11 @@ export default function TrazadoRuta({
             setMostrarResultados(false);
             setDestinoEstablecido(true);
         } else {
-            setBusqueda(""); 
+            setBusqueda("");
             setDestinoEstablecido(false);
         }
     }, [Idrutamarcador, marcadorUbicacion, establecerDestino]);
-    
+
 
     const handleCambiarModoViaje = (modo: 'DRIVING' | 'BICYCLING' | 'WALKING' | 'TRANSIT') => {
         cambiarModoViaje(modo);  // Llama a la función prop
@@ -158,13 +158,13 @@ export default function TrazadoRuta({
                             <div className={styles.ContenInterUno}>
                                 <FontAwesomeIcon icon={faLocationCrosshairs} size="sm" />
                             </div>
-                            <input style={{pointerEvents: "none", cursor: "not-allowed",fontSize:  `${fontSize}rem` ,}}
+                            <input style={{ pointerEvents: "none", cursor: "not-allowed", fontSize: `${fontSize}rem`, }}
                                 type="text"
                                 value={ubicacionActiva ? "Ubicación Activa" : "Ubicación Desactivada"}
                                 readOnly
                                 className={`${styles.Input} ${ubicacionActiva ? styles.activa : styles.desactivada}`}
                             />
-                            
+
                         </div>
 
                         <div className={styles.ContenDos}>
@@ -172,8 +172,8 @@ export default function TrazadoRuta({
                                 <FontAwesomeIcon icon={faLocationPin} size="sm" />
                             </div>
                             <div style={{ position: "relative", width: "100%" }}>
-                            <input
-                                    style={{color: modoNocturno ? "white":"",fontSize:  `${fontSize}rem` }}
+                                <input
+                                    style={{ color: modoNocturno ? "white" : "", fontSize: `${fontSize}rem` }}
                                     type="text"
                                     placeholder="Destino"
                                     className={styles.Input}
@@ -189,9 +189,9 @@ export default function TrazadoRuta({
                                         }
                                     }}
                                 />
-                            {busqueda.length > 0 && mostrarResultados && (
+                                {busqueda.length > 0 && mostrarResultados && (
                                     <div style={{
-                                        fontSize:  `${fontSize}rem` ,
+                                        fontSize: `${fontSize}rem`,
                                         position: "absolute",
                                         width: "100%",
                                         backgroundColor: modoNocturno ? "#2d2d2d" : 'white',
@@ -207,16 +207,16 @@ export default function TrazadoRuta({
                                                 <div
                                                     key={item.id}
                                                     style={{
-                                                        fontSize:  `${fontSize}rem` ,
+                                                        fontSize: `${fontSize}rem`,
                                                         padding: "5px 0",
                                                         borderBottom: "1px solid #eee",
                                                         cursor: "pointer"
                                                     }}
                                                     onClick={() => {
                                                         establecerDestino(item.lat, item.lng);
-                                                        setBusqueda(item.nombre); 
+                                                        setBusqueda(item.nombre);
                                                         setDestinoEstablecido(true);
-                                                        setMostrarResultados(false); 
+                                                        setMostrarResultados(false);
                                                     }}
                                                 >
                                                     <strong>{item.nombre}</strong><br />
@@ -224,27 +224,27 @@ export default function TrazadoRuta({
                                                 </div>
                                             ))
                                         ) : (
-                                            <p style={{ marginTop: "10px", color: "#888", fontSize:  `${fontSize}rem` , }}>Sin resultados.</p>
+                                            <p style={{ marginTop: "10px", color: "#888", fontSize: `${fontSize}rem`, }}>Sin resultados.</p>
                                         )}
                                     </div>
                                 )}
 
-                            </div> 
+                            </div>
                         </div>
                     </div>
 
                     <div className={styles.PositionIcons}>
                         <button className={styles.ButttonIcons} onClick={() => handleCambiarModoViaje('DRIVING')}>
-                            <FontAwesomeIcon icon={faCar} size="lg" style={{ color: modoViajeActual === 'DRIVING' ? 'rgb(75, 127, 241)' : 'black'  }}/>
+                            <FontAwesomeIcon icon={faCar} size="lg" style={{ color: modoViajeActual === 'DRIVING' ? 'rgb(75, 127, 241)' : 'black' }} />
                         </button>
                         <button className={styles.ButttonIcons}>
                             <FontAwesomeIcon icon={faBus} size="lg" style={{ color: "gray" }} />
                         </button>
                         <button className={styles.ButttonIcons} onClick={() => handleCambiarModoViaje('WALKING')}>
-                            <FontAwesomeIcon icon={faPersonWalking} size="lg" style={{ color: modoViajeActual === 'WALKING' ? 'rgb(75, 127, 241)' : 'black' }}/>
+                            <FontAwesomeIcon icon={faPersonWalking} size="lg" style={{ color: modoViajeActual === 'WALKING' ? 'rgb(75, 127, 241)' : 'black' }} />
                         </button>
                         <button className={styles.ButttonIcons} onClick={() => handleCambiarModoViaje('BICYCLING')}>
-                            <FontAwesomeIcon icon={faPersonBiking} size="lg" style={{ color: modoViajeActual === 'BICYCLING' ? 'rgb(75, 127, 241)' : 'black' }}/>
+                            <FontAwesomeIcon icon={faPersonBiking} size="lg" style={{ color: modoViajeActual === 'BICYCLING' ? 'rgb(75, 127, 241)' : 'black' }} />
                         </button>
                     </div>
 
@@ -253,11 +253,11 @@ export default function TrazadoRuta({
                     {/* Desde aqui en adelante realizar la funcion correspondiente con la tabla de busquedas */}
                     {(!ubicacionActiva || !destinoEstablecido) ? (
                         <div style={{ marginTop: "15px" }}>
-                            <h4 style={{color:modoNocturno ? "#fff" : ""}} className={styles.TituloDestin}>
-                                DESTINOS RECIENTES
+                            <h4 style={{ color: modoNocturno ? "#fff" : "" }} className={styles.TituloDestin}>
+                                Exploraciones recientes
                             </h4>
                             {!destinosRecientes ? (
-                                <p style={{color:modoNocturno ? "#fff" : "",fontSize:`${fontSize}rem`}} className={styles.MensajeP}>No hay Destinos Recientes</p>
+                                <p style={{ color: modoNocturno ? "#fff" : "", fontSize: `${fontSize}rem` }} className={styles.MensajeP}>Parece que no hay nada aún</p>
                             ) : (
                                 busquedasRecientes.map((busquedas, index) => (
                                     <div key={index} className={styles.ContenInfo} onClick={() => onSeleccionMarcadorRecientes(busquedas.id_marcador?.id)}>
@@ -279,29 +279,29 @@ export default function TrazadoRuta({
                     ) : null}
 
                     {(ubicacionActiva && destinoEstablecido) ? (
-                        <div style={{ height: "90px"}}>
-                        <h4 className={styles.TituloIndi}>
-                          INDICACIONES
-                        </h4>
-                        <div style={{height: "100%",overflowY: "auto"}}>
-                        {onIndicaciones && onIndicaciones.length > 0 ? (
-                          onIndicaciones.map((instruccion, index) => (
-                            <div key={index} className={styles.ContenInfo}>
-                              <div>
-                                <p
-                                  style={{ margin: "0", fontWeight: "bold", color: modoNocturno ? "white" : "black", fontSize:  `${fontSize}rem` , }}
-                                  dangerouslySetInnerHTML={{ __html: instruccion }}
-                                />
-                              </div>
+                        <div style={{ height: "90px" }}>
+                            <h4 className={styles.TituloIndi}>
+                                INDICACIONES
+                            </h4>
+                            <div style={{ height: "100%", overflowY: "auto" }}>
+                                {onIndicaciones && onIndicaciones.length > 0 ? (
+                                    onIndicaciones.map((instruccion, index) => (
+                                        <div key={index} className={styles.ContenInfo}>
+                                            <div>
+                                                <p
+                                                    style={{ margin: "0", fontWeight: "bold", color: modoNocturno ? "white" : "black", fontSize: `${fontSize}rem`, }}
+                                                    dangerouslySetInnerHTML={{ __html: instruccion }}
+                                                />
+                                            </div>
+                                        </div>
+                                    ))
+                                ) : (
+                                    <p style={{ color: modoNocturno ? "#fff" : "" }} className={styles.MensajeP}>No hay instrucciones disponibles</p>
+                                )}
+
                             </div>
-                          ))
-                        ) : (
-                          <p style={{color:modoNocturno ? "#fff" : ""}} className={styles.MensajeP}>No hay instrucciones disponibles</p>
-                        )}
 
                         </div>
-                        
-                      </div>
                     ) : null}
 
 

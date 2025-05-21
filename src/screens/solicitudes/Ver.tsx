@@ -320,8 +320,8 @@ export default function Ver() {
             <div className={styles.infoContainer}>
                 <div>
                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                        <h2>Informacion</h2>
-                        <span style={{ color: colorState(solicitud.estado as string), fontWeight: 500, fontSize: '0.8rem', textTransform: 'uppercase' }}>• {solicitud.estado}</span>
+                        <h2>Información</h2>
+                        <span style={{ color: colorState(solicitud.estado as string), fontWeight: 500, fontSize: '0.8rem', textTransform: 'capitalize' }}>• {solicitud.estado}</span>
 
                     </div>
 
@@ -332,7 +332,7 @@ export default function Ver() {
                             <p>{solicitud.respuesta_rechazo} </p>
                             <h4>Supervisor </h4>
                             <p>{solicitud.id_supervisor?.nombre + ' '} <button style={{ color: 'white', background: 'transparent', border: 'none' }} onClick={() => { navigate(`/usuario/perfil/${solicitud.id_supervisor?.id}`) }}><FontAwesomeIcon icon={faArrowUpRightFromSquare} /></button></p>
-                            <h4>Fecha de revision</h4>
+                            <h4>Fecha de revisión</h4>
                             <p>{new Date(solicitud.fecha_revision as Date).toLocaleString()}</p>
                         </div>
                     )}
@@ -346,7 +346,7 @@ export default function Ver() {
                             <h4>Supervisor </h4>
                             <p>{solicitud.id_supervisor?.nombre + ' '} <button style={{ color: 'white', background: 'transparent', border: 'none' }}
                                 onClick={() => { navigate(`/usuario/perfil/${solicitud.id_supervisor?.id}`) }}><FontAwesomeIcon icon={faArrowUpRightFromSquare} /></button></p>
-                            <h4>Fecha de revision</h4>
+                            <h4>Fecha de revisión</h4>
                             <p>{new Date(solicitud.fecha_revision as Date).toLocaleString()}</p>
                             {infoMarcador && (
                                 <button className={styles.btnVerMarcado} onClick={() => { navigate(`/panel-administrativo/marcadores/informacion/${infoMarcador.id}`) }}>Revisa tu marcador</button>
@@ -355,7 +355,7 @@ export default function Ver() {
 
                         </div>)}
                     <hr style={{ opacity: '50%' }} />
-                    <h4>ID Solicitud</h4>
+                    <h4>Identificador de solicitud</h4>
                     <p>{solicitud?.id}</p>
                     <h4>Fecha ingreso</h4>
 
@@ -368,20 +368,20 @@ export default function Ver() {
                     )}
 
                     <h4>Nombre representante</h4>
-                    <p style={{ textTransform: 'uppercase' }}>{solicitud.id_usuario?.nombre}</p>
+                    <p style={{ textTransform: 'capitalize' }}>{solicitud.id_usuario?.nombre}</p>
                     <h4>Correo representante</h4>
-                    <p style={{ textTransform: 'uppercase' }}>{solicitud.id_usuario?.correo}</p>
+                    <p>{solicitud.id_usuario?.correo}</p>
 
-                    <h4>Numero de contacto representante</h4>
+                    <h4>Número de contacto representante</h4>
                     <p>(+56 9) {solicitud.id_usuario?.telefono}</p>
 
-                    <h4>Nombre Locacion</h4>
-                    <p>{solicitud.nombre_locacion}</p>
+                    <h4>Nombre locación</h4>
+                    <p style={{ textTransform: 'capitalize' }}>{solicitud.nombre_locacion}</p>
 
-                    <h4>Descripcion/Comentario de solicitud</h4>
+                    <h4>Descripción/Comentario de solicitud</h4>
                     <p>{solicitud.descripcion != '' ? solicitud.descripcion : <span style={{ color: 'gray' }}>No especificado</span>}</p>
 
-                    <h4>Direccion</h4>
+                    <h4>Dirección</h4>
                     <p>{solicitud.direccion != '' ? solicitud.direccion : <span style={{ color: 'gray' }}>No especificado</span>}</p>
 
                     <div style={{ paddingTop: "10px", border: "1px solid rgba(0, 0, 0, 0.2)", borderRadius: '5px', padding: '10px', marginTop: '10px' }}>
@@ -420,7 +420,7 @@ export default function Ver() {
                     ) : (
                         <p style={{ color: 'gray' }}>No hay accesibilidades seleccionadas.</p>
                     )}
-                    <h4>Documentacion</h4>
+                    <h4>Documentación</h4>
                     {solicitud.documentacion != '' ? (
                         <a href={solicitud.documentacion} target="_blank" rel="noopener noreferrer" style={{ color: 'black', paddingLeft: '25px', textDecoration: 'underline' }}>
                             Ver Documentacion <FontAwesomeIcon icon={faArrowUpRightFromSquare} />
@@ -432,8 +432,8 @@ export default function Ver() {
 
                 {solicitud.estado == 'pendiente' &&
                     <div className={styles.acciones}>
-                        <button onClick={handleModal} style={{ color: 'red', background: 'transparent', }}>Rechazar Solicitud</button>
-                        <button onClick={handleAprobar}>Aceptar Solicitud</button>
+                        <button onClick={handleModal} style={{ color: 'red', background: 'transparent', }}>Rechazar solicitud</button>
+                        <button onClick={handleAprobar}>Aceptar solicitud</button>
                     </div>
                 }
 

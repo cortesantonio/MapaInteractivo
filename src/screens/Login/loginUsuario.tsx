@@ -72,7 +72,7 @@ function LoginUsuario() {
 
               <div className={style.containerlogin}>
                 <div className={style.containerHeader}>
-                  <h1>Iniciar Sesión</h1>
+                  <h1>Iniciar sesión</h1>
                   <p>Para continuar como usuario debes tener cuenta de Google</p>
                 </div>
 
@@ -91,7 +91,7 @@ function LoginUsuario() {
 
                   <div className={style.botonSesion}>
                     <button className={style.botonAdmin} onClick={() => setIscambio(false)}>
-                      Ingresar Credenciales
+                      Ingresar credenciales
                     </button>
                   </div>
                 </div>
@@ -142,7 +142,7 @@ function LoginUsuario() {
 
                   <div className={style.containerIniciar}>
                     <button className={style.botonIniciar}>
-                      Iniciar sesion
+                      Iniciar sesión
                     </button>
                   </div>
 

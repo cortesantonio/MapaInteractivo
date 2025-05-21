@@ -102,7 +102,7 @@ function ListAccesibilidad() {
 
                 <header className={styles.header} style={{ paddingTop: '40px', gap: '15px' }}>
                     <hr style={{ flexGrow: "1" }} />
-                    <h2 style={{ textAlign: 'right', paddingRight: "15px", whiteSpace: "nowrap" }} >Gestion de Accesibilidades</h2>
+                    <h2 style={{ textAlign: 'right', paddingRight: "15px", whiteSpace: "nowrap" }} >Gestión de accesibilidades</h2>
                 </header>
                 <div className={styles.filtros}>
                     <div style={{ display: 'flex', gap: '5px' }}>
@@ -129,7 +129,7 @@ function ListAccesibilidad() {
                 </div>
 
                 <div className={styles.SubTitulo}>
-                    <p>Listado</p>
+                    <p>Listado de accesibilidades</p>
                     <hr style={{ width: '25%', marginTop: '10px', marginBottom: '10px ', opacity: '50%' }} />
                 </div>
                 <div className={styles.content}>
@@ -143,8 +143,8 @@ function ListAccesibilidad() {
                                 <FontAwesomeIcon icon={faUniversalAccess} size='xl' style={{ color: 'white' }} />
                             </div>
                             <div className={styles.cardContent}>
-                                <p style={{ color: 'black', textTransform: 'capitalize' }}>{accesibilidad.nombre}</p>
-                                <p style={{ color: 'gray', fontSize: '0.9rem', textTransform: 'capitalize' }}>Tipo: {accesibilidad.tipo}</p>
+                                <p style={{ color: 'black' }}>{accesibilidad.nombre}</p>
+                                <p style={{ color: 'gray', fontSize: '0.9rem' }}>Tipo: {accesibilidad.tipo}</p>
                             </div>
 
                             <div className={styles.opciones}>

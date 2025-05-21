@@ -13,6 +13,7 @@ import { Horarios } from '../interfaces/Horarios';
 import { Accesibilidad } from '../interfaces/Accesibilidad';
 import ImagenConFallback from './ImagenConFallback';
 import { useTheme } from "../components/Footer/Modo_Nocturno";
+import Marca_Verificador from "../../public/img/Marca_Verificador.webp";
 
 interface Props {
     MarcadorSelectId: number;
@@ -32,6 +33,7 @@ export default function VerMarcador({ MarcadorSelectId, CerrarMarcador, establec
     const [mostrarFormulario, setMostrarFormulario] = useState(false);
     const [MostrarCompartir, setMostrarCompartir] = useState(false);
     const { modoNocturno } = useTheme();
+
     const [calificacion, setCalificacion] = useState<number>(0.0);
     // Función para volver a la vista del marcador
     const volverAMarcador = () => {
@@ -63,7 +65,9 @@ export default function VerMarcador({ MarcadorSelectId, CerrarMarcador, establec
                         url_img: marcador.url_img,
                         pagina_web: marcador.pagina_web,
                         telefono: marcador.telefono,
-                        activo: marcador.activo
+                        activo: marcador.activo,
+                        accesibilidad_certificada: marcador.accesibilidad_certificada
+                        
                     };
 
                     setMarcador(marcadorFormateado);
@@ -244,6 +248,32 @@ export default function VerMarcador({ MarcadorSelectId, CerrarMarcador, establec
                 )}
                 <div style={{ backgroundColor: modoNocturno ? "#2d2d2d" : "" }} className={styles.headerContenido}>
                     <div className={styles.info}>
+
+                        <div className={styles.nombreVerificado}>
+                            <h2 style={{ color: modoNocturno ? "#fff" : "" }}>
+                                {cargando ? 'Cargando...' : Marcador?.nombre_recinto}
+                            </h2>
+                            {Marcador?.accesibilidad_certificada && (
+                                <div
+                                    className={styles.tooltipContainer}
+                                    title="Marcador verificado"
+                                >
+                                    <img
+                                        src={Marca_Verificador}
+                                        alt="Verificado"
+                                        className={styles.imgVerific}
+                                    />
+                                </div>
+                            )}
+                            
+                        </div>
+                        <h4 style={{ color: modoNocturno ? "#fff" : "" }} >{cargando ? 'Cargando...' : '> ' + Marcador?.tipo_recinto}</h4>
+                        <p style={{ marginTop: '10px', color: modoNocturno ? "#fff" : "" }}> <FontAwesomeIcon icon={faStar} size="2xs" style={{ color: "#FFD43B", }} /> • 4.4 de la comunidad.</p>
+                        <p>
+                            <span style={{ opacity: 0.5, fontSize: '0.9rem', color: modoNocturno ? "#fff" : "" }}>
+                                <FontAwesomeIcon icon={faStar} size="2xs" style={{ color: "#FFD43B", }} /> • 4.6 en Google Maps.
+                            </span>
+
                         <h2 style={{ color: modoNocturno ? "#fff" : "" }}>{cargando ? 'Cargando...' : Marcador?.nombre_recinto}</h2>
                         <h4 style={{ color: modoNocturno ? "#fff" : "" }} >{cargando ? 'Cargando...' : '> ' + Marcador?.tipo_recinto}</h4>
                         <p style={{ marginTop: '10px', color: modoNocturno ? "#fff" : "" }}>
@@ -253,6 +283,7 @@ export default function VerMarcador({ MarcadorSelectId, CerrarMarcador, establec
                             ) : (
                                 <span style={{ color: 'gray', fontSize: '0.8rem' }}>Sin reseñas aún.</span>
                             )}
+
                         </p>
 
                     </div>
@@ -262,7 +293,8 @@ export default function VerMarcador({ MarcadorSelectId, CerrarMarcador, establec
                             <>
                                 <button onClick={volverAMarcador}>
                                     <FontAwesomeIcon icon={faInfo} style={{ width: "13px" }} className={styles.icon} />
-                                    <p style={{ color: modoNocturno ? "#fff" : "" }}>Informacion</p>
+                                    <p style={{ color: modoNocturno ? "#fff" : "" }}>Información</p>
+
                                 </button>
                                 <button onClick={() => {
                                     establecerIdRutaMarcador(Marcador.id as number);

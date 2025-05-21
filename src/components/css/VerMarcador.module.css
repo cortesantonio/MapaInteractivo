@@ -7,9 +7,7 @@
     background-color: white;
     height: fit-content;
     position: relative;
-
 }
-
 
 .container .CerrarMarcador {
     position: absolute;
@@ -43,6 +41,41 @@
     width: 70%;
 }
 
+.nombreVerificado {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 0.5rem;
+}
+
+.tooltipContainer {
+    position: relative;
+    display: inline-block;
+    cursor: pointer;
+}
+
+.tooltipContainer:hover::after {
+    content: "Marcador verificado";
+    position: absolute;
+    bottom: 120%;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: #000;
+    color: #fff;
+    padding: 6px 10px;
+    border-radius: 4px;
+    white-space: nowrap;
+    font-size: 12px;
+    z-index: 10;
+    opacity: 0.85;
+}
+
+.imgVerific {
+    width: 24px;
+    height: auto;
+    object-fit: contain;
+}
 
 .headerContenido .containerButtons {
     width: 30%;
@@ -69,8 +102,6 @@
     border-radius: 50%;
     background-color: rgb(0, 183, 255);
     color: white;
-
-
 }
 
 .ContenedorInfo {
@@ -89,14 +120,12 @@
     cursor: pointer;
     background-color: transparent;
     border: none;
-
 }
 
 .scrollSeccion {
     max-height: 300px;
     height: fit-content;
     overflow-y: auto;
-
 }
 
 .tabActiva {
@@ -104,13 +133,11 @@
     opacity: 1;
 }
 
-
 .InfoMarcador {
     padding-top: 10px;
     display: flex;
     flex-direction: column;
     gap: 10px;
-
 }
 
 .InfoMarcador h4 {
@@ -126,7 +153,6 @@
     text-decoration: underline;
 }
 
-
 .cargando {
     text-align: center;
     font-size: 1.2rem;
@@ -135,7 +161,7 @@
     margin-top: 20px;
 }
 
-.fechaVerMas{
+.fechaVerMas {
     background-color: transparent;
     width: 60%;
     max-width: 200px;
@@ -145,7 +171,4 @@
 
 .tercerdia {
     color: #aaa5a5;
-  }
-
-
-
+}

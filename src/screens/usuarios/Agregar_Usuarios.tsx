@@ -230,7 +230,7 @@ function Agregar_Usuarios() {
           </div>
 
           <div className={styles.espacio}>
-            <label className={styles.etiquetas}>Fecha Nacimiento</label>
+            <label className={styles.etiquetas}>Fecha de Nacimiento</label>
             <input className={styles.formulario} type="date" placeholder="Fecha Nacimiento" onChange={(e) => setFechaNacimiento(e.target.value)} required />
           </div>
 

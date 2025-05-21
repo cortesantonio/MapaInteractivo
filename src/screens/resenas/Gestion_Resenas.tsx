@@ -71,7 +71,7 @@ function Gestion_Resenas() {
 
         <header className={styles.header} style={{ paddingTop: '40px', gap: '15px' }}>
           <hr style={{ flexGrow: "1" }} />
-          <h2 style={{ textAlign: 'right', paddingRight: "15px", whiteSpace: "nowrap" }}>Gestion de Reseñas</h2>
+          <h2 style={{ textAlign: 'right', paddingRight: "15px", whiteSpace: "nowrap" }}>Gestión de reseñas</h2>
         </header>
 
         <div className={styles.filtros}>
@@ -115,7 +115,7 @@ function Gestion_Resenas() {
 
 
         <div className={styles.SubTitulo}>
-          <p>Gestion De Reseñas</p>
+          <p>Listado de reseñas</p>
           <hr style={{ width: '25%', marginTop: '10px', marginBottom: '10px', opacity: '50%' }} />
         </div>
         <div className={styles.content}>
@@ -128,7 +128,7 @@ function Gestion_Resenas() {
               </div>
 
               <div className={styles.cardContent}  >
-                <p style={{ color: 'gray', fontSize: '0.7rem', textTransform: 'uppercase' }}>{(locacion.tipo_recinto as any)?.tipo}</p>
+                <p style={{ color: 'gray', fontSize: '0.7rem', textTransform: 'capitalize' }}>{(locacion.tipo_recinto as any)?.tipo}</p>
 
                 <p style={{ color: 'black' }}>{locacion.nombre_recinto || "Cargando..."}</p>
                 <p style={{ color: 'gray', fontSize: '0.9rem' }}>{locacion.direccion}</p>
