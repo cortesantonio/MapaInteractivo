@@ -102,7 +102,7 @@ export default function EscribirResena({ onSubmit, onCancel, idMarcador }: Props
     return (
         <div className={styles.formContainer}>
             {user !== undefined ? (
-                <><h3 style={{ color: modoNocturno ? "#fff" : "" }}>Comparte tu experiencia.</h3>
+                <><h3 style={{ color: modoNocturno ? "#fff" : "", textAlign: "center" }}>Comparte tu experiencia.</h3>
 
                     <div className={styles.stars}>
                         <div>

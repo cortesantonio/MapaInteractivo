@@ -54,7 +54,7 @@ function VistaAdministrador() {
 
                 {/* Sección de Gestión */}
                 <div style={{ position: 'relative', margin: '15px', width: "80vw", maxWidth: "380px", display: "flex", marginTop: "30px" }}>
-                    <hr style={{ border: 'none', borderTop: '1px solid rgba(0, 0, 0, 0.42)', width: "78%" }} />
+                    <hr style={{ border: 'none', borderTop: '1px solid rgba(0, 0, 0, 0.42)', width: "73%" }} />
                     <h3
                         style={{
                             position: 'absolute',
@@ -65,7 +65,7 @@ function VistaAdministrador() {
                             color: 'black',
                         }}
                     >
-                        Gestion
+                        Gestiones
                     </h3>
                 </div>
 
@@ -138,7 +138,7 @@ function VistaAdministrador() {
                                 fontSize: "17px",
                                 padding: "4px"
                             }} onClick={() => { navigate('/panel-administrativo/tipo-recinto') }}
-                        >Gestión de recinto
+                        >Gestión de recintos
                         </button>
 
 
@@ -175,7 +175,7 @@ function VistaAdministrador() {
                             border: "none",
                             fontSize: "17px",
                             padding: "4px"
-                        }} onClick={() => { navigate('/panel-administrativo/solicitudes/pendiente') }}  >({pendientes}) nuevas solicitudes.</button>
+                        }} onClick={() => { navigate('/panel-administrativo/solicitudes/pendiente') }}  >({pendientes}) Nuevas solicitudes.</button>
 
                         <button
                             style={{
@@ -227,7 +227,7 @@ function VistaAdministrador() {
                             navigate('/');
                         }}
                     >
-                        CERRAR SESIÓN
+                        Cerrar sesión
                     </button>
                 </div>
             </div>

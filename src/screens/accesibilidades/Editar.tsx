@@ -1,6 +1,5 @@
 import styles from './css/Agregar.module.css'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faReply } from '@fortawesome/free-solid-svg-icons';
+import NavbarAdmin from '../../components/NavbarAdmin';
 import { useState, useEffect } from 'react';
 import { Accesibilidad } from '../../interfaces/Accesibilidad';
 import { supabase } from '../../services/supabase';
@@ -100,40 +99,42 @@ export default function EditarAccesibilidad({ accesibilidadId, onCancel, onUpdat
     };
 
     return (
-        <div className={styles.container}>
-            <div className={styles.titulo}>
-                <button style={{ backgroundColor: 'transparent', border: 'none', cursor: 'pointer' }} onClick={onCancel}>
-                    <FontAwesomeIcon icon={faReply} size='2xl' />
-                </button>
-                <h2 style={{ textAlign: 'center' }}>
-                    Editar Accesibilidad
-                </h2>
-            </div>
 
-            <div style={{ margin: '20px auto', width: '40%', display: 'flex', justifyContent: 'center', flexDirection: 'column', minWidth: '250px' }}>
-                <div style={{ display: 'flex', flexDirection: 'column', maxWidth: '600px' }}>
-                    <label className={styles.labelSeccion}>Tipo Accesibilidad</label>
-                    <select name="tipo" value={formData.tipo} onChange={handleChange}>
-                        <option value="">Selecciona un tipo</option>
-                        <option value="Arquitectónica">Arquitectónica</option>
-                        <option value="Sensorial">Sensorial</option>
-                        <option value="Cognitiva">Cognitiva</option>
-                        <option value="CA">CA</option>
-                    </select>
-                    <label className={styles.labelSeccion}>Nombre</label>
-                    <input
-                        name="nombre"
-                        value={formData.nombre}
-                        onChange={handleChange}
-                        className={styles.inputText}
-                    />
+        <>
+            <NavbarAdmin />
+            <div className={styles.container}>
+                <div className={styles.titulo}>
+
+                    <h2 style={{ textAlign: 'center' }}>
+                        Editar accesibilidad
+                    </h2>
                 </div>
 
-                <div className={styles.acciones}>
-                    <button style={{ color: 'red', background: 'transparent' }} onClick={onCancel}>Cancelar</button>
-                    <button onClick={handleSubmit}>Guardar Cambios</button>
+                <div style={{ margin: '20px auto', width: '40%', alignContent: "center", display: 'flex', flexDirection: 'column', minWidth: '250px' }}>
+                    <div style={{ display: 'flex', flexDirection: 'column', maxWidth: '600px' }}>
+                        <label className={styles.labelSeccion}>Tipo Accesibilidad</label>
+                        <select name="tipo" value={formData.tipo} onChange={handleChange}>
+                            <option value="">Selecciona un tipo</option>
+                            <option value="Arquitectónica">Arquitectónica</option>
+                            <option value="Sensorial">Sensorial</option>
+                            <option value="Cognitiva">Cognitiva</option>
+                            <option value="CA">CA</option>
+                        </select>
+                        <label className={styles.labelSeccion}>Nombre</label>
+                        <input
+                            name="nombre"
+                            value={formData.nombre}
+                            onChange={handleChange}
+                            className={styles.inputText}
+                        />
+                    </div>
+
+                    <div className={styles.acciones}>
+                        <button style={{ color: 'red', background: 'transparent' }} onClick={onCancel}>Cancelar</button>
+                        <button onClick={handleSubmit}>Guardar cambios</button>
+                    </div>
                 </div>
             </div>
-        </div>
+        </>
     );
 }

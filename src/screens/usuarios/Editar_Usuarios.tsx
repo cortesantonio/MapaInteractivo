@@ -265,11 +265,11 @@ function Editar_Usuarios() {
       </div>
       <div className={styles.container}>
         <div className={styles.titulo}>
-          <h1>Editar Usuario</h1>
+          <h1>Editar usuario</h1>
         </div>
         <form className={styles.div_formulario} onSubmit={(e) => e.preventDefault()}>
           <div className={styles.espacio}>
-            <label className={styles.etiquetas}>Nombre Completo *</label>
+            <label className={styles.etiquetas}>Nombre completo *</label>
             <input
               className={styles.formulario}
               type="text"
@@ -291,7 +291,7 @@ function Editar_Usuarios() {
             />
           </div>
           <div className={styles.espacio}>
-            <label className={styles.etiquetas}>Fecha de Nacimiento</label>
+            <label className={styles.etiquetas}>Fecha de nacimiento</label>
             <input
               className={styles.formulario}
               type="date"
@@ -400,7 +400,7 @@ function Editar_Usuarios() {
             {tiene_una_Discapacidad && (
               <>
                 <div className={styles.espacio}>
-                  <label className={styles.etiquetas}>Tipo de Accesibilidad *</label>
+                  <label className={styles.etiquetas}>Tipo de accesibilidad *</label>
                   <select
                     className={styles.formulario}
                     value={tipoAccesibilidadSeleccionado}
@@ -417,7 +417,7 @@ function Editar_Usuarios() {
                 </div>
 
                 <div className={styles.espacio}>
-                  <label className={styles.etiquetas}>Nombre de la Discapacidad *</label>
+                  <label className={styles.etiquetas}>Nombre de la discapacidad *</label>
                   <input
                     className={styles.formulario}
                     type="text"
@@ -429,7 +429,7 @@ function Editar_Usuarios() {
                 </div>
 
                 <div className={styles.espacio}>
-                  <label className={styles.etiquetas}>Tipo de Discapacidad *</label>
+                  <label className={styles.etiquetas}>Tipo de discapacidad *</label>
                   <input
                     className={styles.formulario}
                     type="text"
@@ -452,7 +452,7 @@ function Editar_Usuarios() {
               type="button"
               onClick={Actualizar_Informacion}
             >
-              Editar Usuario
+              Editar usuario
             </button>
           </div>
         </form>

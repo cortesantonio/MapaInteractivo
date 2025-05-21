@@ -101,20 +101,20 @@ export default function EditarTipoRecinto({ idTipoRecinto, onCancel, onUpdate }:
                 <div className={styles.titulo}>
 
                     <h2 style={{ textAlign: 'center' }}>
-                        Editar Tipo Recinto
+                        Editar tipo recinto
                     </h2>
                 </div>
 
                 <div style={{ margin: '20px auto', width: '40%', display: 'flex', justifyContent: 'center', flexDirection: 'column', minWidth: '250px' }}>
                     <div style={{ display: 'flex', flexDirection: 'column', maxWidth: '600px' }}>
-                        <label className={styles.labelSeccion} >TIPO</label>
+                        <label className={styles.labelSeccion} >Tipo</label>
                         <input name="tipo" onChange={handleChange} value={formData.tipo}
                             className={styles.inputText} />
                     </div>
 
                     <div className={styles.acciones}>
                         <button style={{ color: 'red', background: 'transparent' }} onClick={onCancel}>Cancelar</button>
-                        <button onClick={handleSubmit}>Guardar Cambios</button>
+                        <button onClick={handleSubmit}>Guardar cambios</button>
                     </div>
                 </div>
             </div>

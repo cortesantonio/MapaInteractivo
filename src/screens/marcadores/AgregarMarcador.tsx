@@ -199,7 +199,7 @@ export default function AgregarMarcador() {
       <div className={styles.container}>
         <div className={styles.titulo} style={{ marginTop: '25px' }} >
           <h2 style={{ textAlign: 'center' }}>
-            Agregar Marcador
+            Agregar marcador
           </h2>
         </div>
 
@@ -207,7 +207,7 @@ export default function AgregarMarcador() {
           <form className={styles.formulario} onSubmit={handleAgregarMarcador}>
             <div style={{ display: 'flex', flexDirection: 'column', maxWidth: '100%' }}>
 
-              <label className={styles.labelSeccion} >Nombre Locacion
+              <label className={styles.labelSeccion} >Nombre locación
                 <span style={{ fontSize: '0.8rem', color: 'gray', fontStyle: 'italic' }} >  - ¿Como se llama el negocio?</span>
               </label>
               <input
@@ -217,7 +217,7 @@ export default function AgregarMarcador() {
                 className={styles.inputText} required />
 
 
-              <label style={{ display: "flex", flexDirection: "row", alignItems: "center", gap: "5px" }} className={styles.labelSeccion} htmlFor="">Direccion
+              <label style={{ display: "flex", flexDirection: "row", alignItems: "center", gap: "5px" }} className={styles.labelSeccion} htmlFor="">Dirección
                 <span style={{ fontSize: '0.8rem', color: 'gray', fontStyle: 'italic' }} > - ¿Dónde está ubicado el negocio? (Dirección completa)</span>
               </label>
 
@@ -279,8 +279,8 @@ export default function AgregarMarcador() {
                 )}
               </APIProvider>
 
-              <label style={{ display: "flex", flexDirection: "row", alignItems: "center", gap: "5px" }} className={styles.labelSeccion} htmlFor="">Pagina Web
-                <span style={{ fontSize: '0.8rem', color: 'gray', fontStyle: 'italic' }} > - El URL perteneciente al local que se ingresara.</span>
+              <label style={{ display: "flex", flexDirection: "row", alignItems: "center", gap: "5px" }} className={styles.labelSeccion} htmlFor="">Pagina web
+                <span style={{ fontSize: '0.8rem', color: 'gray', fontStyle: 'italic' }} > - El URL perteneciente al local que se ingresará.</span>
               </label>
 
               <input
@@ -289,7 +289,7 @@ export default function AgregarMarcador() {
                 onChange={(e) => setDataMarcador({ ...dataMarcador, pagina_web: e.target.value })}
                 className={styles.inputText} required />
 
-              <label className={styles.labelSeccion} htmlFor="">Telefono
+              <label className={styles.labelSeccion} htmlFor="">Teléfono
                 <span style={{ fontSize: '0.8rem', color: 'gray', fontStyle: 'italic' }} > - Número de contacto del negocio.</span>
               </label>
               <div className={styles.ContainerinputTelefono}>
@@ -308,7 +308,7 @@ export default function AgregarMarcador() {
                 onChange={(e) => setDataMarcador({ ...dataMarcador, url_img: e.target.value })}
                 className={styles.inputText} />
 
-              <label className={styles.labelSeccion}>Tipo de Recinto
+              <label className={styles.labelSeccion}>Tipo de recinto
                 <span style={{ fontSize: '0.8rem', color: 'gray', fontStyle: 'italic' }} > - Selecciona a un tipo de recinto que pertenecera el local.</span>
               </label>
               <select name="tipo_recinto" value={dataMarcador.tipo_recinto} onChange={(e) => setDataMarcador({ ...dataMarcador, tipo_recinto: e.target.value })} className={styles.inputText} required>

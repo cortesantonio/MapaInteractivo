@@ -52,7 +52,6 @@
     background-color: white;
     overflow-y: auto;
     height: fit-content;
-
 }
 
 .FormContainer {
@@ -167,7 +166,7 @@
     background: rgb(253, 29, 29);
     font-size: 0.8rem;
     font-weight: 500;
-    text-transform: uppercase;
+    text-transform: capitalize;
     border: none;
     color: white;
     border-radius: 5px;

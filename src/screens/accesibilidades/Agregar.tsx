@@ -105,13 +105,13 @@ export default function AgregarAccesibilidad() {
                     <FontAwesomeIcon icon={faReply} size='2xl' />
                 </button>
                 <h2 style={{ textAlign: 'center' }}>
-                    Agregar Accesibilidad
+                    Agregar accesibilidad
                 </h2>
             </div>
 
             <div style={{ margin: '20px auto', width: '40%', display: 'flex', justifyContent: 'center', flexDirection: 'column', minWidth: '250px' }}>
                 <div style={{ display: 'flex', flexDirection: 'column', maxWidth: '600px' }}>
-                    <label className={styles.labelSeccion} >Tipo Accesibilidad</label>
+                    <label className={styles.labelSeccion} >Tipo accesibilidad</label>
                     <select name="tipo" value={formData.tipo} onChange={handleChange}>
                         <option value="">Selecciona un tipo</option>
                         <option value="Arquitectónica">Arquitectónica</option>

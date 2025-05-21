@@ -65,7 +65,7 @@ const GraficoTorta = ({ datosGrafico }: Props) => {
         <p style={{ textAlign: 'center', fontSize: '16px', paddingTop: '1rem' }}>No existen datos</p>
       ) : (
         <>
-          <h3 style={{ textAlign: 'center', fontSize: "1.1rem", whiteSpace: "nowrap" }}>Estado de Solicitudes</h3>
+          <h3 style={{ textAlign: 'center', fontSize: "1.1rem", whiteSpace: "nowrap" }}>Estado de solicitudes</h3>
           <ResponsiveContainer width="100%" height="100%">
             <PieChart>
               <Pie

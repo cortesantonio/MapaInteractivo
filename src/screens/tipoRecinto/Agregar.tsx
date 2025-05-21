@@ -91,7 +91,7 @@ export default function AgregarTipoRecinto() {
                 <div className={styles.titulo} >
 
                     <h2 style={{ textAlign: 'center' }}>
-                        Agregar Tipo de recinto
+                        Agregar tipo de recinto
                     </h2>
                 </div>
 

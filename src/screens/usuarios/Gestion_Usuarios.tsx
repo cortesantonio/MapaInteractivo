@@ -53,7 +53,7 @@ function Gestion_Usuarios() {
       <header className={styles.header} style={{ paddingTop: "25px", gap: "15px" }}>
         <hr style={{ flexGrow: "1" }} />
         <h2 className={styles.Titulo}>
-          Gestion de Usuarios
+          Gestión de usuarios
         </h2>
       </header>
 
@@ -114,7 +114,7 @@ function Gestion_Usuarios() {
       </div>
 
       <div className={styles.SubTitulo}>
-        <p>Gestion Usuarios</p>
+        <p>Listado de usuarios</p>
         <hr style={{ width: "25%", marginTop: "10px", marginBottom: "10px ", opacity: "50%", }} />
       </div>
       <div className={styles.content}>
@@ -137,7 +137,7 @@ function Gestion_Usuarios() {
                 className={styles.cardContent}
               >
                 <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-                  <p style={{ color: "gray", fontSize: "0.8rem", textTransform: 'uppercase', textAlign: 'left' }}>{usuario.rol} </p>
+                  <p style={{ color: "gray", fontSize: "0.8rem", textTransform: 'capitalize', textAlign: 'left' }}>{usuario.rol} </p>
                   <div>{usuario.activo ? (<p style={{ backgroundColor: 'rgba(186, 255, 130, 0.73)', borderRadius: '10px', padding: '2px 10px 2px 10px' }}>Activo</p>) : (<p style={{ backgroundColor: 'rgba(255, 145, 130, 0.73)', borderRadius: '10px', padding: '2px 10px 2px 10px' }} >Desactivado</p>)}</div>
                 </div>
 

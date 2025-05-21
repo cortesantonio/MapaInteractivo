@@ -1,12 +1,6 @@
 import styles from './css/List.module.css'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import {
-    faMagnifyingGlass,
-    faFilter,
-    faBuilding,
-    faLocationDot
-} from '@fortawesome/free-solid-svg-icons';
-
+import { faMagnifyingGlass, faFilter, faBuilding, faLocationDot } from '@fortawesome/free-solid-svg-icons';
 import { useEffect, useState } from 'react';
 import { supabase } from '../../services/supabase';
 import { Tipo_Recinto } from "../../interfaces/Tipo_Recinto";
@@ -76,7 +70,7 @@ function ListMarcadores() {
 
                 <header className={styles.header} style={{ paddingTop: '40px', gap: '15px' }}>
                     <hr style={{ flexGrow: "1" }} />
-                    <h2 style={{ textAlign: 'right', paddingRight: "15px", whiteSpace: "nowrap" }}>Gestion de Marcadores</h2>
+                    <h2 style={{ textAlign: 'right', paddingRight: "15px", whiteSpace: "nowrap" }}>Gestión de marcadores</h2>
                 </header>
 
                 <div className={styles.filtros}>
@@ -108,7 +102,7 @@ function ListMarcadores() {
                             </select>
                         </div>
 
-                        <div className={styles.add_user} style={{ paddingLeft: '10vw'/*Agregado Mati*/ }}>
+                        <div className={styles.add_user} style={{ paddingLeft: '10vw'}}>
                             <button onClick={() => { navigate('/panel-administrativo/marcadores/agregar') }}>
                                 <FontAwesomeIcon icon={faLocationDot} /> Nuevo
                             </button>
@@ -130,7 +124,7 @@ function ListMarcadores() {
 
 
                 <div className={styles.SubTitulo}>
-                    <p>Gestion De Marcadores </p>
+                    <p>Listado de marcadores</p>
                     <hr style={{ width: '25%', marginTop: '10px', marginBottom: '10px', opacity: '50%' }} />
                 </div>
                 <div className={styles.content}>
@@ -146,7 +140,7 @@ function ListMarcadores() {
                             </div>
 
                             <div className={styles.cardContent}  >
-                                <p style={{ color: 'gray', fontSize: '0.7rem', textTransform: 'uppercase' }}>{(locacion.tipo_recinto as any)?.tipo}</p>
+                                <p style={{ color: 'gray', fontSize: '0.7rem', textTransform: 'capitalize' }}>{(locacion.tipo_recinto as any)?.tipo}</p>
                                 <p style={{ color: 'black' }}>{locacion.nombre_recinto || "Cargando..."}</p>
                                 <p style={{ color: 'gray', fontSize: '0.9rem' }}>{locacion.direccion}</p>
                             </div>

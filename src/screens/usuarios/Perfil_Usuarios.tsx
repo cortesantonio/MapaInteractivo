@@ -144,10 +144,10 @@ function Perfil_Usuario() {
         {usuarios.map((usuario) => (
           <div key={usuario.id} className={styles.containerDatos}>
             <div className={styles.containeritemdatos}>
-              <span className={styles.titulosdatos}>Usuario Activo:</span>
+              <span className={styles.titulosdatos}>Usuario activo:</span>
               <span className={styles.valorDato}>{usuario.activo ? (<p>Si</p>) : (<p>No</p>)}</span>
             </div>
-            <div className={styles.containeritemdatos}>
+            <div className={styles.containeritemdatos} style={{ textTransform: "capitalize" }}>
               <span className={styles.titulosdatos}>Nombre:</span>
               <span className={styles.valorDato}>{usuario.nombre || "Sin información"}</span>
             </div>
@@ -184,7 +184,7 @@ function Perfil_Usuario() {
             {/*Esta funcion hace que No se muestre el rol en el perfil si el usuario es de rol Usuario,
               solo se podran visualizar en el perfil del Gestor o Admnistrador */}
             {usuario.rol !== "usuario" && (
-              <div className={styles.containeritemdatos}>
+              <div className={styles.containeritemdatos} style={{ textTransform: "capitalize" }}>
                 <span className={styles.titulosdatos}>Rol:</span>
                 <span className={styles.valorDato}>{usuario.rol}</span>
               </div>
@@ -194,11 +194,11 @@ function Perfil_Usuario() {
 
         <div className={styles.contenedor_botones_perfil}>
           <button className={styles.boton_editar} onClick={() => navigate(`/usuarios/editar/${id}`)}>
-            Editar Usuario
+            Editar usuario
           </button>
           {userRole === "administrador" || userRole === 'gestor' ? (
             <button onClick={switchEstados} className={styles.boton_desactivar}>
-              {usuarios[0]?.activo ? "Desactivar Usuario" : "Activar Usuario"}
+              {usuarios[0]?.activo ? "Desactivar usuario" : "Activar usuario"}
             </button>
           ) : (<></>)}
         </div>
@@ -342,9 +342,9 @@ function Perfil_Usuario() {
           <img src={usuarios[0]?.avatar_url || ''} className={styles.imgUsuario} alt="" />
         </div>
 
-        <div className={styles.nombre_usuario}>
+        <div className={styles.nombre_usuario} style={{ textTransform: "capitalize" }}>
           {usuarios.length > 0 && (
-            <h2 style={{ marginBottom: "15px", fontSize: "1.5rem", paddingBottom: "5px", fontWeight: "400" }}>
+            <h2 style={{ marginBottom: "15px", fontSize: "1.5rem", paddingBottom: "5px", fontWeight: "400", textTransform: "capitalize" }}>
               {usuarios[0].nombre}
             </h2>
           )}
@@ -364,7 +364,7 @@ function Perfil_Usuario() {
             style={{ gridColumn: "2" }}
             onClick={() => setVistaActual("perfil")}
           >
-            Perfil Usuario
+            Perfil usuario
           </button>
 
           <button
@@ -372,7 +372,7 @@ function Perfil_Usuario() {
             style={{ gridColumn: "3" }}
             onClick={() => setVistaActual("aportes")}
           >
-            Aportes Usuario
+            Aportes usuario
           </button>
         </div>
 

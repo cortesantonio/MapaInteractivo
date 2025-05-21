@@ -99,7 +99,7 @@ function ListTipoRecinto() {
 
             <header className={styles.header} style={{ paddingTop: '40px', gap: '15px' }}>
                 <hr style={{ flexGrow: "1" }} />
-                <h2 style={{ textAlign: 'right', paddingRight: "15px", whiteSpace: "nowrap" }} >Gestion de Recinto</h2>
+                <h2 style={{ textAlign: 'right', paddingRight: "15px", whiteSpace: "nowrap" }} >Gestión de recintos</h2>
             </header>
             <div className={styles.filtros}>
                 <div style={{ display: 'flex', gap: '5px', justifyContent: 'right' }}>
@@ -126,7 +126,7 @@ function ListTipoRecinto() {
             </div>
 
             <div className={styles.SubTitulo}>
-                <p>Listado</p>
+                <p>Listado de recintos</p>
                 <hr style={{ width: '25%', marginTop: '10px', marginBottom: '10px ', opacity: '50%' }} />
             </div>
             <div className={styles.content}>
