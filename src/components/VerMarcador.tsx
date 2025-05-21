@@ -67,7 +67,7 @@ export default function VerMarcador({ MarcadorSelectId, CerrarMarcador, establec
                         telefono: marcador.telefono,
                         activo: marcador.activo,
                         accesibilidad_certificada: marcador.accesibilidad_certificada
-                        
+
                     };
 
                     setMarcador(marcadorFormateado);
@@ -265,25 +265,14 @@ export default function VerMarcador({ MarcadorSelectId, CerrarMarcador, establec
                                     />
                                 </div>
                             )}
-                            
                         </div>
-                        <h4 style={{ color: modoNocturno ? "#fff" : "" }} >{cargando ? 'Cargando...' : '> ' + Marcador?.tipo_recinto}</h4>
-                        <p style={{ marginTop: '10px', color: modoNocturno ? "#fff" : "" }}> <FontAwesomeIcon icon={faStar} size="2xs" style={{ color: "#FFD43B", }} /> • 4.4 de la comunidad.</p>
-                        <p>
-                            <span style={{ opacity: 0.5, fontSize: '0.9rem', color: modoNocturno ? "#fff" : "" }}>
-                                <FontAwesomeIcon icon={faStar} size="2xs" style={{ color: "#FFD43B", }} /> • 4.6 en Google Maps.
-                            </span>
-
-                        <h2 style={{ color: modoNocturno ? "#fff" : "" }}>{cargando ? 'Cargando...' : Marcador?.nombre_recinto}</h2>
                         <h4 style={{ color: modoNocturno ? "#fff" : "" }} >{cargando ? 'Cargando...' : '> ' + Marcador?.tipo_recinto}</h4>
                         <p style={{ marginTop: '10px', color: modoNocturno ? "#fff" : "" }}>
                             {calificacion > 0 ? (
                                 <><FontAwesomeIcon icon={faStar} size="2xs" style={{ color: "#FFD43B", }} /> • {calificacion} de la comunidad.</>
-
                             ) : (
                                 <span style={{ color: 'gray', fontSize: '0.8rem' }}>Sin reseñas aún.</span>
                             )}
-
                         </p>
 
                     </div>

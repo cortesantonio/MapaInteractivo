@@ -11,7 +11,6 @@ import { useLoadScript, Autocomplete } from "@react-google-maps/api";
 import { APIProvider, Map as VisMap, AdvancedMarker } from "@vis.gl/react-google-maps";
 import ImagenConFallback from '../../components/ImagenConFallback';
 import { useAuth } from '../../hooks/useAuth';
-import { es } from 'date-fns/locale';
 
 interface TipoDeAccesibilidades {
     [tipo: string]: Accesibilidad[];
