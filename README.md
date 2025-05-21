@@ -1,26 +1,57 @@
-# Mapa Interactivo 
+# 🗺️ Mapa Interactivo
 
+**Mapa Interactivo** es una aplicación colaborativa que permite mapear y reportar la accesibilidad de espacios públicos, facilitando la movilidad de personas con discapacidad y promoviendo ciudades más inclusivas.
 
-🚀 **Mapa Interactivo** es una aplicación que permite mapear y reportar la accesibilidad de espacios públicos, facilitando la movilidad de personas con discapacidad y promoviendo una ciudad más inclusiva.
+---
 
 ## 📌 Características Principales
-- 🗺️ **Mapa interactivo** con ubicaciones accesibles.
+
+- 🗺️ **Mapa interactivo** con visualización de espacios accesibles.
 - 📍 **Geolocalización en tiempo real** para encontrar lugares adaptados cercanos.
-- 🏢 **Reportes de accesibilidad**, permitiendo a los usuarios calificar y sugerir mejoras en espacios públicos.
-- 🌍 **Comunidad colaborativa** que fomenta la inclusión y el compromiso social.
+- 🏢 **Reportes de accesibilidad**: los usuarios pueden calificar, comentar y sugerir mejoras.
+- 🌐 **Comunidad colaborativa** enfocada en la inclusión y el compromiso social.
 
-## 💡 Tecnologías Utilizadas
-- **Frontend:** React, TypeScript
-- **Backend:** Node.js
-- **Base de datos:** SupaBase
-- **APIs:** Google Maps API para geolocalización y mapas interactivos
+---
 
-## 📷 Diseño de la Aplicación
-El diseño se centra en la accesibilidad, con colores contrastantes, tipografía legible y navegación intuitiva. El mapa es el eje principal de la app, permitiendo una experiencia fluida e inclusiva para todos los usuarios.
+## 🛠️ Tecnologías Utilizadas
 
-## 📅 Estado del Proyecto
-✅ **Fase de desarrollo** con avances en diseño, mapeo y reportes de accesibilidad. 
-🚧 **Próximos pasos:** Optimización de UX/UI y pruebas con usuarios.
+- **Frontend:** React + TypeScript  
+- **Backend:** Node.js  
+- **Base de datos:** Supabase  
+- **APIs:** Google Maps API (mapas y geolocalización)
+
+---
+
+## 🎨 Diseño Centrado en la Accesibilidad
+
+La interfaz ha sido desarrollada bajo principios de accesibilidad:  
+- Colores con alto contraste  
+- Tipografía clara y legible  
+- Navegación intuitiva  
+- Mapa como eje central para una experiencia inclusiva
+
+---
+
+## 🚧 Estado del Proyecto
+
+### ✅ En desarrollo
+
+Actualmente se trabaja en:
+
+- Optimización de la experiencia de usuario (UX/UI)
+- Desarrollo de interfaces accesibles y responsivas
+- Integración con Supabase para la gestión de datos
+- Implementación de autenticación, roles y permisos
+- Validación de formularios y calidad de la información
+- Integración de herramientas complementarias
+
+### 🗓️ Próximos pasos
+
+- Corrección de bugs
+- Despliegue inicial
+- Pruebas con usuarios y mejoras iterativas
+
+---
 
 ## 🤝 Contribución
 Si quieres aportar a este proyecto, ¡eres bienvenido! Puedes contribuir con código, diseño o feedback sobre accesibilidad.
