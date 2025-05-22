@@ -145,10 +145,35 @@
     }
 }
 
-
 .TituloIndi {
     color: rgb(130, 127, 127);
     text-align: center;
     padding: 3px;
     font: 100% sans-serif;
+}
+
+.ContenedorBusquedas{
+    margin: 5px;
+    max-height: 190px;
+    overflow-y: auto;
+    padding: 0px 5px;
+}
+
+.ContenedorBusquedas::-webkit-scrollbar {
+    width: 3px;
+    background-color: rgb(220, 220, 220);
+}
+
+.ContenedorBusquedas::-webkit-scrollbar-thumb {
+    background-color: rgb(120, 120, 120); 
+    border-radius: 5px;
+}
+
+.darkMode .ContenedorBusquedas::-webkit-scrollbar {
+    background-color: #222; 
+}
+
+.darkMode .ContenedorBusquedas::-webkit-scrollbar-thumb {
+    background-color: #3a46e4; 
+    border-radius: 5px;
 }

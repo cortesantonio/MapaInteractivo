@@ -51,29 +51,33 @@ export default function TrazadoRuta({
             const { data, error } = await supabase
                 .from('busquedas')
                 .select(`
-                fecha_hora,
-                id_marcador(
-                id,
-                nombre_recinto,
-                direccion,
-                url_img,
-                accesibilidad_marcador (
-                    accesibilidad (
-                        nombre
-                    )
-                ))
-            `)
+                    fecha_hora,
+                    id_marcador (
+                    id,
+                    nombre_recinto,
+                    direccion)
+                    `)
                 .eq('id_usuario', user.id)
-                .order('fecha_hora', { ascending: false })
+                .order('fecha_hora', { ascending: false });
 
             if (!error && data) {
-                const busquedasRecientesFormateadas = data.map((item: any) => ({
+                const vistos = new Set();
+                const busquedasUnicas = data.filter((item: any) => {
+                    const idMarcador = item.id_marcador?.id;
+                    if (!idMarcador || vistos.has(idMarcador)) {
+                        return false;
+                    }
+                    vistos.add(idMarcador);
+                    return true;
+                });
+
+                const busquedasFormateadas = busquedasUnicas.map((item: any) => ({
                     id_marcador: item.id_marcador,
                     fecha_hora: item.fecha_hora,
                 }));
-                setBusquedasRecientes(busquedasRecientesFormateadas);
-                setDestinosRecientes(busquedasRecientesFormateadas.length > 0)
 
+                setBusquedasRecientes(busquedasFormateadas);
+                setDestinosRecientes(busquedasFormateadas.length > 0);
             } else {
                 console.error("Error al obtener búsquedas con marcadores:", error);
             }
@@ -146,7 +150,7 @@ export default function TrazadoRuta({
     };
 
     return (
-        <div>
+        <div >
             {panelActivo === "map" && (
 
                 <div className={styles.PanelActivo} style={{ fontSize: `${fontSize}rem` }}>
@@ -235,16 +239,28 @@ export default function TrazadoRuta({
 
                     <div className={styles.PositionIcons}>
                         <button className={styles.ButttonIcons} onClick={() => handleCambiarModoViaje('DRIVING')}>
-                            <FontAwesomeIcon icon={faCar} size="lg" style={{ color: modoViajeActual === 'DRIVING' ? 'rgb(75, 127, 241)' : 'black' }} />
+                            <FontAwesomeIcon icon={faCar} size="lg" style={{
+                                color: modoViajeActual === 'DRIVING' ? 'rgb(75, 127, 241)' : modoNocturno
+                                    ? '#fff'
+                                    : 'black',
+                            }} />
                         </button>
                         <button className={styles.ButttonIcons}>
                             <FontAwesomeIcon icon={faBus} size="lg" style={{ color: "gray" }} />
                         </button>
                         <button className={styles.ButttonIcons} onClick={() => handleCambiarModoViaje('WALKING')}>
-                            <FontAwesomeIcon icon={faPersonWalking} size="lg" style={{ color: modoViajeActual === 'WALKING' ? 'rgb(75, 127, 241)' : 'black' }} />
+                            <FontAwesomeIcon icon={faPersonWalking} size="lg" style={{
+                                color: modoViajeActual === 'WALKING' ? 'rgb(75, 127, 241)' : modoNocturno
+                                    ? '#fff'
+                                    : 'black',
+                            }} />
                         </button>
                         <button className={styles.ButttonIcons} onClick={() => handleCambiarModoViaje('BICYCLING')}>
-                            <FontAwesomeIcon icon={faPersonBiking} size="lg" style={{ color: modoViajeActual === 'BICYCLING' ? 'rgb(75, 127, 241)' : 'black' }} />
+                            <FontAwesomeIcon icon={faPersonBiking} size="lg" style={{
+                                color: modoViajeActual === 'BICYCLING' ? 'rgb(75, 127, 241)' : modoNocturno
+                                    ? '#fff'
+                                    : 'black',
+                            }} />
                         </button>
                     </div>
 
@@ -254,26 +270,55 @@ export default function TrazadoRuta({
                     {(!ubicacionActiva || !destinoEstablecido) ? (
                         <div style={{ marginTop: "15px" }}>
                             <h4 style={{ color: modoNocturno ? "#fff" : "" }} className={styles.TituloDestin}>
-                                Exploraciones recientes
+                                DESTINOS RECIENTES
                             </h4>
-                            {!destinosRecientes ? (
-                                <p style={{ color: modoNocturno ? "#fff" : "", fontSize: `${fontSize}rem` }} className={styles.MensajeP}>Parece que no hay nada aún</p>
+                            {!user ? (
+                                <p style={{ color: modoNocturno ? "#fff" : "", fontSize: `${fontSize}rem` }} className={styles.MensajeP}>
+                                    Inicia sesión para acceder a búsquedas recientes
+                                </p>
+                            ) : !destinosRecientes ? (
+                                <p style={{ color: modoNocturno ? "#fff" : "", fontSize: `${fontSize}rem` }} className={styles.MensajeP}>No hay Destinos Recientes</p>
                             ) : (
-                                busquedasRecientes.map((busquedas, index) => (
-                                    <div key={index} className={styles.ContenInfo} onClick={() => onSeleccionMarcadorRecientes(busquedas.id_marcador?.id)}>
-                                        <div className={styles.IconsClock}>
-                                            <FontAwesomeIcon icon={faClockRotateLeft} style={{ color: "gray" }} size="xl" />
+
+                                <div
+                                    className={`${styles.ContenedorBusquedas} ${modoNocturno ? styles.darkMode : ''}`}
+                                >
+                                    {busquedasRecientes.map((busquedas, index) => (
+                                        <div
+                                            key={index}
+                                            className={styles.ContenInfo}
+                                            onClick={() => onSeleccionMarcadorRecientes(busquedas.id_marcador?.id)}
+                                        >
+                                            <div className={styles.IconsClock}>
+                                                <FontAwesomeIcon
+                                                    icon={faClockRotateLeft}
+                                                    style={{ color: modoNocturno ? "#fff" : "" }}
+                                                    size="xl"
+                                                />
+                                            </div>
+                                            <div>
+                                                <p
+                                                    style={{
+                                                        margin: "0",
+                                                        fontWeight: "bold",
+                                                        color: modoNocturno ? "#fff" : "",
+                                                    }}
+                                                >
+                                                    {busquedas.id_marcador?.nombre_recinto}
+                                                </p>
+                                                <p
+                                                    style={{
+                                                        margin: "0",
+                                                        color: modoNocturno ? "#fff" : "",
+                                                        fontSize: "12px",
+                                                    }}
+                                                >
+                                                    {busquedas.id_marcador?.direccion}
+                                                </p>
+                                            </div>
                                         </div>
-                                        <div>
-                                            <p style={{ margin: "0", fontWeight: "bold", color: "black" }}>
-                                                {busquedas.id_marcador?.nombre_recinto}
-                                            </p>
-                                            <p style={{ margin: "0", color: "gray", fontSize: "12px" }}>
-                                                {busquedas.id_marcador?.direccion}
-                                            </p>
-                                        </div>
-                                    </div>
-                                ))
+                                    ))}
+                                </div>
                             )}
                         </div>
                     ) : null}
@@ -303,11 +348,6 @@ export default function TrazadoRuta({
 
                         </div>
                     ) : null}
-
-
-
-
-
 
                 </div>
 

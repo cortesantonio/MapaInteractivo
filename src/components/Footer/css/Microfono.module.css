@@ -37,6 +37,8 @@
     font-weight: bold;
     animation: parpadeo 1s infinite;
     text-align: center;
+    font-size: 1.2rem;
+    justify-content: center;
 }
 
 @keyframes parpadeo {
