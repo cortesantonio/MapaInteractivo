@@ -224,7 +224,8 @@ function Buscador({ onSeleccionMarcador }: BuscadorProps) {
                         marginTop: '10px',
                         borderRadius: '15px',
                         padding: '15px',
-                        display: displayFiltro
+                        display: displayFiltro,
+                        border: modoNocturno ? "none" :  "1px solid #ccc"
                     }}
                 >
                     <div style={{ textAlign: "left" }}>

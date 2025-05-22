@@ -37,11 +37,13 @@ export default function User({
                                 <>
                                     {userRole !== 'usuario' ? (
                                         <button onClick={() => { navigate('/panel-administrativo') }}
+                                            style={{ fontSize: `${fontSize}rem` }}
                                             className={styles.ButtonSesion}>
                                             Panel Administrativo
                                         </button>
                                     ) : (
                                         <button onClick={() => { navigate(`/usuario/perfil/${user.id}`) }}
+                                            style={{ fontSize: `${fontSize}rem` }}
                                             className={styles.ButtonSesion}>
                                             Ver perfil
                                         </button>
