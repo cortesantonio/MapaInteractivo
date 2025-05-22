@@ -35,7 +35,7 @@ function TrazadoRutaInterno() {
     const fetchDestino = async () => {
         const { data, error } = await supabase
             .from("marcador")
-            .select("nomre_recinto, direccion, latitud, longitud") 
+            .select("nombre_recinto, direccion, latitud, longitud") 
             .eq("id", id)
             .single();
 
