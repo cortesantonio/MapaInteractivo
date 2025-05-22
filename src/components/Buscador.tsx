@@ -5,6 +5,7 @@ import styles from "./css/Buscador.module.css";
 import { supabase } from "../services/supabase";
 import { Accesibilidad } from "../interfaces/Accesibilidad";
 import { useTheme } from "../components/Footer/Modo_Nocturno";
+import { useAuth } from '../hooks/useAuth';
 import { useFontSize } from "./Footer/Modificador_Letras";
 
 interface Marcador {
@@ -19,6 +20,7 @@ interface BuscadorProps {
 }
 
 function Buscador({ onSeleccionMarcador }: BuscadorProps) {
+    const { user } = useAuth();
     const { modoNocturno } = useTheme();
     const {fontSize} = useFontSize ();
     const [filtroIsVisible, setFiltroIsVisible] = useState(false);
@@ -31,6 +33,7 @@ function Buscador({ onSeleccionMarcador }: BuscadorProps) {
     const [resultados, setResultados] = useState<Marcador[]>([]);
     const [busqueda, setBusqueda] = useState<string>("");
     const [opcionesAccesibilidad, setOpcionesAccesibilidad] = useState<Accesibilidad[]>([]);
+
 
     useEffect(() => {
         const fetchMarcadores = async () => {
@@ -76,6 +79,53 @@ function Buscador({ onSeleccionMarcador }: BuscadorProps) {
 
         fetchMarcadores();
     }, []);
+
+
+
+    const obtenerFechaChile = () => {
+        const ahora = new Date();
+        const fechaChile = new Intl.DateTimeFormat('es-CL', {
+            year: 'numeric',
+            month: '2-digit',
+            day: '2-digit',
+            hour: '2-digit',
+            minute: '2-digit',
+            second: '2-digit',
+            hour12: false,
+            timeZone: 'America/Santiago'
+        }).formatToParts(ahora);
+
+        // Convertir partes a un formato tipo ISO local sin zona horaria
+        const partes: { [key: string]: string } = {};
+        fechaChile.forEach(({ type, value }) => {
+            partes[type] = value;
+        });
+
+        const fechaFinal = `${partes.year}-${partes.month}-${partes.day}T${partes.hour}:${partes.minute}:${partes.second}`;
+        return fechaFinal;
+    };
+
+
+    const SeleccionBusqueda = async (idMarcador: number) => {
+        const id_usuario = user?.id;
+
+        if (!id_usuario) {
+            return;
+        }
+        
+        const fechaHoraChile = obtenerFechaChile();
+
+        const { error: insertError } = await supabase.from('busquedas').insert({
+            id_usuario,
+            id_marcador: idMarcador,
+            fecha_hora: fechaHoraChile,
+        });
+
+        if (insertError) {
+            console.error("Error al registrar la búsqueda:", insertError);
+        } 
+    };
+
 
     useEffect(() => {
         const handleResize = () => {
@@ -130,14 +180,16 @@ function Buscador({ onSeleccionMarcador }: BuscadorProps) {
         }
     };
 
+
     return (
         <div className={`${styles.container} ${modoNocturno ? styles.darkMode : ''}`}
             style={{
                 width: width,
                 transition: "width 0.3s ease"
+                
             }}
         >
-            <div style={{backgroundColor: modoNocturno ? "#2d2d2d" : ""}} className={styles.distribucionContainer}>
+            <div style={{backgroundColor: modoNocturno ? "#2d2d2d" : "", border: modoNocturno ? "none" :  "1px solid #ccc"}} className={styles.distribucionContainer}>
                 <FontAwesomeIcon 
                     icon={faLocationDot} 
                     size="xl" 
@@ -222,6 +274,7 @@ function Buscador({ onSeleccionMarcador }: BuscadorProps) {
                                 onSeleccionMarcador(item.id);
                                 setFiltroIsVisible(false);
                                 setBusqueda("");
+                                SeleccionBusqueda(item.id);
                             }}
                         >
                             <strong>{item.nombre}</strong><br />

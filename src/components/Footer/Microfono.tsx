@@ -3,7 +3,6 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCircleXmark } from "@fortawesome/free-solid-svg-icons";
 import { useTheme } from "./Modo_Nocturno";
 import { useEffect, useState, useRef } from 'react';
-import { LiveAudioVisualizer } from 'react-audio-visualize';
 import SpeechRecognition, { useSpeechRecognition } from 'react-speech-recognition';
 import { supabase } from '../../services/supabase';
 import { useFontSize } from "./Modificador_Letras";
@@ -25,40 +24,18 @@ export default function Microfono({
     const {fontSize} = useFontSize ();
     const [mensajePermisos, setMensajePermisos] = useState("");
     const [mostrarEscuchando, setMostrarEscuchando] = useState(false);
-    const [mostrarEspectro, setMostrarEspectro] = useState(false);
     const [intentosFallidos, setIntentosFallidos] = useState(0);
     const [mensaje, setMensaje] = useState("Te Escucho ¿Cual es el nombre del lugar que quieres ir?");
     const contenedorRef = useRef<HTMLDivElement>(null);
-    const [anchoVisualizador, setAnchoVisualizador] = useState(250);
     const [mediaRecorder, setMediaRecorder] = useState<MediaRecorder | null>(null);
     const mediaRecorderRef = useRef<MediaRecorder | null>(null);
     const [stream, setStream] = useState<MediaStream | null>(null);
+
     const {
         transcript,
         resetTranscript,
         browserSupportsSpeechRecognition
     } = useSpeechRecognition();
-
-
-    useEffect(() => {
-        const observer = new ResizeObserver((entries) => {
-            for (let entry of entries) {
-                if (entry.contentRect.width) {
-                    setAnchoVisualizador(Math.min(entry.contentRect.width * 0.8, 300));
-                }
-            }
-        });
-
-        if (contenedorRef.current) {
-            observer.observe(contenedorRef.current);
-        }
-
-        return () => {
-            if (contenedorRef.current) {
-                observer.unobserve(contenedorRef.current);
-            }
-        };
-    }, []);
 
     useEffect(() => {
         return () => {
@@ -104,21 +81,15 @@ export default function Microfono({
         verificarPermisosMicrofono();
     }, []);
 
-
     useEffect(() => {
         const iniciarReconocimiento = async () => {
             try {
-                const micStream = await navigator.mediaDevices.getUserMedia({ audio: true });
-                setStream(micStream);
-                const recorder = new MediaRecorder(micStream);
-                recorder.start();
-                setMediaRecorder(recorder);
+
                 SpeechRecognition.startListening({ continuous: true });
 
                 setTimeout(() => {
-                    setMostrarEspectro(true);
                     setMostrarEscuchando(true);
-                }, 1000);
+                }, 2000);
 
             } catch (err) {
                 console.error('Error al acceder al micrófono:', err);
@@ -130,7 +101,7 @@ export default function Microfono({
             iniciarReconocimiento();
         } else {
             SpeechRecognition.stopListening();
-            setMostrarEspectro(false);
+
             setMostrarEscuchando(false);
             if (mediaRecorder) mediaRecorder.stop();
             if (stream) {
@@ -141,7 +112,6 @@ export default function Microfono({
         }
     }, [activarReconocimiento]);
 
-
     useEffect(() => {
         if (!transcript) return;
 
@@ -150,13 +120,31 @@ export default function Microfono({
             const textoSinPuntoFinal = transcript.trim().replace(/\.$/, "");
             buscarMarcadorPorTexto(textoSinPuntoFinal);
             resetTranscript();
-        }, 1000);
+        }, 2000);
 
         return () => clearTimeout(handler);
     }, [transcript]);
 
+    useEffect(() => {
+        if (!mostrarEscuchando) return;
 
+        const timeout = setTimeout(() => {
+            const nuevosIntentos = intentosFallidos + 1;
+            setIntentosFallidos(nuevosIntentos);
+            setMostrarEscuchando(false);
 
+            if (nuevosIntentos >= 2) {
+                setMensaje("Parece que no tengo resultados con ese nombre. ¿Quieres intentarlo otra vez?");
+            } else {
+                setMensaje("Lo siento, no logré entender lo que dijiste. ¿Podrías intentarlo otra vez?");
+                setTimeout(() => {
+                    setMostrarEscuchando(true);
+                }, 2000);
+            }
+        }, 8000);
+
+        return () => clearTimeout(timeout);
+    }, [mostrarEscuchando]);
 
     const buscarMarcadorPorTexto = async (texto: string) => {
         const { data, error } = await supabase
@@ -180,14 +168,13 @@ export default function Microfono({
         if (coincidencia) {
             setIntentosFallidos(0);
             setMostrarEscuchando(false);
-            setMostrarEspectro(false);
+
             onSeleccionMarcador(coincidencia.id);
             closePanel();
         } else {
             const nuevosIntentos = intentosFallidos + 1;
             setIntentosFallidos(nuevosIntentos);
             setMostrarEscuchando(false);
-            setMostrarEspectro(false);
 
             if (nuevosIntentos >= 2) {
                 setMensaje("Parece que no tengo resultados con ese nombre. ¿Quieres intentarlo otra vez?");
@@ -195,14 +182,11 @@ export default function Microfono({
             } else {
                 setMensaje("Lo siento, no logré entender lo que dijiste. ¿Podrías intentarlo otra vez?");
                 setTimeout(() => {
-                    setMostrarEspectro(true);
                     setMostrarEscuchando(true);
-                }, 1000);
+                }, 2000);
             }
         }
-
     };
-
 
     if (!browserSupportsSpeechRecognition) {
         return <p>Tu navegador no soporta reconocimiento de voz.</p>;
@@ -231,48 +215,30 @@ export default function Microfono({
                                 {mensaje}
                             </h3>
                             <div ref={contenedorRef} className={styles.MicroActive}>
-                                {mediaRecorder && (
-                                    <div style={{ marginTop: 20, textAlign: "center" }}>
-                                        {intentosFallidos >= 2 ? (
-                                            <button
-                                                className={styles.BotonReintentar}
-                                                onClick={() => {
-                                                    setIntentosFallidos(0);
-                                                    setMensaje("Te escucho ¿Cuál es el nombre del lugar que quieres ir?");
-                                                    setMostrarEspectro(false);
-                                                    setMostrarEscuchando(false);
-                                                    resetTranscript();
-
-                                                    setTimeout(() => {
-                                                        setMostrarEspectro(true);
-                                                        setMostrarEscuchando(true);
-                                                    }, 1000);
-                                                }}
-                                            >
-                                                Volver a Intentarlo
-                                            </button>
-                                        ) : (
-                                            <>
-                                                {mostrarEspectro &&  (
-                                                    <LiveAudioVisualizer
-                                                        mediaRecorder={mediaRecorder}
-                                                        width={anchoVisualizador}
-                                                        barWidth={2}
-                                                        gap={1}
-                                                        fftSize={2048}
-                                                        maxDecibels={75}
-                                                        minDecibels={-100}
-                                                    />
-                                                )}
-                                                {mostrarEscuchando && (
-                                                    <p className={styles.EscuchandoTexto}>Escuchando...</p>
-                                                )}
-                                            </>
+                                {(intentosFallidos >= 2) ? (
+                                    <button
+                                        className={styles.BotonReintentar}
+                                        onClick={() => {
+                                            setIntentosFallidos(0);
+                                            setMensaje("Te escucho ¿Cuál es el nombre del lugar que quieres ir?");
+                                            setMostrarEscuchando(false);
+                                            resetTranscript();
+                                            setTimeout(() => {
+                                                setMostrarEscuchando(true);
+                                            }, 2000);
+                                        }}
+                                    >
+                                        Volver a Intentarlo
+                                    </button>
+                                ) : (
+                                    <>
+                                        {mostrarEscuchando && (
+                                            <p className={styles.EscuchandoTexto}>Escuchando...</p>
                                         )}
-                                    </div>
+                                    </>
                                 )}
-
                             </div>
+
                         </>
 
                     )}
