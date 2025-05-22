@@ -58,7 +58,8 @@ export default function TrazadoRuta({
                     direccion)
                     `)
                 .eq('id_usuario', user.id)
-                .order('fecha_hora', { ascending: false });
+                .order('fecha_hora', { ascending: false })
+                .range(0, 2); // Limitar a 3 resultados
 
             if (!error && data) {
                 const vistos = new Set();
@@ -328,7 +329,7 @@ export default function TrazadoRuta({
                             <h4 className={styles.TituloIndi}>
                                 INDICACIONES
                             </h4>
-                            <div style={{ height: "100%", overflowY: "auto" }}>
+                            <div style={{ height: "200px", overflowY: "auto" }}>
                                 {onIndicaciones && onIndicaciones.length > 0 ? (
                                     onIndicaciones.map((instruccion, index) => (
                                         <div key={index} className={styles.ContenInfo}>
