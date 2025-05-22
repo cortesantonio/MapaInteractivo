@@ -1,17 +1,18 @@
 import styles from './css/RegistrosLogs.module.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons';
+import { faMagnifyingGlass,faArrowUpRightFromSquare } from '@fortawesome/free-solid-svg-icons';
 import { useState, useEffect } from 'react';
 import { supabase } from '../../services/supabase';
 import { Registro_Logs } from '../../interfaces/Registro_Logs';
 import NavbarAdmin from '../../components/NavbarAdmin';
+import { useNavigate } from 'react-router-dom';
 
 export default function RegistroLogs() {
     const [busqueda, setBusqueda] = useState('');
     const [registroLogs, setRegistrosLogs] = useState<Registro_Logs[]>([]);
     const [isActiveBuscador, setIsActiveBuscador] = useState(false);
     const [currentPage, setCurrentPage] = useState(1);
-
+    const navigate = useNavigate();
     const getItemsPerPage = (height: number): number => {
         if (height < 1000) return 10;
         return 17;
@@ -40,7 +41,7 @@ export default function RegistroLogs() {
             .select(`
                 *,
                 id_usuario (
-                    nombre
+                    id, nombre, rol
                 )
             `);
         if (!error) setRegistrosLogs(data);
@@ -114,12 +115,12 @@ export default function RegistroLogs() {
 
                 <div className={styles.filtros}>
                     <button className={styles.filtroCard} onClick={handleBuscador}>
-                        <FontAwesomeIcon icon={faMagnifyingGlass} /> Buscador
+                        <FontAwesomeIcon icon={faMagnifyingGlass} /> Buscador de acciones
                     </button>
                     {isActiveBuscador && (
                         <div className={styles.buscar}>
                             <form onSubmit={(e) => e.preventDefault()}>
-                                <input type="text" placeholder="Buscar" value={busqueda} onChange={handleBusquedaChange} />
+                                <input type="text" placeholder="Buscar por tipo de accción" value={busqueda} onChange={handleBusquedaChange} />
                                 <button type="submit">
                                     <FontAwesomeIcon icon={faMagnifyingGlass} />
                                 </button>
@@ -132,9 +133,9 @@ export default function RegistroLogs() {
                     <table className={styles.table}>
                         <thead>
                             <tr>
-                                <th>ID</th>
-                                <th>Usuario</th>
                                 <th>Fecha y Hora</th>
+                                <th>Usuario</th>
+                                <th>Rol</th>
                                 <th>Tipo Acción</th>
                                 <th>Detalle</th>
                             </tr>
@@ -142,9 +143,9 @@ export default function RegistroLogs() {
                         <tbody>
                             {paginatedLogs.map((log) => (
                                 <tr key={log.id}>
-                                    <td>{log.id}</td>
-                                    <td>{log.id_usuario?.nombre ?? 'Desconocido'}</td>
                                     <td>{new Date(log.fecha_hora).toLocaleString()}</td>
+                                    <td><button style={{textTransform:'capitalize'}} onClick={() => { navigate(`/usuario/perfil/${log.id_usuario?.id}`) }}>{log.id_usuario?.nombre ?? 'Desconocido'} <FontAwesomeIcon icon={faArrowUpRightFromSquare} size='xs' /></button></td>
+                                    <td style={{textTransform:'capitalize'}}>{log.id_usuario?.rol ?? 'Desconocido'}</td>
                                     <td>{log.tipo_accion}</td>
                                     <td>{log.detalle}</td>
                                 </tr>
