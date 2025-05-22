@@ -375,7 +375,7 @@ function Modo_Compacto({ onSeleccionMarcador }: ModoCompactoProps) {
                     <div className={styles.contenedor_opciones}>
                         <div className={styles.contenedor_opciones_iconos}>
                             <FontAwesomeIcon className={styles.elementos} icon={faBook} />  
-                            <button onClick={() => navigate("/info")}>Colaborar</button>
+                            <button onClick={() => navigate("/colaborar")}>Colaborar</button>
                             
                             {user ? (
                                 // Si el usuario está logueado, mostrar opciones de usuario autenticado
