@@ -15,7 +15,7 @@ function TrazadoRutaInterno() {
 
     const [modoViajeActual, setModoViajeActual] = useState<ModoViaje>('DRIVING');
     const [origen, setOrigen] = useState<{ lat: number; lng: number } | null>(null);
-    const [marcadorDestino, setMarcadorDestino] = useState<Marcador | null>(null);
+    const [marcadorDestino, setMarcadorDestino] = useState<Partial<Marcador> | null>(null);
     const [destino, setDestino] = useState<{ lat: number; lng: number } | null>(null);
     const [instrucciones, setInstrucciones] = useState<string[]>([]);
 
@@ -35,7 +35,7 @@ function TrazadoRutaInterno() {
     const fetchDestino = async () => {
         const { data, error } = await supabase
             .from("marcador")
-            .select("*") // o selecciona solo lo necesario
+            .select("nombre_recinto, direccion, latitud, longitud") 
             .eq("id", id)
             .single();
 
