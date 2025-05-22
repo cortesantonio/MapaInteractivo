@@ -90,6 +90,14 @@
     font-size: 1rem;
 }
 
+.table td button {
+    background-color: transparent;
+    border: none;
+    outline: none;
+    cursor: pointer;
+    font-size: 1rem;
+}
+
 .paginacion {
     display: flex;
     justify-content: center;
@@ -132,6 +140,7 @@
     .content {
         overflow-x: auto;
     }
+
     .table {
         min-width: 617px;
     }
