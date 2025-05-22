@@ -24,11 +24,9 @@ interface Marcador {
     }[];
 }
 
-interface ModoCompactoProps {
-    onSeleccionMarcador?: (id: number) => void;
-}
 
-function Modo_Compacto({ onSeleccionMarcador }: ModoCompactoProps) {
+
+function Modo_Compacto() {
     // Estados para el buscador y filtros
     const [filtroIsVisible, setFiltroIsVisible] = useState(false);
     const [filtrosActivos, setFiltrosActivos] = useState<Record<string, boolean>>({});
@@ -325,7 +323,6 @@ function Modo_Compacto({ onSeleccionMarcador }: ModoCompactoProps) {
                                         <div 
                                             key={marcador.id} 
                                             className={styles.marcador} 
-                                            onClick={() => onSeleccionMarcador && onSeleccionMarcador(marcador.id)}
                                         >
                                             <h3>{marcador.nombre}</h3>
                                             <p><strong>Tipo:</strong> {marcador.tipoRecintoInfo.tipo}</p>
@@ -345,7 +342,10 @@ function Modo_Compacto({ onSeleccionMarcador }: ModoCompactoProps) {
                                                 )}
                                                 
                                                 <div style={{display: "flex",justifyContent:"flex-end",alignItems:"flex-end",margin:"15px"}}>
-                                                    <button>Iniciar Navegación</button>
+                                                    <button onClick={() => navigate(`/modocompacto/trazadoruta/${marcador.id}`)}>
+                                                        Iniciar Navegación
+                                                    </button>
+
                                                 </div>
                                             </div>
                                         </div>

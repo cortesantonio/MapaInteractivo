@@ -8,6 +8,7 @@ import Home from './screens/Home'
 
 // Modo Compacto
 import Modo_Compacto from './screens/modoCompacto/Home'
+import TrazadoRuta from './screens/modoCompacto/Trazado_Compacto'
 
 // vistas administrador
 import VistaAdministrador from './screens/vistaAdministrador/VistaAdministrador'
@@ -55,6 +56,9 @@ function App() {
         <Route path='/info' element={<Info />} />
         <Route path='/colaborar' element={<AgregarSolicitud />} />
         <Route path='/modocompacto' element= {<Modo_Compacto/>} />
+        <Route path='/modocompacto/trazadoruta/:id' element={<TrazadoRuta />} />
+
+        {/* Marcadores */}
 
         {/* Panel administrativo protegido */}
         <Route path='/panel-administrativo' element={
