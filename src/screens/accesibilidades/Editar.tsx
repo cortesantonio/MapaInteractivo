@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react';
 import { Accesibilidad } from '../../interfaces/Accesibilidad';
 import { supabase } from '../../services/supabase';
 import { useAuth } from '../../hooks/useAuth';
-import { useParams } from 'react-router-dom';
+
 
 interface EditarAccesibilidadProps {
     accesibilidadId: number;
@@ -13,7 +13,7 @@ interface EditarAccesibilidadProps {
 }
 
 export default function EditarAccesibilidad({ accesibilidadId, onCancel, onUpdate }: EditarAccesibilidadProps) {
-    const { id } = useParams();
+
     const { user } = useAuth();
     const [formData, setFormData] = useState<Accesibilidad>({
         id: accesibilidadId,

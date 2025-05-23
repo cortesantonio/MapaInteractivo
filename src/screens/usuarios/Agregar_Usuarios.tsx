@@ -1,5 +1,5 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
 import styles from "../usuarios/css/Formularios.module.css";
 import { supabase } from "../../services/supabase";
@@ -8,7 +8,6 @@ import NavbarAdmin from "../../components/NavbarAdmin";
 import { useAuth } from '../../hooks/useAuth';
 
 function Agregar_Usuarios() {
-  const { id } = useParams();
   const { user } = useAuth();
   const [mostrarContraseña, setMostrarContraseña] = useState(false);
   const navigate = useNavigate();
