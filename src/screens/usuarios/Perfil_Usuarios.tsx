@@ -26,6 +26,7 @@ function Perfil_Usuario() {
 
   const navigate = useNavigate()
   const { id } = useParams()
+  const { user } = useAuth();
   const { userRole } = useAuth()
   useEffect(() => {
     const fetchData = async () => {
@@ -81,29 +82,59 @@ function Perfil_Usuario() {
 
 
   const switchEstados = async () => {
-    try {
-      const usuario = usuarios[0];
-      if (!usuario) {
-        console.error("No se encontró el usuario");
+
+    const usuario = usuarios[0];
+    if (!usuario) {
+      console.error("No se encontró el usuario");
+      return;
+    }
+
+    const nuevoEstado = !usuario.activo;
+
+    const { error } = await supabase
+      .from("usuarios")
+      .update({ activo: nuevoEstado })
+      .eq("id", id);
+
+    if (error) {
+      console.error("Error al cambiar el estado del usuario:", error);
+    } else {
+      setUsuarios(prev => ({ ...prev, activo: nuevoEstado }));
+      alert(`Usuario ${nuevoEstado ? 'activado' : 'desactivado'} correctamente.`);
+      navigate("/panel-administrativo/usuarios");
+    }
+
+    const fechaHoraActual = new Date().toISOString();
+
+    const Registro_cambios = async () => {
+      const tipoAccion = nuevoEstado ? 'Activación de Uusario' : 'Desactivación de Usuario';
+      const detalleAccion = nuevoEstado
+        ? `Se activó el Usuario con ID ${id}`
+        : `Se desactivó el Usuario con ID ${id}`;
+
+      const { data: registro_logs, error: errorLog } = await supabase
+        .from('registro_logs')
+        .insert([
+          {
+            id_usuario: user?.id,
+            tipo_accion: tipoAccion,
+            detalle: detalleAccion,
+            fecha_hora: fechaHoraActual,
+          }
+        ]);
+
+      if (errorLog) {
+        console.error('Error al registrar en los logs:', errorLog);
         return;
       }
 
-      const nuevoEstado = !usuario.activo;
+      console.log('Registro insertado en registro_logs correctamente', registro_logs);
+    };
 
-      const { error } = await supabase
-        .from("usuarios")
-        .update({ activo: nuevoEstado })
-        .eq("id", id);
-
-      if (error) {
-        console.error("Error al cambiar el estado del usuario:", error);
-      } else {
-        navigate("/panel-administrativo/usuarios");
-      }
-    } catch (error) {
-      console.error("Error inesperado al cambiar el estado del usuario:", error);
-    }
+    Registro_cambios();
   };
+
+
 
 
   // Renderizado del perfil de usuario
@@ -113,10 +144,10 @@ function Perfil_Usuario() {
         {usuarios.map((usuario) => (
           <div key={usuario.id} className={styles.containerDatos}>
             <div className={styles.containeritemdatos}>
-              <span className={styles.titulosdatos}>Usuario Activo:</span>
+              <span className={styles.titulosdatos}>Usuario activo:</span>
               <span className={styles.valorDato}>{usuario.activo ? (<p>Si</p>) : (<p>No</p>)}</span>
             </div>
-            <div className={styles.containeritemdatos}>
+            <div className={styles.containeritemdatos} style={{ textTransform: "capitalize" }}>
               <span className={styles.titulosdatos}>Nombre:</span>
               <span className={styles.valorDato}>{usuario.nombre || "Sin información"}</span>
             </div>
@@ -153,7 +184,7 @@ function Perfil_Usuario() {
             {/*Esta funcion hace que No se muestre el rol en el perfil si el usuario es de rol Usuario,
               solo se podran visualizar en el perfil del Gestor o Admnistrador */}
             {usuario.rol !== "usuario" && (
-              <div className={styles.containeritemdatos}>
+              <div className={styles.containeritemdatos} style={{ textTransform: "capitalize" }}>
                 <span className={styles.titulosdatos}>Rol:</span>
                 <span className={styles.valorDato}>{usuario.rol}</span>
               </div>
@@ -163,11 +194,11 @@ function Perfil_Usuario() {
 
         <div className={styles.contenedor_botones_perfil}>
           <button className={styles.boton_editar} onClick={() => navigate(`/usuarios/editar/${id}`)}>
-            Editar Usuario
+            Editar usuario
           </button>
           {userRole === "administrador" || userRole === 'gestor' ? (
             <button onClick={switchEstados} className={styles.boton_desactivar}>
-              {usuarios[0]?.activo ? "Desactivar Usuario" : "Activar Usuario"}
+              {usuarios[0]?.activo ? "Desactivar usuario" : "Activar usuario"}
             </button>
           ) : (<></>)}
         </div>
@@ -220,53 +251,63 @@ function Perfil_Usuario() {
       <div className={styles.perfil_info}>
         {solicitud.length > 0 ? (
           <div style={{ maxHeight: "380px", overflowY: "auto", padding: "0 15px" }}>
-            {solicitud.map((aporte) => (
-              <div className={styles.informacion_campos_de_resena} key={aporte.id} onClick={() => { navigate(`/panel-administrativo/solicitud/${aporte.id}`) }}>
-                <div style={{ display: "flex", flexDirection: "row", justifyContent: "space-between", width: "100%" }}>
-                  <div style={{ flex: 1 }}>
-                    <h3 style={{ fontWeight: "400" }}>{aporte.nombre_locacion}</h3>
+            {solicitud
+              .sort((a, b) => {
+                if (a.estado === "aprobada" && b.estado !== "aprobada") return -1
+                if (a.estado !== "aprobada" && b.estado === "aprobada") return 1
+                return 0
+              })
+              .map((aporte) => (
+                <div className={styles.informacion_campos_de_resena} key={aporte.id} onClick={() => { navigate(`/panel-administrativo/solicitud/${aporte.id}`) }}>
+                  <div style={{ display: "flex", flexDirection: "row", justifyContent: "space-between", width: "100%" }}>
+                    <div style={{ flex: 1 }}>
+                      <h3 style={{ fontWeight: "400" }}>{aporte.nombre_locacion}</h3>
+                    </div>
+
+                    <div style={{ flex: 1, textAlign: "right" }}>
+                      <span
+                        style={{
+                          backgroundColor:
+                            aporte.estado === "aprobada"
+                              ? "rgba(65, 170, 17, 0.15)"
+                              : aporte.estado === "rechazada"
+                                ? "rgba(170, 17, 17, 0.15)"
+                                : "rgba(223, 171, 0, 0.15)",
+                          color:
+                            aporte.estado === "aprobada"
+                              ? "rgb(65, 170, 17)"
+                              : aporte.estado === "rechazada"
+                                ? "rgb(170, 17, 17)"
+                                : "rgb(223, 171, 0)",
+                          padding: "4px 10px",
+                          borderRadius: "20px",
+                          fontWeight: 500,
+                          fontSize: "0.9rem"
+                        }}
+                      >
+                        {aporte.estado === "aprobada"
+                          ? "Aprobada"
+                          : aporte.estado === "rechazada"
+                            ? "Rechazada"
+                            : "Pendiente"}
+                      </span>
+                    </div>
                   </div>
 
-                  <div style={{ flex: 1, textAlign: "right" }}>
-                    <span
-                      style={{
-                        backgroundColor:
-                          aporte.estado === "aprobada"
-                            ? "rgba(65, 170, 17, 0.15)"
-                            : aporte.estado === "rechazada"
-                              ? "rgba(170, 17, 17, 0.15)"
-                              : "rgba(223, 171, 0, 0.15)",
-                        color:
-                          aporte.estado === "aprobada"
-                            ? "rgb(65, 170, 17)"
-                            : aporte.estado === "rechazada"
-                              ? "rgb(170, 17, 17)"
-                              : "rgb(223, 171, 0)",
-                        padding: "4px 10px",
-                        borderRadius: "20px",
-                        fontWeight: 500,
-                        fontSize: "0.9rem"
-                      }}
-                    >
-                      {aporte.estado === "aprobada"
-                        ? "Aprobada"
-                        : aporte.estado === "rechazada"
-                          ? "Rechazada"
-                          : "Pendiente"}
-                    </span>
+                  <div className={styles.campo} style={{ display: "flex", flexDirection: "row", justifyContent: "space-between", width: "100%" }}>
+                    <p className={styles.valor}>&bull; {aporte.direccion}</p>
+                    {aporte.estado === "aprobada" && (
+                      <p className={styles.valor} style={{ textAlign: 'right' }}>Fecha revisión: {aporte.fecha_revision ? new Date(aporte.fecha_revision).toLocaleDateString() : "Sin fecha"}</p>
+
+                    )}
                   </div>
-                </div>
 
-                <div className={styles.campo}>
-                  <p className={styles.valor}>&bull; {aporte.direccion}</p>
-                </div>
+                  <div className={styles.campo}>
+                    <p className={styles.valor}>{aporte.descripcion}</p>
+                  </div>
 
-                <div className={styles.campo}>
-                  <p className={styles.valor}>{aporte.descripcion}</p>
                 </div>
-
-              </div>
-            ))}
+              ))}
           </div>
         ) : (
           <div className={styles.sin_resenas}>
@@ -301,9 +342,9 @@ function Perfil_Usuario() {
           <img src={usuarios[0]?.avatar_url || ''} className={styles.imgUsuario} alt="" />
         </div>
 
-        <div className={styles.nombre_usuario}>
+        <div className={styles.nombre_usuario} style={{ textTransform: "capitalize" }}>
           {usuarios.length > 0 && (
-            <h2 style={{ marginBottom: "15px", fontSize: "1.5rem", paddingBottom: "5px", fontWeight: "400" }}>
+            <h2 style={{ marginBottom: "15px", fontSize: "1.5rem", paddingBottom: "5px", fontWeight: "400", textTransform: "capitalize" }}>
               {usuarios[0].nombre}
             </h2>
           )}
@@ -323,7 +364,7 @@ function Perfil_Usuario() {
             style={{ gridColumn: "2" }}
             onClick={() => setVistaActual("perfil")}
           >
-            Perfil Usuario
+            Perfil usuario
           </button>
 
           <button
@@ -331,7 +372,7 @@ function Perfil_Usuario() {
             style={{ gridColumn: "3" }}
             onClick={() => setVistaActual("aportes")}
           >
-            Aportes Usuario
+            Aportes usuario
           </button>
         </div>
 

@@ -37,6 +37,9 @@ const GraficoTorta = ({ datosGrafico }: Props) => {
 
   const datosFiltrados = datos.filter(d => d.valor > 0);
 
+  const formatearNombre = (nombre: string) =>
+    nombre.charAt(0).toUpperCase() + nombre.slice(1);
+
 
   const containerRef = useRef<HTMLDivElement>(null);
   const [outerRadius, setOuterRadius] = useState(65);
@@ -62,7 +65,7 @@ const GraficoTorta = ({ datosGrafico }: Props) => {
         <p style={{ textAlign: 'center', fontSize: '16px', paddingTop: '1rem' }}>No existen datos</p>
       ) : (
         <>
-          <h3 style={{ textAlign: 'center', fontSize: "1.1rem", whiteSpace: "nowrap" }}>Estado de Solicitudes</h3>
+          <h3 style={{ textAlign: 'center', fontSize: "1.1rem", whiteSpace: "nowrap" }}>Estado de solicitudes</h3>
           <ResponsiveContainer width="100%" height="100%">
             <PieChart>
               <Pie
@@ -115,10 +118,12 @@ const GraficoTorta = ({ datosGrafico }: Props) => {
                   <Cell key={`cell-${index}`} fill={coloresPorEstado[entry.nombre]} />
                 ))}
               </Pie>
-              <Tooltip />
+                <Tooltip
+                  formatter={(value, name) => [value, formatearNombre(name as string)]}
+                />
               <Legend
                 payload={datosFiltrados.map((entry) => ({
-                  value: entry.nombre,
+                  value: formatearNombre(entry.nombre),
                   type: 'square',
                   id: entry.nombre,
                   color: coloresPorEstado[entry.nombre],

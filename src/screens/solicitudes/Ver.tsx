@@ -11,6 +11,46 @@ import { Tipo_Recinto } from '../../interfaces/Tipo_Recinto';
 import { Accesibilidad_Solicitud } from '../../interfaces/Accesibilidad_Solicitud';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useAuth } from '../../hooks/useAuth';
+import { APIProvider, Map as VisMap, AdvancedMarker } from "@vis.gl/react-google-maps";
+import { sendEmail } from "../../utils/sendEmail";
+import { Marcador } from '../../interfaces/Marcador';
+
+function contentEmail(nombre: string, estado: string, solicitudId: string) {
+    const html = `
+        <!DOCTYPE html>
+        <html lang="es">
+        <head>
+            <meta charset="UTF-8">
+            <style>
+            body { font-family: Arial, sans-serif; background-color: #f0f0f0; padding: 20px; }
+            .container { background: white; padding: 20px; border-radius: 8px; max-width: 600px; margin: auto; }
+            .header { color: #007bff; font-size: 20px; margin-bottom: 20px; }
+            .content { font-size: 16px; color: #333; }
+            .footer { font-size: 12px; color: #999; margin-top: 30px; }
+            </style>
+        </head>
+        <body>
+            <div class="container">
+            <div class="header">Tu solicitud fue actualizada a: ${estado}</div>
+            <div class="content">
+                Hola ${nombre},<br/><br/>
+                Tu solicitud con ID <strong>${solicitudId}</strong> ha cambiado de estado.<br/>
+                Estado actual: <strong>${estado}</strong><br/><br/>
+
+                
+
+                ¡Gracias por tu paciencia!<br/>
+                El equipo de mapainteractivo.site
+            </div>
+            <div class="footer">
+                Este mensaje fue enviado automáticamente. Por favor no respondas.
+            </div>
+            </div>
+        </body>
+        </html>
+  `;
+    return html;
+}
 
 
 interface AccesibilidadesPorTipo {
@@ -27,12 +67,17 @@ type SolicitudCompleta = Solicitudes & {
 
 export default function Ver() {
     const navigate = useNavigate()
+    const apiKey = import.meta.env.VITE_GOOGLE_APIKEY;
     const { id } = useParams()
     const { user } = useAuth()
     const [solicitud, setSolicitud] = useState<Partial<SolicitudCompleta>>({});
     const [accesibilidades, setAccesibilidades] = useState<AccesibilidadesPorTipo>({});
     const [isActiveModal, setIsActiveModal] = useState(false)
     const [respuestaRechazo, setRespuestaRechazo] = useState('');
+    const [accesibilidadesRaw, setAccesibilidadesRaw] = useState([]);
+    const [position, setPosition] = useState<{ lat: number; lng: number } | null>(null);
+    const [correoDestinario, setCorreoDestinario] = useState<string>('')
+    const [infoMarcador, setinfoMarcador] = useState<Partial<Marcador>>()
 
     function handleModal() {
         setIsActiveModal(!isActiveModal)
@@ -59,25 +104,46 @@ export default function Ver() {
                 console.error('Error cargando la solicitud:', solicitudError);
                 return;
             }
-
+            setCorreoDestinario(solicitudData.id_usuario.correo)
             setSolicitud(solicitudData);
 
-
-            const accesibilidadesRaw = solicitudData.accesibilidad_solicitud.map((item: Accesibilidad_Solicitud) => item.id_accesibilidad);
+            const accesibilidadesRawData = solicitudData.accesibilidad_solicitud.map((item: Accesibilidad_Solicitud) => item.id_accesibilidad);
+            setAccesibilidadesRaw(accesibilidadesRawData);
             const agrupadas: AccesibilidadesPorTipo = {};
 
-            accesibilidadesRaw.forEach((acc: Accesibilidad) => {
+            accesibilidadesRawData.forEach((acc: Accesibilidad) => {
                 if (!agrupadas[acc.tipo]) agrupadas[acc.tipo] = [];
                 agrupadas[acc.tipo].push(acc);
             });
 
             setAccesibilidades(agrupadas);
 
+            if (solicitudData?.latitud && solicitudData?.longitud) {
+                setPosition({
+                    lat: solicitudData.latitud,
+                    lng: solicitudData.longitud,
+                });
+            }
+
+            if (solicitudData?.estado == 'aprobada') {
+                const { data: marcadorData, error: marcadorError } = await supabase
+                    .from('marcador')
+                    .select('*')
+                    .eq('id_solicitud', id)
+                    .single();
+
+                if (marcadorError) {
+                    console.error('Error cargando el marcador:', marcadorError);
+                    return;
+                }
+                setinfoMarcador(marcadorData)
+                console.log('marcado:', marcadorData)
+            }
+
         };
 
         fetchData();
     }, [id]);
-
     function colorState(estado: string) {
         switch (estado) {
             case 'pendiente':
@@ -92,10 +158,55 @@ export default function Ver() {
     }
 
     const handleAprobar = async () => {
+        console.log("Enviando solicitud de creación de marcador...");
+        const { data: newMarcador, error: errorMarcador } = await supabase
+            .from('marcador')
+            .insert({
+                id_solicitud: id,
+                id_usuario: solicitud.id_usuario?.id,
+                activo: true,
+                tipo_recinto: solicitud.tipo_recinto?.id,
+                nombre_recinto: solicitud.nombre_locacion,
+                direccion: solicitud.direccion,
+                pagina_web: "sin especificar",
+                telefono: "sin especificar",
+                latitud: solicitud.latitud,
+                longitud: solicitud.longitud,
+            })
+            .select()
+            .single();
+
+        if (errorMarcador) {
+            console.error('Error al crear el marcador:', errorMarcador.message, errorMarcador.details);
+            alert(`Error al crear el marcador: ${errorMarcador.message}`);
+            return;
+        }
+
+        if (!newMarcador) {
+            console.error('No se pudo crear el marcador: sin datos devueltos');
+            alert('No se pudo crear el marcador: sin datos devueltos');
+            return;
+        }
+
+        for (const acc of accesibilidadesRaw) {
+            const { error: errorAccesibilidad } = await supabase
+                .from('accesibilidad_marcador')
+                .insert({
+                    id_marcador: newMarcador.id,
+                    id_accesibilidad: acc['id'],
+                });
+
+            if (errorAccesibilidad) {
+                alert(`Error al registrar accesibilidad: ${errorAccesibilidad.message}`);
+                return;
+            }
+        }
+
         const { error } = await supabase
             .from('solicitudes')
             .update({
-                estado: 'aprobada', fecha_revision: new Date(),
+                estado: 'aprobada',
+                fecha_revision: new Date(),
                 id_supervisor: user?.id
             })
             .eq('id', id);
@@ -106,7 +217,39 @@ export default function Ver() {
         }
 
         alert('Solicitud aprobada exitosamente');
+
+        const fechaHoraActual = new Date().toISOString();
+
+        const Registro_cambios = async () => {
+            const { data: registro_logs, error: errorLog } = await supabase
+                .from('registro_logs')
+                .insert([
+                    {
+                        id_usuario: user?.id,
+                        tipo_accion: 'Aceptación de una solicitud',
+                        detalle: `Se a aceptado una Solicitud con ID ${id}`,
+                        fecha_hora: fechaHoraActual,
+                    }
+                ]);
+
+            if (errorLog) {
+                console.error('Error al registrar en los logs:', errorLog);
+                return;
+            }
+
+            console.log(' Registro insertado en registro_logs correctamente', registro_logs);
+        };
+        Registro_cambios();
+
+
+        sendEmail(correoDestinario,
+            "Solicitud aprobada",
+            contentEmail(solicitud.id_usuario?.nombre || '', 'Aprobada', id as string))
+            .then(res => console.log("Correo enviado", res))
+            .catch(err => console.error("Error", err))
+
         navigate(-1)
+
     };
 
     const handleRechazar = async () => {
@@ -125,7 +268,39 @@ export default function Ver() {
 
         alert('Solicitud rechazada exitosamente');
         navigate(-1)
+
+        const fechaHoraActual = new Date().toISOString();
+
+        sendEmail(correoDestinario,
+            "Solicitud rechazada",
+            contentEmail(solicitud.id_usuario?.nombre || '', 'Rechazada', id as string))
+            .then(res => console.log("Correo enviado", res))
+            .catch(err => console.error("Error", err))
+
+
+        const Registro_cambios = async () => {
+            const { data: registro_logs, error: errorLog } = await supabase
+                .from('registro_logs')
+                .insert([
+                    {
+                        id_usuario: user?.id,
+                        tipo_accion: 'Rechazo de una solicitud',
+                        detalle: `Se a rechazado una Solicitud con ID ${id}`,
+                        fecha_hora: fechaHoraActual,
+                    }
+                ]);
+
+            if (errorLog) {
+                console.error('Error al registrar en los logs:', errorLog);
+                return;
+            }
+
+            console.log(' Registro insertado en registro_logs correctamente', registro_logs);
+        };
+        Registro_cambios();
     };
+
+
 
 
 
@@ -145,8 +320,8 @@ export default function Ver() {
             <div className={styles.infoContainer}>
                 <div>
                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                        <h2>Informacion</h2>
-                        <span style={{ color: colorState(solicitud.estado as string), fontWeight: 500, fontSize: '0.8rem', textTransform: 'uppercase' }}>• {solicitud.estado}</span>
+                        <h2>Información</h2>
+                        <span style={{ color: colorState(solicitud.estado as string), fontWeight: 500, fontSize: '0.8rem', textTransform: 'capitalize' }}>• {solicitud.estado}</span>
 
                     </div>
 
@@ -157,7 +332,7 @@ export default function Ver() {
                             <p>{solicitud.respuesta_rechazo} </p>
                             <h4>Supervisor </h4>
                             <p>{solicitud.id_supervisor?.nombre + ' '} <button style={{ color: 'white', background: 'transparent', border: 'none' }} onClick={() => { navigate(`/usuario/perfil/${solicitud.id_supervisor?.id}`) }}><FontAwesomeIcon icon={faArrowUpRightFromSquare} /></button></p>
-                            <h4>Fecha de revision</h4>
+                            <h4>Fecha de revisión</h4>
                             <p>{new Date(solicitud.fecha_revision as Date).toLocaleString()}</p>
                         </div>
                     )}
@@ -167,16 +342,20 @@ export default function Ver() {
                             paddingBottom: 20, marginBottom: '10px', color: 'white', boxShadow: '1px 1px 5px rgba(0, 0, 0, 0.53)'
                         }}>
                             <div style={{ position: 'absolute', right: 5, top: 5 }}><FontAwesomeIcon icon={faCheck} size='xl' /></div>
-                            <h4 style={{ fontWeight: 200 }}> {'> '}Solicitud aprobada</h4>
+                            <h4 style={{ fontWeight: 400, fontSize: '1.2rem' }}>Solicitud aprobada</h4>
                             <h4>Supervisor </h4>
-                            <p>{solicitud.id_supervisor?.nombre + ' '} <button style={{ color: 'white', background: 'transparent', border: 'none' }} onClick={() => { navigate(`/usuario/perfil/${solicitud.id_supervisor?.id}`) }}><FontAwesomeIcon icon={faArrowUpRightFromSquare} /></button></p>
-                            <h4>Fecha de revision</h4>
+                            <p>{solicitud.id_supervisor?.nombre + ' '} <button style={{ color: 'white', background: 'transparent', border: 'none' }}
+                                onClick={() => { navigate(`/usuario/perfil/${solicitud.id_supervisor?.id}`) }}><FontAwesomeIcon icon={faArrowUpRightFromSquare} /></button></p>
+                            <h4>Fecha de revisión</h4>
                             <p>{new Date(solicitud.fecha_revision as Date).toLocaleString()}</p>
+                            {infoMarcador && (
+                                <button className={styles.btnVerMarcado} onClick={() => { navigate(`/panel-administrativo/marcadores/informacion/${infoMarcador.id}`) }}>Revisa tu marcador</button>
+                            )}
 
 
                         </div>)}
                     <hr style={{ opacity: '50%' }} />
-                    <h4>ID Solicitud</h4>
+                    <h4>Identificador de solicitud</h4>
                     <p>{solicitud?.id}</p>
                     <h4>Fecha ingreso</h4>
 
@@ -189,21 +368,38 @@ export default function Ver() {
                     )}
 
                     <h4>Nombre representante</h4>
-                    <p style={{ textTransform: 'uppercase' }}>{solicitud.id_usuario?.nombre}</p>
+                    <p style={{ textTransform: 'capitalize' }}>{solicitud.id_usuario?.nombre}</p>
                     <h4>Correo representante</h4>
-                    <p style={{ textTransform: 'uppercase' }}>{solicitud.id_usuario?.correo}</p>
+                    <p>{solicitud.id_usuario?.correo}</p>
 
-                    <h4>Numero de contacto representante</h4>
+                    <h4>Número de contacto representante</h4>
                     <p>(+56 9) {solicitud.id_usuario?.telefono}</p>
 
-                    <h4>Nombre Locacion</h4>
-                    <p>{solicitud.nombre_locacion}</p>
+                    <h4>Nombre locación</h4>
+                    <p style={{ textTransform: 'capitalize' }}>{solicitud.nombre_locacion}</p>
 
-                    <h4>Descripcion/Comentario de solicitud</h4>
+                    <h4>Descripción/Comentario de solicitud</h4>
                     <p>{solicitud.descripcion != '' ? solicitud.descripcion : <span style={{ color: 'gray' }}>No especificado</span>}</p>
 
-                    <h4>Direccion</h4>
+                    <h4>Dirección</h4>
                     <p>{solicitud.direccion != '' ? solicitud.direccion : <span style={{ color: 'gray' }}>No especificado</span>}</p>
+
+                    <div style={{ paddingTop: "10px", border: "1px solid rgba(0, 0, 0, 0.2)", borderRadius: '5px', padding: '10px', marginTop: '10px' }}>
+                        <APIProvider apiKey={apiKey}>
+                            <VisMap
+                                mapId="bf51a910020fa25a"
+                                center={position}
+                                defaultZoom={16}
+                                disableDefaultUI={true}
+                                zoomControl={true}
+                                gestureHandling="greedy"
+                                keyboardShortcuts={false}
+                                style={{ width: '100%', height: '200px' }}
+                            >
+                                <AdvancedMarker position={position} />
+                            </VisMap>
+                        </APIProvider>
+                    </div>
 
                     <h4>Tipo de recinto</h4>
                     <p>{solicitud.tipo_recinto?.tipo}</p>
@@ -224,9 +420,9 @@ export default function Ver() {
                     ) : (
                         <p style={{ color: 'gray' }}>No hay accesibilidades seleccionadas.</p>
                     )}
-                    <h4>Documentacion</h4>
+                    <h4>Documentación</h4>
                     {solicitud.documentacion != '' ? (
-                        <a href={solicitud.documentacion} target="_blank" rel="noopener noreferrer" style={{ color: 'black', paddingLeft:'25px',textDecoration: 'underline' }}>
+                        <a href={solicitud.documentacion} target="_blank" rel="noopener noreferrer" style={{ color: 'black', paddingLeft: '25px', textDecoration: 'underline' }}>
                             Ver Documentacion <FontAwesomeIcon icon={faArrowUpRightFromSquare} />
                         </a>
                     ) : (
@@ -236,8 +432,8 @@ export default function Ver() {
 
                 {solicitud.estado == 'pendiente' &&
                     <div className={styles.acciones}>
-                        <button onClick={handleModal} style={{ color: 'red', background: 'transparent', }}>Rechazar Solicitud</button>
-                        <button onClick={handleAprobar}>Aceptar Solicitud</button>
+                        <button onClick={handleModal} style={{ color: 'red', background: 'transparent', }}>Rechazar solicitud</button>
+                        <button onClick={handleAprobar}>Aceptar solicitud</button>
                     </div>
                 }
 

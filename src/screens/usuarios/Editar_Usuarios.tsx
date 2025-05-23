@@ -7,9 +7,11 @@ import { Usuarios } from "../../interfaces/Usuarios"
 import { useNavigate, useParams } from "react-router-dom"
 import { Accesibilidad } from '../../interfaces/Accesibilidad';
 import { Discapacidad } from "../../interfaces/Discapacidad"
+import { useAuth } from '../../hooks/useAuth';
 
 function Editar_Usuarios() {
-  const { id } = useParams()
+  const { id } = useParams();
+  const { user } = useAuth();
   const [mostrarContraseña, setMostrarContraseña] = useState(false);
   const [usuarios, setUsuarios] = useState<Usuarios[]>([]);
   const [accesibilidad, setAccesibilidad] = useState<Accesibilidad[]>([]);
@@ -225,6 +227,29 @@ function Editar_Usuarios() {
       console.error('Error general al actualizar:', error);
       alert("Ocurrió un error al actualizar la información");
     }
+    Registro_cambios();
+  };
+
+  const fechaHoraActual = new Date().toISOString();
+
+  const Registro_cambios = async () => {
+    const { data: registro_logs, error: errorLog } = await supabase
+      .from('registro_logs')
+      .insert([
+        {
+          id_usuario: user?.id,
+          tipo_accion: 'Edición de Usuario',
+          detalle: `Se Editó información de un Usuario con ID ${id}`,
+          fecha_hora: fechaHoraActual,
+        }
+      ]);
+
+    if (errorLog) {
+      console.error('Error al registrar en los logs:', errorLog);
+      return;
+    }
+
+    console.log(' Registro insertado en registro_logs correctamente', registro_logs);
   };
 
   const handleDiscapacidadChange = (field: keyof Discapacidad, value: string) => { const updated = [{ ...discapacidad[0], [field]: value }]; setDiscapacidad(updated); };
@@ -240,11 +265,11 @@ function Editar_Usuarios() {
       </div>
       <div className={styles.container}>
         <div className={styles.titulo}>
-          <h1>Editar Usuario</h1>
+          <h1>Editar usuario</h1>
         </div>
         <form className={styles.div_formulario} onSubmit={(e) => e.preventDefault()}>
           <div className={styles.espacio}>
-            <label className={styles.etiquetas}>Nombre Completo *</label>
+            <label className={styles.etiquetas}>Nombre completo *</label>
             <input
               className={styles.formulario}
               type="text"
@@ -266,7 +291,7 @@ function Editar_Usuarios() {
             />
           </div>
           <div className={styles.espacio}>
-            <label className={styles.etiquetas}>Fecha de Nacimiento</label>
+            <label className={styles.etiquetas}>Fecha de nacimiento</label>
             <input
               className={styles.formulario}
               type="date"
@@ -375,7 +400,7 @@ function Editar_Usuarios() {
             {tiene_una_Discapacidad && (
               <>
                 <div className={styles.espacio}>
-                  <label className={styles.etiquetas}>Tipo de Accesibilidad *</label>
+                  <label className={styles.etiquetas}>Tipo de accesibilidad *</label>
                   <select
                     className={styles.formulario}
                     value={tipoAccesibilidadSeleccionado}
@@ -392,7 +417,7 @@ function Editar_Usuarios() {
                 </div>
 
                 <div className={styles.espacio}>
-                  <label className={styles.etiquetas}>Nombre de la Discapacidad *</label>
+                  <label className={styles.etiquetas}>Nombre de la discapacidad *</label>
                   <input
                     className={styles.formulario}
                     type="text"
@@ -404,7 +429,7 @@ function Editar_Usuarios() {
                 </div>
 
                 <div className={styles.espacio}>
-                  <label className={styles.etiquetas}>Tipo de Discapacidad *</label>
+                  <label className={styles.etiquetas}>Tipo de discapacidad *</label>
                   <input
                     className={styles.formulario}
                     type="text"
@@ -427,7 +452,7 @@ function Editar_Usuarios() {
               type="button"
               onClick={Actualizar_Informacion}
             >
-              Editar Usuario
+              Editar usuario
             </button>
           </div>
         </form>

@@ -4,8 +4,12 @@ import { faReply } from '@fortawesome/free-solid-svg-icons';
 import { useState } from 'react';
 import { Accesibilidad } from '../../interfaces/Accesibilidad';
 import { supabase } from '../../services/supabase';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
+import { useAuth } from '../../hooks/useAuth';
+
 export default function AgregarAccesibilidad() {
+    const { id } = useParams();
+    const { user } = useAuth();
     const navigate = useNavigate();
     const [formData, setFormData] = useState<Accesibilidad>({
         id: 0,
@@ -49,7 +53,7 @@ export default function AgregarAccesibilidad() {
         }
 
 
-        const { data, error } = await supabase
+        const { data: nuevaAccesibilidad, error } = await supabase
             .from('accesibilidad')
             .insert([
                 {
@@ -57,14 +61,40 @@ export default function AgregarAccesibilidad() {
                     nombre: formData.nombre,
                 },
             ])
-            .select(); // opcional: si quieres recibir el registro insertado
+            .select() // opcional: si quieres recibir el registro insertado
+            .single<Accesibilidad>();
 
         if (error) {
             console.error('Error al insertar en Supabase:', error);
         } else {
-            alert('Insertado correctamente: ' + data[0].nombre);
+            alert('Agregado correctamente: ' + nuevaAccesibilidad.nombre);
+            await Registro_cambios(nuevaAccesibilidad.id);
             navigate(-1);
         }
+
+    };
+
+    const fechaHoraActual = new Date().toISOString();
+
+    const Registro_cambios = async (idAcc: number) => {
+
+        const { data: registro_logs, error: errorLog } = await supabase
+            .from('registro_logs')
+            .insert([
+                {
+                    id_usuario: user?.id,
+                    tipo_accion: 'Agregación de Accesibilidad',
+                    detalle: `Se agregó una nueva Accesibilidad con ID ${idAcc}`,
+                    fecha_hora: fechaHoraActual,
+                }
+            ]);
+
+        if (errorLog) {
+            console.error('Error al registrar en los logs:', errorLog);
+            return;
+        }
+
+        console.log(' Registro insertado en registro_logs correctamente', registro_logs);
     };
 
 
@@ -75,13 +105,13 @@ export default function AgregarAccesibilidad() {
                     <FontAwesomeIcon icon={faReply} size='2xl' />
                 </button>
                 <h2 style={{ textAlign: 'center' }}>
-                    Agregar Accesibilidad
+                    Agregar accesibilidad
                 </h2>
             </div>
 
             <div style={{ margin: '20px auto', width: '40%', display: 'flex', justifyContent: 'center', flexDirection: 'column', minWidth: '250px' }}>
                 <div style={{ display: 'flex', flexDirection: 'column', maxWidth: '600px' }}>
-                    <label className={styles.labelSeccion} >Tipo Accesibilidad</label>
+                    <label className={styles.labelSeccion} >Tipo accesibilidad</label>
                     <select name="tipo" value={formData.tipo} onChange={handleChange}>
                         <option value="">Selecciona un tipo</option>
                         <option value="Arquitectónica">Arquitectónica</option>

@@ -31,7 +31,6 @@
     max-width: 500px;
     text-align: left;
     padding-left: 25px;
-
 }
 
 .acciones {
@@ -48,7 +47,6 @@
     background: linear-gradient(90deg, rgba(253, 29, 29, 1) 0%, rgba(255, 106, 60, 1) 100%);
     font-size: 0.8rem;
     font-weight: 500;
-    text-transform: uppercase;
     border: none;
     color: white;
     border-radius: 5px;
@@ -82,13 +80,13 @@
     border-radius: 5px;
 }
 
-.modal  {
+.modal {
     margin-top: 15px;
     display: flex;
     flex-direction: column;
 }
 
-.modal  textarea {
+.modal textarea {
     padding: 5px;
     height: 120px;
     margin-bottom: 15px;
@@ -106,5 +104,17 @@
     outline: none;
     color: white;
     border-radius: 3px;
+    cursor: pointer;
+}
+
+.btnVerMarcado {
+    width: 100%;
+    margin-top: 20px;
+    padding: 5px;
+    color: rgba(0, 122, 0, 0.58);
+    font-weight: 500;
+    font-size: 1.2rem;
+    border-radius: 5px;
+    border: none;
     cursor: pointer;
 }

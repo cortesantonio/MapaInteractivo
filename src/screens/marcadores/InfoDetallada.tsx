@@ -8,6 +8,7 @@ import { Accesibilidad } from '../../interfaces/Accesibilidad';
 import { supabase } from '../../services/supabase';
 import { faArrowUpRightFromSquare } from '@fortawesome/free-solid-svg-icons';
 import ImagenConFallback from '../../components/ImagenConFallback';
+import { useAuth } from '../../hooks/useAuth';
 
 interface TipoDeAccesibilidades {
     [tipo: string]: Accesibilidad[];
@@ -16,8 +17,11 @@ interface TipoDeAccesibilidades {
 export default function InfoDetallada() {
     const navigate = useNavigate()
     const { id } = useParams();
+    const { user, userRole } = useAuth();
     const [accesibilidades, setAccesibilidades] = useState<TipoDeAccesibilidades>({});
     const [nombreTipoRecinto, setNombreTipoRecinto] = useState('');
+    const [marcadorPropio, setMarcadorPropio] = useState(false);
+
     const [dataMarcador, setDataMarcador] = useState<Partial<Marcador>>({
         nombre_recinto: '',
         tipo_recinto: '',
@@ -30,6 +34,7 @@ export default function InfoDetallada() {
         latitud: undefined,
         longitud: undefined,
         activo: true,
+        accesibilidad_certificada: false
     });
     const [selecciones, setSelecciones] = useState<number[]>([]);
     const [supervisor, setSupervisor] = useState({
@@ -143,13 +148,58 @@ export default function InfoDetallada() {
             setDataMarcador(prev => ({ ...prev, activo: nuevoEstado }));
             alert(`Marcador ${nuevoEstado ? 'activado' : 'desactivado'} correctamente.`);
         }
+
+        const fechaHoraActual = new Date().toISOString();
+
+        const Registro_cambios = async () => {
+            const tipoAccion = nuevoEstado ? 'Activación de Marcador' : 'Desactivación de Marcador';
+            const detalleAccion = nuevoEstado
+                ? `Se activó el marcador con ID ${id}`
+                : `Se desactivó el marcador con ID ${id}`;
+
+            const { data: registro_logs, error: errorLog } = await supabase
+                .from('registro_logs')
+                .insert([
+                    {
+                        id_usuario: user?.id,
+                        tipo_accion: tipoAccion,
+                        detalle: detalleAccion,
+                        fecha_hora: fechaHoraActual,
+                    }
+                ]);
+
+            if (errorLog) {
+                console.error('Error al registrar en los logs:', errorLog);
+                return;
+            }
+
+            console.log('Registro insertado en registro_logs correctamente', registro_logs);
+        };
+
+        Registro_cambios();
     };
+
+
+
+    // Verificar si el usuario es el dueño del marcador o tiene rol de administrador o gestor para permitir la edición
+    useEffect(() => {
+        if (!dataMarcador || !user) return;
+
+        const esDueño = String(dataMarcador.id_usuario) === String(user.id);
+        const esAdminOGestor = userRole === 'administrador' || userRole === 'gestor';
+
+        if (esDueño || esAdminOGestor) {
+            setMarcadorPropio(true); // Permitir edición
+        } else {
+            setMarcadorPropio(false)
+        }
+    }, [dataMarcador, user, userRole]);
 
 
     return (
         <div className={styles.container}>
             <div className={styles.header}>
-                
+
                 <ImagenConFallback
                     src={dataMarcador?.url_img}
                     alt="Imagen del recinto"
@@ -160,11 +210,12 @@ export default function InfoDetallada() {
                     <FontAwesomeIcon icon={faReply} size='2xl' />
                 </button>
                 <div className={styles.Titulo} >
-                    <h2>Informacion Detallada</h2>
+                    <h2>Información detallada</h2>
                 </div>
                 <div className={styles.locacionTitulo}>
                     <h4>{dataMarcador.nombre_recinto}</h4>
                     <p>{nombreTipoRecinto}</p>
+                    <p>{dataMarcador.accesibilidad_certificada ? ('si') : ('no')}</p>
                 </div>
             </div>
 
@@ -180,7 +231,7 @@ export default function InfoDetallada() {
                             ) : (
                                 <p>{dataMarcador.id_solicitud}
                                     <button className={styles.btnLink} >
-                                        <FontAwesomeIcon onClick={() => { navigate(`/panel-administrativo/solicitud/${supervisor.id}`) }} size="sm" icon={faArrowUpRightFromSquare} />
+                                        <FontAwesomeIcon onClick={() => { navigate(`/panel-administrativo/solicitud/${dataMarcador.id_solicitud}`) }} size="sm" icon={faArrowUpRightFromSquare} />
 
                                     </button>
                                 </p>
@@ -199,15 +250,15 @@ export default function InfoDetallada() {
                             )}
 
 
-                            <label className={styles.labelSeccion} >Nombre Locacion</label>
+                            <label className={styles.labelSeccion} >Nombre locación</label>
                             <p>{dataMarcador.nombre_recinto}</p>
-                            <label className={styles.labelSeccion}>Tipo de Recinto</label>
+                            <label className={styles.labelSeccion}>Tipo de recinto</label>
                             <p>{nombreTipoRecinto}</p>
-                            <label className={styles.labelSeccion} htmlFor="">Direccion</label>
+                            <label className={styles.labelSeccion} htmlFor="">Dirección</label>
                             <p>{dataMarcador.direccion}</p>
-                            <label className={styles.labelSeccion} htmlFor="">Pagina Web</label>
+                            <label className={styles.labelSeccion} htmlFor="">Página web</label>
                             <p>{dataMarcador.pagina_web}</p>
-                            <label className={styles.labelSeccion} htmlFor="">Telefono</label>
+                            <label className={styles.labelSeccion} htmlFor="">Teléfono</label>
                             <div className={styles.ContainerinputTelefono}>
                                 <p className={styles.codTelfono}>+569</p>
                                 <p>{dataMarcador.telefono}</p>
@@ -240,22 +291,24 @@ export default function InfoDetallada() {
                                     </div>
                                 );
                             })}
-
                         </div>
-
                     </div>
 
-                    <div className={styles.acciones}>
+                    {marcadorPropio ? (
+                        <div className={styles.acciones}>
+                            <button
+                                type="button"
+                                onClick={toggleActivo}
+                                style={{ color: dataMarcador.activo ? 'red' : 'green', backgroundColor: 'transparent' }}
+                            >
+                                {dataMarcador.activo ? 'Desactivar' : 'Activar'}
+                            </button>
+                            <button type="submit" onClick={() => { navigate(`/panel-administrativo/marcadores/editar/${dataMarcador.id}`) }}>Editar</button>
+                        </div>
+                    ) : (
+                        <p>No tienes permiso para editar este marcador.</p>
+                    )}
 
-                        <button
-                            type="button"
-                            onClick={toggleActivo}
-                            style={{ color: dataMarcador.activo ? 'red' : 'green', backgroundColor: 'transparent' }}
-                        >
-                            {dataMarcador.activo ? 'Desactivar' : 'Activar'}
-                        </button>
-                        <button type="submit" onClick={() => { navigate(`/panel-administrativo/marcadores/editar/${dataMarcador.id}`) }}>Editar</button>
-                    </div>
                 </div>
             </div>
 

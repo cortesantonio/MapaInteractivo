@@ -4,7 +4,7 @@ import { faEye, faMagnifyingGlass, faFilter, faSort, faCheck, faX, faInfo } from
 import { useEffect, useState } from 'react';
 import { Solicitudes } from '../../interfaces/Solicitudes';
 import { supabase } from '../../services/supabase';
-import { useNavigate, useParams	 } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import NavbarAdmin from '../../components/NavbarAdmin';
 function ListSolicitudes() {
     const [isActiveBuscador, setIsActiveBuscador] = useState(false);
@@ -17,7 +17,7 @@ function ListSolicitudes() {
 
     useEffect(() => {
         if (estado) {
-            setFiltroEstado(estado); 
+            setFiltroEstado(estado);
         }
     }, [estado]);
     useEffect(() => {
@@ -68,10 +68,10 @@ function ListSolicitudes() {
             filtroEstado ? sol.estado === filtroEstado : true
         );
 
-        const handleFiltroCambio = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const handleFiltroCambio = (e: React.ChangeEvent<HTMLSelectElement>) => {
         const nuevoEstado = e.target.value;
         setFiltroEstado(nuevoEstado);
-        navigate(`/panel-administrativo/solicitudes/${nuevoEstado}`); 
+        navigate(`/panel-administrativo/solicitudes/${nuevoEstado}`);
     };
     return (
         <>
@@ -92,7 +92,7 @@ function ListSolicitudes() {
                             <label htmlFor="filtro"><FontAwesomeIcon icon={faFilter} /> </label>
                             <select id="filtro" value={filtroEstado} onChange={handleFiltroCambio} >
                                 <option value="">Todos</option>
-                                <option value="pendiente">Pendiente</option>
+                                <option value="pendiente">pendiente</option>
                                 <option value="aprobada">Aprobado</option>
                                 <option value="rechazada">Rechazado</option>
                             </select>
@@ -123,12 +123,12 @@ function ListSolicitudes() {
                 </div>
 
                 <div className={styles.SubTitulo}>
-                    <p>Listado de Solicitudes</p>
+                    <p>Listado de solicitudes <span style={{ fontWeight: 400 }}>{estado}</span></p>
                     <hr style={{ width: '25%', marginTop: '10px', marginBottom: '10px ', opacity: '50%' }} />
                 </div>
                 <div className={styles.content}>
 
-
+                    {solicitudesFiltradas.length === 0 && (<p style={{ color: 'gray', margin: 'auto' }}> - Sin registros {estado}s -</p>)}
                     {solicitudesFiltradas.map((solicitud) => (
                         <div className={styles.card} key={solicitud.id} style={{ cursor: 'pointer' }} onClick={() => { navigate(`/panel-administrativo/solicitud/${solicitud.id}`) }}>
                             <div className={styles.estado}
@@ -137,7 +137,7 @@ function ListSolicitudes() {
                                 <FontAwesomeIcon icon={iconos(solicitud.estado)} size='xl' style={{ color: 'white' }} />
                             </div>
                             <div className={styles.cardContent}>
-                                <p style={{ color: bgcolor(solicitud.estado), fontSize: '0.7rem', fontWeight: '500', textTransform: 'uppercase' }}>{solicitud.estado}</p>
+                                <p style={{ color: bgcolor(solicitud.estado), fontSize: '0.7rem', fontWeight: '500', textTransform: 'capitalize' }}>{solicitud.estado}</p>
                                 <p style={{ color: solicitud.nombre_locacion.length > 0 ? 'black' : 'red' }}>
                                     {solicitud.nombre_locacion.length > 0 ? solicitud.nombre_locacion : 'Sin nombre'}
                                 </p>
@@ -151,7 +151,7 @@ function ListSolicitudes() {
                                         day: '2-digit',
                                     })}
                                 </p>
-                                
+
 
                             </div>
 

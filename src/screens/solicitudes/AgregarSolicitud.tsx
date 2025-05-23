@@ -9,7 +9,7 @@ import { Tipo_Recinto } from '../../interfaces/Tipo_Recinto';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../hooks/useAuth';
 import Info from './Info';
-import { faGoogle } from '@fortawesome/free-brands-svg-icons'; 
+import { faGoogle } from '@fortawesome/free-brands-svg-icons';
 import { useLoadScript, Autocomplete, } from "@react-google-maps/api";
 import { APIProvider, Map as VisMap, AdvancedMarker } from "@vis.gl/react-google-maps";
 
@@ -29,18 +29,16 @@ export default function AgregarSolicitud() {
         descripcion: '',
         direccion: '',
         documentacion: '',
+        latitud: undefined,
+        longitud: undefined,
         cumple_ley_21015: false,
-        accesibilidad_certificada: false,
     });
     const [instruccionesleidas, setInstruccionesLeidas] = useState(false); // semaforo para saber si el usuario leyo las instrucciones
     const [seleccionadas, setSeleccionadas] = useState<number[]>([]); // ids de accesibilidad seleccionada
-    const [tipoRecinto, setTipoRecinto] = useState<Tipo_Recinto[]>(); // almacena los recintos del llamado a la api
-    const [loading, setLoading] = useState(false); // Estado para manejar la carga de archivos
-    
+    const [tipoRecinto, setTipoRecinto] = useState<Tipo_Recinto[]>(); // almacena los recintos del llamado a la api    
     const [file, setFile] = useState<File | null>(null);
     const [filePreview, setFilePreview] = useState<string | null>(null);
     const [uploading, setUploading] = useState(false);
-    const [uploadProgress, setUploadProgress] = useState(0);
     const [uploadError, setUploadError] = useState<string | null>(null);
 
 
@@ -135,7 +133,7 @@ export default function AgregarSolicitud() {
         });
     };
 
- const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         if (e.target.files && e.target.files.length > 0) {
             const selectedFile = e.target.files[0];
             // Validar tamaño del archivo (máximo 5MB)
@@ -144,7 +142,8 @@ export default function AgregarSolicitud() {
                 e.target.value = '';
                 return;
             }
-            
+
+
             setFile(selectedFile);
             setUploadError(null);
         }
@@ -152,19 +151,21 @@ export default function AgregarSolicitud() {
 
     const uploadFile = async () => {
         if (!file) return null;
-        
+
+
         try {
             setUploading(true);
-            setUploadProgress(0);
             setUploadError(null);
-            
+
+
             // Crear un nombre de archivo único usando timestamp y nombre original
             const fileExt = file.name.split('.').pop();
             const fileName = `${Date.now()}_${Math.random().toString(36).substring(2, 15)}.${fileExt}`;
             const filePath = `${fileName}`; // Usando la raíz del bucket para mayor simplicidad
-            
+
+
             // Subir archivo a Supabase Storage
-            const { data, error } = await supabase.storage
+            const { error } = await supabase.storage
                 .from('documentacion')
                 .upload(filePath, file, {
                     cacheControl: '3600',
@@ -180,7 +181,6 @@ export default function AgregarSolicitud() {
                 .from('documentacion')
                 .getPublicUrl(filePath);
 
-            setUploadProgress(100);
             return urlData.publicUrl;
         } catch (error: any) {
             console.error('Error al subir archivo:', error.message);
@@ -190,6 +190,7 @@ export default function AgregarSolicitud() {
             setUploading(false);
         }
     };
+
     const handleSubmit = async (e: React.FormEvent) => { // SE ENVIAN LOS DATOS A LA BASE DE DATOS. 
         e.preventDefault();
 
@@ -219,9 +220,10 @@ export default function AgregarSolicitud() {
             }
 
             // 2. Insertar la solicitud con la URL del archivo
-            const { data: solicitud, error: errorSolicitud } = await supabase
+
+            const { data: nuevaSolicitud, error: errorSolicitud } = await supabase
                 .from('solicitudes')
-                .insert({
+                .insert([{
                     id_usuario: idUsuario,
                     nombre_locacion: formData.nombre_locacion,
                     direccion: formData.direccion,
@@ -230,41 +232,46 @@ export default function AgregarSolicitud() {
                     documentacion: documentacionUrl,
                     estado: 'pendiente',
                     fecha_ingreso: new Date().toISOString(),
+                    latitud: formData.latitud,
+                    longitud: formData.longitud,
                     cumple_ley_21015: formData.cumple_ley_21015,
-                    accesibilidad_certificada: formData.accesibilidad_certificada,
-                })
-                .select();
+                }])
+                .select()
+                .single();
 
             if (errorSolicitud) {
                 console.error('Error al insertar solicitud:', errorSolicitud);
                 throw errorSolicitud;
             }
 
-            // Si no hay error, solicitud.data[0] debería tener el ID de la solicitud insertada
-            const solicitudId = solicitud && solicitud[0] ? solicitud[0].id : null;
-            
-            if (!solicitudId) {
-                throw new Error('No se pudo obtener el ID de la solicitud creada');
+            if (!nuevaSolicitud) {
+                throw new Error('No se recibió el ID de la solicitud creada.');
             }
+
 
             // 3. Insertar accesibilidades seleccionadas
             if (seleccionadas.length > 0) {
                 const accesibilidadesInsert = seleccionadas.map(accId => ({
-                    id_solicitud: solicitudId,
+                    id_solicitud: nuevaSolicitud.id,
                     id_accesibilidad: accId
                 }));
-                
+
+
                 const { error: errorAccesibilidades } = await supabase
                     .from('accesibilidad_solicitud')
                     .insert(accesibilidadesInsert);
-                
+
+
                 if (errorAccesibilidades) {
                     console.error('Error al insertar accesibilidades:', errorAccesibilidades);
                     // Continuamos sin interrumpir el flujo, ya que la solicitud principal se creó correctamente
                 }
             }
 
+
             alert('Solicitud enviada correctamente');
+            // 4. Registrar en registro_logs
+            await Registro_cambios(nuevaSolicitud.id);
             navigate(-1);
         } catch (error: any) {
             console.error('Error al procesar la solicitud:', error.message);
@@ -272,7 +279,34 @@ export default function AgregarSolicitud() {
         } finally {
             setUploading(false);
         }
+
+
     };
+
+
+
+    const fechaHoraActual = new Date().toISOString();
+
+    const Registro_cambios = async (solicitudId: number) => {
+        const { data: registro_logs, error: errorLog } = await supabase
+            .from('registro_logs')
+            .insert([
+                {
+                    id_usuario: user?.id,
+                    tipo_accion: 'Agregación de una solicitud',
+                    detalle: `Se agregó una Solicitud con ID ${solicitudId}`,
+                    fecha_hora: fechaHoraActual,
+                }
+            ]);
+
+        if (errorLog) {
+            console.error('Error al registrar en los logs:', errorLog);
+            return;
+        }
+
+        console.log('Registro insertado en registro_logs correctamente', registro_logs);
+    };
+
 
     const { isLoaded, loadError } = useLoadScript({
         googleMapsApiKey: apiKey,
@@ -411,12 +445,15 @@ export default function AgregarSolicitud() {
                             if (place.geometry?.location) {
                                 const lat = place.geometry.location.lat();
                                 const lng = place.geometry.location.lng();
-                                setPosition({ lat, lng }); 
+                                setPosition({ lat, lng });
                                 setDireccionValida(true);
-                                
+
+
                                 const nuevaDireccion = place.formatted_address || '';
                                 setFormData((prev) => ({
                                     ...prev,
+                                    latitud: lat,
+                                    longitud: lng,
                                     direccion: nuevaDireccion,
                                 }));
 
@@ -441,37 +478,43 @@ export default function AgregarSolicitud() {
                             onChange={(e) => {
                                 handleInputChange(e);
                                 setDireccionValida(false);
-                                setPosition(null); 
+                                setPosition(null);
                             }}
-                            style={{width:'100%', padding:'0 10px'}}
+                            style={{ width: '100%', padding: '0 10px' }}
                             required
                             disabled={!usuario?.nombre} // Deshabilitar el campo si no hay usuario
                         />
                     </Autocomplete>
 
+
                     <APIProvider apiKey={apiKey}>
                         {position && (
-                            <VisMap
-                                mapId="bf51a910020fa25a"
-                                center={position} 
-                                defaultZoom={16}
-                                disableDefaultUI={true}
-                                zoomControl={true}
-                                gestureHandling="greedy"
-                                keyboardShortcuts={false}
-                                style={{ width: '100%', height: '200px' }}
-                            >
-                                <AdvancedMarker position={position} />
-                            </VisMap>
+                            <div style={{ paddingTop: "10px", border: "1px solid rgba(0, 0, 0, 0.2)", borderRadius: '5px', padding: '10px', marginTop: '10px' }}>
+                                <VisMap
+                                    mapId="bf51a910020fa25a"
+                                    center={position}
+                                    defaultZoom={16}
+                                    disableDefaultUI={true}
+                                    zoomControl={true}
+                                    gestureHandling="greedy"
+                                    keyboardShortcuts={false}
+                                    style={{ width: '100%', height: '200px' }}
+                                >
+                                    <AdvancedMarker position={position} />
+                                </VisMap>
+                            </div>
                         )}
                     </APIProvider>
+
+
+
                 </div>
 
                 <div className={styles.opt}>
                     <label htmlFor='cumple_ley_21015' style={{ fontWeight: 500, display: 'flex', flexDirection: 'column' }}>
                         <p>Cumple con la <a target='_blank' href="https://www.bcn.cl/leychile/navegar?idNorma=1103997" style={{ color: 'black', fontWeight: 500, textTransform: 'capitalize' }}>ley nro. 21015 </a></p>
                         <span style={{ fontSize: '0.8rem', color: 'gray', fontStyle: 'italic', maxWidth: '200px', }}>
-                            - Indique si su negocio cumple con  la inclusion al mundo laboral.
+                            - Indique si su negocio cumple con  la inclusión en el mundo laboral.
                         </span>
                     </label>
                     <input type="checkbox" name="cumple_ley_21015" id='cumple_ley_21015' onChange={handleInputChange} disabled={!usuario?.nombre} // Deshabilitar el campo si no hay usuario
@@ -502,80 +545,89 @@ export default function AgregarSolicitud() {
                 ))}
 
 
-                 <div style={{ marginTop: '20px', display: 'flex', flexDirection: 'column', gap: '10px' }}>
-                    <label className={styles.labelSeccion}>
-                        Documentación
-                        <span style={{ fontSize: '0.8rem', color: 'gray', fontStyle: 'italic' }}>
-                            {' '} - Suba una foto o documento que respalde su solicitud (máx. 5MB)
-                        </span>
-                    </label>
-
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                        <label 
-                            htmlFor="file-upload" 
-                            style={{ 
-                                display: 'flex',
-                                alignItems: 'center',
-                                gap: '5px',
-                                padding: '8px 12px',
-                                backgroundColor: '#f0f0f0',
-                                borderRadius: '4px',
-                                cursor: usuario?.nombre ? 'pointer' : 'not-allowed',
-                                opacity: usuario?.nombre ? 1 : 0.6
-                            }}
-                        >
-                            <FontAwesomeIcon icon={faUpload} />
-                            Seleccionar archivo
+                <div style={{ marginTop: '20px', display: 'flex', flexDirection: 'column', gap: '10px' }}>
+                    <div style={{ marginTop: '20px', display: 'flex', flexDirection: 'column', gap: '10px' }}>
+                        <label className={styles.labelSeccion}>
+                            Documentación
+                            <span style={{ fontSize: '0.8rem', color: 'gray', fontStyle: 'italic' }}>
+                                {' '} - Suba una foto o documento que respalde su solicitud (máx. 5MB)
+                            </span>
                         </label>
-                        <input
-                            id="file-upload"
-                            type="file"
-                            accept="image/*,.pdf"
-                            onChange={handleFileChange}
-                            disabled={!usuario?.nombre}
-                            style={{ display: 'none' }}
-                        />
-                        <span>{file ? file.name : 'Ningún archivo seleccionado'}</span>
-                    </div>
 
-                    {filePreview && filePreview !== 'no-preview' && (
-                        <div style={{ marginTop: '10px', maxWidth: '250px' }}>
-                            <img 
-                                src={filePreview} 
-                                alt="Vista previa" 
-                                style={{ maxWidth: '100%', maxHeight: '200px', objectFit: 'contain' }} 
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+
+                            <label
+                                htmlFor="file-upload"
+                                style={{
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    gap: '5px',
+                                    padding: '8px 12px',
+                                    backgroundColor: '#f0f0f0',
+                                    borderRadius: '4px',
+                                    cursor: usuario?.nombre ? 'pointer' : 'not-allowed',
+                                    opacity: usuario?.nombre ? 1 : 0.6
+                                }} >
+
+                                <FontAwesomeIcon icon={faUpload} />
+                                Seleccionar archivo
+                            </label>
+                            <input
+                                id="file-upload"
+                                type="file"
+                                accept="image/*,.pdf"
+                                onChange={handleFileChange}
+                                disabled={!usuario?.nombre}
+                                style={{ display: 'none' }}
                             />
+                            <span>{file ? file.name : 'Ningún archivo seleccionado'}</span>
                         </div>
-                    )}
-                    
-                    {filePreview === 'no-preview' && (
-                        <div style={{ marginTop: '10px', display: 'flex', alignItems: 'center', gap: '5px' }}>
-                            <FontAwesomeIcon icon={faInfo} />
-                            <span>Archivo seleccionado (sin vista previa disponible)</span>
-                        </div>
-                    )}
 
-                    {uploadError && (
-                        <div style={{ color: 'red', marginTop: '5px' }}>
-                            Error: {uploadError}
-                        </div>
-                    )}
+                        {filePreview && filePreview !== 'no-preview' && (
+                            <div style={{ marginTop: '10px', maxWidth: '250px' }}>
+                                <img
+                                    src={filePreview}
+                                    alt="Vista previa"
+                                    style={{ maxWidth: '100%', maxHeight: '200px', objectFit: 'contain' }}
+                                />
+                                <img
+                                    src={filePreview}
+                                    alt="Vista previa"
+                                    style={{ maxWidth: '100%', maxHeight: '200px', objectFit: 'contain' }}
+                                />
+                            </div>
+                        )}
+
+
+                        {filePreview === 'no-preview' && (
+                            <div style={{ marginTop: '10px', display: 'flex', alignItems: 'center', gap: '5px' }}>
+                                <FontAwesomeIcon icon={faInfo} />
+                                <span>Archivo seleccionado (sin vista previa disponible)</span>
+                            </div>
+                        )}
+
+                        {uploadError && (
+                            <div style={{ color: 'red', marginTop: '5px' }}>
+                                Error: {uploadError}
+                            </div>
+                        )}
+                    </div>
                 </div>
 
                 <div className={styles.acciones}>
-                    <button 
-                        type="button" 
-                        style={{ color: 'red', background: 'transparent' }} 
+                    <button
+                        type="button"
+                        style={{ color: 'red', background: 'transparent' }}
                         onClick={() => { navigate(-1) }}
                     >
                         Cancelar
                     </button>
-                    <button 
-                        type="submit" 
+                    <button
+                        type="submit"
                         disabled={!usuario?.nombre || uploading}
                         style={{ opacity: uploading ? 0.7 : 1 }}
                     >
-                        {uploading ? 'Enviando...' : 'Enviar Solicitud'}
+                        {uploading ? 'Enviando...' : 'Enviar solicitud'}
                     </button>
                 </div>
             </form>

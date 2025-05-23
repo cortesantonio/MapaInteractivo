@@ -12,5 +12,6 @@ export interface Marcador {
   id_solicitud?: number;
   latitud?: number;
   longitud?: number;
-  activo: boolean
+  activo: boolean;
+  accesibilidad_certificada: boolean;
 }

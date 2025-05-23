@@ -6,6 +6,10 @@ import { Routes, Route } from 'react-router-dom'
 import LoginUsuario from './screens/Login/loginUsuario'
 import Home from './screens/Home'
 
+// Modo Compacto
+import Modo_Compacto from './screens/modoCompacto/Home'
+import TrazadoRuta from './screens/modoCompacto/Trazado_Compacto'
+
 // vistas administrador
 import VistaAdministrador from './screens/vistaAdministrador/VistaAdministrador'
 
@@ -25,6 +29,8 @@ import ListAccesibilidades from './screens/accesibilidades/List'
 import AgregarTipoRecinto from './screens/tipoRecinto/Agregar'
 import ListTipoRecinto from './screens/tipoRecinto/List'
 
+import RegistroLogs from './screens/registrosLogs/RegistroLogs'
+
 import Gestion_Resenas from './screens/resenas/Gestion_Resenas'
 import Inspeccionar_Resenas from './screens/resenas/Inspeccionar_Resenas'
 
@@ -38,129 +44,142 @@ import ProtectedRoute from './components/ProtectedRoute'
 import Info from "./screens/solicitudes/Info"
 
 
+
+
 function App() {
   return (
-    
-      <div>
-        <Routes>
-          <Route path='/' element={<Home />} />
-          <Route path='/login' element={<LoginUsuario />} />
-          <Route path='/info' element= {<Info />}/>
-          <Route path='/colaborar' element={<AgregarSolicitud />} />
 
-          {/* Panel administrativo protegido */}
-          <Route path='/panel-administrativo' element={
-            <ProtectedRoute allowedRoles={['administrador', 'gestor']}>
-              <VistaAdministrador />
-            </ProtectedRoute>
-          } />
+    <div>
+      <Routes>
+        <Route path='/' element={<Home />} />
+        <Route path='/login' element={<LoginUsuario />} />
+        <Route path='/info' element={<Info />} />
+        <Route path='/colaborar' element={<AgregarSolicitud />} />
+        <Route path='/modocompacto' element= {<Modo_Compacto/>} />
+        <Route path='/modocompacto/trazadoruta/:id' element={<TrazadoRuta />} />
 
-          <Route path='/panel-administrativo/marcadores' element={
-            <ProtectedRoute allowedRoles={['administrador', 'gestor']}>
-              <List />
-            </ProtectedRoute>
-          } />
+        {/* Marcadores */}
 
-          <Route path='/panel-administrativo/marcadores/agregar' element={
-            <ProtectedRoute allowedRoles={['administrador', 'gestor']}>
-              <AgregarMarcador />
-            </ProtectedRoute>
-          } />
+        {/* Panel administrativo protegido */}
+        <Route path='/panel-administrativo' element={
+          <ProtectedRoute allowedRoles={['administrador', 'gestor']}>
+            <VistaAdministrador />
+          </ProtectedRoute>
+        } />
 
-          <Route path='/panel-administrativo/marcadores/informacion/:id' element={
-            <ProtectedRoute allowedRoles={['administrador', 'gestor']}>
-              <InfoDetallada />
-            </ProtectedRoute>
-          } />
+        <Route path='/panel-administrativo/marcadores' element={
+          <ProtectedRoute allowedRoles={['administrador', 'gestor']}>
+            <List />
+          </ProtectedRoute>
+        } />
 
-          <Route path='/panel-administrativo/marcadores/editar/:id' element={
-            <ProtectedRoute allowedRoles={['administrador', 'gestor']}>
-              <EditarLocation />
-            </ProtectedRoute>
-          } />
+        <Route path='/panel-administrativo/marcadores/agregar' element={
+          <ProtectedRoute allowedRoles={['administrador', 'gestor']}>
+            <AgregarMarcador />
+          </ProtectedRoute>
+        } />
 
-          <Route path='/panel-administrativo/usuarios' element={
-            <ProtectedRoute allowedRoles={['administrador', 'gestor']}>
-              <Gestion_Usuarios />
-            </ProtectedRoute>
-          } />
+        <Route path='/panel-administrativo/marcadores/informacion/:id' element={
+          <ProtectedRoute allowedRoles={['administrador', 'gestor', 'usuario']}>
+            <InfoDetallada />
+          </ProtectedRoute>
+        } />
 
-          <Route path='/usuario/perfil/:id' element={
-            <ProtectedRoute allowedRoles={['administrador', 'gestor', 'usuario']}>
-              <Perfil_Usuario />
-            </ProtectedRoute>
-          } />
+        <Route path='/panel-administrativo/marcadores/editar/:id' element={
+          <ProtectedRoute allowedRoles={['administrador', 'gestor', 'usuario']}>
+            <EditarLocation />
+          </ProtectedRoute>
+        } />
 
-          <Route path='/panel-administrativo/usuarios/agregar' element={
-            <ProtectedRoute allowedRoles={['administrador']}>
-              <Agregar_Usuarios />
-            </ProtectedRoute>
-          } />
+        <Route path='/panel-administrativo/usuarios' element={
+          <ProtectedRoute allowedRoles={['administrador', 'gestor']}>
+            <Gestion_Usuarios />
+          </ProtectedRoute>
+        } />
 
-          <Route path='/usuarios/editar/:id' element={
-            <ProtectedRoute allowedRoles={['administrador', 'gestor', 'usuario']}>
-              <Editar_Usuarios />
-            </ProtectedRoute>
-          } />
+        <Route path='/usuario/perfil/:id' element={
+          <ProtectedRoute allowedRoles={['administrador', 'gestor', 'usuario']}>
+            <Perfil_Usuario />
+          </ProtectedRoute>
+        } />
 
-          {/* Accesibilidades protegidas */}
-          <Route path='/panel-administrativo/accesibilidades' element={
-            <ProtectedRoute allowedRoles={['administrador', 'gestor']}>
-              <ListAccesibilidades />
-            </ProtectedRoute>
-          } />
+        <Route path='/panel-administrativo/usuarios/agregar' element={
+          <ProtectedRoute allowedRoles={['administrador']}>
+            <Agregar_Usuarios />
+          </ProtectedRoute>
+        } />
 
-          <Route path='/panel-administrativo/accesibilidades/agregar' element={
-            <ProtectedRoute allowedRoles={['administrador', 'gestor']}>
-              <AgregarAccesibilidad />
-            </ProtectedRoute>
-          } />
+        <Route path='/usuarios/editar/:id' element={
+          <ProtectedRoute allowedRoles={['administrador', 'gestor', 'usuario']}>
+            <Editar_Usuarios />
+          </ProtectedRoute>
+        } />
 
-          {/* Tipos de recinto protegidos */}
-          <Route path='/panel-administrativo/tipo-recinto' element={
-            <ProtectedRoute allowedRoles={['administrador', 'gestor']}>
-              <ListTipoRecinto />
-            </ProtectedRoute>
-          } />
+        {/* Accesibilidades protegidas */}
+        <Route path='/panel-administrativo/accesibilidades' element={
+          <ProtectedRoute allowedRoles={['administrador', 'gestor']}>
+            <ListAccesibilidades />
+          </ProtectedRoute>
+        } />
 
-          <Route path='/panel-administrativo/tipo-recinto/agregar' element={
-            <ProtectedRoute allowedRoles={['administrador', 'gestor']}>
-              <AgregarTipoRecinto />
-            </ProtectedRoute>
-          } />
+        <Route path='/panel-administrativo/accesibilidades/agregar' element={
+          <ProtectedRoute allowedRoles={['administrador', 'gestor']}>
+            <AgregarAccesibilidad />
+          </ProtectedRoute>
+        } />
 
-          {/* Reseñas protegidas */}
-          <Route path='/panel-administrativo/resenas' element={
-            <ProtectedRoute allowedRoles={['administrador', 'gestor']}>
-              <Gestion_Resenas />
-            </ProtectedRoute>
-          } />
+        {/* Tipos de recinto protegidos */}
+        <Route path='/panel-administrativo/tipo-recinto' element={
+          <ProtectedRoute allowedRoles={['administrador', 'gestor']}>
+            <ListTipoRecinto />
+          </ProtectedRoute>
+        } />
 
-          <Route path='/panel-administrativo/resenas/inspeccionar/:id' element={
-            <ProtectedRoute allowedRoles={['administrador', 'gestor']}>
-              <Inspeccionar_Resenas />
-            </ProtectedRoute>
-          } />
+        <Route path='/panel-administrativo/tipo-recinto/agregar' element={
+          <ProtectedRoute allowedRoles={['administrador', 'gestor']}>
+            <AgregarTipoRecinto />
+          </ProtectedRoute>
+        } />
 
-          {/* Solicitudes protegidas */}
-          <Route path='/panel-administrativo/solicitudes/:estado?' element={
-            <ProtectedRoute allowedRoles={['administrador', 'gestor']}>
-              <ListSolicitudes />
-            </ProtectedRoute>
-          } />
+        {/* Registros Logs Protegidos */}
+        <Route path='/panel-administrativo/registrosLogs' element={
+          <ProtectedRoute allowedRoles={['administrador', 'gestor']}>
+            <RegistroLogs />
+          </ProtectedRoute>
+        } />
 
-          <Route path='/panel-administrativo/solicitud/:id' element={
-            <ProtectedRoute allowedRoles={['administrador', 'gestor']}>
-              <Ver />
-            </ProtectedRoute>
-          } />
+        {/* Reseñas protegidas */}
+        <Route path='/panel-administrativo/resenas' element={
+          <ProtectedRoute allowedRoles={['administrador', 'gestor']}>
+            <Gestion_Resenas />
+          </ProtectedRoute>
+        } />
 
-          {/* Callback auth y 404 sin protección */}
-          <Route path='/auth/callback' element={<AuthCallback />} />
-          <Route path='*' element={<h1>404 NOT FOUND</h1>} />
-        </Routes>
-      </div>
-  
+        <Route path='/panel-administrativo/resenas/inspeccionar/:id' element={
+          <ProtectedRoute allowedRoles={['administrador', 'gestor']}>
+            <Inspeccionar_Resenas />
+          </ProtectedRoute>
+        } />
+
+        {/* Solicitudes protegidas */}
+        <Route path='/panel-administrativo/solicitudes/:estado?' element={
+          <ProtectedRoute allowedRoles={['administrador', 'gestor']}>
+            <ListSolicitudes />
+          </ProtectedRoute>
+        } />
+
+        <Route path='/panel-administrativo/solicitud/:id' element={
+          <ProtectedRoute allowedRoles={['administrador', 'gestor', 'usuario']}>
+            <Ver />
+          </ProtectedRoute>
+        } />
+
+        {/* Callback auth y 404 sin protección */}
+        <Route path='/auth/callback' element={<AuthCallback />} />
+        <Route path='*' element={<h1>404 NOT FOUND</h1>} />
+      </Routes>
+    </div>
+
   )
 }
 

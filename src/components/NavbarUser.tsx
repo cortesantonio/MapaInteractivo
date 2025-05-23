@@ -11,8 +11,8 @@ export default function NavbarUser() {
     const { user, signOut } = useAuth()
     const navigate = useNavigate()
     const [modalOpen, setModalOpen] = useState(false)
-    const {modoNocturno} = useTheme ();
-    const {fontSize} = useFontSize ();
+    const { modoNocturno } = useTheme();
+    const { fontSize } = useFontSize();
 
 
     if (!user) return null
@@ -31,19 +31,19 @@ export default function NavbarUser() {
             </div>
 
             {modalOpen == true && (
-                <div style={{ backgroundColor: modoNocturno ? "#2d2d2d" : 'white', borderRadius: '15px', padding: 10, pointerEvents: 'auto', width: '200px'}}>
+                <div style={{ backgroundColor: modoNocturno ? "#2d2d2d" : 'white', borderRadius: '15px', padding: 10, pointerEvents: 'auto', width: '200px' }}>
                     <div>
-                        <p style={{ color: modoNocturno ? "#fff" : "" ,fontWeight: 400, cursor: 'pointer', textOverflow: 'ellipsis', whiteSpace: 'nowrap', overflow: 'hidden',fontSize:  `${fontSize}rem`  }}>{user?.user_metadata.full_name} </p>
-                        <p style={{ fontSize:  `${fontSize}rem` , color: modoNocturno ? "#fff" :'gray', textOverflow: 'ellipsis', whiteSpace: 'nowrap', overflow: 'hidden' }}>{user?.email} </p>
+                        <p style={{ color: modoNocturno ? "#fff" : "", fontWeight: 400, cursor: 'pointer', textOverflow: 'ellipsis', whiteSpace: 'nowrap', overflow: 'hidden', fontSize: `${fontSize}rem`, textTransform: 'capitalize' }}>{user?.user_metadata.full_name} </p>
+                        <p style={{ fontSize: `${fontSize}rem`, color: modoNocturno ? "#fff" : 'gray', textOverflow: 'ellipsis', whiteSpace: 'nowrap', overflow: 'hidden' }}>{user?.email} </p>
 
                     </div>
                     <div className={styles.opt}>
-                        <button className={styles.btnNavegacion} onClick={() => { navigate(`/usuario/perfil/${user.id}`) }} style={{ fontSize:  `${fontSize}rem` ,color: modoNocturno ? "#fff":"",display: 'block' }}>Ver perfil</button>
-                        <button className={styles.btnNavegacion} onClick={() => { navigate(`/usuarios/editar/${user.id}`) }} style={{ fontSize:  `${fontSize}rem` ,color: modoNocturno ? "#fff":"",display: 'block' }}>Editar perfil</button>
+                        <button className={styles.btnNavegacion} onClick={() => { navigate(`/usuario/perfil/${user.id}`) }} style={{ fontSize: `${fontSize}rem`, color: modoNocturno ? "#fff" : "", display: 'block' }}>Ver perfil</button>
+                        <button className={styles.btnNavegacion} onClick={() => { navigate(`/usuarios/editar/${user.id}`) }} style={{ fontSize: `${fontSize}rem`, color: modoNocturno ? "#fff" : "", display: 'block' }}>Editar perfil</button>
                     </div>
 
-                    <button style={{fontSize:  `${fontSize}rem` }} className={styles.btnCerrarSesion} onClick={signOut}>
-                        Cerrar Sesion  <FontAwesomeIcon icon={faRightFromBracket} />
+                    <button style={{ fontSize: `${fontSize}rem` }} className={styles.btnCerrarSesion} onClick={signOut}>
+                        Cerrar sesión  <FontAwesomeIcon icon={faRightFromBracket} />
                     </button>
                 </div>
 

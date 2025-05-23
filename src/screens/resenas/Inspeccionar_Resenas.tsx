@@ -8,8 +8,10 @@ import { Marcador } from '../../interfaces/Marcador';
 import { useParams } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
 import ImagenConFallback from '../../components/ImagenConFallback';
+import { useAuth } from '../../hooks/useAuth';
 
 function Inspeccionar_Resenas() {
+  const { user } = useAuth();
   const { id } = useParams();
   const [marcador, setMarcador] = useState<Marcador | null>(null);
   const [resenas, setResenas] = useState<Resenas[]>([]);
@@ -36,6 +38,50 @@ function Inspeccionar_Resenas() {
     fetchData();
   }, [id]);
 
+  const EliminarResena = async (idResena: number) => {
+    const confirmacion = window.confirm("¿Estás seguro de que quieres borrar esta reseña?");
+    if (!confirmacion) return;
+
+    try {
+      const { error } = await supabase
+        .from("resenas")
+        .delete()
+        .eq("id", idResena);
+
+      if (error) throw error;
+
+      setResenas((prevResenas) => prevResenas.filter(r => r.id !== idResena));
+
+      alert("Reseña eliminada con éxito");
+      Registro_cambios(idResena);
+    } catch (error) {
+      console.error("Error al borrar la reseña:", error);
+      alert("Hubo un error al eliminar la reseña");
+
+    }
+  };
+
+  const fechaHoraActual = new Date().toISOString();
+  const Registro_cambios = async (id: number) => {
+    const { data: registro_logs, error: errorLog } = await supabase
+      .from('registro_logs')
+      .insert([
+        {
+          id_usuario: user?.id,
+          tipo_accion: 'Eliminación de una Reseña',
+          detalle: `Se eliminó una Reseña con ID ${id}`,
+          fecha_hora: fechaHoraActual,
+        }
+      ]);
+
+    if (errorLog) {
+      console.error('Error al registrar en los logs:', errorLog);
+      return;
+    }
+
+    console.log(' Registro insertado en registro_logs correctamente', registro_logs);
+  };
+
   const renderResenas = () => {
     if (loading) return <p>Cargando reseñas...</p>;
     if (resenas.length === 0) return <p>No hay Reseñas aún</p>;
@@ -46,7 +92,9 @@ function Inspeccionar_Resenas() {
           <h1>{r.id_usuario?.nombre} <button style={{ background: 'none', border: 'none' }}
             onClick={() => { navigate(`/usuario/perfil/${r.id_usuario.id}`) }}> <FontAwesomeIcon icon={faArrowUpRightFromSquare} /></button> </h1>
           <div className={styles.trash_button}>
-            <FontAwesomeIcon icon={faTrash} />
+            <button style={{ border: "none", color: "red", backgroundColor: "transparent", width: "100%", height: "100%" }} onClick={() => EliminarResena(r.id)}>
+              <FontAwesomeIcon icon={faTrash} />
+            </button>
           </div>
         </div>
 

@@ -3,6 +3,9 @@ import { useState, useEffect } from 'react';
 import { supabase } from '../../services/supabase';
 import { Tipo_Recinto } from '../../interfaces/Tipo_Recinto';
 import NavbarAdmin from '../../components/NavbarAdmin';
+import { useParams } from 'react-router-dom';
+import { useAuth } from '../../hooks/useAuth';
+
 interface EditarTipoRecintoProps {
     idTipoRecinto: number;
     onCancel: () => void;
@@ -10,6 +13,8 @@ interface EditarTipoRecintoProps {
 }
 
 export default function EditarTipoRecinto({ idTipoRecinto, onCancel, onUpdate }: EditarTipoRecintoProps) {
+    const { id } = useParams();
+    const { user } = useAuth()
     const [formData, setFormData] = useState<Tipo_Recinto>({
         id: idTipoRecinto,
         tipo: '',
@@ -49,7 +54,7 @@ export default function EditarTipoRecinto({ idTipoRecinto, onCancel, onUpdate }:
             return;
         }
 
-        const {  error } = await supabase
+        const { error } = await supabase
             .from('tipo_recinto')
             .update({
                 tipo: formData.tipo,
@@ -60,9 +65,33 @@ export default function EditarTipoRecinto({ idTipoRecinto, onCancel, onUpdate }:
             console.error('Error al actualizar:', error);
             alert('Ocurrió un error al actualizar el registro.');
         } else {
-            alert('Registro actualizado correctamente');
+            alert('Tipo Recinto actualizado correctamente');
             onUpdate();
+            Registro_cambios(formData.id);
         }
+
+    };
+
+    const fechaHoraActual = new Date().toISOString();
+
+    const Registro_cambios = async (id: number) => {
+        const { data: registro_logs, error: errorLog } = await supabase
+            .from('registro_logs')
+            .insert([
+                {
+                    id_usuario: user?.id,
+                    tipo_accion: 'Edición de tipo Recinto',
+                    detalle: `Se editó un tipo de recinto con ID ${id}`,
+                    fecha_hora: fechaHoraActual,
+                }
+            ]);
+
+        if (errorLog) {
+            console.error('Error al registrar en los logs:', errorLog);
+            return;
+        }
+
+        console.log(' Registro insertado en registro_logs correctamente', registro_logs);
     };
 
     return (
@@ -72,20 +101,20 @@ export default function EditarTipoRecinto({ idTipoRecinto, onCancel, onUpdate }:
                 <div className={styles.titulo}>
 
                     <h2 style={{ textAlign: 'center' }}>
-                        Editar Accesibilidad
+                        Editar tipo recinto
                     </h2>
                 </div>
 
                 <div style={{ margin: '20px auto', width: '40%', display: 'flex', justifyContent: 'center', flexDirection: 'column', minWidth: '250px' }}>
                     <div style={{ display: 'flex', flexDirection: 'column', maxWidth: '600px' }}>
-                        <label className={styles.labelSeccion} >TIPO</label>
+                        <label className={styles.labelSeccion} >Tipo</label>
                         <input name="tipo" onChange={handleChange} value={formData.tipo}
                             className={styles.inputText} />
                     </div>
 
                     <div className={styles.acciones}>
                         <button style={{ color: 'red', background: 'transparent' }} onClick={onCancel}>Cancelar</button>
-                        <button onClick={handleSubmit}>Guardar Cambios</button>
+                        <button onClick={handleSubmit}>Guardar cambios</button>
                     </div>
                 </div>
             </div>

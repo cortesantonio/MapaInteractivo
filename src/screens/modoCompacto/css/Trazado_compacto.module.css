@@ -1,0 +1,69 @@
+.container_principal {
+    width: 100%;
+    height: 100%;
+}
+
+.botonatras {
+  position: absolute;
+  top: 5px;
+  left: 5px;
+  color: #000;
+  cursor: pointer;
+  font-size: 20px;
+  background-color: transparent;
+  border: solid 3px black;
+  border-radius: 10px;
+  width: 200px;
+}
+
+.PositionIcons {
+    overflow: hidden;
+    display: flex;
+    justify-content: space-between; 
+    align-items: center;
+    margin: 35px 0;
+    border: 1px solid #e0e0e0;
+    border-radius: 15px;
+    padding: 20px;
+    background-color: #f8f8f8;
+    width: 60%;
+    max-width: 250px;
+}
+
+.ButttonIcons {
+    background: transparent;
+    padding: 0px;
+    outline: none;
+    border: none;
+}
+
+.Container_secundario{
+  width: 100%;
+  height: 90vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 30px 20px;
+  justify-content: center;
+  gap: 20px;
+
+}
+
+.Container_secundario h3 {
+  font-size: clamp(1rem, 2.5vw, 1.4rem); 
+}
+.Container_secundario ol{
+  padding-left: 15px;
+}
+.Container_secundario li {
+  font-size: clamp(0.85rem, 2vw, 1.1rem); 
+}
+
+.Container_secundario h3 {
+  font-size: clamp(0.9rem, 2.5vw, 1.3rem); 
+  line-height: 1.4;
+}
+
+
+
+

@@ -8,7 +8,7 @@ import { useAuth } from '../../hooks/useAuth';
 import NavbarAdmin from '../../components/NavbarAdmin';
 import { useLoadScript, Autocomplete } from "@react-google-maps/api";
 import { APIProvider, Map as VisMap, AdvancedMarker } from "@vis.gl/react-google-maps";
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 
 
 interface TipoDeAccesibilidades {
@@ -19,6 +19,7 @@ const LIBRARIES: ("places")[] = ['places'];
 export default function AgregarMarcador() {
   const navigate = useNavigate()
   const apiKey = import.meta.env.VITE_GOOGLE_APIKEY;
+  const { id } = useParams();
   const { user } = useAuth();
   const [accesibilidades, setAccesibilidades] = useState<TipoDeAccesibilidades>({});
   const [dataMarcador, setDataMarcador] = useState<Partial<Marcador>>({
@@ -84,7 +85,30 @@ export default function AgregarMarcador() {
     };
 
     setnewMarcador(envio);
+
   };
+
+  const fechaHoraActual = new Date().toISOString();
+
+  const Registro_cambios = async (idMarcador: number) => {
+    const { data: registro_logs, error: errorLog } = await supabase
+      .from('registro_logs')
+      .insert([
+        {
+          id_usuario: user?.id,
+          tipo_accion: 'Agregación de Marcador',
+          detalle: `Se agregó un nuevo Marcador con ID ${idMarcador}`,
+          fecha_hora: fechaHoraActual,
+        }
+      ]);
+
+    if (errorLog) {
+      console.error('Error al registrar en los logs:', errorLog);
+    } else {
+      console.log('Registro insertado en registro_logs correctamente', registro_logs);
+    }
+  };
+
 
   useEffect(() => {
     const guardarMarcador = async () => {
@@ -96,6 +120,16 @@ export default function AgregarMarcador() {
       }
 
       try {
+
+        // 4. Se inserta el "registro_logs"
+        console.log('Entró a actualizarMarcador');
+        const { data: { user }, error: userError } = await supabase.auth.getUser();
+        console.log('Usuario obtenido:', user);
+
+        if (userError || !user) {
+          console.error('No se pudo obtener el usuario:', userError);
+          return;
+        }
         const { data: marcadorInsertado, error: errorMarcador } = await supabase
           .from('marcador')
           .insert({
@@ -111,7 +145,7 @@ export default function AgregarMarcador() {
             id_usuario: user?.id
           })
           .select()
-          .single();
+          .single<Marcador>();
 
         if (errorMarcador) {
           console.error('Error al guardar marcador:', errorMarcador);
@@ -131,8 +165,9 @@ export default function AgregarMarcador() {
           console.error('Error al guardar relaciones de accesibilidad:', errorRelaciones);
           return;
         }
+        await Registro_cambios(marcadorInsertado.id);
 
-        alert('Insertado correctamente: ' + marcadorInsertado.nombre_recinto);
+        alert('Agregado correctamente: ' + marcadorInsertado.nombre_recinto);
         navigate(-1);
       } catch (error) {
         console.error('Error general al guardar el marcador:', error);
@@ -144,15 +179,15 @@ export default function AgregarMarcador() {
 
   const { isLoaded, loadError } = useLoadScript({
     googleMapsApiKey: apiKey,
-    libraries: LIBRARIES,   
+    libraries: LIBRARIES,
   });
-  
 
-  const [autocomplete, setAutocomplete] = useState<google.maps.places.Autocomplete|null>(null);
-  const [position, setPosition] = useState<{ lat: number; lng: number }|null>(null);
+
+  const [autocomplete, setAutocomplete] = useState<google.maps.places.Autocomplete | null>(null);
+  const [position, setPosition] = useState<{ lat: number; lng: number } | null>(null);
   const [direccionValida, setDireccionValida] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
-  
+
   if (loadError) return <div>Error cargando Places</div>;
   if (!isLoaded) return <div>Cargando Autocomplete...</div>;
 
@@ -164,7 +199,7 @@ export default function AgregarMarcador() {
       <div className={styles.container}>
         <div className={styles.titulo} style={{ marginTop: '25px' }} >
           <h2 style={{ textAlign: 'center' }}>
-            Agregar Marcador
+            Agregar marcador
           </h2>
         </div>
 
@@ -172,7 +207,7 @@ export default function AgregarMarcador() {
           <form className={styles.formulario} onSubmit={handleAgregarMarcador}>
             <div style={{ display: 'flex', flexDirection: 'column', maxWidth: '100%' }}>
 
-              <label className={styles.labelSeccion} >Nombre Locacion
+              <label className={styles.labelSeccion} >Nombre locación
                 <span style={{ fontSize: '0.8rem', color: 'gray', fontStyle: 'italic' }} >  - ¿Como se llama el negocio?</span>
               </label>
               <input
@@ -181,8 +216,8 @@ export default function AgregarMarcador() {
                 onChange={(e) => setDataMarcador({ ...dataMarcador, nombre_recinto: e.target.value })}
                 className={styles.inputText} required />
 
-              
-              <label style={{ display: "flex", flexDirection: "row", alignItems: "center", gap: "5px" }} className={styles.labelSeccion} htmlFor="">Direccion
+
+              <label style={{ display: "flex", flexDirection: "row", alignItems: "center", gap: "5px" }} className={styles.labelSeccion} htmlFor="">Dirección
                 <span style={{ fontSize: '0.8rem', color: 'gray', fontStyle: 'italic' }} > - ¿Dónde está ubicado el negocio? (Dirección completa)</span>
               </label>
 
@@ -205,11 +240,11 @@ export default function AgregarMarcador() {
                       direccion: place.formatted_address || '',
                     }));
                   }
-                }} 
+                }}
                 options={{
                   types: ['address'],
                   fields: ['geometry', 'formatted_address'],
-                  componentRestrictions: { country: 'cl' } 
+                  componentRestrictions: { country: 'cl' }
                 }}
               >
                 <input
@@ -219,7 +254,7 @@ export default function AgregarMarcador() {
                   className={styles.inputText}
                   onChange={() => {
                     setDireccionValida(false);
-                    setPosition(null); 
+                    setPosition(null);
                   }}
                   required
                 />
@@ -227,23 +262,25 @@ export default function AgregarMarcador() {
 
               <APIProvider apiKey={apiKey}>
                 {position && (
-                  <VisMap
-                    mapId="bf51a910020fa25a"
-                    center={position} 
-                    defaultZoom={16}
-                    disableDefaultUI={true}
-                    zoomControl={true}
-                    gestureHandling="greedy"
-                    keyboardShortcuts={false}
-                    style={{ width: '100%', height: '200px' }}
-                  >
-                    <AdvancedMarker position={position} />
-                  </VisMap>
+                  <div style={{ paddingTop: "10px", border: "1px solid rgba(0, 0, 0, 0.2)", borderRadius: '5px', padding: '10px', marginTop: '10px' }}>
+                    <VisMap
+                      mapId="bf51a910020fa25a"
+                      center={position}
+                      defaultZoom={16}
+                      disableDefaultUI={true}
+                      zoomControl={true}
+                      gestureHandling="greedy"
+                      keyboardShortcuts={false}
+                      style={{ width: '100%', height: '200px' }}
+                    >
+                      <AdvancedMarker position={position} />
+                    </VisMap>
+                  </div>
                 )}
               </APIProvider>
 
-              <label style={{ display: "flex", flexDirection: "row", alignItems: "center", gap: "5px" }} className={styles.labelSeccion} htmlFor="">Pagina Web
-                <span style={{ fontSize: '0.8rem', color: 'gray', fontStyle: 'italic' }} > - El URL perteneciente al local que se ingresara.</span>
+              <label style={{ display: "flex", flexDirection: "row", alignItems: "center", gap: "5px" }} className={styles.labelSeccion} htmlFor="">Pagina web
+                <span style={{ fontSize: '0.8rem', color: 'gray', fontStyle: 'italic' }} > - El URL perteneciente al local que se ingresará.</span>
               </label>
 
               <input
@@ -252,7 +289,7 @@ export default function AgregarMarcador() {
                 onChange={(e) => setDataMarcador({ ...dataMarcador, pagina_web: e.target.value })}
                 className={styles.inputText} required />
 
-              <label className={styles.labelSeccion} htmlFor="">Telefono
+              <label className={styles.labelSeccion} htmlFor="">Teléfono
                 <span style={{ fontSize: '0.8rem', color: 'gray', fontStyle: 'italic' }} > - Número de contacto del negocio.</span>
               </label>
               <div className={styles.ContainerinputTelefono}>
@@ -271,7 +308,7 @@ export default function AgregarMarcador() {
                 onChange={(e) => setDataMarcador({ ...dataMarcador, url_img: e.target.value })}
                 className={styles.inputText} />
 
-              <label className={styles.labelSeccion}>Tipo de Recinto
+              <label className={styles.labelSeccion}>Tipo de recinto
                 <span style={{ fontSize: '0.8rem', color: 'gray', fontStyle: 'italic' }} > - Selecciona a un tipo de recinto que pertenecera el local.</span>
               </label>
               <select name="tipo_recinto" value={dataMarcador.tipo_recinto} onChange={(e) => setDataMarcador({ ...dataMarcador, tipo_recinto: e.target.value })} className={styles.inputText} required>

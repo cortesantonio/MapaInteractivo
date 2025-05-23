@@ -60,7 +60,7 @@
     left: 0px;
     background-color: white;
     overflow: hidden;
-    height: 450px;
+    height: 450px !important;
 }
 
 .ContenPrin.darkMode {

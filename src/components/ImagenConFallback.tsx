@@ -1,4 +1,4 @@
-import imagenPorDefecto from '../assets/Sin Img.png';
+import imagenPorDefecto from '../../public/img/Sin Img.png';
 
 type Props = {
     src?: string;

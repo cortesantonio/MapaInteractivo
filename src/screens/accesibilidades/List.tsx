@@ -7,8 +7,10 @@ import { supabase } from '../../services/supabase';
 import EditarAccesibilidad from './Editar';
 import { useNavigate } from "react-router-dom";
 import NavbarAdmin from '../../components/NavbarAdmin';
+import { useAuth } from '../../hooks/useAuth';
 
 function ListAccesibilidad() {
+    const { user } = useAuth();
     const [accesibilidades, setAccesibilidades] = useState<Accesibilidad[]>([]);
     const [selectedId, setSelectedId] = useState<number | null>(null);
     const [query, setQuery] = useState('');
@@ -42,6 +44,7 @@ function ListAccesibilidad() {
             />
         );
     }
+
     const handleDelete = async (id: number) => {
         const confirmDelete = window.confirm('¿Estás seguro que deseas eliminar este registro?');
 
@@ -56,10 +59,35 @@ function ListAccesibilidad() {
             console.error('Error al eliminar:', error);
             alert('Hubo un error al eliminar el registro.');
         } else {
-            alert('Registro eliminado correctamente.');
+            alert('Accesibilidad eliminada correctamente.');
             fetchData(); // refresca la lista
+            Registro_cambios(id);
         }
+
     };
+
+    const fechaHoraActual = new Date().toISOString();
+
+    const Registro_cambios = async (id: number) => {
+        const { data: registro_logs, error: errorLog } = await supabase
+            .from('registro_logs')
+            .insert([
+                {
+                    id_usuario: user?.id,
+                    tipo_accion: 'Eliminación de Accesibilidad',
+                    detalle: `Se eliminó una Accesibilidad con ID ${id}`,
+                    fecha_hora: fechaHoraActual,
+                }
+            ]);
+
+        if (errorLog) {
+            console.error('Error al registrar en los logs:', errorLog);
+            return;
+        }
+
+        console.log(' Registro insertado en registro_logs correctamente', registro_logs);
+    };
+
     const filteredAccesibilidades = accesibilidades.filter((a) =>
         a.nombre.toLowerCase().includes(query.toLowerCase()) ||
         a.tipo.toLowerCase().includes(query.toLowerCase())
@@ -74,7 +102,7 @@ function ListAccesibilidad() {
 
                 <header className={styles.header} style={{ paddingTop: '40px', gap: '15px' }}>
                     <hr style={{ flexGrow: "1" }} />
-                    <h2 style={{ textAlign: 'right', paddingRight: "15px", whiteSpace: "nowrap" }} >Gestion de Accesibilidades</h2>
+                    <h2 style={{ textAlign: 'right', paddingRight: "15px", whiteSpace: "nowrap" }} >Gestión de accesibilidades</h2>
                 </header>
                 <div className={styles.filtros}>
                     <div style={{ display: 'flex', gap: '5px' }}>
@@ -101,7 +129,7 @@ function ListAccesibilidad() {
                 </div>
 
                 <div className={styles.SubTitulo}>
-                    <p>Listado</p>
+                    <p>Listado de accesibilidades</p>
                     <hr style={{ width: '25%', marginTop: '10px', marginBottom: '10px ', opacity: '50%' }} />
                 </div>
                 <div className={styles.content}>
@@ -115,8 +143,8 @@ function ListAccesibilidad() {
                                 <FontAwesomeIcon icon={faUniversalAccess} size='xl' style={{ color: 'white' }} />
                             </div>
                             <div className={styles.cardContent}>
-                                <p style={{ color: 'black', textTransform: 'capitalize' }}>{accesibilidad.nombre}</p>
-                                <p style={{ color: 'gray', fontSize: '0.9rem', textTransform: 'capitalize' }}>Tipo: {accesibilidad.tipo}</p>
+                                <p style={{ color: 'black' }}>{accesibilidad.nombre}</p>
+                                <p style={{ color: 'gray', fontSize: '0.9rem' }}>Tipo: {accesibilidad.tipo}</p>
                             </div>
 
                             <div className={styles.opciones}>

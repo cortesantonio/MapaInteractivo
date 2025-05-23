@@ -1,0 +1,147 @@
+.container {
+    display: flex;
+    min-height: 100vh;
+    background-color: white;
+    display: flex;
+    color: black;
+    flex-direction: column;
+}
+
+.filtros {
+    display: flex;
+    gap: 5px;
+    justify-content: left;
+    flex-direction: column;
+    margin-bottom: 15px;
+    align-items: center;
+    margin-top: 15px;
+}
+
+.filtros .buscar {
+    display: flex;
+    justify-content: lef1;
+}
+
+.filtros .buscar {
+    display: flex;
+    gap: 5px;
+}
+
+.filtros .buscar input {
+    padding: 2px;
+    border-radius: 5px;
+    border: 1px solid gray;
+}
+
+.filtros .buscar button {
+    background-color: transparent;
+    border: none;
+    outline: none;
+}
+
+.filtroCard {
+    border: 1px solid gray;
+    padding: 0px 10px 0px 10px;
+    border-radius: 15px;
+    font-size: 0.8rem;
+    cursor: pointer;
+    transition: 0.2s all;
+    margin-bottom: 15px;
+    background-color: transparent;
+}
+
+.filtroCard select {
+    border: none;
+    background-color: transparent;
+}
+
+.filtroCard:hover {
+    transform: scale(98%);
+}
+
+.content {
+    display: flex;
+    justify-content: start;
+    flex-wrap: wrap;
+    padding: 15px;
+    gap: 10px;
+    width: 95%;
+    margin: 0 auto;
+    border: 1px solid gray;
+    overflow-x: auto;
+}
+
+.table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.table thead {
+    background-color: #f5f5f5;
+    position: sticky;
+    top: 0;
+}
+
+.table th,
+.table td {
+    padding: 12px 10px;
+    text-align: left;
+    border-bottom: 1px solid #c4c1c1;
+    font-size: 1rem;
+}
+
+.table td button {
+    background-color: transparent;
+    border: none;
+    outline: none;
+    cursor: pointer;
+    font-size: 1rem;
+}
+
+.paginacion {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    padding: 15px;
+    gap: 10px;
+    width: 95%;
+    margin: 0 auto;
+}
+
+.paginacion button {
+    background-color: #efeded;
+    border: 1px solid #fffefe;
+    padding: 8px 12px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: all 0.2s ease-in-out;
+    color: #000;
+    top: -20px;
+}
+
+.paginacion button:hover:not(:disabled) {
+    background-color: #bbb;
+}
+
+.paginacion button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.activePage {
+    background-color: #049bff !important;
+    /* azul claro */
+    border: 1px solid #0a76e9;
+    font-weight: bold;
+    box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+}
+
+@media (max-width: 500px) {
+    .content {
+        overflow-x: auto;
+    }
+
+    .table {
+        min-width: 617px;
+    }
+}
