@@ -22,7 +22,7 @@ interface BuscadorProps {
 function Buscador({ onSeleccionMarcador }: BuscadorProps) {
     const { user } = useAuth();
     const { modoNocturno } = useTheme();
-    const {fontSize} = useFontSize ();
+    const { fontSize } = useFontSize();
     const [filtroIsVisible, setFiltroIsVisible] = useState(false);
     const [width, setWidth] = useState(window.innerWidth <= 768 ? "65%" : "300px");
     const [height, setHeight] = useState("0px");
@@ -112,7 +112,7 @@ function Buscador({ onSeleccionMarcador }: BuscadorProps) {
         if (!id_usuario) {
             return;
         }
-        
+
         const fechaHoraChile = obtenerFechaChile();
 
         const { error: insertError } = await supabase.from('busquedas').insert({
@@ -123,13 +123,13 @@ function Buscador({ onSeleccionMarcador }: BuscadorProps) {
 
         if (insertError) {
             console.error("Error al registrar la búsqueda:", insertError);
-        } 
+        }
     };
 
 
     useEffect(() => {
         const handleResize = () => {
-            setWidth(window.innerWidth <= 768 ? "65%" : "300px");
+            setWidth(window.innerWidth <= 768 ? "90%" : "300px");
         };
 
         window.addEventListener("resize", handleResize);
@@ -185,20 +185,22 @@ function Buscador({ onSeleccionMarcador }: BuscadorProps) {
         <div className={`${styles.container} ${modoNocturno ? styles.darkMode : ''}`}
             style={{
                 width: width,
-                transition: "width 0.3s ease"
-                
+                transition: "width 0.3s ease",
+                pointerEvents: 'auto'
+
+
             }}
         >
-            <div style={{backgroundColor: modoNocturno ? "#2d2d2d" : "", border: modoNocturno ? "none" :  "1px solid #ccc"}} className={styles.distribucionContainer}>
-                <FontAwesomeIcon 
-                    icon={faLocationDot} 
-                    size="xl" 
-                    style={{ color: modoNocturno ? "red" : "" }} 
+            <div style={{ backgroundColor: modoNocturno ? "#2d2d2d" : "", border: modoNocturno ? "none" : "1px solid #ccc" }} className={styles.distribucionContainer}>
+                <FontAwesomeIcon
+                    icon={faLocationDot}
+                    size="xl"
+                    style={{ color: modoNocturno ? "red" : "" }}
                 />
                 <input
                     type="text"
                     className={`${styles.inpBuscar}`}
-                    style={{backgroundColor:modoNocturno ? "#2d2d2d" : "", color: modoNocturno ? "white": "",fontSize : `${fontSize}rem`}}
+                    style={{ backgroundColor: modoNocturno ? "#2d2d2d" : "", color: modoNocturno ? "white" : "", fontSize: `${fontSize}rem` }}
                     placeholder="Buscador"
                     onChange={(e) => setBusqueda(e.target.value)}
                     value={busqueda}
@@ -225,7 +227,7 @@ function Buscador({ onSeleccionMarcador }: BuscadorProps) {
                         borderRadius: '15px',
                         padding: '15px',
                         display: displayFiltro,
-                        border: modoNocturno ? "none" :  "1px solid #ccc"
+                        border: modoNocturno ? "none" : "1px solid #ccc"
                     }}
                 >
                     <div style={{ textAlign: "left" }}>
@@ -251,14 +253,14 @@ function Buscador({ onSeleccionMarcador }: BuscadorProps) {
 
             {busqueda.length > 0 && (
                 <div style={{
-                    marginTop: "10px", 
-                    textAlign: "left", 
-                    maxHeight: "200px", 
+                    marginTop: "10px",
+                    textAlign: "left",
+                    maxHeight: "200px",
                     overflowY: "auto",
-                    backgroundColor: modoNocturno ? '#333' : 'white', 
-                    borderRadius: '10px', 
+                    backgroundColor: modoNocturno ? '#333' : 'white',
+                    borderRadius: '10px',
                     padding: '10px',
-                    fontSize:  `${fontSize}rem` ,
+                    fontSize: `${fontSize}rem`,
                     color: modoNocturno ? 'white' : 'black'
                 }}>
                     <p>Resultados</p>
@@ -266,10 +268,10 @@ function Buscador({ onSeleccionMarcador }: BuscadorProps) {
                     {resultados.map((item) => (
                         <div
                             key={item.id}
-                            style={{ 
-                                padding: "5px 0", 
-                                borderBottom: `1px solid ${modoNocturno ? '#555' : '#ccc'}`, 
-                                cursor: "pointer" 
+                            style={{
+                                padding: "5px 0",
+                                borderBottom: `1px solid ${modoNocturno ? '#555' : '#ccc'}`,
+                                cursor: "pointer"
                             }}
                             onClick={() => {
                                 onSeleccionMarcador(item.id);
