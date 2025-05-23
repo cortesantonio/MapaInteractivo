@@ -6,11 +6,11 @@ import { supabase } from '../../services/supabase';
 import { Tipo_Recinto } from '../../interfaces/Tipo_Recinto';
 import EditarTipoRecinto from './Editar';
 import NavbarAdmin from '../../components/NavbarAdmin';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../hooks/useAuth';
 
 function ListTipoRecinto() {
-    const { id } = useParams();
+
     const { user } = useAuth();
     const navigate = useNavigate();
     const [tiposRecintos, setTiposRecintos] = useState<Tipo_Recinto[]>([]);

@@ -8,7 +8,7 @@ import { useAuth } from '../../hooks/useAuth';
 import NavbarAdmin from '../../components/NavbarAdmin';
 import { useLoadScript, Autocomplete } from "@react-google-maps/api";
 import { APIProvider, Map as VisMap, AdvancedMarker } from "@vis.gl/react-google-maps";
-import { useNavigate, useParams } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 
 interface TipoDeAccesibilidades {
@@ -19,7 +19,6 @@ const LIBRARIES: ("places")[] = ['places'];
 export default function AgregarMarcador() {
   const navigate = useNavigate()
   const apiKey = import.meta.env.VITE_GOOGLE_APIKEY;
-  const { id } = useParams();
   const { user } = useAuth();
   const [accesibilidades, setAccesibilidades] = useState<TipoDeAccesibilidades>({});
   const [dataMarcador, setDataMarcador] = useState<Partial<Marcador>>({

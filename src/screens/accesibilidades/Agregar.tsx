@@ -4,11 +4,11 @@ import { faReply } from '@fortawesome/free-solid-svg-icons';
 import { useState } from 'react';
 import { Accesibilidad } from '../../interfaces/Accesibilidad';
 import { supabase } from '../../services/supabase';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../hooks/useAuth';
 
 export default function AgregarAccesibilidad() {
-    const { id } = useParams();
+
     const { user } = useAuth();
     const navigate = useNavigate();
     const [formData, setFormData] = useState<Accesibilidad>({
