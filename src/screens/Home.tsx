@@ -25,7 +25,7 @@ export default function Home() {
   const { userEstado, signOut } = useAuth()
   const [yaVerificado, setYaVerificado] = useState(false);
   const [mapacentrado, setMapacentrado] = useState(false);
-  const {modoNocturno} = useTheme ();
+  const { modoNocturno } = useTheme();
 
   useEffect(() => {
     if (userEstado === false && !yaVerificado) {
@@ -63,13 +63,13 @@ export default function Home() {
   }, []);
 
   const estilosMarcador: CSSProperties = {
-    position: "absolute",
     zIndex: 1,
-    bottom: isMobile ? "0px" : "60px",
+    bottom: isMobile ? "0px" : "0px",
     left: isMobile ? "0px" : "25px",
-    width: isMobile ? "100%" : "auto",
+    width: isMobile ? "100%" : "fit-content",
     height: isMobile ? "85%" : "auto",
     transition: "bottom 0.3s ease-in-out",
+    pointerEvents: 'auto'
   };
 
   return (
@@ -93,19 +93,31 @@ export default function Home() {
       {!isStreetViewActive && (
         <>
           <div style={{
-            position: 'absolute', top: 0, right: 0, zIndex: 1, width: '100%', display: 'flex', justifyContent: 'space-between', padding: 25, pointerEvents: 'none'
+            position: 'absolute', top: 0, right: 0, zIndex: 1, width: '100%', height: '100dvh',
+            padding: '25px', display: 'flex', pointerEvents: 'none', flexDirection: 'column'
           }}>
-            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'start', gap: 10, pointerEvents: 'auto', width: "85%" }}>
-              <Buscador onSeleccionMarcador={(id: number) => {
-                setMarcadorSeleccionadoId(id);
-                setMostrarMarcador(true);
-              }} />
-              <BotonEventos />
+            <div style={{ display: 'flex', justifyContent: 'space-between', width: '100%' }}>
+              <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'start', gap: 10, pointerEvents: 'none', width: "85%" }}>
+                <Buscador onSeleccionMarcador={(id: number) => {
+                  setMarcadorSeleccionadoId(id);
+                  setMostrarMarcador(true);
+                }} />
+                <BotonEventos />
+              </div>
+              <div style={{ position: "absolute", right: "25px" }}>
+                <NavbarUser />
+              </div>
             </div>
-            <div style={{ position: "absolute", right: "25px" }}>
-              <NavbarUser />
 
-            </div>
+            {mostrarMarcador && marcadorSeleccionadoId !== null && (
+              <div style={estilosMarcador}>
+                <VerMarcador
+                  MarcadorSelectId={marcadorSeleccionadoId}
+                  CerrarMarcador={() => setMostrarMarcador(false)}
+                  establecerIdRutaMarcador={(id) => setIdrutamarcador(id)}
+                />
+              </div>
+            )}
 
           </div>
 
@@ -144,7 +156,7 @@ export default function Home() {
               style={{
                 background: modoNocturno ? "#2d2d2d" : "",
                 backgroundColor: !ubicacionActiva
-                ? modoNocturno ? "#666" : "#ccc" : mapacentrado ? "#4285F4" : modoNocturno ? "#2d2d2d" : "#fff" ,
+                  ? modoNocturno ? "#666" : "#ccc" : mapacentrado ? "#4285F4" : modoNocturno ? "#2d2d2d" : "#fff",
                 border: "none",
                 borderRadius: "5px",
                 boxShadow: "0 1px 4px rgba(0,0,0,0.3)",
@@ -159,21 +171,13 @@ export default function Home() {
             >
               <FontAwesomeIcon
                 icon={faLocationCrosshairs}
-                color={!ubicacionActiva ? "#888" : mapacentrado ? "#fff" :( modoNocturno ? "#ddd" : "#666")}
+                color={!ubicacionActiva ? "#888" : mapacentrado ? "#fff" : (modoNocturno ? "#ddd" : "#666")}
                 style={{ width: "22px", height: "22px" }}
               />
             </button>
           </div>
 
-          {mostrarMarcador && marcadorSeleccionadoId !== null && (
-            <div style={estilosMarcador}>
-              <VerMarcador
-                MarcadorSelectId={marcadorSeleccionadoId}
-                CerrarMarcador={() => setMostrarMarcador(false)}
-                establecerIdRutaMarcador={(id) => setIdrutamarcador(id)}
-              />
-            </div>
-          )}
+
 
         </>
       )

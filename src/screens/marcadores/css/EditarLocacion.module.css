@@ -42,10 +42,27 @@
 
 .locacionTitulo {
     position: absolute;
-    bottom: 45px;
+    bottom: 25px;
     left: 25px;
     color: white;
-    font-size: 30px;
+}
+
+.locacionTitulo h4 {
+    font-size: 3rem;
+    margin: 0;
+}
+
+
+.locacionTitulo p {
+    font-size: 1.7rem;
+    margin: 0;
+}
+
+.locacionTitulo img {
+    width: 30px;
+    height: 30px;
+    margin-right: 10px;
+    filter: brightness(100%);
 }
 
 .Conten {

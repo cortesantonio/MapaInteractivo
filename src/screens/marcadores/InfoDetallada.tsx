@@ -9,6 +9,7 @@ import { supabase } from '../../services/supabase';
 import { faArrowUpRightFromSquare } from '@fortawesome/free-solid-svg-icons';
 import ImagenConFallback from '../../components/ImagenConFallback';
 import { useAuth } from '../../hooks/useAuth';
+import Marca_Verificador from '../../../public/img/Marca_Verificador.webp';
 
 interface TipoDeAccesibilidades {
     [tipo: string]: Accesibilidad[];
@@ -213,9 +214,16 @@ export default function InfoDetallada() {
                     <h2>Información detallada</h2>
                 </div>
                 <div className={styles.locacionTitulo}>
-                    <h4>{dataMarcador.nombre_recinto}</h4>
-                    <p>{nombreTipoRecinto}</p>
-                    <p>{dataMarcador.accesibilidad_certificada ? ('si') : ('no')}</p>
+                    <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', gap: '10px' }}>
+                        <h4>{dataMarcador.nombre_recinto}</h4>
+                        {dataMarcador.accesibilidad_certificada ? (
+                            <img className={styles.marcaVerificador} src={Marca_Verificador} alt="Marca Verificador" title='Marcador Verificado' />
+                        ) : (
+                            <p></p>
+                        )}
+                    </div>
+                    <p>{'>'} {nombreTipoRecinto}</p>
+
                 </div>
             </div>
 

@@ -46,6 +46,24 @@
     color: white;
 }
 
+.locacionTitulo h4 {
+    font-size: 3rem;
+    margin: 0;
+}
+
+
+.locacionTitulo p {
+    font-size: 1.7rem;
+    margin: 0;
+}
+
+.locacionTitulo img {
+    width: 30px;
+    height: 30px;
+    margin-right: 10px;
+    filter: brightness(100%);
+}
+
 .Conten {
     width: 100%;
     padding: 25px;
@@ -177,4 +195,36 @@
     border: none;
     margin-left: 10px;
     cursor: pointer;
+}
+
+@media screen and (max-width: 768px) {
+    .VolverAtras {
+        top: 15px;
+        left: 15px;
+    }
+
+    .Titulo {
+        font-size: 1rem;
+        font-weight: 100;
+        top: 15px;
+    }
+
+    .header img {
+        height: 35vh;
+    }
+
+    .locacionTitulo h4 {
+        font-size: 2.1rem;
+        text-wrap: wrap;
+    }
+
+    .locacionTitulo p {
+        font-size: 1.5rem;
+    }
+
+    .locacionTitulo img {
+        width: 20px;
+        height: 20px;
+    }
+
 }
