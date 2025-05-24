@@ -1,8 +1,10 @@
 /* Estilos base y contenedor principal */
 .container_principal {
     width: 100%;
-    height: 100%;
-    overflow: none;
+    height: 95vh;
+    overflow: hidden;
+    display: flex ;
+    flex-direction: column;
 }
 
 .container {
@@ -26,20 +28,23 @@
   background-color: transparent;
   border: solid 3px black;
   border-radius: 10px;
-  width: 200px;
+  width: fit-content;
+  padding: 0px 15px ;
 }
 
 /* Estilos del título */
 .Titulo {
     align-self: flex-start;
-    margin-bottom: clamp(10px, 2vw, 20px);
+    height: 5vh;
     width: 100%;
+    height: 100%;
 }
 
 .Titulo h4 {
     font-size: clamp(1.2rem, 4vw, 1.8rem);
     font-weight: 500;
-    margin: 20px;
+
+
 }
 
 /* Estilos del buscador */
@@ -128,6 +133,11 @@
     padding: clamp(12px, 3vw, 20px);
     margin-bottom: clamp(15px, 3vw, 25px);
     z-index: 10;
+    border: 3px solid black;
+    max-height: clamp(300px, 50vh, 400px);
+    overflow-y: auto;
+    overflow-x: hidden;
+    
 }
 
 .contenedor_resultados_filtros p {
@@ -139,6 +149,7 @@
 /* Resultados de búsqueda */
 .resultados_busqueda {
     width: 100%;
+    height: 100%;
     border: 1px solid #e0e0e0;
     border-radius: clamp(8px, 2vw, 15px);
     overflow: hidden;
@@ -164,7 +175,7 @@
 .contenedor_resultados {
     width: 100%;
     padding: clamp(10px, 2vw, 15px);
-    height: 100%;
+    height: 100vh;
     overflow-y: auto;
     max-height: clamp(300px, 60vh, 500px);
 }
@@ -173,7 +184,7 @@
     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.15);
     background-color: #fff;
     border-radius: clamp(10px, 2vw, 15px);
-    min-height: clamp(200px, 50vh, 350px);
+    height: clamp(50vh, 10vw + 50vh, 70vh);
     margin-bottom: clamp(15px, 3vw, 25px);
     padding: clamp(15px, 3vw, 25px);
     transition: transform 0.2s, box-shadow 0.2s;
@@ -247,15 +258,106 @@
     transform: scale(1.05);
 }
 
+/* NUEVOS ESTILOS COMPACTOS PARA CONTENEDOR DE OPCIONES */
 
+/* Contenedor principal de opciones - compacto */
 .contenedor_de_opciones {
     background-color: #fff;
     width: 100%;
-    margin-top: clamp(15px, 3vw, 30px);
-    margin-bottom: clamp(15px, 3vw, 30px);
-    padding: clamp(10px, 2vw, 20px);
+    max-width: 500px;
+    margin-top: 0.8rem;
+    margin-bottom: clamp(15px, 3vw, 20px);
+    padding: clamp(10px, 2vw, 15px);
+    border: 3px solid #000;
+    border-radius: 10px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
 }
 
+/* Título principal compacto */
+.contenedor_titulo_principal {
+    text-align: center;
+    margin-bottom: clamp(12px, 2vw, 15px);
+    padding-bottom: clamp(8px, 1.5vw, 10px);
+    border-bottom: 1px solid #e9ecef;
+}
+
+.contenedor_titulo_principal h3 {
+    font-size: clamp(1.1rem, 3vw, 1.4rem);
+    font-weight: 600;
+    margin: 0 0 clamp(5px, 1vw, 8px) 0;
+    color: #333;
+}
+
+.contenedor_titulo_principal h4 {
+    font-size: clamp(0.9rem, 2.5vw, 1.1rem);
+    font-weight: 400;
+    margin: 0;
+    color: #666;
+}
+
+/* Contenedor de opciones horizontal y compacto */
+.contenedor_opciones {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: clamp(10px, 2vw, 15px);
+    width: 100%;
+    padding: clamp(8px, 1.5vw, 12px);
+    background-color: #fff;
+    border-radius: 8px;
+    border: 2px solid #000;
+}
+
+/* Cada opción compacta horizontal */
+.opcion_tarjeta {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    padding: clamp(8px, 1.5vw, 12px);
+    background-color: #fff;
+    border-radius: 8px;
+    border: 2px solid #000;
+    transition: all 0.2s ease;
+    cursor: pointer;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.05);
+    min-width: 0;
+    flex: 1;
+    justify-content: center;
+}
+
+.opcion_tarjeta:hover {
+    border-color: #000;
+    transform: translateY(-1px);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.opcion_tarjeta .icono_opcion {
+    font-size: clamp(1rem, 2.5vw, 1.2rem);
+    margin-right: clamp(6px, 1.5vw, 8px);
+    color: #333;
+    flex-shrink: 0;
+}
+
+.opcion_tarjeta button {
+    background-color: transparent;
+    border: none;
+    font-size: clamp(0.8rem, 2vw, 0.95rem);
+    font-weight: 500;
+    color: #333;
+    cursor: pointer;
+    padding: 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.opcion_tarjeta:hover button {
+    color: #000;
+}
+
+
+
+/* ESTILOS ANTIGUOS QUE SE MANTIENEN PARA COMPATIBILIDAD */
 .contenedor_titulo_opciones {
     display: flex;
     justify-content: center;
@@ -269,22 +371,6 @@
     font-size: clamp(1.1rem, 3vw, 1.5rem);
     font-weight: 500;
     margin: 0;
-}
-
-.contenedor_opciones {
-    display: flex;
-    flex-direction: column;
-    width: 100%;
-    padding: clamp(5px, 1vw, 10px);
-}
-
-.contenedor_opciones .contenedor_opciones_iconos {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    align-items: center;
-    gap: clamp(8px, 2vw, 15px);
-    padding: clamp(5px, 1vw, 10px);
 }
 
 .elementos {
@@ -303,10 +389,4 @@
     cursor: pointer;
     transition: color 0.2s;
 }
-
-.contenedor_opciones_iconos button:hover {
-    color: #555;
-    text-decoration: underline;
-}
-
 
