@@ -41,7 +41,7 @@ function Modo_Compacto() {
     const [eventosVisible, setEventosVisible] = useState<boolean>(false);
     
     // Nuevo estado para controlar la visibilidad del contenedor de opciones
-    const [opcionesVisible, setOpcionesVisible] = useState<boolean>(true);
+   
     
     const navigate = useNavigate();
     
@@ -157,12 +157,7 @@ function Modo_Compacto() {
     const toggleEventos = () => {
         setEventosVisible(!eventosVisible);
         // Si los eventos se muestran, oculta las opciones de usuario
-        if (!eventosVisible) {
-            setOpcionesVisible(false);
-        } else {
-            // Si los eventos se ocultan, muestra de nuevo las opciones de usuario
-            setOpcionesVisible(true);
-        }
+        
         
         // Si se abre el panel de eventos, cerrar el panel de filtros
         if (!eventosVisible && filtroIsVisible) {
@@ -208,22 +203,62 @@ function Modo_Compacto() {
         // Si se abre el panel de filtros, cerrar el panel de eventos
         if (!filtroIsVisible && eventosVisible) {
             setEventosVisible(false);
-            setOpcionesVisible(true); // Restaurar opciones de usuario si se cierran los eventos
+            // Restaurar opciones de usuario si se cierran los eventos
         }
     };
 
     return (
         <div className={styles.container_principal}>
-            <div style={{marginBottom:"25px",marginRight:"10px",backgroundColor:"#000"}}>
+            <div style={{ marginBottom: "25px", marginRight: "10px", backgroundColor: "#000" }}>
                 <button className={styles.botonatras} onClick={() => navigate(-1)}>
-                    <FontAwesomeIcon style={{fontSize:"20px",margin:"3px"}} icon={faReply} />
-                    <span style={{width:"100px",fontSize:"25px"}}>Atrás</span>
-                 </button>
+                    <FontAwesomeIcon style={{ fontSize: "20px", margin: "3px" }} icon={faReply} />
+                    <span style={{ width: "100px", fontSize: "25px" }}>Atrás</span>
+                </button>
             </div>
             <div className={styles.container}>
-                <div className={styles.Titulo}>
-                    <h4>Inicio Búsqueda de Recintos</h4>
+                
+        
+            <div className={styles.contenedor_de_opciones}>
+                     {/* Título principal separado */}
+            <div className={styles.contenedor_titulo_principal}>
+            <h3>Inicio Búsqueda de Recintos</h3>
+            <h4>
+                {user ? `Bienvenido, ${userDetails?.nombre || user.user_metadata?.nombre || user.email}` : 'Bienvenido'}
+            </h4>
+        </div>
+
+        {/* Opciones organizadas en tarjetas */}
+        <div className={styles.contenedor_opciones}>
+            {/* Opción Colaborar */}
+            <div className={styles.opcion_tarjeta} onClick={() => navigate("/colaborar")}>
+                <FontAwesomeIcon className={styles.icono_opcion} icon={faBook} />
+                <button>Colaborar</button>
+            </div>
+
+            {user ? (
+                // Si el usuario está logueado
+                <div className={styles.opcion_tarjeta} onClick={() => navigate(`/usuario/perfil/${user.id}`)}>
+                    <FontAwesomeIcon className={styles.icono_opcion} icon={faUser} />
+                    <button>Mi Perfil</button>
                 </div>
+            ) : (
+                // Si no hay usuario logueado
+                <div className={styles.opcion_tarjeta} onClick={() => navigate("/login")}>
+                    <FontAwesomeIcon className={styles.icono_opcion} icon={faRightToBracket} />
+                    <button>Iniciar Sesión</button>
+                </div>
+            )}
+
+            {/* Opción Salir */}
+            <div className={styles.opcion_tarjeta} onClick={() => navigate("/")}>
+                <FontAwesomeIcon className={styles.icono_opcion} icon={faRightFromBracket} />
+                <button>Salir</button>
+            </div>
+        </div>
+    </div>
+
+                    
+                    
                 
                 <div className={styles.contenedor_buscador}>
                     <div className={styles.buscador}>
@@ -342,10 +377,7 @@ function Modo_Compacto() {
                                                 )}
                                                 
                                                 <div style={{display: "flex",justifyContent:"flex-end",alignItems:"flex-end",margin:"15px"}}>
-                                                    <button onClick={() => navigate(`/modocompacto/trazadoruta/${marcador.id}`)}>
-                                                        Iniciar Navegación
-                                                    </button>
-
+                                                    <button onClick={() => navigate(`/modocompacto/trazadoruta/${marcador.id}`)} >Iniciar Navegación</button>
                                                 </div>
                                             </div>
                                         </div>
@@ -361,45 +393,6 @@ function Modo_Compacto() {
                 )}
             </div>
             
-            {/* Contenedor de opciones - Solo se muestra si opcionesVisible es true */}
-            {opcionesVisible && (
-                <div className={styles.contenedor_de_opciones}>
-                    <div className={styles.contenedor_titulo_opciones}>
-                        <h3>Opciones Usuarios</h3>
-                    </div>
-                    <div style={{textAlign:"center"}}>
-                        <h3>
-                            {user ? `Bienvenido, ${userDetails?.nombre || user.user_metadata?.nombre || user.email}` : 'Bienvenido'}
-                        </h3>
-                    </div>
-                    <div className={styles.contenedor_opciones}>
-                        <div className={styles.contenedor_opciones_iconos}>
-                            <FontAwesomeIcon className={styles.elementos} icon={faBook} />  
-                            <button onClick={() => navigate("/colaborar")}>Colaborar</button>
-                            
-                            {user ? (
-                                // Si el usuario está logueado, mostrar opciones de usuario autenticado
-                                <>
-                                    <FontAwesomeIcon className={styles.elementos} icon={faUser} />
-                                    <button onClick={() => navigate(`/usuario/perfil/${user.id}`)}>Mi Perfil</button>
-                                    
-                                    
-                                    
-                                </>
-                            ) : (
-                                // Si no hay usuario logueado, mostrar opción de inicio de sesión
-                                <>
-                                    <FontAwesomeIcon className={styles.elementos} icon={faRightToBracket} />
-                                    <button onClick={() => navigate("/login")}>Iniciar Sesión</button>
-                                </>
-                            )}
-                            
-                            <FontAwesomeIcon className={styles.elementos} icon={faRightFromBracket} />
-                            <button onClick={() => navigate("/")}>Salir</button>
-                        </div>
-                    </div>
-                </div>
-            )}
         </div>
     );
 }

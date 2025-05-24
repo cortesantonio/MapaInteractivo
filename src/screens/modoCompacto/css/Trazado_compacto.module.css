@@ -9,11 +9,13 @@
   left: 5px;
   color: #000;
   cursor: pointer;
+  z-index: 1000;
   font-size: 20px;
   background-color: transparent;
   border: solid 3px black;
   border-radius: 10px;
-  width: 200px;
+  width: fit-content;
+  padding: 0px 15px ;
 }
 
 .PositionIcons {
