@@ -14,4 +14,5 @@ export interface Marcador {
   longitud?: number;
   activo: boolean;
   accesibilidad_certificada: boolean;
+  info_adicional?: string;
 }
