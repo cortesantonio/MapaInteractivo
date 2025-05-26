@@ -35,7 +35,9 @@ export default function InfoDetallada() {
         latitud: undefined,
         longitud: undefined,
         activo: true,
-        accesibilidad_certificada: false
+        accesibilidad_certificada: false,
+        info_adicional: ''
+
     });
     const [selecciones, setSelecciones] = useState<number[]>([]);
     const [supervisor, setSupervisor] = useState({
@@ -91,6 +93,26 @@ export default function InfoDetallada() {
             fetchMarcador();
         }
     }, [id]);
+
+    useEffect(() => {
+        if (!id) return;
+
+        const fetchHorario = async () => {
+            const { data, error } = await supabase
+                .from('horarios')
+                .select('*')
+                .eq('id_marcador', id)
+                .single();
+
+            if (error) {
+                console.error('Error al obtener el marcador:', error);
+            } else {
+                console.log('Horario del marcador:', data);
+            }
+        };
+
+        fetchHorario();
+    }), [id];
 
     useEffect(() => {
         const fetchNombreUsuario = async () => {
@@ -299,7 +321,16 @@ export default function InfoDetallada() {
                                     </div>
                                 );
                             })}
+                            
+                            <div>
+                                <label className={styles.labelSeccion} htmlFor="">Informacion Adicional</label>
+                                <p style={{ color: '#ccc' }}>{dataMarcador.info_adicional || 'No aporta informacion adicional.'}</p>
+
+                            </div>
+
+
                         </div>
+
                     </div>
 
                     {marcadorPropio ? (

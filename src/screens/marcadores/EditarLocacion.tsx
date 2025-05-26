@@ -35,6 +35,7 @@ export default function EditarLocacion() {
         longitud: undefined,
         activo: true,
         accesibilidad_certificada: false,
+        info_adicional: '',
 
     };
     const [dataMarcador, setDataMarcador] = useState<Partial<Marcador>>(estadoInicialMarcadores);
@@ -387,14 +388,14 @@ export default function EditarLocacion() {
                                     type="text"
                                     value={dataMarcador.pagina_web}
                                     onChange={(e) => setDataMarcador({ ...dataMarcador, pagina_web: e.target.value })}
-                                    className={styles.inputText}  />
+                                    className={styles.inputText} />
 
                                 <label className={styles.labelSeccion} htmlFor="">URL de imagen</label>
                                 <input
                                     type="text"
                                     value={dataMarcador.url_img}
                                     onChange={(e) => setDataMarcador({ ...dataMarcador, url_img: e.target.value })}
-                                    className={styles.inputText}  />
+                                    className={styles.inputText} />
 
 
                                 <label className={styles.labelSeccion} htmlFor="">Teléfono</label>
@@ -425,6 +426,20 @@ export default function EditarLocacion() {
                                             ))}
                                         </div>
                                     ))}
+
+                                    <div>
+                                        <label className={styles.labelSeccion} htmlFor="">Informacion Adicional</label>
+                                        <textarea
+                                            placeholder="Escribe información adicional sobre el marcador..."
+                                            value={dataMarcador.info_adicional}
+                                            onChange={(e) => setDataMarcador({ ...dataMarcador, info_adicional: e.target.value })}
+                                            className={styles.inputText}
+                                            rows={4}
+                                            style={{ resize: 'none', height: '100px' }}
+
+                                        />
+                                    </div>
+
                                 </div>) : null}
                             {/*Segundo Grupo*/}
 
