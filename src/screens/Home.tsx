@@ -9,10 +9,14 @@ import { useAuth } from "../hooks/useAuth";
 import { useTheme } from "../components/Footer/Modo_Nocturno";
 import { faLocationCrosshairs } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import ModalPerfilIncompleto from "../components/ModalPerfilIncompleto";
+import { supabase } from "../services/supabase";
 
 
 
 export default function Home() {
+  const [mostrarModal, setMostrarModal] = useState(false);
+  const [ignorarModal, setIgnorarModal] = useState(false);
   const [marcadorSeleccionadoId, setMarcadorSeleccionadoId] = useState<number | null>(null);
   const [mostrarMarcador, setMostrarMarcador] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
@@ -34,6 +38,55 @@ export default function Home() {
       alert("Su cuenta está desactivada, por favor contacta a soporte");
     }
   }, [userEstado]);
+
+
+  // El modal aparece solo si hay campos del perfil sin completar, al completar todos los campos requeridos el modal desaparece por completo del Home.
+  useEffect(() => {
+    const verificarDatosObligatorios = async () => {
+      const { data: sessionData } = await supabase.auth.getUser();
+      const email = sessionData?.user?.email;
+
+      // Si no hay sesión activa, no mostrar el modal ni validar nada
+      if (!email) {
+        setMostrarModal(false);
+        return;
+      }
+
+      // Si hay sesión, validar los datos del perfil
+      const { data: usuario } = await supabase
+        .from("usuarios")
+        .select("*")
+        .eq("correo", email)
+        .single();
+
+      if (!usuario) return;
+
+      const { data: discapacidad } = await supabase
+        .from("discapacidad")
+        .select("*")
+        .eq("id_usuario", usuario.id)
+        .single();
+
+      const datosCompletos =
+        usuario.nombre?.trim() &&
+        usuario.correo?.trim() &&
+        usuario.rut?.trim() &&
+        usuario.password?.trim() &&
+        (!discapacidad || (
+          discapacidad.nombre?.trim() &&
+          discapacidad.tipo?.trim() &&
+          discapacidad.id_accesibilidad
+        ));
+
+      if (!datosCompletos) {
+        setMostrarModal(true);
+      } else {
+        setMostrarModal(false);
+      }
+    };
+
+    verificarDatosObligatorios();
+  }, []);
 
 
   const establecerDestino = useCallback((lat: number | null, lng: number | null) => {
@@ -93,7 +146,7 @@ export default function Home() {
       {!isStreetViewActive && (
         <>
           <div style={{
-            position: 'absolute', top: 0, right: 0, zIndex: 1, width: '100%', height: '100dvh',
+            position: 'absolute', top: 0, right: 0, width: '100%', height: '100dvh',
             padding: '25px', display: 'flex', pointerEvents: 'none', flexDirection: 'column'
           }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', width: '100%' }}>
@@ -104,7 +157,7 @@ export default function Home() {
                 }} />
                 <BotonEventos />
               </div>
-              <div style={{ position: "absolute", right: "25px" }}>
+              <div style={{ position: "absolute", right: "25px", zIndex: 2, }}>
                 <NavbarUser />
               </div>
             </div>
@@ -182,6 +235,8 @@ export default function Home() {
         </>
       )
       }
+      {mostrarModal && !ignorarModal && <ModalPerfilIncompleto onCerrar={() => setIgnorarModal(true)} />}
+
     </div >
   );
 }

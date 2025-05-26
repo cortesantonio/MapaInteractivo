@@ -132,7 +132,7 @@ function Editar_Usuarios() {
       setAccesibilidad(accesibilidadData || []);
 
       if (accesibilidadData && accesibilidadData.length > 0) {
-        setTipoAccesibilidadSeleccionado(accesibilidadData[0].id);
+        setTipoAccesibilidadSeleccionado("");
       }
 
       // Consulta para obtener datos de discapacidad del usuario
@@ -146,9 +146,6 @@ function Editar_Usuarios() {
       } else {
         setDiscapacidad(discapacidadData as any);
       }
-
-
-
     };
 
     if (id) {
@@ -279,16 +276,12 @@ function Editar_Usuarios() {
               required
             />
           </div>
+          {/* Este div de Correo se encuentra bloquedo para que el usuario no pueda hacer cosas extrañas */}
           <div className={styles.espacio}>
             <label className={styles.etiquetas}>Correo *</label>
-            <input
-              className={styles.formulario}
-              type="email"
-              placeholder="tu@correo.cl"
-              onChange={(e) => handleChange('correo', e.target.value)}
-              value={usuarios[0]?.correo || ""}
-              required
-            />
+            <p className={styles.texto_bloqueado}>
+              {usuarios[0]?.correo || "Correo no disponible"}
+            </p>
           </div>
           <div className={styles.espacio}>
             <label className={styles.etiquetas}>Fecha de nacimiento</label>
@@ -355,7 +348,7 @@ function Editar_Usuarios() {
               onChange={(e) => handleChange('genero', e.target.value)}
               value={usuarios[0]?.genero || ""}
             >
-              <option value="">Seleccione género</option>
+              <option value="" disabled hidden>Seleccione género</option>
               {['Hombre', 'Mujer', 'No especificado'].map((genero, index) => (
                 <option key={index} value={genero}>
                   {genero}
@@ -391,9 +384,25 @@ function Editar_Usuarios() {
               <input
                 type="checkbox"
                 checked={tiene_una_Discapacidad}
-                onChange={(e) => set_tiene_una_Discapacidad(e.target.checked)}
+                onChange={async (e) => {
+                  const checked = e.target.checked;
+                  set_tiene_una_Discapacidad(checked);
+
+                  if (!checked) {
+                    // Si el usuario desactiva el checkbox, eliminamos la discapacidad del backend
+                    await supabase
+                      .from("discapacidad")
+                      .delete()
+                      .eq("id_usuario", id);
+
+                    // También limpiamos el estado local
+                    setDiscapacidad([]);
+                    setTipoAccesibilidadSeleccionado("");
+                  }
+                }}
                 id="discapacidad_checkbox"
               />
+
               <label htmlFor="discapacidad_checkbox">¿Presentas algún tipo de discapacidad?</label>
             </div>
 
@@ -407,7 +416,7 @@ function Editar_Usuarios() {
                     onChange={(e) => setTipoAccesibilidadSeleccionado(e.target.value)}
                     required={tiene_una_Discapacidad}
                   >
-                    <option value="">Seleccione tipo de accesibilidad</option>
+                    <option value="" disabled hidden>Seleccione tipo de accesibilidad</option>
                     {accesibilidad.map((tipo) => (
                       <option key={tipo.id} value={tipo.id}>
                         {tipo.nombre}
