@@ -348,7 +348,8 @@ function Editar_Usuarios() {
               onChange={(e) => handleChange('genero', e.target.value)}
               value={usuarios[0]?.genero || ""}
             >
-              <option value="" disabled hidden>Seleccione género</option>
+
+              <option value='No especificado'>Seleccione género</option>
               {['Hombre', 'Mujer', 'No especificado'].map((genero, index) => (
                 <option key={index} value={genero}>
                   {genero}

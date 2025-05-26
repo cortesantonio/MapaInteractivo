@@ -387,14 +387,14 @@ export default function EditarLocacion() {
                                     type="text"
                                     value={dataMarcador.pagina_web}
                                     onChange={(e) => setDataMarcador({ ...dataMarcador, pagina_web: e.target.value })}
-                                    className={styles.inputText} required />
+                                    className={styles.inputText}  />
 
                                 <label className={styles.labelSeccion} htmlFor="">URL de imagen</label>
                                 <input
                                     type="text"
                                     value={dataMarcador.url_img}
                                     onChange={(e) => setDataMarcador({ ...dataMarcador, url_img: e.target.value })}
-                                    className={styles.inputText} required />
+                                    className={styles.inputText}  />
 
 
                                 <label className={styles.labelSeccion} htmlFor="">Teléfono</label>
@@ -402,7 +402,7 @@ export default function EditarLocacion() {
                                     <p className={styles.codTelfono}>+569</p>
                                     <input
                                         type="number" value={dataMarcador.telefono}
-                                        onChange={(e) => setDataMarcador({ ...dataMarcador, telefono: e.target.value })} required />
+                                        onChange={(e) => setDataMarcador({ ...dataMarcador, telefono: e.target.value })} />
                                 </div>
 
                             </div>
