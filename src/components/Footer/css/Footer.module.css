@@ -5,7 +5,7 @@
     border-radius: 10px;
     top: auto;
     bottom: 10px;
-    z-index: 0;
+    z-index: 1;
     height: 5%;
     transform: translatex(-50%);
     position: fixed;
