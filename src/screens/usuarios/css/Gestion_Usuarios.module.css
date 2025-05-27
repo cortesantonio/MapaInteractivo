@@ -47,16 +47,14 @@
 }
 
 .add_user button {
-    margin: 0 0 5px 5px;
-    padding: 10px;
+    padding: 5px 15px;
     color: #ffffff;
-    border: solid 1px gray;
     background: linear-gradient(90deg, #ff0000, #ff6100);
     border-radius: 30px;
-    height: 20px;
-    gap: 5px;
     display: flex;
     align-items: center;
+    border: none;
+
 }
 
 .filtros .buscar {
@@ -91,8 +89,10 @@
     border-radius: 15px;
     font-size: 0.8rem;
     cursor: pointer;
-    margin-bottom: 15px;
     background-color: transparent;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .filtroCard select {
@@ -174,7 +174,7 @@
 
 .content {
     display: flex;
-    justify-content: start;
+    justify-content: center;
     flex-wrap: wrap;
     padding: 25px;
     gap: 10px;
