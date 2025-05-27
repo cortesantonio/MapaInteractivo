@@ -267,18 +267,31 @@ const CustomMap = ({
             position={{ lat, lng }}
             onClick={() => SeleccionMarcador(cluster.properties.marcadorId)}
           >
-            <div style={{
-              fontSize: "15px",
-              fontWeight: "bold",
-              color: modoNocturno ? "#F0F0F0" : "#565656",
-              whiteSpace: "nowrap",
-              overflow: "hidden",
-              textOverflow: "ellipsis",
-              maxWidth: "200px"
-            }}>
-              <FontAwesomeIcon icon={faLocationDot} style={{ color: "red" }} size="1x" /> {cluster.properties.nombre}
+            <div style={{ position: "relative", transform: "translate(-50%, -100%)" }}>
+              <div style={{ position: "absolute", left: "50%", top: "100%", transform: "translate(-50%, -100%)" }}>
+                <FontAwesomeIcon icon={faLocationDot} style={{ color: "red" }} size="lg" />
+              </div>
+              <div
+                style={{
+                  position: "absolute",
+                  top: "50%",
+                  left: "100%",
+                  transform: "translate(8px, -50%)", 
+                  fontSize: "15px",
+                  fontWeight: "bold",
+                  color: modoNocturno ? "#F0F0F0" : "#565656",
+                  whiteSpace: "nowrap",
+                  overflow: "hidden",
+                  textOverflow: "ellipsis",
+                  maxWidth: "200px"
+                }}
+              >
+                {cluster.properties.nombre}
+              </div>
             </div>
           </AdvancedMarker>
+
+
         );
       })}
 
