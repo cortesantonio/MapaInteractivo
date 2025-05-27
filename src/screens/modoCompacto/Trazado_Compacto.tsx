@@ -1,4 +1,4 @@
-import styles from "./css/Trazado_Compacto.module.css";
+import styles from "./css/Trazado_compacto.module.css";
 import { APIProvider } from "@vis.gl/react-google-maps";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBus, faCar, faPersonBiking, faPersonWalking, faReply } from "@fortawesome/free-solid-svg-icons";
