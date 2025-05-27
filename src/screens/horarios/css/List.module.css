@@ -1,0 +1,167 @@
+.container {
+    position: relative;
+    width: 100%;
+    background-color: white;
+    display: flex;
+    color: black;
+    flex-direction: column;
+}
+
+.header {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    margin-bottom: 15px;
+}
+
+.filtros {
+    display: flex;
+    gap: 5px;
+    justify-content: left;
+    flex-direction: column;
+    margin-bottom: 25px;
+    padding-left: 50px;
+    align-items: center;
+    /*Agregado por Mati*/
+}
+
+.filtroCard {
+    border: 1px solid gray;
+    padding: 0px 10px 0px 10px;
+    border-radius: 15px;
+    font-size: 0.8rem;
+    cursor: pointer;
+    transition: 0.2s all;
+    margin-bottom: 15px;
+    background-color: transparent;
+}
+
+.filtroCard select {
+    border: none;
+    background-color: transparent;
+}
+
+.filtroCard:hover {
+    transform: scale(98%);
+}
+
+.filtros .buscar {
+    display: flex;
+    justify-content: lef1;
+}
+
+.filtros .buscar {
+    display: flex;
+    gap: 5px;
+}
+
+.filtros .buscar input {
+    padding: 2px;
+    border-radius: 5px;
+    border: 1px solid gray;
+}
+
+.filtros .buscar button {
+    background-color: transparent;
+    border: none;
+    outline: none;
+}
+
+.add_user button {
+    margin: 0 0 5px 5px;
+    padding: 10px;
+    color: #ffffff;
+    border: solid 1px gray;
+    background: linear-gradient(90deg, #ff0000, #ff6100);
+    border-radius: 30px;
+    height: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.SubTitulo {
+    text-align: center;
+    color: gray;
+    justify-items: center;
+}
+
+.content {
+    display: flex;
+    justify-content: start;
+    flex-wrap: wrap;
+    padding: 25px;
+    gap: 10px;
+    width: 90%;
+    margin: 0 auto;
+
+}
+
+.card {
+    display: flex;
+    padding: 20px;
+    justify-content: center;
+    align-items: center;
+    background-color: white;
+    gap: 30px;
+    width: auto;
+    width: fit-content;
+    border: 1px solid rgba(128, 128, 128, 0.075);
+    border-radius: 15px;
+    box-shadow: 0px 0px 5px 0px rgba(128, 128, 128, 0.562);
+    transition: 0.2s all;
+
+}
+
+.card:hover {
+    transform: scale(98%);
+    box-shadow: 0px 0px 10px 0px rgba(128, 128, 128, 0.562);
+
+}
+
+.card .estado {
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+}
+
+.cardContent p {
+    width: 200px;
+    text-align: left;
+    white-space: wrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.card .opciones button {
+    background-color: transparent;
+    color: black;
+    padding: 0;
+    width: 20px;
+    height: 30px;
+    outline: none;
+    transition: 0.5s all;
+    border: none;
+    cursor: pointer;
+}
+
+.card .opciones button:hover {
+    transform: scale(110%);
+    color: gray;
+}
+
+.cardContent p {
+    font-size: 1rem;
+}
+
+@media (max-width: 768px) {
+    .content {
+        justify-content: center;
+        flex-wrap: wrap;
+    }
+}

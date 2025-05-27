@@ -83,7 +83,17 @@ function VistaAdministrador() {
                         }} onClick={() => { navigate('/panel-administrativo/marcadores') }}
                         >Gestión de marcadores
                         </button>
-
+                        <button style={{
+                            color: "black",
+                            background: "transparent",
+                            outline: "none",
+                            display: "flex",
+                            border: "none",
+                            fontSize: "17px",
+                            padding: "5px"
+                        }} onClick={() => { navigate('/panel-administrativo/marcadores/horarios') }}
+                        >Gestión de horarios en marcadores
+                        </button>
                         <button
                             style={{
                                 color: "black",

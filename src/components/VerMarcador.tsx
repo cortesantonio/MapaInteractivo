@@ -73,9 +73,8 @@ export default function VerMarcador({ MarcadorSelectId, CerrarMarcador, establec
                     setMarcador(marcadorFormateado);
                 }
 
-                if (marcador.horarios && marcador.horarios.length > 0) {
-                    setHorariosMarcador(marcador.horarios);
-                }
+                setHorariosMarcador(marcador.horarios);
+
 
                 if (marcador.accesibilidad_marcador && marcador.accesibilidad_marcador.length > 0) {
                     const accesibilidades = marcador.accesibilidad_marcador.map((item: any) => item.id_accesibilidad);

@@ -10,6 +10,7 @@ import { faArrowUpRightFromSquare } from '@fortawesome/free-solid-svg-icons';
 import ImagenConFallback from '../../components/ImagenConFallback';
 import { useAuth } from '../../hooks/useAuth';
 import Marca_Verificador from '../../../public/img/Marca_Verificador.webp';
+import { Horarios } from '../../interfaces/Horarios';
 
 interface TipoDeAccesibilidades {
     [tipo: string]: Accesibilidad[];
@@ -22,6 +23,8 @@ export default function InfoDetallada() {
     const [accesibilidades, setAccesibilidades] = useState<TipoDeAccesibilidades>({});
     const [nombreTipoRecinto, setNombreTipoRecinto] = useState('');
     const [marcadorPropio, setMarcadorPropio] = useState(false);
+
+    const [horario, setHorario] = useState<Horarios[]>([]);
 
     const [dataMarcador, setDataMarcador] = useState<Partial<Marcador>>({
         nombre_recinto: '',
@@ -94,25 +97,6 @@ export default function InfoDetallada() {
         }
     }, [id]);
 
-    useEffect(() => {
-        if (!id) return;
-
-        const fetchHorario = async () => {
-            const { data, error } = await supabase
-                .from('horarios')
-                .select('*')
-                .eq('id_marcador', id)
-                .single();
-
-            if (error) {
-                console.error('Error al obtener el marcador:', error);
-            } else {
-                console.log('Horario del marcador:', data);
-            }
-        };
-
-        fetchHorario();
-    }), [id];
 
     useEffect(() => {
         const fetchNombreUsuario = async () => {
@@ -201,6 +185,28 @@ export default function InfoDetallada() {
 
         Registro_cambios();
     };
+
+    useEffect(() => {
+        if (!id) return;
+
+        const fetchHorario = async () => {
+            const { data, error } = await supabase
+                .from('horarios')
+                .select('*')
+                .eq('id_marcador', id);
+
+            if (error) {
+                console.error('Error al obtener el horario:', error);
+                return;
+            }
+
+            if (data) {
+                setHorario(data);
+            }
+        };
+
+        fetchHorario();
+    }, [id]);
 
 
 
@@ -294,7 +300,26 @@ export default function InfoDetallada() {
                                 <p>{dataMarcador.telefono}</p>
                             </div>
 
+                            <button onClick={() => { navigate(`/panel-administrativo/marcadores/horario/${id}`) }} style={{ textDecoration: 'underline',  background: 'none', width: 'fit-content', border: 'none' }}> <label className={styles.labelSeccion} style={{cursor: 'pointer',}} htmlFor="">Horario <FontAwesomeIcon icon={faArrowUpRightFromSquare} size='2xs' /></label></button>
+                            <div className={styles.ContainerinputTelefono}>
+                                <ul>
+                                    {horario
+                                        .slice() // para no mutar el estado original
+                                        .sort((a, b) => {
+                                            const ordenDias = ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado', 'Domingo'];
+                                            return ordenDias.indexOf(a.dia) - ordenDias.indexOf(b.dia);
+                                        })
+                                        .map((h) => (
+                                            <li style={{ listStyleType: 'none', marginTop: '5px' }}>
+                                                {h.dia} - {h.apertura} a {h.cierre}
+                                            </li>
+                                        ))}
+                                    {horario.length === 0 && <p>No se ingresó horario. </p>}
 
+
+
+                                </ul>
+                            </div>
                         </div>
 
                         {/*Segundo Grupo*/}
@@ -321,7 +346,7 @@ export default function InfoDetallada() {
                                     </div>
                                 );
                             })}
-                            
+
                             <div>
                                 <label className={styles.labelSeccion} htmlFor="">Informacion Adicional</label>
                                 <p style={{ color: '#ccc' }}>{dataMarcador.info_adicional || 'No aporta informacion adicional.'}</p>
@@ -353,7 +378,7 @@ export default function InfoDetallada() {
 
 
 
-        </div>
+        </div >
     )
 
 }
