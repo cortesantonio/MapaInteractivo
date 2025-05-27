@@ -234,17 +234,35 @@ function Buscador({ onSeleccionMarcador }: BuscadorProps) {
                         <p style={{ color: modoNocturno ? "white" : "black", fontWeight: 550 }}>
                             Filtros de Accesibilidad
                         </p>
-                        {opcionesAccesibilidad.map((acces) => (
-                            <div key={acces.id}>
-                                <label style={{ color: modoNocturno ? "white" : "black" }}>
-                                    <input
-                                        type="checkbox"
-                                        checked={filtrosActivos[acces.nombre] || false}
-                                        onChange={() => toggleFiltro(acces.nombre)}
-                                    />{" "}
-                                    {acces.nombre}
-                                </label>
-                                <br />
+
+                        {Object.entries(
+                            opcionesAccesibilidad.reduce((acc, item) => {
+                                if (!acc[item.tipo]) acc[item.tipo] = [];
+                                acc[item.tipo].push(item);
+                                return acc;
+                            }, {} as Record<string, Accesibilidad[]>)
+                        ).map(([tipo, accesibilidades]) => (
+                            <div key={tipo} style={{ marginBottom: "10px" }}>
+                                <p style={{
+                                    fontWeight: "bold",
+                                    color: modoNocturno ? "#ddd" : "#222",
+                                    marginBottom: "5px",
+                                    fontSize: "0.95rem"
+                                }}>{tipo}</p>
+
+                                {accesibilidades.map((acces) => (
+                                    <div key={acces.id}>
+                                        <label style={{ color: modoNocturno ? "white" : "black" }}>
+                                            <input
+                                                type="checkbox"
+                                                checked={filtrosActivos[acces.nombre] || false}
+                                                onChange={() => toggleFiltro(acces.nombre)}
+                                            />{" "}
+                                            {acces.nombre}
+                                        </label>
+                                        <br />
+                                    </div>
+                                ))}
                             </div>
                         ))}
                     </div>
