@@ -1,5 +1,5 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import { faReply, faEyeSlash, faEye } from "@fortawesome/free-solid-svg-icons"
+import { faReply,  } from "@fortawesome/free-solid-svg-icons"
 import styles from "../usuarios/css/Formularios.module.css"
 import { supabase } from "../../services/supabase"
 import { useState, useEffect } from "react"
@@ -12,7 +12,6 @@ import { useAuth } from '../../hooks/useAuth';
 function Editar_Usuarios() {
   const { id } = useParams();
   const { user } = useAuth();
-  const [mostrarContraseña, setMostrarContraseña] = useState(false);
   const [usuarios, setUsuarios] = useState<Usuarios[]>([]);
   const [accesibilidad, setAccesibilidad] = useState<Accesibilidad[]>([]);
   const navigate = useNavigate();
@@ -198,7 +197,15 @@ function Editar_Usuarios() {
 
     try {
       // Actualizar información del usuario
-      const { error: errorUsuario } = await supabase.from('usuarios').update({ nombre: usuarios[0].nombre, correo: usuarios[0].correo, telefono: usuarios[0].telefono, genero: usuarios[0].genero, rol: usuarios[0].rol, rut: usuarios[0].rut, password: usuarios[0].password, fecha_nacimiento: usuarios[0].fecha_nacimiento }).eq('id', id);
+      const { error: errorUsuario } = await supabase.from('usuarios').update({
+        nombre: usuarios[0].nombre,
+        correo: usuarios[0].correo,
+        telefono: usuarios[0].telefono,
+        genero: usuarios[0].genero,
+        rol: usuarios[0].rol,
+        rut: usuarios[0].rut,
+        fecha_nacimiento: usuarios[0].fecha_nacimiento
+      }).eq('id', id);
       if (errorUsuario) {
         console.error('Error al actualizar datos de usuario:', errorUsuario);
         alert("Hubo un error al actualizar los datos del usuario");
@@ -310,26 +317,7 @@ function Editar_Usuarios() {
               </span>
             )}
           </div>
-          <div className={styles.espacio}>
-            <label className={styles.etiquetas}>Contraseña *</label>
-            <div className={styles.input_contraseña}>
-              <input
-                className={styles.formulario}
-                type={mostrarContraseña ? "text" : "password"}
-                placeholder="Contraseña"
-                onChange={(e) => handleChange('password', e.target.value)}
-                value={usuarios[0]?.password || ""}
-                required
-              />
-              <button
-                type="button"
-                onClick={() => setMostrarContraseña(!mostrarContraseña)}
-                className={styles.boton_ojito}
-              >
-                <FontAwesomeIcon icon={mostrarContraseña ? faEye : faEyeSlash} style={{ color: "black" }} />
-              </button>
-            </div>
-          </div>
+
           <div className={styles.espacio}>
             <label className={styles.etiquetas}>Teléfono</label>
             <input
