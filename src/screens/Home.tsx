@@ -71,7 +71,6 @@ export default function Home() {
         usuario.nombre?.trim() &&
         usuario.correo?.trim() &&
         usuario.rut?.trim() &&
-        usuario.password?.trim() &&
         (!discapacidad || (
           discapacidad.nombre?.trim() &&
           discapacidad.tipo?.trim() &&
