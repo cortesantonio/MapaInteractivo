@@ -1,22 +1,11 @@
-/* Estilos base y contenedor principal */
 .container_principal {
-    width: 100%;
-    height: 95vh;
-    overflow: hidden;
-    display: flex ;
-    flex-direction: column;
+    width: 100vw;
+    height: 100vh;
+    overflow: hidden; 
+    box-sizing: border-box;
+    padding: 0;
+    margin: 0;
 }
-
-.container {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    margin: 0 auto;
-    padding: clamp(10px, 3vw, 30px);
-    max-width: clamp(320px, 90vw, 1200px);
-}
-
 .botonatras {
   position: absolute;
   top: 5px;
@@ -31,26 +20,24 @@
   width: fit-content;
   padding: 0px 15px ;
 }
-
-/* Estilos del título */
-.Titulo {
-    align-self: flex-start;
-    height: 5vh;
+.contenedor_de_opciones {
+    background-color: #fff;
     width: 100%;
-    height: 100%;
+    max-width: clamp(320px, 85vw, 800px);
+    margin: 0 auto;
+    padding: clamp(8px, 1.5vw, 12px);
+    flex-shrink: 0;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    max-height: calc(105vh - 80px);
+    overflow: hidden;
 }
-
-.Titulo h4 {
-    font-size: clamp(1.2rem, 4vw, 1.8rem);
-    font-weight: 500;
-
-
-}
-
-/* Estilos del buscador */
 .contenedor_buscador {
     width: 100%;
-    margin-bottom: clamp(10px, 2vw, 20px);
+    max-width: clamp(280px, 70vw, 600px);
+    margin: 0 auto clamp(8px, 1.5vw, 12px) auto;
+    flex-shrink: 0;
 }
 
 .buscador {
@@ -58,52 +45,68 @@
     align-items: center;
     position: relative;
     width: 100%;
-    max-width: clamp(280px, 80vw, 500px);
-    margin: 0 auto;
+    margin: 0;
+    box-sizing: border-box;
 }
 
 .buscador .icono {
     position: absolute;
-    left: clamp(10px, 3%, 15px);
-    font-size: clamp(1rem, 3vw, 1.3rem);
+    left: clamp(8px, 2%, 12px);
+    font-size: clamp(0.9rem, 2.5vw, 1.1rem);
     color: #555;
+    z-index: 2;
 }
+
 
 .buscador input {
     width: 100%;
-    border: 3px solid black;
+    border: 2px solid #e5e5e5; 
     border-radius: 10px;
-    padding: clamp(8px, 2vw, 12px);
-    padding-left: clamp(30px, 10%, 40px);
-    font-size: clamp(0.9rem, 2vw, 1rem);
+    padding: clamp(10px, 1.5vw, 14px); 
+    padding-left: clamp(35px, 8%, 40px);
+    font-size: clamp(0.85rem, 2vw, 0.95rem);
+    box-sizing: border-box;
+    transition: border-color 0.2s; 
 }
 
-/* Estilos de los botones de filtro y eventos */
+.buscador input:focus {
+    outline: none;
+    border-color: #000; /* Nuevo: borde negro al focus */
+}
+
 .contenedor_botones {
     display: flex;
     flex-direction: row;
     justify-content: center;
-    gap: clamp(10px, 3vw, 20px);
+    gap: clamp(8px, 2vw, 12px);
     width: 100%;
-    margin-bottom: clamp(15px, 3vw, 25px);
+    max-width: clamp(280px, 70vw, 600px);
+    margin: 0 auto clamp(8px, 1.5vw, 12px) auto;
+    flex-shrink: 0;
 }
 
 .contenedor_eventos,
 .contenedor_filtros {
     flex: 1;
-    max-width: clamp(150px, 40vw, 250px);
+    min-width: 0;
 }
+
 
 .eventos,
 .filtros {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    border: 3px solid black;
+    border: 2px solid #e5e5e5; 
     border-radius: 10px;
-    padding: clamp(5px, 1vw, 10px);
+    padding: clamp(8px, 1vw, 12px); 
     width: 100%;
+    box-sizing: border-box;
+    background-color: #fafafa; 
+    transition: border-color 0.2s; 
 }
+
+
 
 .eventos button,
 .filtros button {
@@ -111,57 +114,128 @@
     background-color: transparent;
     color: #000;
     border: none;
-    font-size: clamp(0.8rem, 2vw, 1rem);
+    font-size: clamp(0.7rem, 1.8vw, 0.9rem);
     flex: 1;
     text-align: left;
     white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .icono_evento,
 .icono_filtro {
-    font-size: clamp(1rem, 2.5vw, 1.3rem);
+    font-size: clamp(0.9rem, 2vw, 1.1rem);
+    flex-shrink: 0;
 }
 
-/* Panel de filtros */
 .contenedor_resultados_filtros {
     display: flex;
     flex-direction: column;
+    align-items: center;
     background-color: #fff;
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
-    border-radius: clamp(10px, 3vw, 20px);
-    width: clamp(250px, 80vw, 400px);
-    padding: clamp(12px, 3vw, 20px);
-    margin-bottom: clamp(15px, 3vw, 25px);
-    z-index: 10;
-    border: 3px solid black;
-    max-height: clamp(300px, 50vh, 400px);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08); /* Cambio: sombra más sutil */
+    border: 1px solid #f0f0f0; /* Nuevo: borde sutil */
+    border-radius: 10px;
+    width: 350px;
+    height: 100%;
+    max-width: clamp(280px, 70vw, 600px);
+    margin: 0 auto clamp(8px, 1.5vw, 12px) auto;
+    padding: clamp(12px, 2vw, 18px); /* Cambio: más padding */
+    max-height: clamp(150px, 25vh, 250px);
     overflow-y: auto;
     overflow-x: hidden;
-    
+    box-sizing: border-box;
+    flex-shrink: 0;
 }
 
 .contenedor_resultados_filtros p {
-    font-size: clamp(1rem, 2.5vw, 1.2rem);
+    font-size: clamp(0.9rem, 2vw, 1.1rem);
     font-weight: 500;
-    margin-bottom: clamp(10px, 2vw, 15px);
+    margin: 0 0 clamp(8px, 1.5vw, 12px) 0;
+}
+.contenedor_opciones {
+    display: flex;
+    justify-content: center;
+    align-items: stretch; /* Cambio: altura uniforme */
+    gap: clamp(8px, 2vw, 12px); /* Cambio: más espacio */
+    width: 100%;
+    max-width: clamp(280px, 70vw, 600px);
+    margin: 0 auto clamp(12px, 2vw, 16px) auto; /* Cambio: más margen */
+    padding: clamp(10px, 2vw, 16px); /* Cambio: más padding */
+    background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%); 
+    border-radius: 12px; 
+    border: 1px solid #e9ecef; 
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06); 
+    box-sizing: border-box;
+    flex-shrink: 0;
+}
+.opcion_tarjeta {
+    display: flex;
+    flex-direction: row; 
+    align-items: center;
+    justify-content: center;
+    padding: clamp(8px, 1.5vw, 16px);; 
+    background-color: #fff;
+    border-radius: 10px; 
+    border: 1px solid #e9ecef; 
+    transition: all 0.3s ease; 
+    cursor: pointer;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08); 
+    flex: 1;
+    min-height: clamp(60px, 8vh, 80px); 
+    box-sizing: border-box;
+    position: relative;
+    overflow: hidden; 
 }
 
-/* Resultados de búsqueda */
+.opcion_tarjeta:hover {
+    transform: translateY(-2px) scale(1.02); 
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12); 
+    border-color: #007bff; 
+    background: linear-gradient(135deg, #ffffff 0%, #f8f9ff 100%); 
+}
+
+.opcion_tarjeta .icono_opcion {
+    margin: 10px;
+    font-size: 1rem; 
+    margin-bottom: clamp(4px, 1vw, 8px); 
+    color: #495057; 
+    flex-shrink: 0;
+    transition: all 0.3s ease; 
+}
+.opcion_tarjeta button {
+    background-color: transparent;
+    border: none;
+    font-size: clamp(0.75rem, 2vw, 0.9rem); 
+    font-weight: 600; 
+    color: #495057; 
+    cursor: pointer;
+    padding: 0;
+    text-align: center; 
+    line-height: 1.2; 
+    transition: color 0.3s ease; 
+}
+
 .resultados_busqueda {
     width: 100%;
-    height: 100%;
+    flex-grow: 1;
+    min-height: 0; 
     border: 1px solid #e0e0e0;
-    border-radius: clamp(8px, 2vw, 15px);
+    border-radius: clamp(8px, 2vw, 12px);
     overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    box-sizing: border-box;
 }
 
 .contenedor_titulo {
-    padding: clamp(10px, 2vw, 15px);
+    padding: clamp(8px, 1.5vw, 12px);
     background-color: #f8f8f8;
+    flex-shrink: 0;
 }
 
 .contenedor_titulo h4 {
-    font-size: clamp(1rem, 2.5vw, 1.3rem);
+    font-size: clamp(0.9rem, 2vw, 1.1rem);
     font-weight: 500;
     margin: 0;
 }
@@ -169,68 +243,66 @@
 .contenedor_titulo hr {
     border: none;
     border-top: 1px solid #ddd;
-    margin: clamp(5px, 1vw, 10px) 0 0 0;
+    margin: clamp(3px, 0.5vw, 5px) 0 0 0;
 }
 
 .contenedor_resultados {
     width: 100%;
-    padding: clamp(10px, 2vw, 15px);
-    height: 100vh;
+    padding: clamp(10px,2vw,15px);
     overflow-y: auto;
-    max-height: clamp(300px, 60vh, 500px);
+    flex-grow: 1;
+    min-height: 0; 
+    box-sizing: border-box;
 }
-
 .marcador {
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.15);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08); 
     background-color: #fff;
-    border-radius: clamp(10px, 2vw, 15px);
-    height: clamp(50vh, 10vw + 50vh, 70vh);
-    margin-bottom: clamp(15px, 3vw, 25px);
-    padding: clamp(15px, 3vw, 25px);
+    border-radius: 12px; 
+    border: 1px solid #f0f0f0; 
+    min-height: clamp(140px, 15vh, 200px);
+    margin-bottom: clamp(12px, 2vw, 20px);
+    padding: clamp(20px, 3vw, 35px); 
+    width: 100%;
     transition: transform 0.2s, box-shadow 0.2s;
     cursor: pointer;
-}
-
-.marcador:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+    box-sizing: border-box;
 }
 
 .marcador h3 {
-    font-size: clamp(1.1rem, 3vw, 1.4rem);
+    font-size: clamp(1rem, 2.5vw, 1.2rem);
     font-weight: 500;
-    margin: 0 0 clamp(5px, 1vw, 10px) 0;
+    margin: 0 0 clamp(5px, 1vw, 8px) 0;
 }
 
 .marcador p {
-    font-size: clamp(0.9rem, 2vw, 1rem);
-    margin: clamp(3px, 1vw, 8px) 0;
+    font-size: clamp(0.85rem, 1.8vw, 0.95rem);
+    margin: clamp(3px, 0.5vw, 5px) 0;
     color: #555;
 }
 
 .accesibilidad_marcador {
     display: flex;
     flex-direction: column;
-    margin: clamp(10px, 2vw, 20px) 0 0 0;
-    padding-top: clamp(10px, 2vw, 15px);
+    margin: clamp(8px, 1.5vw, 15px) 0 0 0;
+    padding-top: clamp(8px, 1.5vw, 12px);
     border-top: 1px solid #eee;
 }
 
 .accesibilidad_marcador h3 {
-    font-size: clamp(1rem, 2.5vw, 1.2rem);
-    margin: 0 0 clamp(8px, 2vw, 15px) 0;
+    font-size: clamp(0.9rem, 2vw, 1.1rem);
+    margin: 0 0 clamp(6px, 1vw, 10px) 0;
 }
 
 .accesibilidad_marcador ul {
     list-style: none;
     padding: 0;
-    margin: 0 0 clamp(10px, 2vw, 20px) 0;
+    margin: 0 0 clamp(8px, 1.5vw, 15px) 0;
 }
 
 .accesibilidad_marcador li {
-    font-size: clamp(0.85rem, 2vw, 0.95rem);
-    margin-bottom: clamp(3px, 1vw, 6px);
-    padding-left: clamp(10px, 2vw, 15px);
+    font-size: clamp(0.8rem, 1.8vw, 0.9rem);
+    margin-bottom: clamp(2px, 0.5vw, 4px);
+    padding-left: clamp(8px, 1.5vw, 12px);
     position: relative;
 }
 
@@ -240,153 +312,62 @@
     left: 0;
     color: #555;
 }
-
 .accesibilidad_marcador button {
     align-self: flex-end;
-    background-color: black;
-    color: yellow;
+    background-color: #000;
+    color: yellow; 
     border: none;
-    border-radius: clamp(4px, 1vw, 8px);
-    padding: clamp(6px, 1.5vw, 10px) clamp(12px, 3vw, 20px);
-    font-size: clamp(0.85rem, 2vw, 1rem);
+    border-radius: clamp(6px, 1vw, 8px); 
+    padding: clamp(8px, 1vw, 12px) clamp(16px, 2vw, 20px); 
+    font-size: clamp(0.8rem, 1.8vw, 0.9rem);
     cursor: pointer;
     font-weight: 500;
-    transition: transform 0.2s;
+    transition: all 0.2s; 
 }
 
-.accesibilidad_marcador button:hover {
-    transform: scale(1.05);
-}
-
-/* NUEVOS ESTILOS COMPACTOS PARA CONTENEDOR DE OPCIONES */
-
-/* Contenedor principal de opciones - compacto */
-.contenedor_de_opciones {
-    background-color: #fff;
-    width: 100%;
-    max-width: 500px;
-    margin-top: 0.8rem;
-    margin-bottom: clamp(15px, 3vw, 20px);
-    padding: clamp(10px, 2vw, 15px);
-    border: 3px solid #000;
-    border-radius: 10px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
-}
-
-/* Título principal compacto */
-.contenedor_titulo_principal {
-    text-align: center;
-    margin-bottom: clamp(12px, 2vw, 15px);
-    padding-bottom: clamp(8px, 1.5vw, 10px);
-    border-bottom: 1px solid #e9ecef;
-}
-
-.contenedor_titulo_principal h3 {
-    font-size: clamp(1.1rem, 3vw, 1.4rem);
-    font-weight: 600;
-    margin: 0 0 clamp(5px, 1vw, 8px) 0;
-    color: #333;
-}
-
-.contenedor_titulo_principal h4 {
-    font-size: clamp(0.9rem, 2.5vw, 1.1rem);
-    font-weight: 400;
-    margin: 0;
-    color: #666;
-}
-
-/* Contenedor de opciones horizontal y compacto */
-.contenedor_opciones {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: clamp(10px, 2vw, 15px);
-    width: 100%;
-    padding: clamp(8px, 1.5vw, 12px);
-    background-color: #fff;
-    border-radius: 8px;
-    border: 2px solid #000;
-}
-
-/* Cada opción compacta horizontal */
-.opcion_tarjeta {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    padding: clamp(8px, 1.5vw, 12px);
-    background-color: #fff;
-    border-radius: 8px;
-    border: 2px solid #000;
-    transition: all 0.2s ease;
-    cursor: pointer;
-    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.05);
-    min-width: 0;
-    flex: 1;
-    justify-content: center;
-}
-
-.opcion_tarjeta:hover {
-    border-color: #000;
-    transform: translateY(-1px);
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-}
-
-.opcion_tarjeta .icono_opcion {
-    font-size: clamp(1rem, 2.5vw, 1.2rem);
-    margin-right: clamp(6px, 1.5vw, 8px);
-    color: #333;
-    flex-shrink: 0;
-}
-
-.opcion_tarjeta button {
-    background-color: transparent;
-    border: none;
-    font-size: clamp(0.8rem, 2vw, 0.95rem);
-    font-weight: 500;
-    color: #333;
-    cursor: pointer;
-    padding: 0;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-}
-
-.opcion_tarjeta:hover button {
-    color: #000;
-}
-
-
-
-/* ESTILOS ANTIGUOS QUE SE MANTIENEN PARA COMPATIBILIDAD */
 .contenedor_titulo_opciones {
     display: flex;
     justify-content: center;
     align-items: center;
-    padding: clamp(5px, 1.5vw, 12px);
-    margin-bottom: clamp(8px, 2vw, 15px);
+    padding: clamp(5px, 1vw, 8px);
+    margin-bottom: clamp(6px, 1vw, 10px);
     border-bottom: 1px solid #eee;
 }
 
 .contenedor_titulo_opciones h3 {
-    font-size: clamp(1.1rem, 3vw, 1.5rem);
+    font-size: clamp(1rem, 2.5vw, 1.3rem);
     font-weight: 500;
     margin: 0;
 }
-
 .elementos {
     cursor: pointer;
-    font-size: clamp(1rem, 2.5vw, 1.3rem);
-    margin-right: clamp(5px, 1vw, 8px);
+    font-size: clamp(0.9rem, 2vw, 1.1rem);
+    margin-right: clamp(4px, 1vw, 6px);
 }
-
 .contenedor_opciones_iconos button {
     background-color: transparent;
     color: #000;
     border: none;
-    font-size: clamp(0.9rem, 2vw, 1.1rem);
-    padding: clamp(3px, 1vw, 5px);
-    margin-right: clamp(10px, 2vw, 20px);
+    font-size: clamp(0.8rem, 1.8vw, 1rem);
+    padding: clamp(2px, 0.5vw, 4px);
+    margin-right: clamp(8px, 1.5vw, 15px);
     cursor: pointer;
     transition: color 0.2s;
+}
+.contenedor_resultados_eventos {
+    display: flex;
+    flex-direction: column;
+    background-color: #fff;
+    border: 1px solid #f0f0f0; 
+    border-radius: 10px;
+    width: 100%;
+    max-width: clamp(280px, 70vw, 600px);
+    margin: 0 auto clamp(8px, 1.5vw, 12px) auto;
+    padding: clamp(12px, 2vw, 18px); 
+    max-height: clamp(200px, 30vh, 350px);
+    overflow-y: auto;
+    overflow-x: hidden;
+    box-sizing: border-box;
+    flex-shrink: 0;
 }
 

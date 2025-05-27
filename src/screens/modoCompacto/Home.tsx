@@ -1,13 +1,23 @@
 import { useState, useEffect } from "react";
-import styles from "./css/Modo_Compacto.module.css";
+import { useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faLocationDot, faCalendar, faFilter, faFilterCircleXmark, faReply, faRightFromBracket, faRightToBracket, faUser,faBook } from "@fortawesome/free-solid-svg-icons";
+import { 
+    faLocationDot, 
+    faCalendar, 
+    faFilter, 
+    faFilterCircleXmark, 
+    faReply, 
+    faRightFromBracket, 
+    faRightToBracket, 
+    faUser, 
+    faBook 
+} from "@fortawesome/free-solid-svg-icons";
+
+import styles from "./css/Modo_Compacto.module.css";
 import { supabase } from "../../services/supabase";
 import { Accesibilidad } from "../../interfaces/Accesibilidad";
 import { Usuarios } from "../../interfaces/Usuarios";
-import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../hooks/useAuth";
-
 import Boton_Eventos from "./Boton_Eventos";
 
 interface Marcador {
@@ -23,32 +33,23 @@ interface Marcador {
         tipo: string;
     }[];
 }
-
-
-
 function Modo_Compacto() {
-    // Estados para el buscador y filtros
+    const navigate = useNavigate();
+    const { user } = useAuth();
     const [filtroIsVisible, setFiltroIsVisible] = useState(false);
     const [filtrosActivos, setFiltrosActivos] = useState<Record<string, boolean>>({});
+    const [busqueda, setBusqueda] = useState<string>("");
+    
+    // Estados para datos
     const [marcadores, setMarcadores] = useState<Marcador[]>([]);
     const [resultados, setResultados] = useState<Marcador[]>([]);
-    const [busqueda, setBusqueda] = useState<string>("");
     const [opcionesAccesibilidad, setOpcionesAccesibilidad] = useState<Accesibilidad[]>([]);
-    const [cargando, setCargando] = useState<boolean>(true);
     const [userDetails, setUserDetails] = useState<Usuarios | null>(null);
     
-    // Estado para controlar la visibilidad del componente Boton_Eventos
+    // Estados para UI
+    const [cargando, setCargando] = useState<boolean>(true);
     const [eventosVisible, setEventosVisible] = useState<boolean>(false);
-    
-    // Nuevo estado para controlar la visibilidad del contenedor de opciones
-   
-    
-    const navigate = useNavigate();
-    
-    // Obtener datos de autenticación
-    const { user } = useAuth();
 
-    // Cargar datos al iniciar
     useEffect(() => {
         const fetchMarcadores = async () => {
             setCargando(true);
@@ -143,37 +144,6 @@ function Modo_Compacto() {
         fetchUserDetails();
     }, [user]);
 
- 
-
-    // Cambiar estado del filtro
-    const toggleFiltro = (filtro: string) => {
-        setFiltrosActivos(prev => ({
-            ...prev,
-            [filtro]: !prev[filtro]
-        }));
-    };
-
-    // Función para mostrar/ocultar el componente de eventos y controlar la visibilidad de opciones
-    const toggleEventos = () => {
-        setEventosVisible(!eventosVisible);
-        // Si los eventos se muestran, oculta las opciones de usuario
-        
-        
-        // Si se abre el panel de eventos, cerrar el panel de filtros
-        if (!eventosVisible && filtroIsVisible) {
-            setFiltroIsVisible(false);
-        }
-    };
-
-    // Limpiar todos los filtros
-    const limpiarFiltros = () => {
-        const resetFiltros = {...filtrosActivos};
-        Object.keys(resetFiltros).forEach(key => {
-            resetFiltros[key] = false;
-        });
-        setFiltrosActivos(resetFiltros);
-    };
-
     // Filtrar resultados cuando cambia la búsqueda o los filtros
     useEffect(() => {
         const texto = busqueda.toLowerCase();
@@ -197,69 +167,57 @@ function Modo_Compacto() {
         setResultados(filtrados);
     }, [busqueda, marcadores, filtrosActivos]);
 
+    // Cambiar estado del filtro
+    const toggleFiltro = (filtro: string) => {
+        setFiltrosActivos(prev => ({
+            ...prev,
+            [filtro]: !prev[filtro]
+        }));
+    };
+
+    // Función para mostrar/ocultar el componente de eventos y controlar la visibilidad de opciones
+    const toggleEventos = () => {
+        setEventosVisible(!eventosVisible);
+        // Si se abre el panel de eventos, cerrar el panel de filtros
+        if (!eventosVisible && filtroIsVisible) {
+            setFiltroIsVisible(false);
+        }
+    };
+
+    // Limpiar todos los filtros
+    const limpiarFiltros = () => {
+        const resetFiltros = {...filtrosActivos};
+        Object.keys(resetFiltros).forEach(key => {
+            resetFiltros[key] = false;
+        });
+        setFiltrosActivos(resetFiltros);
+    };
+
     // Manejar visibilidad de filtros
     const toggleFiltros = () => {
         setFiltroIsVisible(!filtroIsVisible);
         // Si se abre el panel de filtros, cerrar el panel de eventos
         if (!filtroIsVisible && eventosVisible) {
             setEventosVisible(false);
-            // Restaurar opciones de usuario si se cierran los eventos
         }
     };
-
     return (
         <div className={styles.container_principal}>
+            {/* Botón Atrás */}
             <div style={{ marginBottom: "25px", marginRight: "10px", backgroundColor: "#000" }}>
                 <button className={styles.botonatras} onClick={() => navigate(-1)}>
                     <FontAwesomeIcon style={{ fontSize: "20px", margin: "3px" }} icon={faReply} />
                     <span style={{ width: "100px", fontSize: "25px" }}>Atrás</span>
                 </button>
             </div>
-            <div className={styles.container}>
-                
-        
+            
             <div className={styles.contenedor_de_opciones}>
-                     {/* Título principal separado */}
-            <div className={styles.contenedor_titulo_principal}>
-            <h3>Inicio Búsqueda de Recintos</h3>
-            <h4>
-                {user ? `Bienvenido, ${userDetails?.nombre || user.user_metadata?.nombre || user.email}` : 'Bienvenido'}
-            </h4>
-        </div>
-
-        {/* Opciones organizadas en tarjetas */}
-        <div className={styles.contenedor_opciones}>
-            {/* Opción Colaborar */}
-            <div className={styles.opcion_tarjeta} onClick={() => navigate("/colaborar")}>
-                <FontAwesomeIcon className={styles.icono_opcion} icon={faBook} />
-                <button>Colaborar</button>
-            </div>
-
-            {user ? (
-                // Si el usuario está logueado
-                <div className={styles.opcion_tarjeta} onClick={() => navigate(`/usuario/perfil/${user.id}`)}>
-                    <FontAwesomeIcon className={styles.icono_opcion} icon={faUser} />
-                    <button>Mi Perfil</button>
-                </div>
-            ) : (
-                // Si no hay usuario logueado
-                <div className={styles.opcion_tarjeta} onClick={() => navigate("/login")}>
-                    <FontAwesomeIcon className={styles.icono_opcion} icon={faRightToBracket} />
-                    <button>Iniciar Sesión</button>
-                </div>
-            )}
-
-            {/* Opción Salir */}
-            <div className={styles.opcion_tarjeta} onClick={() => navigate("/")}>
-                <FontAwesomeIcon className={styles.icono_opcion} icon={faRightFromBracket} />
-                <button>Salir</button>
-            </div>
-        </div>
-    </div>
-
-                    
+                {/* Título principal */}
+                <h3 style={{textAlign:"center",marginTop:"10px"}}>Inicio Búsqueda de Recintos</h3>
                     
                 
+                
+                {/* Buscador */}
                 <div className={styles.contenedor_buscador}>
                     <div className={styles.buscador}>
                         <input 
@@ -271,7 +229,39 @@ function Modo_Compacto() {
                         <FontAwesomeIcon className={styles.icono} icon={faLocationDot} />
                     </div>
                 </div>
-                
+
+                {/* Opciones de usuario */}
+                <div className={styles.contenedor_opciones}>
+                    
+               
+                    {/* Opción Colaborar */}
+                    <div className={styles.opcion_tarjeta} onClick={() => navigate("/colaborar")}>
+                        <FontAwesomeIcon className={styles.icono_opcion} icon={faBook} />
+                        <button>Colaborar</button>
+                    </div>
+
+                    {/* Opción Mi Perfil o Iniciar Sesión */}
+                    {user ? (
+                        <div className={styles.opcion_tarjeta} onClick={() => navigate(`/usuario/perfil/${user.id}`)}>
+                            <FontAwesomeIcon className={styles.icono_opcion} icon={faUser} />
+                            <button>Mi Perfil</button>
+                        </div>
+                    ) : (
+                        <div className={styles.opcion_tarjeta} onClick={() => navigate("/login")}>
+                            <FontAwesomeIcon className={styles.icono_opcion} icon={faRightToBracket} />
+                            <button>Iniciar Sesión</button>
+                        </div>
+                    )}
+
+                    {/* Opción Salir */}
+                    <div className={styles.opcion_tarjeta} onClick={() => navigate("/")}>
+                        <FontAwesomeIcon className={styles.icono_opcion} icon={faRightFromBracket} />
+                        <button>Salir</button>
+                    </div>
+                </div>
+               
+
+                {/* Botones de eventos y filtros */}
                 <div className={styles.contenedor_botones}>
                     <div className={styles.contenedor_eventos}>
                         <div className={styles.eventos}>
@@ -295,7 +285,7 @@ function Modo_Compacto() {
                     </div>
                 </div>
 
-                {/* Panel de eventos - Se muestra cuando eventosVisible es true */}
+                {/* Panel de eventos */}
                 {eventosVisible && (
                     <div className={styles.contenedor_resultados_eventos}>
                         <Boton_Eventos />
@@ -339,60 +329,62 @@ function Modo_Compacto() {
                     </div>
                 )}
 
-                {/* Resultados de búsqueda - Solo se muestran si eventosVisible es false */}
+                
+
+                {/* Resultados de búsqueda */}
                 {!eventosVisible && (
                     <div className={styles.resultados_busqueda}>
                         <div className={styles.contenedor_titulo}>
-                            <h4>Resultados {resultados.length > 0 && `(${resultados.length})`}</h4>
-                            <hr />
+                            <h4 style={{textAlign:"center"}}>Resultados {resultados.length > 0 && `(${resultados.length})`}</h4> 
+                            <h4 style={{textAlign:"center",fontSize:"1.3rem"}}>{user ? `Bienvenido, ${userDetails?.nombre || user.user_metadata?.nombre || user.email}` : 'Bienvenido'}</h4>
+        
                         </div>
 
                         <div className={styles.contenedor_resultados}>
-                            <div>
-                                {cargando ? (
-                                    <div style={{ padding: '20px', textAlign: 'center' }}>
-                                        <p>Cargando recintos...</p>
-                                    </div>
-                                ) : resultados.length > 0 ? (
-                                    resultados.map((marcador) => (
-                                        <div 
-                                            key={marcador.id} 
-                                            className={styles.marcador} 
-                                        >
-                                            <h3>{marcador.nombre}</h3>
-                                            <p><strong>Tipo:</strong> {marcador.tipoRecintoInfo.tipo}</p>
-                                            <p><strong>Dirección:</strong> {marcador.direccion}</p>
+                            {cargando ? (
+                                <div style={{ padding: '20px', textAlign: 'center' }}>
+                                    <p>Cargando recintos...</p>
+                                </div>
+                            ) : resultados.length > 0 ? (
+                                resultados.map((marcador) => (
+                                    <div 
+                                        key={marcador.id} 
+                                        className={styles.marcador} 
+                                    >
+                                        <h3>{marcador.nombre}</h3>
+                                        <p><strong>Tipo:</strong> {marcador.tipoRecintoInfo.tipo}</p>
+                                        <p><strong>Dirección:</strong> {marcador.direccion}</p>
+                                        
+                                        <div className={styles.accesibilidad_marcador}>
+                                            <h3>Accesibilidades:</h3>
                                             
-                                            <div className={styles.accesibilidad_marcador}>
-                                                <h3>Accesibilidades:</h3>
-                                                
-                                                {marcador.filtros.length === 0 ? (
-                                                    <p>Este recinto no cuenta con Accesibilidad Universal aún</p>
-                                                ) : (
-                                                    <ul>
-                                                        {marcador.filtros.map((filtro, index) => (
-                                                            <li key={index}>{filtro.tipo}: {filtro.nombre}</li>
-                                                        ))}
-                                                    </ul>
-                                                )}
-                                                
-                                                <div style={{display: "flex",justifyContent:"flex-end",alignItems:"flex-end",margin:"15px"}}>
-                                                    <button onClick={() => navigate(`/modocompacto/trazadoruta/${marcador.id}`)} >Iniciar Navegación</button>
-                                                </div>
+                                            {marcador.filtros.length === 0 ? (
+                                                <p>Este recinto no cuenta con Accesibilidad Universal aún</p>
+                                            ) : (
+                                                <ul>
+                                                    {marcador.filtros.map((filtro, index) => (
+                                                        <li key={index}>{filtro.tipo}: {filtro.nombre}</li>
+                                                    ))}
+                                                </ul>
+                                            )}
+                                            
+                                            <div style={{display: "flex", justifyContent: "flex-end", alignItems: "flex-end", margin: "15px"}}>
+                                                <button onClick={() => navigate(`/modocompacto/trazadoruta/${marcador.id}`)}>
+                                                    Iniciar Navegación
+                                                </button>
                                             </div>
                                         </div>
-                                    ))
-                                ) : (
-                                    <div style={{ padding: '20px', textAlign: 'center' }}>
-                                        <p>No se encontraron resultados para tu búsqueda.</p>
                                     </div>
-                                )}
-                            </div>
+                                ))
+                            ) : (
+                                <div style={{ padding: '20px', textAlign: 'center' }}>
+                                    <p>No se encontraron resultados para tu búsqueda.</p>
+                                </div>
+                            )}
                         </div>
                     </div>
                 )}
             </div>
-            
         </div>
     );
 }
