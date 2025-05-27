@@ -1,0 +1,139 @@
+.container {
+    margin-top: 5px;
+    margin: auto;
+    display: flex;
+    flex-direction: column;
+    background-color: white;
+    align-items: center;
+    padding: 2px;
+}
+
+.graficoContainer {
+    padding: 20px;
+    width: 80%;
+    height: 30vh;
+}
+
+.sectionHeader {
+    position: relative;
+    margin: 15px;
+    width: 80vw;
+    max-width: 380px;
+    display: flex;
+}
+
+.sectionDivider {
+    border: none;
+    border-top: 1px solid rgba(0, 0, 0, 0.42);
+    width: 100%;
+}
+
+.sectionTitle {
+    position: absolute;
+    right: 0;
+    top: -13px;
+    background: transparent;
+    font-size: 18px;
+    color: black;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background-color: white;
+    padding-left: 10px; 
+}
+
+.sectionDescription {
+    font-size: 14px;
+    color: rgb(56, 56, 56);
+    font-weight: 400;
+    width: 80vw;
+    max-width: 380px;
+    text-align: left;
+}
+
+.menuContainer {
+    margin-bottom: 20px;
+    width: 80vw;
+    max-width: 380px;
+    align-items: center;
+    justify-content: center;
+    padding: 8px;
+}
+
+.menuButton {
+    color: black;
+    background: transparent;
+    outline: none;
+    display: flex;
+    align-items: center;
+    border: none;
+    font-size: 17px;
+    padding: 12px 8px;
+    width: 100%;
+    text-align: left;
+    transition: all 0.2s ease;
+    cursor: pointer;
+    border-radius: 4px;
+    gap: 12px;
+}
+
+.menuButton:hover {
+    background-color: rgba(123, 191, 255, 0.233);
+    transform: translateX(4px);
+}
+
+.menuButton:focus {
+    outline: 2px solid #007bff;
+    outline-offset: 2px;
+}
+
+.icon {
+    width: 20px;
+    height: 20px;
+    color: #007bff;
+}
+
+.logoutButton {
+    width: 35vw;
+    max-width: 150px;
+    background-color: rgba(236, 21, 21, 0.7);
+    color: white;
+    margin: 10px;
+    margin-left: 25vw;
+    padding: 12px;
+    border-radius: 7px;
+    font-weight: 400;
+    border: none;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    font-size: 1rem;
+}
+
+.logoutButton:hover {
+    background-color: rgba(236, 21, 21, 0.9);
+    transform: translateY(-2px);
+}
+
+.logoutButton:focus {
+    outline: 2px solid #007bff;
+    outline-offset: 2px;
+}
+
+.pendingCount {
+    background-color: #ff4444;
+    color: white;
+    padding: 2px 8px;
+    border-radius: 12px;
+    font-size: 14px;
+    margin-left: auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 24px;
+    height: 24px;
+} 
