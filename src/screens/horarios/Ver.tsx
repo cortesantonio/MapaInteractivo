@@ -1,5 +1,5 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faReply, faClock } from '@fortawesome/free-solid-svg-icons';
+import { faReply, faClock, faArrowUpRightFromSquare } from '@fortawesome/free-solid-svg-icons';
 import styles from "./css/Ver.module.css";
 import { useState, useEffect } from 'react';
 import { supabase } from '../../services/supabase';
@@ -182,7 +182,7 @@ function VerHorarioMarcador() {
 
         </div>
         <div className={styles.titulo_locacion}>
-          <h2>{marcador?.nombre_recinto || "Cargando..."}</h2>
+          <h2 style={{  cursor:'pointer' }} onClick={() => { navigate(`/panel-administrativo/marcadores/informacion/${marcador?.id}`) }}>{<>{marcador?.nombre_recinto} <FontAwesomeIcon size='2xs' icon={faArrowUpRightFromSquare} /></> || "Cargando..."}</h2>
         </div>
         <div className={styles.info_locacion}>
           <h4>{'>'} {(marcador?.tipo_recinto as any)?.tipo || "Cargando tipo..."}</h4>
