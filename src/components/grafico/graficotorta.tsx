@@ -66,7 +66,8 @@ const GraficoTorta = ({ datosGrafico }: Props) => {
       ) : (
         <>
           <h3 style={{ textAlign: 'center', fontSize: "1.1rem", whiteSpace: "nowrap" }}>Estado de solicitudes</h3>
-          <ResponsiveContainer width="100%" height="100%">
+          <p style={{ textAlign: 'center', fontSize: "1rem", whiteSpace: "wrap", width: '80vw', maxWidth: "380px", margin: 'auto', color: 'gray', marginBottom: '20px' }}>Un vistazo rápido a las solicitudes pendientes, rechazadas y aprobadas.</p>
+          <ResponsiveContainer width="100%" height="80%">
             <PieChart>
               <Pie
                 data={datosFiltrados}
@@ -118,9 +119,9 @@ const GraficoTorta = ({ datosGrafico }: Props) => {
                   <Cell key={`cell-${index}`} fill={coloresPorEstado[entry.nombre]} />
                 ))}
               </Pie>
-                <Tooltip
-                  formatter={(value, name) => [value, formatearNombre(name as string)]}
-                />
+              <Tooltip
+                formatter={(value, name) => [value, formatearNombre(name as string)]}
+              />
               <Legend
                 payload={datosFiltrados.map((entry) => ({
                   value: formatearNombre(entry.nombre),
