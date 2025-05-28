@@ -297,64 +297,91 @@ export default function InfoDetallada() {
                             <label className={styles.labelSeccion} htmlFor="">Teléfono</label>
                             <div className={styles.ContainerinputTelefono}>
                                 <p className={styles.codTelfono}>+569</p>
-                                <p>{dataMarcador.telefono}</p>
+                                <p>{dataMarcador.telefono || "Sin información"}</p>
                             </div>
 
-                            <button onClick={() => { navigate(`/panel-administrativo/marcadores/horario/${id}`) }} style={{ textDecoration: 'underline',  background: 'none', width: 'fit-content', border: 'none' }}> <label className={styles.labelSeccion} style={{cursor: 'pointer',}} htmlFor="">Horario <FontAwesomeIcon icon={faArrowUpRightFromSquare} size='2xs' /></label></button>
-                            <div className={styles.ContainerinputTelefono}>
-                                <ul>
-                                    {horario
-                                        .slice() // para no mutar el estado original
-                                        .sort((a, b) => {
-                                            const ordenDias = ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado', 'Domingo'];
-                                            return ordenDias.indexOf(a.dia) - ordenDias.indexOf(b.dia);
-                                        })
-                                        .map((h) => (
-                                            <li style={{ listStyleType: 'none', marginTop: '5px' }}>
-                                                {h.dia} - {h.apertura} a {h.cierre}
-                                            </li>
-                                        ))}
-                                    {horario.length === 0 && <p>No se ingresó horario. </p>}
 
-
-
-                                </ul>
-                            </div>
                         </div>
+
 
                         {/*Segundo Grupo*/}
-                        <div className={styles.gridContainer}>
-                            {Object.entries(accesibilidades).map(([tipo, lista]) => {
-                                const seleccionadas = lista.filter(acc => selecciones.includes(acc.id));
-                                if (seleccionadas.length === 0) return null;
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: '5px' }}>
+                            {/* Accesibilidades */}
+                            <div className={styles.gridContainer}>
+                                {Object.entries(accesibilidades).map(([tipo, lista]) => {
+                                    const seleccionadas = lista.filter(acc => selecciones.includes(acc.id));
+                                    if (seleccionadas.length === 0) return null;
 
-                                return (
-                                    <div key={tipo} className={styles.accesibilidadGrupo}>
-                                        <p><strong>{`Accesibilidad ${tipo}`}</strong></p>
-                                        {seleccionadas.map(acc => (
-                                            <div className={styles.opt} key={acc.id}>
-                                                <input
-                                                    type="checkbox"
-                                                    value={acc.id}
-                                                    checked={true}
-                                                    disabled={true} // <--- Esto evita que se pueda editar
-                                                    id={acc.nombre}
-                                                />
-                                                <label htmlFor={acc.nombre}>{acc.nombre}</label>
-                                            </div>
-                                        ))}
-                                    </div>
-                                );
-                            })}
-
-                            <div>
-                                <label className={styles.labelSeccion} htmlFor="">Informacion Adicional</label>
-                                <p style={{ color: '#ccc' }}>{dataMarcador.info_adicional || 'No aporta informacion adicional.'}</p>
+                                    return (
+                                        <div key={tipo} className={styles.accesibilidadGrupo}>
+                                            <p><strong>{`Accesibilidad ${tipo}`}</strong></p>
+                                            {seleccionadas.map(acc => (
+                                                <div className={styles.opt} key={acc.id}>
+                                                    <input
+                                                        type="checkbox"
+                                                        value={acc.id}
+                                                        checked={true}
+                                                        disabled={true} // <--- Esto evita que se pueda editar
+                                                        id={acc.nombre}
+                                                    />
+                                                    <label htmlFor={acc.nombre}>{acc.nombre}</label>
+                                                </div>
+                                            ))}
+                                        </div>
+                                    );
+                                })}
 
                             </div>
 
+                            <div className={styles.gridContainer}>
+                                {/* Horarios */}
+                                <div className={styles.ContenHorarios}>
+                                    <button onClick={() => { navigate(`/panel-administrativo/marcadores/horario/${id}`) }} style={{ textDecoration: 'underline', background: 'none', width: 'fit-content', border: 'none' }}>
+                                        <label className={styles.labelSeccion} style={{ cursor: 'pointer' }} htmlFor="">Horario <FontAwesomeIcon icon={faArrowUpRightFromSquare} size='2xs' /></label></button>
+                                    <div className={styles.ContainerinputTelefono}>
+                                        <ul>
+                                            {horario
+                                                .slice() // para no mutar el estado original
+                                                .sort((a, b) => {
+                                                    const ordenDias = ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado', 'Domingo'];
+                                                    return ordenDias.indexOf(a.dia) - ordenDias.indexOf(b.dia);
+                                                })
+                                                
+                                                .map((h) => (
+                                                    <div key={h.dia} className={styles.horarioCard}>
+                                                        <div className={styles.filaHorario}>
+                                                            <p className={styles.diaNombre}>{h.dia}</p>
+                                                            <div className={styles.bloqueHorario}>
+                                                                <div>
+                                                                    <span className={styles.horarioEtiqueta}>Apertura</span>
+                                                                    <p className={styles.horarioTexto}>{h.apertura}</p>
+                                                                </div>
+                                                                <div>
+                                                                    <span className={styles.horarioEtiqueta}>Cierre</span>
+                                                                    <p className={styles.horarioTexto}>{h.cierre}</p>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                ))
 
+                                            }
+                                            {horario.length === 0 && <p>No se ingresó horario. </p>}
+
+
+
+                                        </ul>
+                                    </div>
+                                </div>
+
+                                {/* Información adicional */}
+                                <div className={styles.InfoAdicional}>
+                                    <label className={styles.labelSeccion} htmlFor="">Información Adicional</label>
+                                    <p style={{ color: '#ccc' }}>{dataMarcador.info_adicional || 'No aporta informacion adicional.'}</p>
+                                </div>
+                            </div>
                         </div>
+
 
                     </div>
 
