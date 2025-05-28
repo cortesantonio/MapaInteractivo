@@ -94,7 +94,7 @@ function ListSolicitudes() {
                             </label>
                             <input
                                 type="text"
-                                placeholder="Buscar por nombre o tipo..."
+                                placeholder="Buscar por nombre..."
                                 value={busqueda}
                                 onChange={handleBusquedaChange}
                                 style={{
