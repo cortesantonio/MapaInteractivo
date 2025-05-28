@@ -23,7 +23,6 @@
     flex-direction: column;
     margin-bottom: 25px;
     align-items: center;
-    /*Agregado por Mati*/
 }
 
 .add_user button {
@@ -76,7 +75,6 @@
     background-color: transparent;
 }
 
-
 .card {
     display: flex;
     padding: 20px;
@@ -122,9 +120,7 @@
 
 .card .opciones p {
     font-weight: 500;
-
 }
-
 
 .cardContent p {
     font-size: 1rem;

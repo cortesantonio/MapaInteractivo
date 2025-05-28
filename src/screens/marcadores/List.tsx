@@ -29,11 +29,11 @@ function ListMarcadores() {
             const { data: gestionResenasData, error: gestionResenasError } = await supabase
                 .from('marcador')
                 .select(`
-          *,
-          tipo_recinto:tipo_recinto (
-            tipo
-          )
-        `);
+                    *,
+                    tipo_recinto:tipo_recinto (
+                        tipo
+                    )
+                    `);
 
             if (tipoRecintoError || gestionResenasError) {
                 console.error('Error al obtener datos:', tipoRecintoError || gestionResenasError);

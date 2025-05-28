@@ -24,7 +24,6 @@
     margin-bottom: 25px;
     padding-left: 50px;
     align-items: center;
-    /*Agregado por Mati*/
 }
 
 .filtroCard {
@@ -41,10 +40,6 @@
 .filtroCard select {
     border: none;
     background-color: transparent;
-}
-
-.filtroCard:hover {
-    transform: scale(98%);
 }
 
 .filtros .buscar {
