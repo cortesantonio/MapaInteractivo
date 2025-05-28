@@ -51,7 +51,6 @@
     margin: 0;
 }
 
-
 .locacionTitulo p {
     font-size: 1.7rem;
     margin: 0;
@@ -159,7 +158,6 @@
 }
 
 .opt input[type="checkbox"] {
-    width: 18px;
     height: 18px;
     accent-color: #4a6da7;
 }
@@ -167,6 +165,51 @@
 .opt label {
     font-size: 15px;
     color: #555;
+}
+
+.ContenHorarios {
+    border-radius: 10px;
+    padding: 15px;
+}
+
+.filaHorario {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.diaNombre {
+    font-weight: 350;
+    font-size: 16px;
+    color: #2c3e50;
+    text-transform: capitalize;
+    min-width: 100px;
+}
+
+.bloqueHorario {
+    display: flex;
+    gap: 25px;
+    flex-wrap: wrap;
+}
+
+.horarioEtiqueta {
+    font-size: 15px;
+    font-weight: 400;
+    color: #888;
+    display: block;
+    margin-bottom: 2px;
+}
+
+.horarioTexto {
+    font-size: 15px;
+    color: #333;
+    margin: 0;
+}
+
+.InfoAdicional {
+    border-radius: 10px;
+    padding: 15px;
 }
 
 .acciones {
@@ -202,29 +245,23 @@
         top: 15px;
         left: 15px;
     }
-
     .Titulo {
         font-size: 1rem;
         font-weight: 100;
         top: 15px;
     }
-
     .header img {
         height: 35vh;
     }
-
     .locacionTitulo h4 {
         font-size: 2.1rem;
         text-wrap: wrap;
     }
-
     .locacionTitulo p {
         font-size: 1.5rem;
     }
-
     .locacionTitulo img {
         width: 20px;
         height: 20px;
     }
-
 }

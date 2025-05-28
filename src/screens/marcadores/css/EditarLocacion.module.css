@@ -52,7 +52,6 @@
     margin: 0;
 }
 
-
 .locacionTitulo p {
     font-size: 1.7rem;
     margin: 0;
@@ -106,8 +105,12 @@
 .labelSeccion {
     font-size: 16px !important;
     color: #555;
-    font-weight: 600;
+    font-weight: 350;
     padding-bottom: 5px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 8px;
 }
 
 .inputText {
