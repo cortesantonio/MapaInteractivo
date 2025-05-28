@@ -55,10 +55,6 @@
     background-color: transparent;
 }
 
-.filtroCard:hover {
-    transform: scale(98%);
-}
-
 .content {
     display: flex;
     justify-content: start;
