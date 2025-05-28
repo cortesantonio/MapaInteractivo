@@ -1,6 +1,6 @@
 import styles from './css/List.module.css'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faMagnifyingGlass, faPenToSquare, faUniversalAccess, faDeleteLeft, faPlus } from '@fortawesome/free-solid-svg-icons';
+import { faMagnifyingGlass, faPenToSquare, faUniversalAccess, faDeleteLeft, faPlus, faChevronLeft, faChevronRight } from '@fortawesome/free-solid-svg-icons';
 import { useState, useEffect } from 'react';
 import { Accesibilidad } from '../../interfaces/Accesibilidad';
 import { supabase } from '../../services/supabase';
@@ -13,7 +13,9 @@ function ListAccesibilidad() {
     const { user } = useAuth();
     const [accesibilidades, setAccesibilidades] = useState<Accesibilidad[]>([]);
     const [selectedId, setSelectedId] = useState<number | null>(null);
-    const [query, setQuery] = useState('');
+    const [busqueda, setBusqueda] = useState('');
+    const ITEMS_PER_PAGE = 10;
+    const [currentPage, setCurrentPage] = useState(1);
     const navigate = useNavigate()
 
     const fetchData = async () => {
@@ -27,11 +29,6 @@ function ListAccesibilidad() {
         fetchData();
     }, []);
 
-    const [isActiveBuscador, setIsActiveBuscador] = useState(false);
-
-    function handleBuscador() {
-        setIsActiveBuscador(prevState => !prevState);
-    }
     if (selectedId !== null) {
         return (
             <EditarAccesibilidad
@@ -88,11 +85,33 @@ function ListAccesibilidad() {
         console.log(' Registro insertado en registro_logs correctamente', registro_logs);
     };
 
-    const filteredAccesibilidades = accesibilidades.filter((a) =>
-        a.nombre.toLowerCase().includes(query.toLowerCase()) ||
-        a.tipo.toLowerCase().includes(query.toLowerCase())
+    const tiposFiltrados = accesibilidades.filter((a) =>
+        a.nombre.toLowerCase().includes(busqueda.toLowerCase()) ||
+        a.tipo.toLowerCase().includes(busqueda.toLowerCase())
     );
 
+    const handleBusquedaChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setBusqueda(e.target.value);
+    };
+
+    const totalPages = Math.ceil(accesibilidades.length / ITEMS_PER_PAGE);
+    const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
+    const endIndex = startIndex + ITEMS_PER_PAGE;
+    const currentItems = tiposFiltrados.slice(startIndex, endIndex);
+
+
+    const handlePageChange = (newPage: number) => {
+        if (newPage >= 1 && newPage <= totalPages) {
+            setCurrentPage(newPage);
+        }
+    };
+
+
+
+
+    useEffect(() => {
+        setCurrentPage(1);
+    }, [busqueda]);
 
     return (
 
@@ -106,26 +125,29 @@ function ListAccesibilidad() {
                 </header>
                 <div className={styles.filtros}>
                     <div style={{ display: 'flex', gap: '5px' }}>
+                        <div className={styles.filtroCard} style={{ position: 'relative' }}>
+                            <label>
+                                <FontAwesomeIcon icon={faMagnifyingGlass} />
+                            </label>
+                            <input
+                                type="text"
+                                placeholder="Buscar por nombre o tipo..."
+                                value={busqueda}
+                                onChange={handleBusquedaChange}
+                                style={{
+                                    width: '150px',
+                                    padding: '5px',
+                                    border: 'none',
+                                    outline: 'none'
+                                }}
+                            />
+                        </div>
 
-                        <button className={styles.filtroCard} onClick={() => handleBuscador()} >
-                            <FontAwesomeIcon icon={faMagnifyingGlass} /> Buscador
-                        </button>
                         <button className={styles.agregarCard} style={{ backgroundColor: 'red' }} onClick={() => navigate('/panel-administrativo/accesibilidades/agregar')}>
                             <FontAwesomeIcon icon={faPlus} color='white' /> Agregar
                         </button>
                     </div>
-                    {isActiveBuscador &&
-                        <div className={styles.buscar}>
-                            <form action="">
-                                <input type="text" placeholder='Buscar'
-                                    onChange={(e) => setQuery(e.target.value)}
-                                    value={query}
 
-                                />
-                                <button type='submit'><FontAwesomeIcon icon={faMagnifyingGlass} /></button>
-                            </form>
-                        </div>
-                    }
                 </div>
 
                 <div className={styles.SubTitulo}>
@@ -135,7 +157,7 @@ function ListAccesibilidad() {
                 <div className={styles.content}>
 
 
-                    {filteredAccesibilidades.map((accesibilidad) => (
+                    {currentItems.map((accesibilidad) => (
                         <div key={accesibilidad.id} className={styles.card} >
                             <div className={styles.estado}
                                 style={{ backgroundColor: 'rgb(0, 97, 223)', }}
@@ -161,6 +183,79 @@ function ListAccesibilidad() {
 
 
                 </div>
+
+
+
+
+                {totalPages > 1 && (
+                    <div style={{
+                        display: 'flex',
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                        gap: '10px',
+                        marginTop: '20px',
+                        marginBottom: '20px'
+                    }}>
+                        <button
+                            onClick={() => handlePageChange(currentPage - 1)}
+                            disabled={currentPage === 1}
+                            style={{
+                                padding: '8px 12px',
+                                border: '1px solid #ddd',
+                                borderRadius: '4px',
+                                backgroundColor: currentPage === 1 ? '#f5f5f5' : 'white',
+                                cursor: currentPage === 1 ? 'not-allowed' : 'pointer',
+                                display: 'flex',
+                                alignItems: 'center',
+                                gap: '5px'
+                            }}
+                        >
+                            <FontAwesomeIcon icon={faChevronLeft} />
+                            Anterior
+                        </button>
+
+                        <div style={{
+                            display: 'flex',
+                            gap: '5px',
+                            alignItems: 'center'
+                        }}>
+                            {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
+                                <button
+                                    key={page}
+                                    onClick={() => handlePageChange(page)}
+                                    style={{
+                                        padding: '8px 12px',
+                                        border: '1px solid #ddd',
+                                        borderRadius: '4px',
+                                        backgroundColor: currentPage === page ? '#0397fc' : 'white',
+                                        color: currentPage === page ? 'white' : 'black',
+                                        cursor: 'pointer'
+                                    }}
+                                >
+                                    {page}
+                                </button>
+                            ))}
+                        </div>
+
+                        <button
+                            onClick={() => handlePageChange(currentPage + 1)}
+                            disabled={currentPage === totalPages}
+                            style={{
+                                padding: '8px 12px',
+                                border: '1px solid #ddd',
+                                borderRadius: '4px',
+                                backgroundColor: currentPage === totalPages ? '#f5f5f5' : 'white',
+                                cursor: currentPage === totalPages ? 'not-allowed' : 'pointer',
+                                display: 'flex',
+                                alignItems: 'center',
+                                gap: '5px'
+                            }}
+                        >
+                            Siguiente
+                            <FontAwesomeIcon icon={faChevronRight} />
+                        </button>
+                    </div>
+                )}
 
             </div>
         </>

@@ -64,10 +64,6 @@
     background-color: transparent;
 }
 
-.filtroCard:hover {
-    transform: scale(98%);
-}
-
 .card {
     display: flex;
     padding: 20px;
