@@ -53,7 +53,7 @@
 .botonatras {
     position: absolute;
     top: 20px;
-    left: 20px;
+    left: 15px;
     font-size: 1.5rem;
     background-color: transparent;
     color: white;
@@ -62,46 +62,41 @@
     z-index: 3;
 }
 
-.titulo_locacion {
+.Titulo {
     position: absolute;
-    bottom: 80px;
-    left: 50px;
-    z-index: 3;
+    top: 25px;
+    left: 0;
+    width: 100%;
+    text-align: center;
+    color: white;
+    z-index: 2;
 }
 
-.titulo_locacion h2 {
-    margin: 0;
-    font-size: 2.5rem;
-    font-weight: 350;
-}
-
-.info_locacion {
+.locacionTitulo {
     position: absolute;
-    bottom: 55px;
-    left: 30px;
+    bottom: 25px;
+    width: 100%;
+    padding-left: 25px;
     z-index: 3;
     display: flex;
-    align-items: center;
+    flex-direction: column;
+    gap: 10px;
 }
 
-.info_locacion h4 {
+.locacionTitulo h4 {
+    font-size: 3rem;
     margin: 0;
+}
+
+.locacionTitulo p {
     font-size: 1.7rem;
-    font-weight: 300;
-}
-
-.text {
-    position: absolute;
-    bottom: 20px;
-    left: 50px;
-    z-index: 3;
-}
-
-.text h2 {
     margin: 0;
-    font-size: 1.2rem;
-    font-weight: 400;
+}
+
+.locacionTitulo h2 {
+    font-size: 1.1rem;
     opacity: 0.9;
+    margin: 0;
 }
 
 .contenido_reseña {
@@ -251,6 +246,13 @@
     gap: 20px;
 }
 
+.selectDia {
+    width: 100%;
+    min-width: 0;
+    max-width: 100%;
+    box-sizing: border-box;
+}
+
 .modalHeader {
     display: flex;
     justify-content: space-between;
@@ -290,6 +292,7 @@
 
 .modalContent>div {
     width: 100%;
+    max-width: 100%;
 }
 
 .modalCloseButton {

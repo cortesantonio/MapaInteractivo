@@ -203,17 +203,23 @@ function Modo_Compacto() {
     };
     return (
         <div className={styles.container_principal}>
+            
+            <div style={{display:"flex",flexDirection:"row",justifyContent:"center",padding:"25px 5px ",height:"10px"}}>
+                <h4 style={{marginTop:"20px",marginLeft:"5px",fontSize:"1.5rem",fontWeight:"500",marginBottom:"5px"}}>{user ? `Bienvenido/a, ${userDetails?.nombre || user.user_metadata?.nombre || user.email}` : 'Bienvenido'}</h4>
+            </div>
+        
             {/* Botón Atrás */}
-            <div style={{ marginBottom: "25px", marginRight: "10px", backgroundColor: "#000" }}>
+            <div>
                 <button className={styles.botonatras} onClick={() => navigate(-1)}>
                     <FontAwesomeIcon style={{ fontSize: "20px", margin: "3px" }} icon={faReply} />
                     <span style={{ width: "100px", fontSize: "25px" }}>Atrás</span>
                 </button>
             </div>
+
             
             <div className={styles.contenedor_de_opciones}>
                 {/* Título principal */}
-                <h3 style={{textAlign:"center",marginTop:"10px"}}>Inicio Búsqueda de Recintos</h3>
+                <h2 style={{textAlign:"center",padding:"5px",margin:"5px",fontWeight:"300",fontSize:"1.2rem"}}>Inicio Búsqueda de Recintos</h2>
                     
                 
                 
@@ -336,8 +342,7 @@ function Modo_Compacto() {
                     <div className={styles.resultados_busqueda}>
                         <div className={styles.contenedor_titulo}>
                             <h4 style={{textAlign:"center"}}>Resultados {resultados.length > 0 && `(${resultados.length})`}</h4> 
-                            <h4 style={{textAlign:"center",fontSize:"1.3rem"}}>{user ? `Bienvenido, ${userDetails?.nombre || user.user_metadata?.nombre || user.email}` : 'Bienvenido'}</h4>
-        
+                            
                         </div>
 
                         <div className={styles.contenedor_resultados}>

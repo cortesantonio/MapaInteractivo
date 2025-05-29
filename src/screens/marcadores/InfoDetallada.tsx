@@ -228,13 +228,13 @@ export default function InfoDetallada() {
     return (
         <div className={styles.container}>
             <div className={styles.header}>
-
-                <ImagenConFallback
-                    src={dataMarcador?.url_img}
-                    alt="Imagen del recinto"
-                    className={styles.imagenMarcador}
-                />
-
+                <div className={styles.imagen}>
+                    <ImagenConFallback
+                        src={dataMarcador?.url_img}
+                        alt="Imagen del recinto"
+                        className={styles.imagenMarcador}
+                    />
+                </div>
                 <button style={{ zIndex: 10 }} className={styles.VolverAtras} onClick={() => { navigate(-1) }}>
                     <FontAwesomeIcon icon={faReply} size='2xl' />
                 </button>
@@ -346,7 +346,7 @@ export default function InfoDetallada() {
                                                     const ordenDias = ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado', 'Domingo'];
                                                     return ordenDias.indexOf(a.dia) - ordenDias.indexOf(b.dia);
                                                 })
-                                                
+
                                                 .map((h) => (
                                                     <div key={h.dia} className={styles.horarioCard}>
                                                         <div className={styles.filaHorario}>
