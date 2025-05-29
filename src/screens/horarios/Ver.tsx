@@ -1,5 +1,5 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faReply, faClock, faArrowUpRightFromSquare } from '@fortawesome/free-solid-svg-icons';
+import { faReply, faClock, faArrowUpRightFromSquare, faTrash, faXmark } from '@fortawesome/free-solid-svg-icons';
 import styles from "./css/Ver.module.css";
 import { useState, useEffect } from 'react';
 import { supabase } from '../../services/supabase';
@@ -26,15 +26,16 @@ function VerHorarioMarcador() {
     'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado', 'Domingo'
   ]);
 
-  const fechaHoraActual = new Date().toISOString();
   const Registro_cambios = async (tipo_accion: string, detalle: string) => {
+    const fechaHoraActual = new Date().toISOString(); // <-- mover aquí
+
     const { data: registro_logs, error: errorLog } = await supabase
       .from('registro_logs')
       .insert([
         {
           id_usuario: user?.id,
-          tipo_accion: tipo_accion,
-          detalle: detalle,
+          tipo_accion,
+          detalle,
           fecha_hora: fechaHoraActual,
         }
       ]);
@@ -44,8 +45,9 @@ function VerHorarioMarcador() {
       return;
     }
 
-    console.log(' Registro insertado en registro_logs correctamente', registro_logs);
+    console.log('Registro insertado en registro_logs correctamente', registro_logs);
   };
+
 
 
 
@@ -102,6 +104,8 @@ function VerHorarioMarcador() {
     setModoEdicion(false);
   };
 
+
+
   const guardarHorario = async () => {
     if (!id) return;
 
@@ -112,6 +116,9 @@ function VerHorarioMarcador() {
         alert("Por favor, completa todos los campos antes de guardar.");
         return;
       }
+      const aperturaAnterior = horarioExistente.apertura;
+      const cierreAnterior = horarioExistente.cierre;
+
       const { error } = await supabase
         .from('horarios')
         .update({
@@ -125,7 +132,7 @@ function VerHorarioMarcador() {
           h.id === horarioExistente.id ? { ...h, ...nuevoHorario } : h
         );
         setHorarios(actualizados);
-        Registro_cambios('Modificación de un horario', `Se modificó el horario del día ${horarioExistente.dia} en el marcador con ID ${id}`);
+        Registro_cambios('Modificación de un horario', `Se editó el horario del día ${horarioExistente.dia}. Apertura: ${aperturaAnterior} → ${nuevoHorario.apertura}, Cierre: ${cierreAnterior} → ${nuevoHorario.cierre} en el marcador con ID ${id}`);
       }
     } else {
       const existe = horarios.some(h => h.dia === nuevoHorario.dia);
@@ -149,7 +156,7 @@ function VerHorarioMarcador() {
 
       if (!error && data) {
         setHorarios([...horarios, ...data]);
-        await Registro_cambios('Creación de un horario', `Se creó un nuevo horario para el día ${nuevoHorario.dia} en el marcador con ID ${id}`);
+        await Registro_cambios('Creación de un horario', `Se agregó el horario del día ${nuevoHorario.dia}. Apertura: ${nuevoHorario.apertura}, Cierre: ${nuevoHorario.cierre} en el marcador con ID ${id}`);
         window.location.reload();
 
       }
@@ -161,6 +168,30 @@ function VerHorarioMarcador() {
 
     cerrarModal();
   };
+
+  // Eliminación de un dia de la semana en el horario que tiene el maracdor
+  const eliminarHorario = async (idHorario: number, dia: string) => {
+    const confirmacion = window.confirm(`¿Estás seguro que deseas eliminar el horario del día ${dia}?`);
+
+    if (!confirmacion) return;
+
+    const { error } = await supabase
+      .from('horarios')
+      .delete()
+      .eq('id', idHorario);
+
+    if (error) {
+      console.error("Error al eliminar el horario:", error);
+      alert("Hubo un error al eliminar el horario");
+      return;
+    }
+
+    setHorarios(horarios.filter(h => h.id !== idHorario));
+    setDiasSemana(prevDias => [...prevDias, dia]);
+
+    await Registro_cambios('Eliminación de un horario', `Se eliminó el horario del día ${dia} en el marcador con ID ${id}`);
+  };
+
 
 
 
@@ -182,7 +213,7 @@ function VerHorarioMarcador() {
 
         </div>
         <div className={styles.titulo_locacion}>
-          <h2 style={{  cursor:'pointer' }} onClick={() => { navigate(`/panel-administrativo/marcadores/informacion/${marcador?.id}`) }}>{<>{marcador?.nombre_recinto} <FontAwesomeIcon size='2xs' icon={faArrowUpRightFromSquare} /></> || "Cargando..."}</h2>
+          <h2 style={{ cursor: 'pointer' }} onClick={() => { navigate(`/panel-administrativo/marcadores/informacion/${marcador?.id}`) }}>{<>{marcador?.nombre_recinto} <FontAwesomeIcon size='2xs' icon={faArrowUpRightFromSquare} /></> || "Cargando..."}</h2>
         </div>
         <div className={styles.info_locacion}>
           <h4>{'>'} {(marcador?.tipo_recinto as any)?.tipo || "Cargando tipo..."}</h4>
@@ -197,7 +228,9 @@ function VerHorarioMarcador() {
 
           <div className={styles.titulo_reseña}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-              <h4>Horarios</h4>
+              <h4>Horarios <span style={{ fontSize: '0.8rem', color: 'gray', fontStyle: 'italic', marginLeft: '5px' }}>
+                - No agregues el día si el local no abre.
+              </span></h4>
               <button onClick={abrirModalAgregar} className={styles.agregarHorario}><FontAwesomeIcon icon={faClock} />+ Agregar horario</button>
             </div>
 
@@ -210,7 +243,7 @@ function VerHorarioMarcador() {
             <>
               <ul className={styles.listaHorarios}>
                 {horarios
-                  .slice() // para no mutar el estado original
+                  .slice()
                   .sort((a, b) => {
                     const ordenDias = ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado', 'Domingo'];
                     return ordenDias.indexOf(a.dia) - ordenDias.indexOf(b.dia);
@@ -218,11 +251,19 @@ function VerHorarioMarcador() {
                   .map((h) => (
                     <li key={h.id} className={styles.card} >
                       <div className={styles.horarioItem}>
-                        <h3>{h.dia}</h3>
+                        <div className={styles.horarioHeader}>
+                          <h3>{h.dia}</h3>
+                          <div className={styles.trash_button}>
+                            <button style={{ border: "none", color: "red", backgroundColor: "transparent", width: "100%", height: "100%" }} onClick={() => eliminarHorario(h.id, h.dia)}>
+                              <FontAwesomeIcon icon={faTrash} />
+                            </button>
+                          </div>
+                        </div>
+
                         <p>Apertura: {h.apertura}hrs.</p>
                         <p>Cierre: {h.cierre}hrs.</p>
                         <hr />
-                        <button onClick={() => abrirModalEditar(h.dia)}>Editar</button>
+                        <button className={styles.buttonEditar} onClick={() => abrirModalEditar(h.dia)}>Editar</button>
                       </div>
                     </li>
                   ))}
@@ -237,8 +278,8 @@ function VerHorarioMarcador() {
         <div className={styles.modalOverlay}>
           <div className={styles.modalContent}>
             <div className={styles.modalHeader}>
-              <h2>{modoEdicion ? `Editar Horario dia ${nuevoHorario.dia}` : 'Agregar Horario'}</h2>
-              <button className={styles.modalCloseButton} onClick={cerrarModal}>×</button>
+              <h2>{modoEdicion ? `Editar horario del día ${nuevoHorario.dia}` : 'Agregar horario'}</h2>
+              <button className={styles.modalCloseButton} onClick={cerrarModal}><FontAwesomeIcon icon={faXmark} /></button>
             </div>
             {!modoEdicion && (
               <div>
@@ -275,7 +316,7 @@ function VerHorarioMarcador() {
                 onChange={(e) => setNuevoHorario({ ...nuevoHorario, cierre: e.target.value })}
               />
             </div>
-            <div style={{ marginTop: '20px', display: 'flex', justifyContent: 'space-between' }}>
+            <div className={styles.botonesModal}>
               <button onClick={cerrarModal} className={styles.botonCancelar}>
                 Cancelar
               </button>
