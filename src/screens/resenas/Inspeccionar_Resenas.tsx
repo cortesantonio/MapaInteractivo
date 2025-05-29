@@ -120,19 +120,18 @@ function Inspeccionar_Resenas() {
             className={styles.imagenMarcador}
           />
         </div>
-        <div>
-          <button className={styles.botonatras} onClick={() => navigate(-1)}>
-            <FontAwesomeIcon icon={faReply} />
-          </button>
-
+        <button className={styles.botonatras} onClick={() => navigate(-1)}>
+          <FontAwesomeIcon icon={faReply} />
+        </button>
+        <div className={styles.Titulo} >
+          <h2>Reseña del marcador</h2>
         </div>
-        <div className={styles.titulo_locacion}>
-          <h2>{marcador?.nombre_recinto || "Cargando..."}</h2>
-        </div>
-        <div className={styles.info_locacion}>
-          <h4>{'>'} {(marcador?.tipo_recinto as any)?.tipo || "Cargando tipo..."}</h4>
-        </div>
-        <div className={styles.text}>
+        <div className={styles.locacionTitulo}>
+          <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', gap: '10px' }}>
+            <h4>
+              {marcador?.nombre_recinto || "Cargando..."}</h4>
+          </div>
+          <p>{'>'} {(marcador?.tipo_recinto as any)?.tipo || "Cargando tipo..."}</p>
           <h2>{marcador?.direccion || "Cargando..."}</h2>
         </div>
       </div>
