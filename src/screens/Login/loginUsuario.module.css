@@ -28,7 +28,12 @@
 
 .containeratras {
     padding: 25px;
+    display: flex;
+    justify-content: space-between;
+}
 
+.containeratras img {
+    width: 200px;
 }
 
 .containeratras .botonatras {

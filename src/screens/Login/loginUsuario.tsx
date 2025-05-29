@@ -62,6 +62,8 @@ function LoginUsuario() {
               <button className={style.botonatras} onClick={() => { navigate(-1) }}>
                 <FontAwesomeIcon icon={faReply} />
               </button>
+              <img src="../../../public\img\logoConCurico.png" alt="" />
+              
             </div>
 
             <div className={style.containerlogin}>
