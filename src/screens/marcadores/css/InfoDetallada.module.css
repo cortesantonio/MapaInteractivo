@@ -11,6 +11,17 @@
     width: 100%;
 }
 
+.header::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(to top, rgba(67, 67, 67, 0.7), rgba(196, 195, 195, 0.3));
+    z-index: 2;
+}
+
 .header img {
     z-index: 0;
     width: 100%;
@@ -27,7 +38,7 @@
     border: none;
     outline: none;
     color: white;
-    z-index: 1;
+    z-index: 3;
 }
 
 .Titulo {
@@ -37,6 +48,7 @@
     width: 100%;
     text-align: center;
     color: white;
+    z-index: 3;
 }
 
 .locacionTitulo {
@@ -44,6 +56,7 @@
     bottom: 25px;
     left: 25px;
     color: white;
+    z-index: 3;
 }
 
 .locacionTitulo h4 {
