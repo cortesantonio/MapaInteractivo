@@ -32,19 +32,6 @@ function ListTipoRecinto() {
     }, []);
 
 
-
-    if (selectedId !== null) {
-        return (
-            <EditarTipoRecinto
-                idTipoRecinto={selectedId}
-                onCancel={() => setSelectedId(null)}
-                onUpdate={() => {
-                    fetchData(); // refresca lista después de editar
-                    setSelectedId(null); // vuelve a lista
-                }}
-            />
-        );
-    }
     const handleDelete = async (id: number) => {
         const confirmDelete = window.confirm('¿Estás seguro que deseas eliminar este registro?');
 
@@ -111,7 +98,22 @@ function ListTipoRecinto() {
     }, [busqueda]);
 
 
-    return (<>
+    if (selectedId !== null) {
+        return (
+            <EditarTipoRecinto
+                idTipoRecinto={selectedId}
+                onCancel={() => setSelectedId(null)}
+                onUpdate={() => {
+                    fetchData(); // refresca lista después de editar
+                    setSelectedId(null); // vuelve a lista
+                }}
+            />
+        );
+    }
+
+
+    return (
+    <>
         <NavbarAdmin />
         <div className={styles.container}>
             <header className={styles.header} style={{ paddingTop: '40px', gap: '15px' }}>
