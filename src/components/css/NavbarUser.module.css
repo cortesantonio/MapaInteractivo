@@ -9,10 +9,11 @@
     box-shadow: 1px 1px 2px black;
     pointer-events: auto;
     border-radius: 50%;
-    background: #ff0000;
-    background: linear-gradient(90deg, rgba(255, 0, 0, 1) 0%, rgba(253, 175, 29, 1) 70%, rgba(249, 252, 69, 1) 100%);
+    background: -webkit-linear-gradient(55deg, #29482a, #4e8950, #9fb97f);
+    background: linear-gradient(55deg, #29482a, #4e8950, #9fb97f);
     cursor: pointer;
     position: relative;
+
 }
 
 .btnNavegacion {
@@ -23,16 +24,16 @@
 }
 
 .btnCerrarSesion {
-    border: 1px solid red;
-    background-color: transparent;
+    border: none;
+    background-color: red;
     width: 100%;
     border-radius: 5px;
-    color: red;
+    color: white;
     padding: 5px;
 }
 
 .opt {
     gap: 10px;
-    margin-top: 20px;
+    margin-top: 10px;
     margin-bottom: 20px;
 }
