@@ -17,17 +17,17 @@ interface Props {
     ubicacionActiva: boolean
     Idrutamarcador: number | null;
     limpiarRutaMarcador: () => void;
-    InformacionDestino?: any; 
-    onIndicaciones?: string[]; 
+    InformacionDestino?: any;
+    onIndicaciones?: string[];
 }
 
-export default function Footer({ 
-    onSeleccionMarcador, 
-    cambiarModoViaje, 
-    establecerDestino, 
-    ubicacionActiva, 
-    Idrutamarcador, 
-    limpiarRutaMarcador, 
+export default function Footer({
+    onSeleccionMarcador,
+    cambiarModoViaje,
+    establecerDestino,
+    ubicacionActiva,
+    Idrutamarcador,
+    limpiarRutaMarcador,
     InformacionDestino,
     onIndicaciones
 }: Props) {
@@ -38,7 +38,7 @@ export default function Footer({
     const setHeight = useState("0px")[1];
     const [Isdisplay, setIsdisplay] = useState("none");
     const [activarReconocimiento, setactivarReconocimiento] = useState(false);
-    const {fontSize} = useFontSize ();
+    const { fontSize } = useFontSize();
 
 
     const togglePanel = (panel: "map" | "user" | "microphone") => {
@@ -84,17 +84,17 @@ export default function Footer({
         setIsdisplay("none");
         setactivarReconocimiento(false);
         if (Idrutamarcador !== null) {
-            limpiarRutaMarcador(); 
+            limpiarRutaMarcador();
         }
         setTimeout(() => {
             setPanelActivo(null);
         }, 300);
     };
 
-    
+
     return (
         <div className={`${styles.ContenPrin} ${modoNocturno ? styles.darkMode : ''}`}
-            style={{ fontSize: `${fontSize}rem`, width: window.innerWidth <= 768 ? "98%" : "300px" }}>
+            style={{ fontSize: `${fontSize}rem`, width: window.innerWidth <= 768 ? "100%" : "300px", bottom: window.innerWidth <= 768 ? "0" : '' }}>
 
             <div className={styles.ContenButton}>
                 <button onClick={() => togglePanel("map")} className={styles.Button}>
@@ -115,37 +115,37 @@ export default function Footer({
                     style={{ color: "white" }} />
             </button>
 
-            <div className={`${styles.PanelInfo} ${modoNocturno ? styles.darkMode : ''}`} 
-                 style={{
-                    display: Isdisplay, 
-                    transition: "height 0.3s ease, opacity 0.3s ease", 
+            <div className={`${styles.PanelInfo} ${modoNocturno ? styles.darkMode : ''}`}
+                style={{
+                    display: Isdisplay,
+                    transition: "height 0.3s ease, opacity 0.3s ease",
                     height: ubicacionActiva && InformacionDestino && Object.keys(InformacionDestino).length > 0 ? "340px" : "450px",
                 }}>
-                
-                {panelActivo === "map" && <TrazadoRuta 
-                    closePanel={closePanel} 
-                    panelActivo={panelActivo}
-                    onSeleccionMarcadorRecientes={onSeleccionMarcador} 
-                    cambiarModoViaje={cambiarModoViaje} 
-                    establecerDestino={establecerDestino} 
-                    ubicacionActiva={ubicacionActiva} 
-                    Idrutamarcador={Idrutamarcador} 
-                    onIndicaciones={onIndicaciones}/>}
 
-                {panelActivo === "user" && <User 
-                    closePanel={closePanel} 
-                    panelActivo={panelActivo} 
-                    user={user} 
-                    navigate={navigate}
-                    
-                     />}
-
-                {panelActivo === "microphone" && <Microfono 
+                {panelActivo === "map" && <TrazadoRuta
                     closePanel={closePanel}
-                    panelActivo={panelActivo} 
+                    panelActivo={panelActivo}
+                    onSeleccionMarcadorRecientes={onSeleccionMarcador}
+                    cambiarModoViaje={cambiarModoViaje}
+                    establecerDestino={establecerDestino}
+                    ubicacionActiva={ubicacionActiva}
+                    Idrutamarcador={Idrutamarcador}
+                    onIndicaciones={onIndicaciones} />}
+
+                {panelActivo === "user" && <User
+                    closePanel={closePanel}
+                    panelActivo={panelActivo}
+                    user={user}
+                    navigate={navigate}
+
+                />}
+
+                {panelActivo === "microphone" && <Microfono
+                    closePanel={closePanel}
+                    panelActivo={panelActivo}
                     activarReconocimiento={activarReconocimiento}
                     onSeleccionMarcador={onSeleccionMarcador} />}
-                    
+
             </div>
         </div>
     );
