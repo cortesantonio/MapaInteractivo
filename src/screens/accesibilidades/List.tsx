@@ -29,18 +29,6 @@ function ListAccesibilidad() {
         fetchData();
     }, []);
 
-    if (selectedId !== null) {
-        return (
-            <EditarAccesibilidad
-                accesibilidadId={selectedId}
-                onCancel={() => setSelectedId(null)}
-                onUpdate={() => {
-                    fetchData(); // refresca lista después de editar
-                    setSelectedId(null); // vuelve a lista
-                }}
-            />
-        );
-    }
 
     const handleDelete = async (id: number) => {
         const confirmDelete = window.confirm('¿Estás seguro que deseas eliminar este registro?');
@@ -106,12 +94,23 @@ function ListAccesibilidad() {
         }
     };
 
-
-
-
     useEffect(() => {
         setCurrentPage(1);
     }, [busqueda]);
+
+    
+    if (selectedId !== null) {
+        return (
+            <EditarAccesibilidad
+                accesibilidadId={selectedId}
+                onCancel={() => setSelectedId(null)}
+                onUpdate={() => {
+                    fetchData(); // refresca lista después de editar
+                    setSelectedId(null); // vuelve a lista
+                }}
+            />
+        );
+    }
 
     return (
 
