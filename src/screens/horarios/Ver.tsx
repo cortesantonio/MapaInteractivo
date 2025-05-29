@@ -206,21 +206,22 @@ function VerHorarioMarcador() {
             className={styles.imagenMarcador}
           />
         </div>
-        <div>
-          <button className={styles.botonatras} onClick={() => navigate(-1)}>
-            <FontAwesomeIcon icon={faReply} />
-          </button>
-
+        <button className={styles.botonatras} onClick={() => navigate(-1)}>
+          <FontAwesomeIcon icon={faReply} />
+        </button>
+        <div className={styles.Titulo} >
+          <h2>Horario del marcador</h2>
         </div>
-        <div className={styles.titulo_locacion}>
-          <h2 style={{ cursor: 'pointer' }} onClick={() => { navigate(`/panel-administrativo/marcadores/informacion/${marcador?.id}`) }}>{<>{marcador?.nombre_recinto} <FontAwesomeIcon size='2xs' icon={faArrowUpRightFromSquare} /></> || "Cargando..."}</h2>
-        </div>
-        <div className={styles.info_locacion}>
-          <h4>{'>'} {(marcador?.tipo_recinto as any)?.tipo || "Cargando tipo..."}</h4>
-        </div>
-        <div className={styles.text}>
+        <div className={styles.locacionTitulo}>
+          <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', gap: '10px' }}>
+            <h4 onClick={() => navigate(`/panel-administrativo/marcadores/informacion/${marcador?.id}`)}>
+              {marcador?.nombre_recinto || "Cargando..."} <FontAwesomeIcon size="2xs" icon={faArrowUpRightFromSquare} />
+            </h4>
+          </div>
+          <p>{'>'} {(marcador?.tipo_recinto as any)?.tipo || "Cargando tipo..."}</p>
           <h2>{marcador?.direccion || "Cargando..."}</h2>
         </div>
+
       </div>
       {/* Listado de horarios */}
       <div className={styles.inspeccionar_reseñas}>
@@ -285,6 +286,7 @@ function VerHorarioMarcador() {
               <div>
                 <label>Día:</label>
                 <select
+                  className={styles.selectDia}
                   disabled={modoEdicion}
                   value={nuevoHorario.dia}
                   onChange={(e) => setNuevoHorario({ ...nuevoHorario, dia: e.target.value })}
