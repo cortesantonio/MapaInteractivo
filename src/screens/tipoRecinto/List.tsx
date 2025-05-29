@@ -1,6 +1,6 @@
 import styles from './css/List.module.css'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faMagnifyingGlass, faPenToSquare, faUniversalAccess, faDeleteLeft, faPlus } from '@fortawesome/free-solid-svg-icons';
+import { faMagnifyingGlass, faPenToSquare, faUniversalAccess, faDeleteLeft, faPlus, faChevronLeft, faChevronRight } from '@fortawesome/free-solid-svg-icons';
 import { useState, useEffect } from 'react';
 import { supabase } from '../../services/supabase';
 import { Tipo_Recinto } from '../../interfaces/Tipo_Recinto';
@@ -15,7 +15,10 @@ function ListTipoRecinto() {
     const navigate = useNavigate();
     const [tiposRecintos, setTiposRecintos] = useState<Tipo_Recinto[]>([]);
     const [selectedId, setSelectedId] = useState<number | null>(null);
-    const [query, setQuery] = useState('');
+    const [busqueda, setBusqueda] = useState('');
+    const ITEMS_PER_PAGE = 10;
+    const [currentPage, setCurrentPage] = useState(1);
+
 
     const fetchData = async () => {
         const { data, error } = await supabase
@@ -28,11 +31,7 @@ function ListTipoRecinto() {
         fetchData();
     }, []);
 
-    const [isActiveBuscador, setIsActiveBuscador] = useState(false);
 
-    function handleBuscador() {
-        setIsActiveBuscador(prevState => !prevState);
-    }
 
     if (selectedId !== null) {
         return (
@@ -88,41 +87,61 @@ function ListTipoRecinto() {
         console.log(' Registro insertado en registro_logs correctamente', registro_logs);
     };
 
-    const TipoRecintosFiltrados = tiposRecintos.filter((a) =>
-        a.tipo.toLowerCase().includes(query.toLowerCase())
+    const handleBusquedaChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setBusqueda(e.target.value);
+    };
+
+    const tiposFiltrados = tiposRecintos.filter((a) =>
+        a.tipo.toLowerCase().includes(busqueda.toLowerCase())
     );
+
+    const totalPages = Math.ceil(tiposFiltrados.length / ITEMS_PER_PAGE);
+    const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
+    const endIndex = startIndex + ITEMS_PER_PAGE;
+    const currentItems = tiposFiltrados.slice(startIndex, endIndex);
+
+    const handlePageChange = (newPage: number) => {
+        if (newPage >= 1 && newPage <= totalPages) {
+            setCurrentPage(newPage);
+        }
+    };
+
+    useEffect(() => {
+        setCurrentPage(1);
+    }, [busqueda]);
 
 
     return (<>
         <NavbarAdmin />
         <div className={styles.container}>
-
             <header className={styles.header} style={{ paddingTop: '40px', gap: '15px' }}>
                 <hr style={{ flexGrow: "1" }} />
                 <h2 style={{ textAlign: 'right', paddingRight: "15px", whiteSpace: "nowrap" }} >Gestión de recintos</h2>
             </header>
             <div className={styles.filtros}>
                 <div style={{ display: 'flex', gap: '5px', justifyContent: 'right' }}>
-
-                    <button className={styles.filtroCard} onClick={() => handleBuscador()} >
-                        <FontAwesomeIcon icon={faMagnifyingGlass} /> Buscador
-                    </button>
+                    <div className={styles.filtroCard} style={{ position: 'relative' }}>
+                        <label>
+                            <FontAwesomeIcon icon={faMagnifyingGlass} />
+                        </label>
+                        <input
+                            type="text"
+                            placeholder="Buscar por nombre..."
+                            value={busqueda}
+                            onChange={handleBusquedaChange}
+                            style={{
+                                width: '150px',
+                                padding: '5px',
+                                border: 'none',
+                                outline: 'none'
+                            }}
+                        />
+                    </div>
                     <button className={styles.agregarCard} style={{ backgroundColor: 'red' }} onClick={() => navigate('/panel-administrativo/tipo-recinto/agregar')}>
                         <FontAwesomeIcon icon={faPlus} color='white' /> Agregar
                     </button>
                 </div>
-                {isActiveBuscador &&
-                    <div className={styles.buscar}>
-                        <form action="">
-                            <input type="text" placeholder='Buscar'
-                                onChange={(e) => setQuery(e.target.value)}
-                                value={query}
 
-                            />
-                            <button type='submit'><FontAwesomeIcon icon={faMagnifyingGlass} /></button>
-                        </form>
-                    </div>
-                }
             </div>
 
             <div className={styles.SubTitulo}>
@@ -131,11 +150,10 @@ function ListTipoRecinto() {
             </div>
             <div className={styles.content}>
 
-
-                {TipoRecintosFiltrados.map((tRecinto) => (
+                {currentItems.map((tRecinto) => (
                     <div key={tRecinto.id} className={styles.card} >
                         <div className={styles.estado}
-                            style={{ backgroundColor: 'rgb(0, 97, 223)', }}
+                            style={{ backgroundColor: 'rgb(0, 97, 223)' }}
                         >
                             <FontAwesomeIcon icon={faUniversalAccess} size='xl' style={{ color: 'white' }} />
                         </div>
@@ -147,16 +165,84 @@ function ListTipoRecinto() {
                             <button title='Editar' onClick={() => setSelectedId(tRecinto.id)}>
                                 <FontAwesomeIcon icon={faPenToSquare} />
                             </button>
-                            <button title='Borrar filtro' onClick={() => handleDelete(tRecinto.id)} ><FontAwesomeIcon icon={faDeleteLeft} /></button>
+                            <button title='Eliminar' onClick={() => handleDelete(tRecinto.id)} >
+                                <FontAwesomeIcon icon={faDeleteLeft} />
+                            </button>
                         </div>
                     </div>
                 ))}
 
-
-
-
-
             </div>
+
+            {totalPages > 1 && (
+                <div style={{
+                    display: 'flex',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    gap: '10px',
+                    marginTop: '20px',
+                    marginBottom: '20px'
+                }}>
+                    <button
+                        onClick={() => handlePageChange(currentPage - 1)}
+                        disabled={currentPage === 1}
+                        style={{
+                            padding: '8px 12px',
+                            border: '1px solid #ddd',
+                            borderRadius: '4px',
+                            backgroundColor: currentPage === 1 ? '#f5f5f5' : 'white',
+                            cursor: currentPage === 1 ? 'not-allowed' : 'pointer',
+                            display: 'flex',
+                            alignItems: 'center',
+                            gap: '5px'
+                        }}
+                    >
+                        <FontAwesomeIcon icon={faChevronLeft} />
+                        Anterior
+                    </button>
+
+                    <div style={{
+                        display: 'flex',
+                        gap: '5px',
+                        alignItems: 'center'
+                    }}>
+                        {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
+                            <button
+                                key={page}
+                                onClick={() => handlePageChange(page)}
+                                style={{
+                                    padding: '8px 12px',
+                                    border: '1px solid #ddd',
+                                    borderRadius: '4px',
+                                    backgroundColor: currentPage === page ? '#0397fc' : 'white',
+                                    color: currentPage === page ? 'white' : 'black',
+                                    cursor: 'pointer'
+                                }}
+                            >
+                                {page}
+                            </button>
+                        ))}
+                    </div>
+
+                    <button
+                        onClick={() => handlePageChange(currentPage + 1)}
+                        disabled={currentPage === totalPages}
+                        style={{
+                            padding: '8px 12px',
+                            border: '1px solid #ddd',
+                            borderRadius: '4px',
+                            backgroundColor: currentPage === totalPages ? '#f5f5f5' : 'white',
+                            cursor: currentPage === totalPages ? 'not-allowed' : 'pointer',
+                            display: 'flex',
+                            alignItems: 'center',
+                            gap: '5px'
+                        }}
+                    >
+                        Siguiente
+                        <FontAwesomeIcon icon={faChevronRight} />
+                    </button>
+                </div>
+            )}
 
         </div>
     </>

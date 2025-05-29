@@ -7,7 +7,7 @@ import { supabase } from '../../services/supabase';
 import { useNavigate, useParams } from "react-router-dom";
 import NavbarAdmin from '../../components/NavbarAdmin';
 function ListSolicitudes() {
-    const [isActiveBuscador, setIsActiveBuscador] = useState(false);
+  
     const [solicitudes, setSolicitudes] = useState<Solicitudes[]>([]);
     const [busqueda, setBusqueda] = useState('');
     const [filtroEstado, setFiltroEstado] = useState('');
@@ -60,6 +60,10 @@ function ListSolicitudes() {
         }
     }
 
+    function handleBusquedaChange(e: React.ChangeEvent<HTMLInputElement>) {
+        setBusqueda(e.target.value);
+    }
+
     const solicitudesFiltradas = solicitudes
         .filter((sol) =>
             sol.nombre_locacion.toLowerCase().includes(busqueda.toLowerCase())
@@ -84,11 +88,25 @@ function ListSolicitudes() {
 
                 <div className={styles.filtros}>
                     <div style={{ display: 'flex', gap: '5px' }}>
-                        <button className={styles.filtroCard} onClick={() => setIsActiveBuscador(prev => !prev)} >
-                            <FontAwesomeIcon icon={faMagnifyingGlass} /> Buscador
-                        </button>
+                        <div className={styles.filtroCard} style={{ position: 'relative' }}>
+                            <label>
+                                <FontAwesomeIcon icon={faMagnifyingGlass} />
+                            </label>
+                            <input
+                                type="text"
+                                placeholder="Buscar por nombre..."
+                                value={busqueda}
+                                onChange={handleBusquedaChange}
+                                style={{
+                                    width: '150px',
+                                    padding: '5px',
+                                    border: 'none',
+                                    outline: 'none'
+                                }}
+                            />
+                        </div>
 
-                        <div className={styles.filtroCard}>
+                        <div className={styles.filtroCard} style={{display: 'flex', alignItems: 'center'}}>
                             <label htmlFor="filtro"><FontAwesomeIcon icon={faFilter} /> </label>
                             <select id="filtro" value={filtroEstado} onChange={handleFiltroCambio} >
                                 <option value="">Todos</option>
@@ -98,7 +116,7 @@ function ListSolicitudes() {
                             </select>
                         </div>
 
-                        <div className={styles.filtroCard}>
+                        <div className={styles.filtroCard} style={{display: 'flex', alignItems: 'center'}}>
                             <label htmlFor="orden"><FontAwesomeIcon icon={faSort} /></label>
                             <select id="orden" onChange={(e) => setOrden(e.target.value)}>
                                 <option value="desc">Más reciente</option>
@@ -107,19 +125,7 @@ function ListSolicitudes() {
                         </div>
                     </div>
 
-                    {isActiveBuscador &&
-                        <div className={styles.buscar}>
-                            <form onSubmit={(e) => e.preventDefault()}>
-                                <input
-                                    type="text"
-                                    placeholder='Buscar por locación'
-                                    value={busqueda}
-                                    onChange={(e) => setBusqueda(e.target.value)}
-                                />
-                                <button type='submit'><FontAwesomeIcon icon={faMagnifyingGlass} /></button>
-                            </form>
-                        </div>
-                    }
+
                 </div>
 
                 <div className={styles.SubTitulo}>
