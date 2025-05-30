@@ -106,7 +106,7 @@ export default function EditarTipoRecinto({ idTipoRecinto, onCancel, onUpdate }:
                 </div>
 
                 <div style={{ margin: '20px auto', width: '40%', display: 'flex', justifyContent: 'center', flexDirection: 'column', minWidth: '250px' }}>
-                    <div style={{ display: 'flex', flexDirection: 'column', maxWidth: '600px' }}>
+                    <div className={styles.formularioCentro}>
                         <label className={styles.labelSeccion} >Tipo</label>
                         <input name="tipo" onChange={handleChange} value={formData.tipo}
                             className={styles.inputText} />
