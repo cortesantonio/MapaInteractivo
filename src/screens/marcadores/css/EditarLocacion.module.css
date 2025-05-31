@@ -191,6 +191,13 @@
     color: #555;
 }
 
+.checkboxColor {
+    accent-color: #4e8950;
+    width: 14px;
+    height: 18px;
+    cursor: pointer;
+}
+
 .acciones {
     width: 100%;
     display: flex;

@@ -92,16 +92,20 @@
 }
 
 @keyframes fadeIn {
-    from { opacity: 0; transform: translateY(-10px); }
-    to { opacity: 1; transform: translateY(0); }
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
-
-
 
 .imagen_container img {
     width: 100%;
     border-radius: 8px;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
     transition: transform 0.3s ease;
     cursor: pointer;
 }
@@ -122,11 +126,11 @@
 }
 
 .Seccion_de_Accesibilidad .seccion_de_titulos h2 {
-   text-align: center;
-   font-weight: 350;
-   margin: clamp(0.7rem, 2vw, 1rem) 0;
-   padding: 5px;
-   font-size: clamp(1.2rem, 2vw, 1.4rem);
+    text-align: center;
+    font-weight: 350;
+    margin: clamp(0.7rem, 2vw, 1rem) 0;
+    padding: 5px;
+    font-size: clamp(1.2rem, 2vw, 1.4rem);
 }
 
 .featureHeader {
@@ -151,6 +155,41 @@
     padding: 5px;
     font-size: clamp(1rem, 1.1vw, 1.1rem);
     color: blue;
+}
+
+.alertaInformativa {
+    display: flex;
+    align-items: center;
+    background-color: #f0f8ff;
+    /* azul claro */
+    border-left: 4px solid #007acc;
+    padding: 10px 15px;
+    border-radius: 6px;
+    font-size: 1rem;
+    gap: 10px;
+    margin-top: 10px;
+}
+
+.iconoInfo {
+    color: #007acc;
+    font-size: 1.1rem;
+}
+
+.linkArticulo {
+    color: #007acc;
+    text-decoration: none;
+    font-weight: 500;
+}
+
+.linkArticulo:hover {
+    text-decoration: underline;
+}
+
+.infoExtra {
+    font-size: 0.85rem;
+    color: gray;
+    font-style: italic;
+    margin-left: 5px;
 }
 
 .Pre_Descripcion {
@@ -259,40 +298,43 @@
     object-fit: contain;
 }
 
+
 /* Ejemplo para Info.module.css */
+
 .toast {
-  position: fixed;
-  top: 20px;
-  right: 20px;
-  background-color: #323232;
-  color: white;
-  padding: 10px 20px;
-  border-radius: 5px;
-  box-shadow: 0 0 10px rgba(0,0,0,0.2);
-  z-index: 1000;
-  opacity: 1;
-  transition: opacity 1s ease-in-out;
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background-color: #323232;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+    z-index: 1000;
+    opacity: 1;
+    transition: opacity 1s ease-in-out;
 }
 
 .toast.hide {
-  opacity: 0;
+    opacity: 0;
 }
+
 .confirmButton {
-  background-color: #007BFF;
-  color: white;
-  border: none;
-  padding: 12px 24px;
-  border-radius: 6px;
-  font-size: 1rem;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
-  font-weight: 500;
+    background-color: #007BFF;
+    color: white;
+    border: none;
+    padding: 12px 24px;
+    border-radius: 6px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    font-weight: 500;
 }
 
 .confirmButton:hover {
-  background-color: #0056b3;
+    background-color: #0056b3;
 }
 
 .confirmButton:active {
-  background-color: #00408d;
+    background-color: #00408d;
 }
