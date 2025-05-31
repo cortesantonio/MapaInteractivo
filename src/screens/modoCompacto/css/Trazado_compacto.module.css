@@ -1,6 +1,6 @@
 .container_principal {
-    width: 100%;
-    height: 100%;
+  width: 100%;
+  height: 100%;
 }
 
 .botonatras {
@@ -19,24 +19,24 @@
 }
 
 .PositionIcons {
-    overflow: hidden;
-    display: flex;
-    justify-content: space-between; 
-    align-items: center;
-    margin: 35px 0;
-    border: 1px solid #e0e0e0;
-    border-radius: 15px;
-    padding: 20px;
-    background-color: #f8f8f8;
-    width: 60%;
-    max-width: 250px;
+  overflow: hidden;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 35px 0;
+  border: 1px solid #e0e0e0;
+  border-radius: 15px;
+  padding: 20px;
+  background-color: #f8f8f8;
+  width: 60%;
+  max-width: 250px;
 }
 
 .ButttonIcons {
-    background: transparent;
-    padding: 0px;
-    outline: none;
-    border: none;
+  background: transparent;
+  padding: 0px;
+  outline: none;
+  border: none;
 }
 
 .Container_secundario{
@@ -52,18 +52,33 @@
 }
 
 .mensajePermiso {
+  display: flex;
+  justify-content: center; 
+  align-items: center;     
+  text-align: center;      
+  height: 100%;            
+  width: 100%;             
+  padding: 20px;
+  box-sizing: border-box;  
+  flex-direction: column;  
+}
+
+.mensajePermiso p{
   color: red;
   margin: 10px;
   font-weight: bold;
-  font-size: 1.5rem;
+  font-size: 1.3rem;
+  white-space: pre-line;
 }
 
 .Container_secundario h3 {
   font-size: clamp(1rem, 2.5vw, 1.4rem); 
 }
-.Container_secundario ol{
+
+.Container_secundario ol {
   padding-left: 15px;
 }
+
 .Container_secundario li {
   font-size: clamp(0.85rem, 2vw, 1.1rem); 
 }

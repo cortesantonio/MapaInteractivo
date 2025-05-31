@@ -20,16 +20,22 @@ function TrazadoRutaInterno() {
     const [instrucciones, setInstrucciones] = useState<string[]>([]);
     const [mensajePermisoUbicacion, setMensajePermisoUbicacion] = useState<string>("");
 
-useEffect(() => {
+    useEffect(() => {
         const verificarPermisosUbicacion = async () => {
             try {
                 const permiso = await navigator.permissions.query({ name: 'geolocation' as PermissionName });
 
                 const actualizarMensaje = () => {
                     if (permiso.state === 'denied') {
-                        setMensajePermisoUbicacion("No es posible acceder a la ubicación. Los permisos fueron denegados.");
+                        setMensajePermisoUbicacion(
+                            "No se puede acceder a tu ubicación porque los permisos fueron denegados. \n" +
+                            "Para habilitarlos, ve a la configuración de tu navegador, busca 'Privacidad y seguridad' > 'Configuración del sitio' > 'Ubicación' y permite el acceso manualmente para este sitio."
+                        );
                     } else if (permiso.state === 'prompt') {
-                        setMensajePermisoUbicacion("Active los permisos de ubicación para utilizar esta función.");
+                        setMensajePermisoUbicacion(
+                            "Activa los permisos de ubicación para utilizar esta función. \n " +
+                            "Cuando se te solicite, haz clic en 'Permitir'. Si no ves la solicitud, revisa el icono del candado 🔒 en la barra de direcciones y ajusta los permisos desde allí."
+                        );
                     } else {
                         setMensajePermisoUbicacion("");
                     }
@@ -61,23 +67,23 @@ useEffect(() => {
 
 
     useEffect(() => {
-    const fetchDestino = async () => {
-        const { data, error } = await supabase
-            .from("marcador")
-            .select("nombre_recinto, direccion, latitud, longitud") 
-            .eq("id", id)
-            .single();
+        const fetchDestino = async () => {
+            const { data, error } = await supabase
+                .from("marcador")
+                .select("nombre_recinto, direccion, latitud, longitud")
+                .eq("id", id)
+                .single();
 
-        if (error) {
-            console.error("Error al obtener destino:", error);
-        } else {
-            setMarcadorDestino(data);
-            setDestino({ lat: data.latitud, lng: data.longitud });
-        }
-    };
+            if (error) {
+                console.error("Error al obtener destino:", error);
+            } else {
+                setMarcadorDestino(data);
+                setDestino({ lat: data.latitud, lng: data.longitud });
+            }
+        };
 
-    fetchDestino();
-}, [id]);
+        fetchDestino();
+    }, [id]);
 
     useEffect(() => {
         const obtenerRuta = () => {
