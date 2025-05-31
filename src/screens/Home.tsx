@@ -115,11 +115,8 @@ export default function Home() {
   }, []);
 
   const estilosMarcador: CSSProperties = {
-    zIndex: 1,
-    bottom: isMobile ? "0px" : "0px",
-    left: isMobile ? "0px" : "25px",
+    zIndex: 10,
     width: isMobile ? "100%" : "fit-content",
-    height: isMobile ? "85%" : "auto",
     transition: "bottom 0.3s ease-in-out",
     pointerEvents: 'auto'
   };
@@ -160,8 +157,8 @@ export default function Home() {
               <img style={{ width: '30dvw', maxWidth: '150px', height: 'fit-content' }} src="../../public/img/logoConCurico.png" alt="" />
               <NavbarUser />
             </div>
-          </div>
-          {mostrarMarcador && marcadorSeleccionadoId !== null && (
+
+            {mostrarMarcador && marcadorSeleccionadoId !== null && (
             <div style={estilosMarcador}>
               <VerMarcador
                 MarcadorSelectId={marcadorSeleccionadoId}
@@ -170,6 +167,8 @@ export default function Home() {
               />
             </div>
           )}
+          </div>
+          
           <Footer onSeleccionMarcador={(id: number) => {
             setMarcadorSeleccionadoId(id);
             setMostrarMarcador(true);
