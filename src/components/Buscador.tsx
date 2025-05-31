@@ -190,6 +190,7 @@ function Buscador({ onSeleccionMarcador }: BuscadorProps) {
                     placeholder="Buscador"
                     onChange={(e) => setBusqueda(e.target.value)}
                     value={busqueda}
+                    name="busqueda"
                 />
 
                 <button 
