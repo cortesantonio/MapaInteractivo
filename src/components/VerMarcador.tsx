@@ -1,4 +1,4 @@
-import { useEffect, useState, useRef } from 'react';
+import { useEffect, useState } from 'react';
 import { Marcador } from '../interfaces/Marcador';
 import { Review } from '../interfaces/Review';
 import { formatDistanceToNow } from 'date-fns';
@@ -14,6 +14,7 @@ import { Accesibilidad } from '../interfaces/Accesibilidad';
 import ImagenConFallback from './ImagenConFallback';
 import { useTheme } from "../components/Footer/Modo_Nocturno";
 import Marca_Verificador from "../../public/img/Marca_Verificador.webp";
+import { ClipLoader } from 'react-spinners';
 
 interface Props {
     MarcadorSelectId: number;
@@ -24,7 +25,7 @@ interface Props {
 export default function VerMarcador({ MarcadorSelectId, CerrarMarcador, establecerIdRutaMarcador }: Props) {
     const [cargando, setCargando] = useState<boolean>(true);
     const [width, setWidth] = useState(window.innerWidth <= 768 ? "100%" : "400px");
-    const [height, setHeight] = useState("100vh");
+    const [height,] = useState("100vh");
     const [Marcador, setMarcador] = useState<Partial<Marcador>>({});
     const [horariosMarcador, setHorariosMarcador] = useState<Horarios[]>([]);
     const [accesibilidadMarcador, setAccesibilidadMarcador] = useState<Accesibilidad[]>([]);
@@ -176,7 +177,10 @@ export default function VerMarcador({ MarcadorSelectId, CerrarMarcador, establec
         return (
             <div className={styles.InfoMarcador}>
                 {cargando ? (
-                    <div className={styles.cargando}>Cargando...</div>
+                    <div className={styles.cargando}>
+                        <ClipLoader color="#74C0FC" loading={cargando} size={50} />
+                        <p>Cargando...</p>
+                    </div>
                 ) : (
                     Marcador && (
                         <>
@@ -348,7 +352,10 @@ export default function VerMarcador({ MarcadorSelectId, CerrarMarcador, establec
             <div className={styles.HeaderFijo}>
                 <button onClick={CerrarMarcador} className={styles.CerrarMarcador}>X</button>
                 {cargando ? (
-                    <p>Cargando imagen...</p>
+                    <div className={styles.cargando}>
+                        <ClipLoader color="#74C0FC" loading={cargando} size={50} />
+                        <p>Cargando...</p>
+                    </div>
                 ) : (
                     <>
                         <ImagenConFallback

@@ -263,11 +263,12 @@
 }
 
 .cargando {
-    text-align: center;
-    font-size: 1.2rem;
-    color: #74C0FC;
-    font-weight: bold;
-    margin-top: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 150px;
+    width: 100%;
+    background-color: #f8f9fa;
 }
 
 .fechaVerMas {
