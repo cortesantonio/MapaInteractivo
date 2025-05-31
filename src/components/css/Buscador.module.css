@@ -1,19 +1,24 @@
 .container {
     align-items: center;
     position: relative;
+    width: 100%;
+    max-width: 600px;
 }
 
 .distribucionContainer {
     background-color: white;
-    padding: 20px;
+    padding: 15px 20px;
     display: flex;
-    justify-content: space-around;
+    justify-content: space-between;
     align-items: center;
-    height: 25px;
-    gap: 10px;
+    gap: 15px;
     border-radius: 15px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+}
 
-
+.distribucionContainer:hover {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
 }
 
 .inpBuscar {
@@ -25,4 +30,326 @@
     height: 25px;
     outline: none;
     font-weight: 500;
+    padding: 0 10px;
+}
+
+.inpBuscar::placeholder {
+    color: #999;
+    font-weight: 400;
+}
+
+.filterButton {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 8px;
+    border-radius: 50%;
+    transition: all 0.3s ease;
+}
+
+.filterButton:hover {
+    background-color: rgba(0, 0, 0, 0.05);
+}
+
+.filterCount {
+    position: absolute;
+    top: -8px;
+    right: -8px;
+    background-color: #4CAF50;
+    color: white;
+    border-radius: 50%;
+    width: 20px;
+    height: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.7rem;
+    font-weight: bold;
+    border: 2px solid white;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+/* Estilos para los resultados de búsqueda */
+.resultadosContainer {
+    margin-top: 15px;
+    background-color: white;
+    border-radius: 15px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    max-height: 300px;
+    overflow-y: auto;
+}
+
+.resultadoItem {
+    padding: 15px;
+    border-bottom: 1px solid #eee;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.resultadoItem:last-child {
+    border-bottom: none;
+}
+
+.resultadoItem:hover {
+    background-color: rgba(0, 0, 0, 0.02);
+}
+
+.resultadoIcon {
+    color: #666;
+    font-size: 1.2rem;
+}
+
+.resultadoInfo {
+    flex: 1;
+}
+
+.resultadoNombre {
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 4px;
+}
+
+.resultadoDireccion {
+    font-size: 0.9rem;
+    color: #666;
+}
+
+/* Estilos para modo oscuro */
+.darkMode .distribucionContainer {
+    background-color: #2d2d2d;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+.darkMode .distribucionContainer:hover {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+.darkMode .inpBuscar {
+    color: white;
+}
+
+.darkMode .inpBuscar::placeholder {
+    color: #888;
+}
+
+.darkMode .filterButton:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+.darkMode .filterCount {
+    border-color: #333;
+}
+
+.darkMode .resultadosContainer {
+    background-color: #2d2d2d;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+.darkMode .resultadoItem {
+    border-bottom-color: #444;
+}
+
+.darkMode .resultadoItem:hover {
+    background-color: rgba(255, 255, 255, 0.05);
+}
+
+.darkMode .resultadoIcon {
+    color: #888;
+}
+
+.darkMode .resultadoNombre {
+    color: #fff;
+}
+
+.darkMode .resultadoDireccion {
+    color: #aaa;
+}
+
+/* Estilos responsivos */
+@media (max-width: 768px) {
+    .container {
+        max-width: 100%;
+    }
+
+    .distribucionContainer {
+        padding: 12px 15px;
+    }
+
+    .resultadosContainer {
+        max-height: 250px;
+    }
+}
+
+.modalOverlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.modalContent {
+    background: white;
+    border-radius: 15px;
+    width: 90%;
+    max-width: 600px;
+    max-height: 80vh;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.modalHeader {
+    padding: 20px;
+    border-bottom: 1px solid #eee;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.modalHeader h2 {
+    margin: 0;
+    font-size: 1.5rem;
+}
+
+.closeButton {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 5px;
+    color: #666;
+    transition: color 0.3s ease;
+}
+
+.closeButton:hover {
+    color: #333;
+}
+
+.filtrosContainer {
+    padding: 20px;
+    overflow-y: auto;
+    flex-grow: 1;
+}
+
+.filtroGrupo {
+    margin-bottom: 20px;
+}
+
+.filtroGrupo h3 {
+    margin: 0 0 15px 0;
+    font-size: 1.2rem;
+}
+
+.pictogramasGrid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+    gap: 15px;
+}
+
+.pictogramaItem {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 10px;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    border: 2px solid transparent;
+}
+
+.pictogramaItem:hover {
+    background-color: rgba(0, 0, 0, 0.05);
+}
+
+.pictogramaItem.activo {
+    border-color: #4CAF50;
+    background-color: rgba(76, 175, 80, 0.1);
+}
+
+.pictogramaPlaceholder {
+    width: 60px;
+    height: 60px;
+    background-color: #f0f0f0;
+    border-radius: 50%;
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.pictogramaItem span {
+    font-size: 0.9rem;
+    text-align: center;
+    word-break: break-word;
+}
+
+.modalFooter {
+    padding: 20px;
+    border-top: 1px solid #eee;
+    display: flex;
+    justify-content: flex-end;
+}
+
+.aplicarButton {
+    transition: background-color 0.3s ease;
+}
+
+.aplicarButton:hover {
+    background-color: #45a049 !important;
+}
+
+/* Estilos para modo oscuro */
+.darkMode .modalContent {
+    background-color: #333;
+}
+
+.darkMode .modalHeader {
+    border-bottom-color: #444;
+}
+
+.darkMode .closeButton {
+    color: #999;
+}
+
+.darkMode .closeButton:hover {
+    color: #fff;
+}
+
+.darkMode .pictogramaItem:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+.darkMode .pictogramaPlaceholder {
+    background-color: #444;
+}
+
+.darkMode .modalFooter {
+    border-top-color: #444;
+}
+
+/* Estilos responsivos */
+@media (max-width: 768px) {
+    .modalContent {
+        width: 95%;
+        max-height: 90vh;
+    }
+
+    .pictogramasGrid {
+        grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+    }
+
+    .pictogramaPlaceholder {
+        width: 50px;
+        height: 50px;
+    }
 }
