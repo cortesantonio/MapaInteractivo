@@ -21,8 +21,6 @@ export default function EscribirResena({ onSubmit, onCancel, idMarcador }: Props
     const navigate = useNavigate()
     const { modoNocturno } = useTheme();
 
-
-
     const obtenerFechaChile = () => {
         const ahora = new Date();
         const fechaChile = new Intl.DateTimeFormat('es-CL', {
@@ -36,14 +34,12 @@ export default function EscribirResena({ onSubmit, onCancel, idMarcador }: Props
             timeZone: 'America/Santiago'
         }).formatToParts(ahora);
 
-        // Convertir partes a un formato tipo ISO local sin zona horaria
         const partes: { [key: string]: string } = {};
         fechaChile.forEach(({ type, value }) => {
             partes[type] = value;
         });
 
-        const fechaFinal = `${partes.year}-${partes.month}-${partes.day}T${partes.hour}:${partes.minute}:${partes.second}`;
-        return fechaFinal;
+        return `${partes.year}-${partes.month}-${partes.day}T${partes.hour}:${partes.minute}:${partes.second}`;
     };
 
     const handleSubmit = async () => {
@@ -57,7 +53,7 @@ export default function EscribirResena({ onSubmit, onCancel, idMarcador }: Props
         const { data: nuevaReseña, error } = await supabase.from('resenas').insert({
             calificacion,
             comentario,
-            fecha: Fechahorachile, // Fecha actual
+            fecha: Fechahorachile,
             id_usuario: user?.id,
             id_marcador: idMarcador,
         })
@@ -66,85 +62,106 @@ export default function EscribirResena({ onSubmit, onCancel, idMarcador }: Props
 
         if (error) {
             console.error("No se Puedieron Insertar los Datos", error)
-        }
-
-        else {
+        } else {
             console.log("Datos Enviados con Exito:" + nuevaReseña)
             await Registro_cambios(nuevaReseña.id);
             alert("¡Gracias por compartir tu reseña!");
-
         }
-
     };
 
     const fechaHoraActual = new Date().toISOString();
 
     const Registro_cambios = async (idReseña: number) => {
-
         const { data: registro_logs, error: errorLog } = await supabase
             .from('registro_logs')
-            .insert([
-                {
-                    id_usuario: user?.id,
-                    tipo_accion: 'Agregación de Reseña',
-                    detalle: `Se agregó una nueva Reseña con ID ${idReseña}`,
-                    fecha_hora: fechaHoraActual,
-                }
-            ]);
+            .insert([{
+                id_usuario: user?.id,
+                tipo_accion: 'Agregación de Reseña',
+                detalle: `Se agregó una nueva Reseña con ID ${idReseña}`,
+                fecha_hora: fechaHoraActual,
+            }]);
 
         if (errorLog) {
             console.error('Error al registrar en los logs:', errorLog);
             return;
         }
 
-        console.log(' Registro insertado en registro_logs correctamente', registro_logs);
+        console.log('Registro insertado en registro_logs correctamente', registro_logs);
     };
-    return (
-        <div className={styles.formContainer}>
-            {user !== undefined ? (
-                <><h3 style={{ color: modoNocturno ? "#fff" : "", textAlign: "center" }}>Comparte tu experiencia.</h3>
 
-                    <div className={styles.stars}>
-                        <div>
+    return (
+        <div className={`${styles.formContainer} ${modoNocturno ? styles.formContainerOscuro : ''}`}>
+            {user !== undefined ? (
+                <>
+                    <h3 className={styles.titulo}>Comparte tu experiencia</h3>
+
+                    <div className={styles.starsContainer}>
+                        <div className={styles.stars} role="radiogroup" aria-label="Calificación">
                             {[1, 2, 3, 4, 5].map((star) => (
-                                <FontAwesomeIcon
+                                <button
                                     key={star}
-                                    icon={faStar}
+                                    type="button"
                                     onClick={() => setCalificacion(star)}
                                     onMouseEnter={() => setHover(star)}
                                     onMouseLeave={() => setHover(0)}
-                                    className={star <= (hover || calificacion) ? styles.starFilled : styles.starEmpty}
-                                />
+                                    className={`${styles.starButton} ${star <= (hover || calificacion) ? styles.starFilled : styles.starEmpty}`}
+                                    aria-label={`${star} ${star === 1 ? 'estrella' : 'estrellas'}`}
+                                    aria-pressed={calificacion === star}
+                                >
+                                    <FontAwesomeIcon icon={faStar} size='lg' />
+                                </button>
                             ))}
                         </div>
-
-                        <p style={{ fontSize: '0.9rem', color: modoNocturno ? "#fff" : 'gray', }}>¿Cómo calificarías tu experiencia?</p>
+                        <p className={styles.starLabel}>¿Cómo calificarías tu experiencia?</p>
                     </div>
 
-                    <textarea
-                        placeholder="Por favor, escribe tu reseña aquí."
-                        value={comentario}
-                        onChange={(e) => setComentario(e.target.value)}
-                        className={styles.textArea}
-                    />
+                    <div className={styles.comentarioContainer}>
+                        <label htmlFor="comentario" className={styles.comentarioLabel}>
+                            Tu reseña
+                        </label>
+                        <textarea
+                            id="comentario"
+                            placeholder="Por favor, escribe tu reseña aquí."
+                            value={comentario}
+                            onChange={(e) => setComentario(e.target.value)}
+                            className={styles.textArea}
+                            aria-label="Escribe tu reseña"
+                            rows={4}
+                        />
+                    </div>
 
                     <div className={styles.buttons}>
-                        {onCancel && <button onClick={onCancel} style={{ backgroundColor: "white", color: "#af0000", fontWeight: 300, width: '40%', border: '1px solid #af0000' }}>Cancelar</button>}
-                        <button onClick={handleSubmit} style={{ background: "linear-gradient(45deg, #ff0000, #ff6100)", color: "white", fontWeight: "bold", width: '40%' }}>Publicar</button>
-                    </div></>
+                        {onCancel && (
+                            <button 
+                                onClick={onCancel} 
+                                className={styles.cancelButton}
+                                aria-label="Cancelar reseña"
+                            >
+                                Cancelar
+                            </button>
+                        )}
+                        <button 
+                            onClick={handleSubmit} 
+                            className={styles.submitButton}
+                            disabled={calificacion === 0 || comentario.trim() === ''}
+                            aria-label="Publicar reseña"
+                        >
+                            Publicar
+                        </button>
+                    </div>
+                </>
             ) : (
-                <p style={{ textAlign: 'center' }}>
-                    Inicia sesión para dejar una reseña
-                    <button style={{
-                        padding: '5px 25px 5px 25px', borderRadius: '10px',
-                        border: 'none', backgroundColor: 'rgb(0, 183, 255) ', color: 'white', marginTop: '10px'
-                    }}
-                        onClick={() => { navigate('/login') }}
+                <div className={styles.loginPrompt}>
+                    <p>Inicia sesión para dejar una reseña</p>
+                    <button 
+                        className={styles.loginButton}
+                        onClick={() => navigate('/login')}
+                        aria-label="Iniciar sesión con Google"
                     >
                         Continuar con Google
-                    </button>                </p>
+                    </button>
+                </div>
             )}
-
         </div>
     );
 }

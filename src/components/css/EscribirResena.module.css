@@ -1,53 +1,196 @@
+.formContainer {
+    background-color: #fff;
+    padding: 25px;
+    border-radius: 10px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.formContainerOscuro {
+    background-color: #2d2d2d;
+    color: #fff;
+}
+
+.titulo {
+    text-align: center;
+    margin-bottom: 20px;
+    font-size: 1.5rem;
+    font-weight: 600;
+}
+
+.starsContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 20px;
+}
 
 .stars {
     display: flex;
     gap: 5px;
-    margin-bottom: 10px;
+    margin-bottom: 8px;
+}
+
+.starButton {
+    background: none;
+    border: none;
     cursor: pointer;
-    justify-content: center;
-    flex-direction: column;
-    align-items: center;
-    margin-top: 15px;
-    margin-bottom: 15px;
+    transition: transform 0.2s ease;
+}
+
+.starButton:hover {
+    transform: scale(1.2);
+}
+
+.starButton:focus {
+    outline: 2px solid #74C0FC;
+    border-radius: 50%;
 }
 
 .starFilled {
     color: #FFD43B;
-    font-size: 24px;
 }
 
 .starEmpty {
-    color: #ccc;
-    font-size: 24px;
+    color: #e0e0e0;
+}
+
+.starLabel {
+    font-size: 1rem;
+    color: #6c757d;
+    margin: 0;
+}
+
+.comentarioContainer {
+    margin-bottom: 20px;
+}
+
+.comentarioLabel {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 500;
+    color: #495057;
 }
 
 .textArea {
     width: 100%;
-    min-height: 80px;
+    padding: 12px;
+    border: 1px solid #dee2e6;
+    border-radius: 8px;
     resize: vertical;
-    margin-bottom: 10px;
-    padding: 8px;
-    border-radius: 6px;
-    border: 1px solid #ccc;
+    min-height: 100px;
+    font-family: inherit;
     font-size: 1rem;
+    line-height: 1.5;
+    transition: border-color 0.2s ease;
+}
+
+.textArea:focus {
+    outline: none;
+    border-color: #74C0FC;
+    box-shadow: 0 0 0 2px rgba(116, 192, 252, 0.2);
 }
 
 .buttons {
     display: flex;
-    gap: 10px;
-    justify-content: space-between;
+    justify-content: center;
+    gap: 16px;
 }
 
-.buttons button {
-    padding: 10px;
-    font-size: 1rem;
-    border: none;
+.cancelButton {
+    padding: 10px 20px;
+    border: 1px solid #af0000;
+    background-color: white;
+    color: #af0000;
+    border-radius: 20px;
     cursor: pointer;
-    border-radius: 5px;
-
+    font-weight: 500;
+    transition: all 0.2s ease;
+    width: 40%;
 }
 
-.cancelBtn {
-    background: #eee;
-    color: #333;
+.cancelButton:hover {
+    background-color: #af0000;
+    color: white;
+}
+
+.submitButton {
+    padding: 10px 20px;
+    border: none;
+    background: linear-gradient(55deg, #29482a, #4e8950, #9fb97f);
+    color: white;
+    border-radius: 20px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: all 0.2s ease;
+    width: 40%;
+}
+
+.submitButton:hover:not(:disabled) {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.submitButton:disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
+}
+
+.loginPrompt {
+    text-align: center;
+    padding: 20px;
+}
+
+.loginPrompt p {
+    margin-bottom: 16px;
+    color: #6c757d;
+}
+
+.loginButton {
+    padding: 10px 25px;
+    border: none;
+    background-color: rgb(0, 183, 255);
+    color: white;
+    border-radius: 10px;
+    cursor: pointer;
+    font-weight: 500;
+    transition: all 0.2s ease;
+}
+
+.loginButton:hover {
+    background-color: rgb(0, 163, 235);
+    transform: translateY(-2px);
+}
+
+/* Modo oscuro */
+.formContainerOscuro .comentarioLabel {
+    color: #e0e0e0;
+}
+
+.formContainerOscuro .textArea {
+    background-color: #3a3a3a;
+    border-color: #474747;
+    color: #fff;
+}
+
+.formContainerOscuro .textArea:focus {
+    border-color: #74C0FC;
+}
+
+.formContainerOscuro .starLabel {
+    color: #adb5bd;
+}
+
+.formContainerOscuro .cancelButton {
+    background-color: #3a3a3a;
+    color: #ff6b6b;
+    border-color: #ff6b6b;
+}
+
+.formContainerOscuro .cancelButton:hover {
+    background-color: #ff6b6b;
+    color: #fff;
+}
+
+.formContainerOscuro .loginPrompt p {
+    color: #adb5bd;
 }
