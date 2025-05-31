@@ -26,7 +26,6 @@ function BotonEventos() {
         display: "flex",
         flexDirection: "column",
         alignItems: "flex-start",
-        gap: "10px",
         pointerEvents: 'auto'
       }}
     >
@@ -35,12 +34,14 @@ function BotonEventos() {
         style={{
           background: modoNocturno ? "#2d2d2d" : "white",
           border: modoNocturno ? "none" : "1px solid #ccc",
-          borderRadius: "5px",
-          padding: "8px",
+          borderRadius: "10px",
+          padding: "10px 15px",
           display: "flex",
           alignItems: "center",
           gap: "5px",
           cursor: "pointer",
+          boxShadow: "0 2px 8px rgba(0, 0, 0, 0.1)",
+          transition: "all 0.3s ease",
         }}
       >
         <FontAwesomeIcon icon={faCalendar} style={{ color: modoNocturno ? "white" : "black", fontSize: `${fontSize}rem` }} />
@@ -50,11 +51,13 @@ function BotonEventos() {
       <div
         style={{
           backgroundColor: modoNocturno ? "#2d2d2d" : "white",
-          borderRadius: "5px",
+          borderRadius: "10px",
           overflow: "hidden",
           width: window.innerWidth < 768 ? "100%" : "300px",
-          transition: "width 0.3s ease-in-out",
           padding: EventoIsVisible ? "10px" : "0",
+          marginTop: "10px",
+          boxShadow: "0 2px 8px rgba(0, 0, 0, 0.1)",
+          transition: "all 0.3s ease",
         }}
       >
         {EventoIsVisible && (
@@ -91,7 +94,7 @@ function BotonEventos() {
                   textAlign: "left",
                   display: "flex",
                   flexDirection: "column",
-                  maxHeight: "390px",
+                  maxHeight: "410px",
                   overflowY: "auto",
                 }}
               >
