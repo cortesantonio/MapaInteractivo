@@ -1,6 +1,6 @@
 import styles from "./css/Microfono.module.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCircleXmark } from "@fortawesome/free-solid-svg-icons";
+import { faCircleXmark, faMicrophoneSlash } from "@fortawesome/free-solid-svg-icons";
 import { useTheme } from "./Modo_Nocturno";
 import { useEffect, useState, useRef } from 'react';
 import SpeechRecognition, { useSpeechRecognition } from 'react-speech-recognition';
@@ -31,6 +31,7 @@ export default function Microfono({
     const [mediaRecorder, setMediaRecorder] = useState<MediaRecorder | null>(null);
     const [stream, setStream] = useState<MediaStream | null>(null);
     const [modoSeleccion, setModoSeleccion] = useState(false);
+    const [estadoPermisoMicrofono, setEstadoPermisoMicrofono] = useState<string>("");
 
 
     const {
@@ -45,23 +46,26 @@ export default function Microfono({
             try {
                 const permiso = await navigator.permissions.query({ name: 'microphone' as PermissionName });
 
-                if (permiso.state === 'denied') {
-                    setMensajePermisos("No es posible acceder al micrófono. Los permisos fueron denegados.");
-                } else if (permiso.state === 'prompt') {
-                    setMensajePermisos("Activa los permisos del micrófono para utilizar esta función.");
-                } else {
-                    setMensajePermisos(""); 
-                }
-
-                permiso.onchange = () => {
+                const actualizarMensaje = () => {
+                    setEstadoPermisoMicrofono(permiso.state);
                     if (permiso.state === 'denied') {
-                        setMensajePermisos("No es posible acceder al micrófono. Los permisos fueron denegados.");
+                        setMensajePermisos(
+                            "No se puede acceder al micrófono porque los permisos fueron denegados.\n" +
+                            "Ve a la configuración del navegador > Privacidad y seguridad > Permisos > Micrófono y habilítalos."
+                        );
                     } else if (permiso.state === 'prompt') {
-                        setMensajePermisos("Activa los permisos del micrófono para utilizar esta función.");
+                        setMensajePermisos(
+                            "Activa los permisos del micrófono para usar esta función.\n" +
+                            "Cuando se te solicite, haz clic en 'Permitir'."
+                        );
                     } else {
                         setMensajePermisos("");
                     }
                 };
+
+                actualizarMensaje();
+
+                permiso.onchange = actualizarMensaje;
             } catch (error) {
                 console.warn("No se pudo verificar el permiso del micrófono:", error);
             }
@@ -115,26 +119,8 @@ export default function Microfono({
     };
 
     useEffect(() => {
-        const iniciarReconocimiento = async () => {
-            try {
-
-                SpeechRecognition.startListening({ continuous: true });
-
-                setTimeout(() => {
-                    setMostrarEscuchando(true);
-                }, 2000);
-
-            } catch (err) {
-                console.error('Error al acceder al micrófono:', err);
-            }
-        };
-
-        if (activarReconocimiento) {
-            resetTranscript();
-            iniciarReconocimiento();
-        } else {
+        if (!activarReconocimiento) {
             SpeechRecognition.stopListening();
-
             setMostrarEscuchando(false);
             if (mediaRecorder) mediaRecorder.stop();
             if (stream) {
@@ -142,8 +128,19 @@ export default function Microfono({
                 setStream(null);
                 setMediaRecorder(null);
             }
+            return;
         }
-    }, [activarReconocimiento]);
+
+        if (estadoPermisoMicrofono === "granted") {
+            resetTranscript();
+            SpeechRecognition.startListening({ continuous: true });
+            setTimeout(() => setMostrarEscuchando(true), 2000);
+        } else {
+            setMostrarEscuchando(false);
+            SpeechRecognition.stopListening();
+        }
+
+    }, [activarReconocimiento, estadoPermisoMicrofono]);
 
     useEffect(() => {
         if (!transcript) return;
@@ -325,8 +322,19 @@ export default function Microfono({
     }, [transcript, coincidenciasEncontradas]);
 
     if (!browserSupportsSpeechRecognition) {
-        return <p>Tu navegador no soporta reconocimiento de voz.</p>;
+        return (
+            <div className={styles.microfonoIncompatible}>
+                <div className={styles.icono}>
+                    <FontAwesomeIcon icon={faMicrophoneSlash} />
+                </div>
+                <p>
+                    El reconocimiento de voz no está disponible en tu navegador.<br />
+                    Prueba con Google Chrome u otro navegador compatible.
+                </p>
+            </div>
+        );
     }
+
 
     return (
         <div>
@@ -340,7 +348,7 @@ export default function Microfono({
                     )}
 
                     {mensajePermisos && (
-                        <h3 style={{ color: "red" }} className={styles.Titulo}>
+                        <h3 style={{ color: "red", whiteSpace: "pre-line"  }} className={styles.Titulo}>
                             {mensajePermisos}
                         </h3>
                     )}
