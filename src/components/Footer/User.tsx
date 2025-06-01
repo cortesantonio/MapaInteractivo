@@ -7,6 +7,7 @@ import {
     faUser,
     faShieldAlt,
     faSignInAlt,
+    faHandshake,
     faMoon,
     faCompress
 } from "@fortawesome/free-solid-svg-icons";
@@ -91,7 +92,17 @@ export default function User({
                                     Iniciar sesión
                                 </button>
                             )}
-
+                            <div>
+                                <button
+                                    style={{ fontSize: `${fontSize}rem` }}
+                                    className={styles.ButtonColab}
+                                    onClick={() => { navigate('/colaborar') }}
+                                    aria-label="Colaborar con el proyecto"
+                                    title="Colaborar con el proyecto"
+                                >
+                                    <FontAwesomeIcon icon={faHandshake} className={styles.ButtonIcon} /> Colaborar
+                                </button>
+                            </div>
                             <div className={styles.ContenSpan} role="group" aria-label="Configuración de modo nocturno">
                                 <span className={styles.SpanNoctur}>
                                     <FontAwesomeIcon icon={faMoon} className={styles.ButtonIcon} /> Modo nocturno
