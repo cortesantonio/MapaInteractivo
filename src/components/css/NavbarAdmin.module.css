@@ -1,7 +1,9 @@
 .container {
     width: 100%;
+    display: flex;
+    justify-content: center;
     align-items: center;
-    padding: 20px 20px;
+    padding: 20px;
     background-color: rgba(0, 0, 0, 0.068);
 }
 
@@ -9,17 +11,26 @@
     display: flex;
     align-items: center;
     gap: 15px;
+    max-width: 1200px;
+    width: 100%;
+    justify-content: center;
 }
 
 .boxIcon {
     position: relative;
-    background: #ff0000;
-    background: linear-gradient(90deg, rgba(255, 0, 0, 1) 0%, rgba(253, 175, 29, 1) 70%, rgba(249, 252, 69, 1) 100%);
+    background: -webkit-linear-gradient(55deg, #29482a, #4e8950, #9fb97f);
+    background: linear-gradient(55deg, #29482a, #4e8950, #9fb97f);
     padding: 4px;
     border-radius: 50%;
     display: flex;
     justify-content: center;
     align-items: center;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+    transition: transform 0.3s ease;
+}
+
+.boxIcon:hover {
+    transform: scale(1.05);
 }
 
 .InfoUser {
@@ -36,34 +47,45 @@
     position: absolute;
     bottom: 0px;
     right: -12px;
-    color: rgb(0, 0, 0);
+    color: #3a683b;
+    background: white;
+    padding: 4px;
+    border-radius: 50%;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .ButtonCruds {
     display: flex;
-    align-items: right;
-    justify-content: right;
+    align-items: center;
+    justify-content: center;
     width: 100%;
-    padding-top: 10px;
-    padding-bottom: 10px;
+    padding: 10px;
     gap: 20px;
+    flex-wrap: wrap;
 }
 
 .ButtonCruds button {
-    font-size: 18px;
+    font-size: 1rem;
     border: none;
     cursor: pointer;
     align-items: center;
     display: flex;
-    gap: 5px;
-    transition: 0.3s;
-    font-size: 1rem;
-
+    gap: 8px;
+    transition: all 0.3s ease;
+    padding: 8px 16px;
+    border-radius: 4px;
+    background-color: transparent;
+    color: #29482a;
 }
 
 .ButtonCruds button:hover {
-    background-color: rgba(255, 255, 255, 0.1);
+    background-color: rgba(41, 72, 42, 0.1);
     transform: translateY(-1px);
+}
+
+.ButtonCruds button:focus {
+    outline: 2px solid #29482a;
+    outline-offset: 2px;
 }
 
 .navMenuContainer {
@@ -80,16 +102,39 @@
     padding: 25px;
     cursor: pointer;
     margin-left: auto;
+    color: #29482a;
+    transition: all 0.3s ease;
+}
+
+.ButtonBars:hover {
+    transform: scale(1.1);
+}
+
+.ButtonBars:focus {
+    outline: 2px solid #29482a;
+    outline-offset: 2px;
 }
 
 @media screen and (max-width:1084px) {
     .container {
         flex-wrap: wrap;
         position: relative;
+        padding: 15px;
+    }
+
+    .leftSection {
+        justify-content: space-between;
     }
 
     .ButtonBars {
         display: block;
+        padding: 15px;
+        color: inherit;
+    }
+
+    .ButtonBars:focus {
+        outline: 2px solid #007bff;
+        outline-offset: 2px;
     }
 
     .navMenuContainer {
@@ -101,21 +146,18 @@
         max-height: 0;
         overflow: hidden;
         transition: max-height 0.3s ease-in-out;
-        z-index: 100
+        z-index: 100;
     }
 
     .menuOpen {
-        max-height: 350px;
+        max-height: 500px;
     }
 
     .ButtonCruds {
         flex-direction: column;
         width: 100%;
         gap: 0;
-    }
-
-    .ButtonCruds div {
-        width: 100%;
+        padding: 0;
     }
 
     .ButtonCruds button {
@@ -129,7 +171,8 @@
         transition: background-color 0.2s;
     }
 
-    .ButtonCruds button:hover {
+    .ButtonCruds button:hover,
+    .ButtonCruds button:focus {
         background-color: rgba(255, 255, 255, 0.1);
     }
 }
