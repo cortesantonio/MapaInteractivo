@@ -1,6 +1,4 @@
 import styles from './css/Agregar.module.css'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faReply } from '@fortawesome/free-solid-svg-icons';
 import NavbarAdmin from '../../components/NavbarAdmin';
 import { useState } from 'react';
 import { Accesibilidad } from '../../interfaces/Accesibilidad';

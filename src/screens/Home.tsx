@@ -154,7 +154,7 @@ export default function Home() {
             </div>
 
             <div style={{ width: '30%', display: 'flex', justifyContent: 'end', gap: '10px', height: '50px', zIndex: 10, flexWrap: 'wrap' }} >
-              <img style={{ width: '30dvw', maxWidth: '150px', height: 'fit-content' }} src="../../public/img/logoConCurico.png" alt="" />
+              <img style={{ width: '30dvw', maxWidth: '150px', height: 'fit-content' }} src="../../img/logoConCurico.png" alt="" />
               <NavbarUser />
             </div>
 
