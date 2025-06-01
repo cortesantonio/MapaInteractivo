@@ -75,6 +75,23 @@ export default function Microfono({
     }, []);
 
 
+    const solicitarPermisoMicrofono = async () => {
+        if (!browserSupportsSpeechRecognition){
+            return;
+        }
+        
+        try {
+            const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+            setStream(stream); 
+            setEstadoPermisoMicrofono('granted');
+            stream.getTracks().forEach(track => track.stop());
+        } catch (error) {
+            console.error("Error al solicitar permiso del micrófono:", error);
+
+        }
+    };
+
+
     const obtenerFechaChile = () => {
         const ahora = new Date();
         const fechaChile = new Intl.DateTimeFormat('es-CL', {
@@ -119,7 +136,25 @@ export default function Microfono({
     };
 
     useEffect(() => {
-        if (!activarReconocimiento) {
+        const iniciarReconocimiento = async () => {
+            try {
+                if (estadoPermisoMicrofono !== 'granted') {
+                    await solicitarPermisoMicrofono();
+                    return;
+                }
+
+                resetTranscript();
+                await SpeechRecognition.startListening({ continuous: true });
+                setTimeout(() => setMostrarEscuchando(true), 2000);
+            } catch (error) {
+                console.error('Error al iniciar reconocimiento:', error);
+                setMostrarEscuchando(false);
+            }
+        };
+
+        if (activarReconocimiento) {
+            iniciarReconocimiento();
+        } else {
             SpeechRecognition.stopListening();
             setMostrarEscuchando(false);
             if (mediaRecorder) mediaRecorder.stop();
@@ -128,18 +163,7 @@ export default function Microfono({
                 setStream(null);
                 setMediaRecorder(null);
             }
-            return;
         }
-
-        if (estadoPermisoMicrofono === "granted") {
-            resetTranscript();
-            SpeechRecognition.startListening({ continuous: true });
-            setTimeout(() => setMostrarEscuchando(true), 2000);
-        } else {
-            setMostrarEscuchando(false);
-            SpeechRecognition.stopListening();
-        }
-
     }, [activarReconocimiento, estadoPermisoMicrofono]);
 
     useEffect(() => {
