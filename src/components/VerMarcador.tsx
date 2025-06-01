@@ -456,7 +456,7 @@ export default function VerMarcador({ MarcadorSelectId, CerrarMarcador, establec
 
             <div className={styles.ContenedorInfo}>
                 {MostrarCompartir ? (
-                    <Compartir />
+                    <Compartir idMarcador={MarcadorSelectId} />
                 ) : mostrarFormulario ? (
                     <EscribirResena
                         onSubmit={(resena) => {
