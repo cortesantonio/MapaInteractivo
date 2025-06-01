@@ -202,16 +202,22 @@ function Modo_Compacto() {
         }
     };
     return (
-        <div className={styles.container_principal}>
+        <div className={styles.container_principal} role="main" aria-label="Página principal de búsqueda de recintos">
             
             <div style={{display:"flex",flexDirection:"row",justifyContent:"center",padding:"25px 5px ",height:"10px"}}>
-                <h4 style={{marginTop:"20px",marginLeft:"5px",fontSize:"1.5rem",fontWeight:"500",marginBottom:"5px"}}>{user ? `Bienvenido/a, ${userDetails?.nombre || user.user_metadata?.nombre || user.email}` : 'Bienvenido'}</h4>
+                <h4 style={{marginTop:"20px",marginLeft:"5px",fontSize:"1.5rem",fontWeight:"500",marginBottom:"5px"}}>
+                    {user ? `Bienvenido/a, ${userDetails?.nombre || user.user_metadata?.nombre || user.email}` : 'Bienvenido'}
+                </h4>
             </div>
         
             {/* Botón Atrás */}
             <div>
-                <button className={styles.botonatras} onClick={() => navigate(-1)}>
-                    <FontAwesomeIcon style={{ fontSize: "20px", margin: "3px" }} icon={faReply} />
+                <button 
+                    className={styles.botonatras} 
+                    onClick={() => navigate(-1)}
+                    aria-label="Volver a la página anterior"
+                >
+                    <FontAwesomeIcon style={{ fontSize: "20px", margin: "3px" }} icon={faReply} aria-hidden="true" />
                     <span style={{ width: "100px", fontSize: "25px" }}>Atrás</span>
                 </button>
             </div>
@@ -230,62 +236,106 @@ function Modo_Compacto() {
                             type="text" 
                             placeholder="Buscar por nombre o dirección" 
                             onChange={(e) => setBusqueda(e.target.value)} 
-                            value={busqueda} 
+                            value={busqueda}
+                            aria-label="Buscar recintos por nombre o dirección"
+                            role="searchbox"
                         />
-                        <FontAwesomeIcon className={styles.icono} icon={faLocationDot} />
+                        <FontAwesomeIcon className={styles.icono} icon={faLocationDot} aria-hidden="true" />
                     </div>
                 </div>
 
                 {/* Opciones de usuario */}
-                <div className={styles.contenedor_opciones}>
+                <div className={styles.contenedor_opciones} role="navigation" aria-label="Opciones de usuario">
                     
                
                     {/* Opción Colaborar */}
-                    <div className={styles.opcion_tarjeta} onClick={() => navigate("/colaborar")}>
-                        <FontAwesomeIcon className={styles.icono_opcion} icon={faBook} />
+                    <div 
+                        className={styles.opcion_tarjeta} 
+                        onClick={() => navigate("/colaborar")}
+                        role="button"
+                        tabIndex={0}
+                        onKeyPress={(e) => e.key === 'Enter' && navigate("/colaborar")}
+                        aria-label="Ir a la sección de colaboración"
+                    >
+                        <FontAwesomeIcon className={styles.icono_opcion} icon={faBook} aria-hidden="true" />
                         <button>Colaborar</button>
                     </div>
 
                     {/* Opción Mi Perfil o Iniciar Sesión */}
                     {user ? (
-                        <div className={styles.opcion_tarjeta} onClick={() => navigate(`/usuario/perfil/${user.id}`)}>
-                            <FontAwesomeIcon className={styles.icono_opcion} icon={faUser} />
+                        <div 
+                            className={styles.opcion_tarjeta} 
+                            onClick={() => navigate(`/usuario/perfil/${user.id}`)}
+                            role="button"
+                            tabIndex={0}
+                            onKeyPress={(e) => e.key === 'Enter' && navigate(`/usuario/perfil/${user.id}`)}
+                            aria-label="Ir a mi perfil"
+                        >
+                            <FontAwesomeIcon className={styles.icono_opcion} icon={faUser} aria-hidden="true" />
                             <button>Mi Perfil</button>
                         </div>
                     ) : (
-                        <div className={styles.opcion_tarjeta} onClick={() => navigate("/login")}>
-                            <FontAwesomeIcon className={styles.icono_opcion} icon={faRightToBracket} />
+                        <div 
+                            className={styles.opcion_tarjeta} 
+                            onClick={() => navigate("/login")}
+                            role="button"
+                            tabIndex={0}
+                            onKeyPress={(e) => e.key === 'Enter' && navigate("/login")}
+                            aria-label="Iniciar sesión"
+                        >
+                            <FontAwesomeIcon className={styles.icono_opcion} icon={faRightToBracket} aria-hidden="true" />
                             <button>Iniciar Sesión</button>
                         </div>
                     )}
 
                     {/* Opción Salir */}
-                    <div className={styles.opcion_tarjeta} onClick={() => navigate("/")}>
-                        <FontAwesomeIcon className={styles.icono_opcion} icon={faRightFromBracket} />
+                    <div 
+                        className={styles.opcion_tarjeta} 
+                        onClick={() => navigate("/")}
+                        role="button"
+                        tabIndex={0}
+                        onKeyPress={(e) => e.key === 'Enter' && navigate("/")}
+                        aria-label="Salir de la aplicación"
+                    >
+                        <FontAwesomeIcon className={styles.icono_opcion} icon={faRightFromBracket} aria-hidden="true" />
                         <button>Salir</button>
                     </div>
                 </div>
                
 
                 {/* Botones de eventos y filtros */}
-                <div className={styles.contenedor_botones}>
+                <div className={styles.contenedor_botones} role="toolbar" aria-label="Herramientas de búsqueda">
                     <div className={styles.contenedor_eventos}>
                         <div className={styles.eventos}>
-                            <button onClick={toggleEventos}>
+                            <button 
+                                onClick={toggleEventos}
+                                aria-expanded={eventosVisible}
+                                aria-controls="panel-eventos"
+                            >
                                 {eventosVisible ? "Ocultar Eventos" : "Listado De Eventos"}
                             </button>
-                            <FontAwesomeIcon className={styles.icono_evento} icon={faCalendar} onClick={toggleEventos} />
+                            <FontAwesomeIcon 
+                                className={styles.icono_evento} 
+                                icon={faCalendar} 
+                                onClick={toggleEventos} 
+                                aria-hidden="true"
+                            />
                         </div>
                     </div>
                     <div className={styles.contenedor_filtros}>
                         <div className={styles.filtros}>
-                            <button onClick={toggleFiltros}>
+                            <button 
+                                onClick={toggleFiltros}
+                                aria-expanded={filtroIsVisible}
+                                aria-controls="panel-filtros"
+                            >
                                 {filtroIsVisible ? "Ocultar Filtros" : "Filtrar Resultados"}
                             </button>
                             <FontAwesomeIcon 
                                 className={styles.icono_filtro} 
                                 icon={filtroIsVisible ? faFilterCircleXmark : faFilter} 
                                 onClick={toggleFiltros}
+                                aria-hidden="true"
                             />
                         </div>
                     </div>
@@ -293,15 +343,25 @@ function Modo_Compacto() {
 
                 {/* Panel de eventos */}
                 {eventosVisible && (
-                    <div className={styles.contenedor_resultados_eventos}>
+                    <div 
+                        id="panel-eventos"
+                        className={styles.contenedor_resultados_eventos}
+                        role="region"
+                        aria-label="Panel de eventos"
+                    >
                         <Boton_Eventos />
                     </div>
                 )}
 
                 {/* Panel de filtros */}
                 {filtroIsVisible && (
-                    <div className={styles.contenedor_resultados_filtros}>
-                        <p>Filtros de Accesibilidad</p>
+                    <div 
+                        id="panel-filtros"
+                        className={styles.contenedor_resultados_filtros}
+                        role="region"
+                        aria-label="Panel de filtros de accesibilidad"
+                    >
+                        <h3>Filtros de Accesibilidad</h3>
                         
                         {opcionesAccesibilidad.map((acces) => (
                             <div key={acces.id}>
@@ -310,7 +370,11 @@ function Modo_Compacto() {
                                         type="checkbox"
                                         checked={filtrosActivos[acces.nombre] || false}
                                         onChange={() => toggleFiltro(acces.nombre)}
-                                    />{" "}
+                                        aria-label={`Filtrar por ${acces.nombre}`}
+                                        style={{
+                                            marginRight: '5px',
+                                        }}
+                                    />
                                     {acces.nombre}
                                 </label>
                             </div>
@@ -328,6 +392,7 @@ function Modo_Compacto() {
                                     cursor: 'pointer',
                                     color: "yellow",
                                 }}
+                                aria-label="Limpiar todos los filtros"
                             >
                                 Limpiar filtros
                             </button>
@@ -339,10 +404,15 @@ function Modo_Compacto() {
 
                 {/* Resultados de búsqueda */}
                 {!eventosVisible && (
-                    <div className={styles.resultados_busqueda}>
+                    <div 
+                        className={styles.resultados_busqueda}
+                        role="region"
+                        aria-label="Resultados de la búsqueda"
+                    >
                         <div className={styles.contenedor_titulo}>
-                            <h4 style={{textAlign:"center"}}>Resultados {resultados.length > 0 && `(${resultados.length})`}</h4> 
-                            
+                            <h4 style={{textAlign:"center"}}>
+                                Resultados {resultados.length > 0 && `(${resultados.length})`}
+                            </h4> 
                         </div>
 
                         <div className={styles.contenedor_resultados}>
@@ -354,7 +424,9 @@ function Modo_Compacto() {
                                 resultados.map((marcador) => (
                                     <div 
                                         key={marcador.id} 
-                                        className={styles.marcador} 
+                                        className={styles.marcador}
+                                        role="article"
+                                        aria-label={`Recinto: ${marcador.nombre}`}
                                     >
                                         <h3>{marcador.nombre}</h3>
                                         <p><strong>Tipo:</strong> {marcador.tipoRecintoInfo.tipo}</p>
@@ -374,7 +446,10 @@ function Modo_Compacto() {
                                             )}
                                             
                                             <div style={{display: "flex", justifyContent: "flex-end", alignItems: "flex-end", margin: "15px"}}>
-                                                <button onClick={() => navigate(`/modocompacto/trazadoruta/${marcador.id}`)}>
+                                                <button 
+                                                    onClick={() => navigate(`/modocompacto/trazadoruta/${marcador.id}`)}
+                                                    aria-label={`Iniciar navegación hacia ${marcador.nombre}`}
+                                                >
                                                     Iniciar Navegación
                                                 </button>
                                             </div>
