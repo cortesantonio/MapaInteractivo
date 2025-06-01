@@ -427,30 +427,33 @@ function Modo_Compacto() {
                                         className={styles.marcador}
                                         role="article"
                                         aria-label={`Recinto: ${marcador.nombre}`}
+                                        tabIndex={0}
                                     >
                                         <h3>{marcador.nombre}</h3>
                                         <p><strong>Tipo:</strong> {marcador.tipoRecintoInfo.tipo}</p>
                                         <p><strong>Dirección:</strong> {marcador.direccion}</p>
                                         
                                         <div className={styles.accesibilidad_marcador}>
-                                            <h3>Accesibilidades:</h3>
+                                            <h3 role="list">Accesibilidades:</h3>
                                             
                                             {marcador.filtros.length === 0 ? (
                                                 <p>Este recinto no cuenta con Accesibilidad Universal aún</p>
                                             ) : (
-                                                <ul>
+                                                <p >
                                                     {marcador.filtros.map((filtro, index) => (
                                                         <li key={index}>{filtro.tipo}: {filtro.nombre}</li>
                                                     ))}
-                                                </ul>
+                                                </p>
                                             )}
                                             
                                             <div style={{display: "flex", justifyContent: "flex-end", alignItems: "flex-end", margin: "15px"}}>
-                                                <button 
+                                                <button
+                                                    role="button"
                                                     onClick={() => navigate(`/modocompacto/trazadoruta/${marcador.id}`)}
-                                                    aria-label={`Iniciar navegación hacia ${marcador.nombre}`}
+                                                    aria-label={`Iniciar navegación hacia el recinto ${marcador.nombre} ubicado en ${marcador.direccion}`}
                                                 >
                                                     Iniciar Navegación
+                                                    <span className="sr-only"> hacia {marcador.nombre}</span>
                                                 </button>
                                             </div>
                                         </div>
