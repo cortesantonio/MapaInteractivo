@@ -69,7 +69,7 @@ export default function Ver() {
     const navigate = useNavigate()
     const apiKey = import.meta.env.VITE_GOOGLE_APIKEY;
     const { id } = useParams()
-    const { user } = useAuth()
+    const { user, userRole } = useAuth()
     const [solicitud, setSolicitud] = useState<Partial<SolicitudCompleta>>({});
     const [accesibilidades, setAccesibilidades] = useState<AccesibilidadesPorTipo>({});
     const [isActiveModal, setIsActiveModal] = useState(false)
@@ -429,8 +429,7 @@ export default function Ver() {
                         <p style={{ color: 'gray' }}>Sin archivos adjuntos.</p>
                     )}
                 </div>
-
-                {solicitud.estado == 'pendiente' &&
+                {userRole == 'gestor' || userRole == 'administrador' && solicitud.estado == 'pendiente' &&
                     <div className={styles.acciones}>
                         <button onClick={handleModal} style={{ color: 'red', background: 'transparent', }}>Rechazar solicitud</button>
                         <button onClick={handleAprobar}>Aceptar solicitud</button>
