@@ -14,6 +14,7 @@ import {
 import { useAuth } from "../../hooks/useAuth";
 import { useTheme } from "./Modo_Nocturno";
 import { useFontSize } from "./Modificador_Letras";
+import { ClipLoader } from "react-spinners";
 
 export default function User({
     closePanel,
@@ -50,40 +51,45 @@ export default function User({
 
                         <div style={{ margin: "0px", justifyItems: "left" }}>
                             {user?.email != null ? (
-                                <>
-                                    {userRole !== 'usuario' ? (
-                                        <button
-                                            onClick={() => { navigate('/panel-administrativo') }}
-                                            style={{ fontSize: `${fontSize}rem` }}
-                                            className={styles.ButtonSesion}
-                                            aria-label="Acceder al panel administrativo"
-                                            title="Acceder al panel administrativo"
-                                        >
-                                            <FontAwesomeIcon icon={faShieldAlt} className={styles.ButtonIcon} />
-                                            Panel Administrativo
-                                        </button>
-                                    ) : (
-                                        <button
-                                            onClick={() => { navigate(`/usuario/perfil/${user.id}`) }}
-                                            style={{ fontSize: `${fontSize}rem` }}
-                                            className={styles.ButtonSesion}
-                                            aria-label="Ver mi perfil de usuario"
-                                            title="Ver mi perfil de usuario"
-                                        >
-                                            <FontAwesomeIcon icon={faUser} className={styles.ButtonIcon} />
-                                            Ver perfil
-                                        </button>
-                                    )}
-                                </>
+                                !userRole ? (
+                                    <p style={{ width: "100%", textAlign: "center", padding: "10px", color: modoNocturno ? "white" : "black" }}><ClipLoader color={modoNocturno ? "white" : "black"} size={15} /> Cargando sesión...</p>
+                                ) : (
+                                    <>
+                                        {userRole === 'gestor' || userRole === 'administrador' ? (
+                                            <button
+                                                onClick={() => navigate('/panel-administrativo')}
+                                                style={{ fontSize: `${fontSize}rem` }}
+                                                className={styles.ButtonSesion}
+                                                aria-label="Acceder al panel administrativo"
+                                                title="Acceder al panel administrativo"
+                                            >
+                                                <FontAwesomeIcon icon={faShieldAlt} className={styles.ButtonIcon} />
+                                                Panel Administrativo
+                                            </button>
+                                        ) : (
+                                            <button
+                                                onClick={() => navigate(`/usuario/perfil/${user.id}`)}
+                                                style={{ fontSize: `${fontSize}rem` }}
+                                                className={styles.ButtonSesion}
+                                                aria-label="Ver mi perfil de usuario"
+                                                title="Ver mi perfil de usuario"
+                                            >
+                                                <FontAwesomeIcon icon={faUser} className={styles.ButtonIcon} />
+                                                Ver perfil
+                                            </button>
+                                        )}
+                                    </>
+                                )
                             ) : (
                                 <button
                                     className={styles.ButtonSesion}
                                     style={{ fontSize: `${fontSize}rem` }}
-                                    onClick={() => { navigate('/login') }}
+                                    onClick={() => navigate('/login')}
                                     aria-label="Iniciar sesión en la plataforma"
                                     title="Iniciar sesión en la plataforma"
                                 >
-                                    <FontAwesomeIcon icon={faSignInAlt} className={styles.ButtonIcon} /> Iniciar sesión
+                                    <FontAwesomeIcon icon={faSignInAlt} className={styles.ButtonIcon} />
+                                    Iniciar sesión
                                 </button>
                             )}
                             <div>
