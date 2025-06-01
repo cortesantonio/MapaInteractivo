@@ -11,13 +11,15 @@ import { faLocationCrosshairs } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import ModalPerfilIncompleto from "../components/ModalPerfilIncompleto";
 import { supabase } from "../services/supabase";
-
+import { useSearchParams } from "react-router-dom";
 
 
 export default function Home() {
+  const [searchParams] = useSearchParams();
+  const shared = searchParams.get('shared');
   const [mostrarModal, setMostrarModal] = useState(false);
   const [ignorarModal, setIgnorarModal] = useState(false);
-  const [marcadorSeleccionadoId, setMarcadorSeleccionadoId] = useState<number | null>(null);
+  const [marcadorSeleccionadoId, setMarcadorSeleccionadoId] = useState<string | number | null>(null);
   const [mostrarMarcador, setMostrarMarcador] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
   const [isStreetViewActive, setIsStreetViewActive] = useState(false);
@@ -120,7 +122,12 @@ export default function Home() {
     transition: "bottom 0.3s ease-in-out",
     pointerEvents: 'auto'
   };
-
+  useEffect(() => {
+    if (shared) {
+      setMarcadorSeleccionadoId(shared);
+      setMostrarMarcador(true);
+    }
+  }, [shared]);
   return (
 
     <div style={{ width: '100%', height: '100vh', position: 'relative' }}>
@@ -159,16 +166,16 @@ export default function Home() {
             </div>
 
             {mostrarMarcador && marcadorSeleccionadoId !== null && (
-            <div style={estilosMarcador}>
-              <VerMarcador
-                MarcadorSelectId={marcadorSeleccionadoId}
-                CerrarMarcador={() => setMostrarMarcador(false)}
-                establecerIdRutaMarcador={(id) => setIdrutamarcador(id)}
-              />
-            </div>
-          )}
+              <div style={estilosMarcador}>
+                <VerMarcador
+                  MarcadorSelectId={marcadorSeleccionadoId as number}
+                  CerrarMarcador={() => setMostrarMarcador(false)}
+                  establecerIdRutaMarcador={(id) => setIdrutamarcador(id)}
+                />
+              </div>
+            )}
           </div>
-          
+
           <Footer onSeleccionMarcador={(id: number) => {
             setMarcadorSeleccionadoId(id);
             setMostrarMarcador(true);
