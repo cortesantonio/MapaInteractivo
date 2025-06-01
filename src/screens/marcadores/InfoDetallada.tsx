@@ -377,7 +377,7 @@ export default function InfoDetallada() {
                                 {/* Información adicional */}
                                 <div className={styles.InfoAdicional}>
                                     <label className={styles.labelSeccion} htmlFor="">Información Adicional</label>
-                                    <p style={{ color: '#ccc' }}>{dataMarcador.info_adicional || 'No aporta informacion adicional.'}</p>
+                                    <p style={{ color: '#ccc' }}>{dataMarcador.info_adicional || 'No aporta información adicional.'}</p>
                                 </div>
                             </div>
                         </div>
