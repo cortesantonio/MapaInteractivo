@@ -192,7 +192,7 @@ export default function Home() {
           <div style={{
             position: "absolute",
             bottom: window.innerWidth < 768 ? "20%" : "15%",
-            right: "15px",
+            right: "10px",
           }}>
             <button
               onClick={() => {

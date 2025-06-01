@@ -4,17 +4,20 @@ import {
   faAngleUp,
   faCalendar,
   faCalendarAlt,
+  faHandshake,
   faLocationDot,
 } from "@fortawesome/free-solid-svg-icons";
 import useGetCalendario from "../hooks/GetCalendario";
 import { useTheme } from "../components/Footer/Modo_Nocturno";
 import { useFontSize } from "./Footer/Modificador_Letras";
+import { useNavigate } from "react-router-dom";
 
 function BotonEventos() {
   const [EventoIsVisible, setEventoIsVisible] = useState(false);
   const { events, error } = useGetCalendario();
   const { modoNocturno } = useTheme();
   const { fontSize } = useFontSize();
+  const navigate = useNavigate();
 
   const toggleEventos = () => {
     setEventoIsVisible((prev) => !prev);
@@ -29,25 +32,50 @@ function BotonEventos() {
         pointerEvents: 'auto'
       }}
     >
-      <button
-        onClick={toggleEventos}
-        style={{
-          background: modoNocturno ? "#2d2d2d" : "white",
-          border: modoNocturno ? "none" : "1px solid #ccc",
-          borderRadius: "10px",
-          padding: "10px 15px",
-          display: "flex",
-          alignItems: "center",
-          gap: "5px",
-          cursor: "pointer",
-          boxShadow: "0 2px 8px rgba(0, 0, 0, 0.1)",
-          transition: "all 0.3s ease",
-        }}
-      >
-        <FontAwesomeIcon icon={faCalendar} style={{ color: modoNocturno ? "white" : "black", fontSize: `${fontSize}rem` }} />
-        <p style={{ margin: 0, color: modoNocturno ? "white" : "black", fontSize: `${fontSize}rem` }}>Eventos</p>
-      </button>
+      <div style={{ display: "flex", flexDirection: "row", gap: "10px" }}>
 
+        <button
+          onClick={toggleEventos}
+          style={{
+            background: modoNocturno ? "#2d2d2d" : "white",
+            border: modoNocturno ? "none" : "1px solid #ccc",
+            borderRadius: "10px",
+            padding: "10px 15px",
+            display: "flex",
+            alignItems: "center",
+            gap: "5px",
+            cursor: "pointer",
+            boxShadow: "0 2px 8px rgba(0, 0, 0, 0.1)",
+            transition: "all 0.3s ease",
+          }}
+        >
+          <FontAwesomeIcon icon={faCalendar} style={{ color: modoNocturno ? "white" : "black", fontSize: `${fontSize}rem` }} />
+          <p style={{ margin: 0, color: modoNocturno ? "white" : "black", fontSize: `${fontSize}rem` }}>Eventos</p>
+        </button>
+
+        <button
+          style={{
+            background: modoNocturno ? "#2d2d2d" : "white",
+            border: modoNocturno ? "none" : "1px solid #ccc",
+            borderRadius: "10px",
+            padding: "10px 10px",
+            display: "flex",
+            alignItems: "center",
+            gap: "5px",
+            cursor: "pointer",
+            boxShadow: "0 2px 8px rgba(0, 0, 0, 0.1)",
+            transition: "all 0.3s ease",
+          }}
+          onClick={() => { navigate('/colaborar') }}
+          aria-label="Colaborar con el proyecto"
+          title="Colaborar con el proyecto"
+        >
+          <FontAwesomeIcon icon={faHandshake} style={{ color: modoNocturno ? "white" : "black", fontSize: `${fontSize}rem` }} />
+          <p style={{ margin: 0, color: modoNocturno ? "white" : "black", fontSize: `${fontSize}rem` }}> Colaborar</p>
+        </button>
+
+      </div>
+    
       <div
         style={{
           backgroundColor: modoNocturno ? "#2d2d2d" : "white",
