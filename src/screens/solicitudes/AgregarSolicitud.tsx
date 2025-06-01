@@ -1,6 +1,6 @@
 import styles from './css/AgregarSolicitud.module.css'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faInfo, faReply, faUpload, faArrowUpRightFromSquare } from '@fortawesome/free-solid-svg-icons'
+import { faInfo, faReply, faUpload, faArrowUpRightFromSquare,faFileWord,faFilePdf } from '@fortawesome/free-solid-svg-icons'
 import { useState, useEffect, useRef } from 'react';
 import { Solicitudes } from '../../interfaces/Solicitudes';
 import { Accesibilidad } from '../../interfaces/Accesibilidad';
@@ -40,6 +40,7 @@ export default function AgregarSolicitud() {
     const [filePreview, setFilePreview] = useState<string | null>(null);
     const [uploading, setUploading] = useState(false);
     const [uploadError, setUploadError] = useState<string | null>(null);
+    const [charCount, setCharCount] = useState(0);
 
 
     useEffect(() => {
@@ -120,6 +121,9 @@ export default function AgregarSolicitud() {
 
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => { // MANEJA LOS DATOS DE LOS INPUTS
         const { name, value, type, checked } = e.target;
+        if (name === 'descripcion') {
+            setCharCount(value.length);
+        }
         setFormData({
             ...formData,
             [name]: type === 'checkbox' ? checked : value
@@ -430,7 +434,9 @@ export default function AgregarSolicitud() {
                         onChange={handleInputChange}
                         disabled={!usuario?.nombre} // Deshabilitar el campo si no hay usuario
                         required
+                        maxLength={250}
                     />
+                    <div style={{ fontSize: '0.8rem', color: '#666', textAlign: 'right' }}>{charCount}/250</div>
                     <label className={styles.labelSeccion}>
                         Dirección
                         <span style={{ fontSize: '0.8rem', color: 'gray', fontStyle: 'italic' }}>
@@ -598,6 +604,16 @@ export default function AgregarSolicitud() {
                             />
                             <span>{file ? file.name : 'Ningún archivo seleccionado'}</span>
                         </div>
+                        <div>
+                            <div style={{display: "flex",alignItems: "center",justifyContent: "center",gap: "12px",backgroundColor: "#f8f9fa",border: "2px dashed #dee2e6",borderRadius: "8px",padding: "16px 20px",margin: "16px auto",maxWidth: "400px",transition: "all 0.2s ease"}}>
+                                <div style={{display: "flex", gap: "8px",alignItems: "center"}}>
+                                    <FontAwesomeIcon icon={faFileWord} style={{color: '#2b579a',fontSize: "1.5rem"}} />
+                                    <FontAwesomeIcon icon={faFilePdf} style={{color: '#dc3545',fontSize: "1.5rem"}} />
+                                </div>
+                                <p style={{margin: 0,fontSize: "14px",fontWeight: "500",color: "#495057",textAlign: "center"}}>Solo puedes subir archivos Word o PDF</p>
+                            </div>
+                        </div>
+
 
                         {filePreview && filePreview !== 'no-preview' && (
                             <div style={{ marginTop: '10px', maxWidth: '250px' }}>
