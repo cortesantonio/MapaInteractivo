@@ -1,6 +1,6 @@
 import styles from './css/AgregarSolicitud.module.css'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faInfo, faReply, faUpload } from '@fortawesome/free-solid-svg-icons'
+import { faInfo, faReply, faUpload, faArrowUpRightFromSquare } from '@fortawesome/free-solid-svg-icons'
 import { useState, useEffect, useRef } from 'react';
 import { Solicitudes } from '../../interfaces/Solicitudes';
 import { Accesibilidad } from '../../interfaces/Accesibilidad';
@@ -510,17 +510,32 @@ export default function AgregarSolicitud() {
 
                 </div>
 
-                <div className={styles.opt}>
-                    <label htmlFor='cumple_ley_21015' style={{ fontWeight: 500, display: 'flex', flexDirection: 'column' }}>
-                        <p>Cumple con la <a target='_blank' href="https://www.bcn.cl/leychile/navegar?idNorma=1103997" style={{ color: 'black', fontWeight: 500, textTransform: 'capitalize' }}>ley nro. 21015 </a></p>
-                        <span style={{ fontSize: '0.8rem', color: 'gray', fontStyle: 'italic', maxWidth: '200px', }}>
-                            - Indique si su negocio cumple con  la inclusión en el mundo laboral.
+                <div className={styles.checkboxLey}>
+                    <input
+                        type="checkbox"
+                        name="cumple_ley_21015"
+                        id="cumple_ley_21015"
+                        onChange={handleInputChange}
+                        disabled={!usuario?.nombre}
+                    />
+                    <label htmlFor="cumple_ley_21015" className={styles.labelLey}>
+                        <p>
+                            Cumple con la{" "}
+                            <a
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                href="https://www.bcn.cl/leychile/navegar?idNorma=1103997"
+                                className={styles.linkLey}
+                            >
+                                Ley N.º 21.015 <FontAwesomeIcon size="2xs" icon={faArrowUpRightFromSquare} style={{ transform: 'scale(1.2)' }} />
+                            </a>
+                        </p>
+                        <span className={styles.descripcionLey}>
+                            - Indique si su negocio cumple con la inclusión en el mundo laboral.
                         </span>
                     </label>
-                    <input type="checkbox" name="cumple_ley_21015" id='cumple_ley_21015' onChange={handleInputChange} disabled={!usuario?.nombre} // Deshabilitar el campo si no hay usuario
-                    />
-
                 </div>
+
 
 
 
@@ -531,6 +546,7 @@ export default function AgregarSolicitud() {
                             <div className={styles.opt} key={acc.id}>
                                 <input
                                     type="checkbox"
+                                    className={styles.checkboxColor}
                                     value={acc.id}
                                     checked={seleccionadas.includes(acc.id)}
                                     onChange={() => handleCheckboxChange(acc.id)}

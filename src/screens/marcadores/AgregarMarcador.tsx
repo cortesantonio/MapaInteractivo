@@ -329,6 +329,7 @@ export default function AgregarMarcador() {
                   <div className={styles.opt} key={acc.id}>
                     <input
                       type="checkbox"
+                      className={styles.checkboxColor}
                       value={acc.id}
                       checked={selecciones.includes(acc.id)}
                       onChange={() => handleCheckboxChange(acc.id)}

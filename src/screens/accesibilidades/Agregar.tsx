@@ -1,6 +1,7 @@
 import styles from './css/Agregar.module.css'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faReply } from '@fortawesome/free-solid-svg-icons';
+import NavbarAdmin from '../../components/NavbarAdmin';
 import { useState } from 'react';
 import { Accesibilidad } from '../../interfaces/Accesibilidad';
 import { supabase } from '../../services/supabase';
@@ -99,37 +100,40 @@ export default function AgregarAccesibilidad() {
 
 
     return (
-        <div className={styles.container}>
-            <div className={styles.titulo} >
-                <button onClick={() => { navigate(-1) }} style={{ backgroundColor: 'transparent', border: 'none', cursor: 'pointer' }}>
-                    <FontAwesomeIcon icon={faReply} size='2xl' />
-                </button>
-                <h2 style={{ textAlign: 'center' }}>
-                    Agregar accesibilidad
-                </h2>
-            </div>
-
-            <div style={{ margin: '20px auto', width: '40%', display: 'flex', justifyContent: 'center', flexDirection: 'column', minWidth: '250px' }}>
-                <div style={{ display: 'flex', flexDirection: 'column', maxWidth: '600px' }}>
-                    <label className={styles.labelSeccion} >Tipo accesibilidad</label>
-                    <select name="tipo" value={formData.tipo} onChange={handleChange}>
-                        <option value="">Selecciona un tipo</option>
-                        <option value="Arquitectónica">Arquitectónica</option>
-                        <option value="Sensorial">Sensorial</option>
-                        <option value="Cognitiva">Cognitiva </option>
-                        <option value="CA">CA </option>
-                    </select>
-                    <label className={styles.labelSeccion} style={{ marginTop: '10px' }} >Nombre</label>
-                    <input name="nombre" onChange={handleChange}
-                        className={styles.inputText} />
+        <>
+            <NavbarAdmin />
+            <div className={styles.container}>
+                <div className={styles.titulo} >
+                    <h2 style={{ textAlign: 'center' }}>
+                        Agregar accesibilidad
+                    </h2>
                 </div>
 
-                <div className={styles.acciones}>
-                    <button onClick={() => { navigate(-1) }} style={{ color: 'red', background: 'transparent', }}>Cancelar</button>
-                    <button onClick={handleSubmit} >Agregar</button>
+                <div style={{ margin: '20px auto', width: '40%', display: 'flex', flexDirection: 'column', minWidth: '200px' }}>
+                    <div className={styles.formularioCentro}>
+                        <label className={styles.labelSeccion} >Tipo accesibilidad</label>
+                        <select name="tipo" value={formData.tipo} onChange={handleChange}>
+                            <option value="">Selecciona un tipo</option>
+                            <option value="Arquitectónica">Arquitectónica</option>
+                            <option value="Sensorial">Sensorial</option>
+                            <option value="Cognitiva">Cognitiva </option>
+                            <option value="CA">CA </option>
+                        </select>
+                        <label className={styles.labelSeccion}>Nombre</label>
+                        <input
+                            name="nombre"
+                            onChange={handleChange}
+                            className={styles.inputText}
+                        />
+                    </div>
+
+                    <div className={styles.acciones}>
+                        <button onClick={() => { navigate(-1) }} style={{ color: 'red', background: 'transparent', }}>Cancelar</button>
+                        <button onClick={handleSubmit} >Agregar</button>
+                    </div>
                 </div>
             </div>
-        </div>
+        </>
 
 
     )

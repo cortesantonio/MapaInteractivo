@@ -118,7 +118,7 @@ function ListTipoRecinto() {
         <div className={styles.container}>
             <header className={styles.header} style={{ paddingTop: '40px', gap: '15px' }}>
                 <hr style={{ flexGrow: "1" }} />
-                <h2 style={{ textAlign: 'right', paddingRight: "15px", whiteSpace: "nowrap" }} >Gestión de recintos</h2>
+                <h2 style={{ textAlign: 'right', paddingRight: "15px", whiteSpace: "nowrap" }} >Categoria de recintos</h2>
             </header>
             <div className={styles.filtros}>
                 <div style={{ display: 'flex', gap: '5px', justifyContent: 'right' }}>
