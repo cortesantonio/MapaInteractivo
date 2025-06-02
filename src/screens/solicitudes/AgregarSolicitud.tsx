@@ -209,6 +209,12 @@ export default function AgregarSolicitud() {
             alert('Por favor, selecciona una dirección desde las sugerencias de Google Places.');
             return;
         }
+
+        if (!formData.tipo_recinto) {
+            alert('Por favor, selecciona un tipo de recinto válido.');
+            return;
+        }
+
         setUploading(true);
 
         try {
@@ -324,13 +330,20 @@ export default function AgregarSolicitud() {
         console.log('Registro insertado en registro_logs correctamente', registro_logs);
     };
 
+    const [filtroBusqueda, setFiltroBusqueda] = useState('');
+    const [showFiltroOptions, setShowFiltroOptions] = useState(false);
+    const tipoRecintoRef = useRef<HTMLInputElement>(null);
+
+    const filteredTipoRecinto = (tipoRecinto ?? []).filter(tipo =>
+        tipo.tipo.toLowerCase().includes(filtroBusqueda.toLowerCase())
+    );
 
     const { isLoaded, loadError } = useLoadScript({
         googleMapsApiKey: apiKey,
         libraries: LIBRARIES,
     });
 
-
+    
     const [autocomplete, setAutocomplete] = useState<google.maps.places.Autocomplete | null>(null);
     const [position, setPosition] = useState<{ lat: number; lng: number } | null>(null);
     const [direccionValida, setDireccionValida] = useState(false);
@@ -418,22 +431,77 @@ export default function AgregarSolicitud() {
 
                     />
                     <label className={styles.labelSeccion}>Tipo de Recinto</label>
-                    <select
-                        name="tipo_recinto"
-                        className={styles.inputText}
-                        required
-                        value={formData.tipo_recinto || ''}
-                        onChange={handleSelectChange}
-                        disabled={!usuario?.nombre} // Deshabilitar el campo si no hay usuario
+                    <div style={{ position: 'relative', width: '100%' }}>
+                        <input
+                            ref={tipoRecintoRef}
+                            type="text"
+                            placeholder="Selecciona un tipo de recinto"
+                            className={styles.inputText}
+                            style={{ width: '100%', marginBottom: '0px'  }}
+                            value={filtroBusqueda}
+                            onChange={(e) => {
+                                const texto = e.target.value;
+                                setFiltroBusqueda(texto);
+                                setShowFiltroOptions(true);
 
-                    >
-                        <option value="">Selecciona un tipo de recinto</option>
-                        {tipoRecinto?.map((tipo) => (
-                            <option key={tipo.id} value={tipo.id}>{tipo.tipo}</option>
-                        ))}
-                    </select>
+                                const tipoEncontrado = tipoRecinto?.find(
+                                    (tipo) => tipo.tipo.toLowerCase() === texto.toLowerCase()
+                                );
 
-                    <label className={styles.labelSeccion}>
+                                if (tipoEncontrado) {
+                                    handleSelectChange({ target: { name: "tipo_recinto", value: tipoEncontrado.id } } as any);
+                                } else {
+                                    handleSelectChange({ target: { name: "tipo_recinto", value: '' } } as any);
+                                }
+                            }}
+
+                            onFocus={() => setShowFiltroOptions(true)}
+                            onBlur={() => {
+                                setTimeout(() => {
+                                    setShowFiltroOptions(false);
+                                }, 100);
+                            }}
+                            disabled={!usuario?.nombre}
+                            required
+                        />
+                        {showFiltroOptions && (
+                            <div
+                                style={{
+                                    position: 'absolute',
+                                    top: '100%',
+                                    left: 0,
+                                    right: 0,
+                                    backgroundColor: 'white',
+                                    border: '1px solid #ddd',
+                                    borderRadius: '4px',
+                                    maxHeight: '200px',
+                                    overflowY: 'auto',
+                                    zIndex: 1000
+                                }}
+                            >
+                                {filteredTipoRecinto.map((tipo) => (
+                                    <div
+                                        key={tipo.id}
+                                        style={{
+                                            padding: '8px',
+                                            cursor: 'pointer',
+                                            backgroundColor: formData.tipo_recinto === tipo.id ? '#f0f0f0' : 'white'
+                                        }}
+                                        onMouseDown={(e) => e.preventDefault()}
+                                        onClick={() => {
+                                            handleSelectChange({ target: { name: "tipo_recinto", value: tipo.id } } as any);
+                                            setFiltroBusqueda(tipo.tipo);
+                                            setShowFiltroOptions(false);
+                                        }}
+                                    >
+                                        {tipo.tipo}
+                                    </div>
+                                ))}
+                            </div>
+                        )}
+                    </div>
+
+                    <label className={styles.labelSeccion} style={{ marginTop: '10px' }}>
                         Mensaje
                         <span style={{ fontSize: '0.8rem', color: 'gray', fontStyle: 'italic' }}>
                             {' '} - Describa brevemente la accesibilidad de su negocio.
@@ -499,7 +567,7 @@ export default function AgregarSolicitud() {
                                 setDireccionValida(false);
                                 setPosition(null);
                             }}
-                            style={{ width: '100%', padding: '0 10px' }}
+                            style={{ width: '100%' }}
                             required
                             disabled={!usuario?.nombre} // Deshabilitar el campo si no hay usuario
                         />
