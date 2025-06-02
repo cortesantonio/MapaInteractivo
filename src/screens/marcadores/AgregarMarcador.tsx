@@ -344,15 +344,21 @@ export default function AgregarMarcador() {
             <label className={styles.labelSeccion} htmlFor="">Información Adicional
               <span style={{ fontSize: '0.8rem', color: 'gray', fontStyle: 'italic' }} >*Opcional </span>
             </label>
+          
             <textarea
-              placeholder="Escribe información adicional sobre el marcador..."
+              placeholder="Cuentanos como es tu recinto en pocas palabras..."
               value={dataMarcador.info_adicional}
               onChange={(e) => setDataMarcador({ ...dataMarcador, info_adicional: e.target.value })}
               className={styles.inputText}
               rows={4}
               style={{ resize: 'none', height: '100px' }}
-
+              maxLength={250}
             />
+
+            <div style={{textAlign:"right",color:"rgb(102, 102, 102)"}}>
+              {dataMarcador.info_adicional?.length || 0}/250
+            </div>
+
 
             <div className={styles.acciones}>
               <button type="submit" >Agregar Marcador</button>
