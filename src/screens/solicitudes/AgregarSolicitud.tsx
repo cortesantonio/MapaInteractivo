@@ -1,6 +1,7 @@
+
 import styles from './css/AgregarSolicitud.module.css'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faInfo, faReply, faUpload, faArrowUpRightFromSquare,faFileWord,faFilePdf } from '@fortawesome/free-solid-svg-icons'
+import { faInfo, faReply, faUpload, faArrowUpRightFromSquare,faFileImage,faFilePdf,faTimes } from '@fortawesome/free-solid-svg-icons'
 import { useState, useEffect, useRef } from 'react';
 import { Solicitudes } from '../../interfaces/Solicitudes';
 import { Accesibilidad } from '../../interfaces/Accesibilidad';
@@ -286,6 +287,18 @@ export default function AgregarSolicitud() {
 
 
     };
+
+    // Función para cancelar/eliminar el archivo seleccionado
+const handleCancelFile = () => {
+    setFile(null);
+    setFilePreview(null);
+    setUploadError(null);
+    // Limpiar el input file
+    const fileInput = document.getElementById('file-upload') as HTMLInputElement;
+    if (fileInput) {
+        fileInput.value = '';
+    }
+};
 
 
 
@@ -576,67 +589,67 @@ export default function AgregarSolicitud() {
                             </span>
                         </label>
 
-                        <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                        
+    <div style={{display: "flex",flexDirection: "column",alignItems: "center",justifyContent: "center",gap: "12px",backgroundColor: "#f8f9fa",border: "2px dashed #dee2e6",borderRadius: "8px",padding: "20px",margin: "16px auto",width: "100%",maxWidth: "100%",transition: "all 0.2s ease"}}>
+    <div>
+        <h4 style={{fontWeight: "300",borderBottom: "solid gray 1px",padding: "3px"}}>
+            Subir Imagen o PDF
+        </h4>
+    </div>
+    
+    <div style={{display: "flex", gap: "12px",alignItems: "center",marginBottom: "8px"}}>
+        <FontAwesomeIcon icon={faFileImage} style={{color: '#2b579a',fontSize: "1.8rem"}} />
+        <FontAwesomeIcon icon={faFilePdf} style={{color: '#dc3545',fontSize: "1.8rem"}} />
+    </div>
 
-                            <label
-                                htmlFor="file-upload"
-                                style={{
-                                    display: 'flex',
-                                    alignItems: 'center',
-                                    gap: '5px',
-                                    padding: '8px 12px',
-                                    backgroundColor: '#f0f0f0',
-                                    borderRadius: '4px',
-                                    cursor: usuario?.nombre ? 'pointer' : 'not-allowed',
-                                    opacity: usuario?.nombre ? 1 : 0.6
-                                }} >
+    <div style={{ display: 'flex', flexDirection: 'column',alignItems: 'center', gap: '12px',width: '100%'}}>
+        <label className={styles.boton_subir} htmlFor="file-upload"style={{display: 'flex',alignItems: 'center',gap: '8px',padding: '10px 16px',backgroundColor: usuario?.nombre ? '#007bff' : '#f0f0f0',color: usuario?.nombre ? '#fff' : '#6c757d',borderRadius: '6px',cursor: usuario?.nombre ? 'pointer' : 'not-allowed', opacity: usuario?.nombre ? 1 : 0.6,fontWeight: '500',transition: 'all 0.2s ease',border: 'none'}}>
+            <FontAwesomeIcon icon={faUpload} />
+            Seleccionar archivo
+        </label>
 
-                                <FontAwesomeIcon icon={faUpload} />
-                                Seleccionar archivo
-                            </label>
-                            <input
-                                id="file-upload"
-                                type="file"
-                                accept="image/*,.pdf"
-                                onChange={handleFileChange}
-                                disabled={!usuario?.nombre}
-                                style={{ display: 'none' }}
-                            />
-                            <span>{file ? file.name : 'Ningún archivo seleccionado'}</span>
-                        </div>
-                        <div>
-                            <div style={{display: "flex",alignItems: "center",justifyContent: "center",gap: "12px",backgroundColor: "#f8f9fa",border: "2px dashed #dee2e6",borderRadius: "8px",padding: "16px 20px",margin: "16px auto",maxWidth: "400px",transition: "all 0.2s ease"}}>
-                                <div style={{display: "flex", gap: "8px",alignItems: "center"}}>
-                                    <FontAwesomeIcon icon={faFileWord} style={{color: '#2b579a',fontSize: "1.5rem"}} />
-                                    <FontAwesomeIcon icon={faFilePdf} style={{color: '#dc3545',fontSize: "1.5rem"}} />
-                                </div>
-                                <p style={{margin: 0,fontSize: "14px",fontWeight: "500",color: "#495057",textAlign: "center"}}>Solo puedes subir archivos Word o PDF</p>
-                            </div>
-                        </div>
+        <input id="file-upload" type="file"accept="image/*,.pdf"onChange={handleFileChange}disabled={!usuario?.nombre}style={{ display: 'none' }}/>
 
+        {/* Información del archivo y botón cancelar */}
+        <div style={{display: 'flex',alignItems: 'center',
+            gap: '8px',
+            flexWrap: 'wrap',
+            justifyContent: 'center'
+        }}>
+            <span style={{fontSize: "14px", color: file ? "#28a745" : "#6c757d",fontWeight: file ? "500" : "400", textAlign: "center"}}>
+                {file ? `📄 ${file.name}` : 'Ningún archivo seleccionado'}
+            </span>
 
-                        {filePreview && filePreview !== 'no-preview' && (
-                            <div style={{ marginTop: '10px', maxWidth: '250px' }}>
-                                <img
-                                    src={filePreview}
-                                    alt="Vista previa"
-                                    style={{ maxWidth: '100%', maxHeight: '200px', objectFit: 'contain' }}
+            {file && (
+                <button type="button" onClick={handleCancelFile} style={{display: 'flex',alignItems: 'center',gap: '4px',padding: '4px 8px',backgroundColor: '#dc3545',color: '#fff',border: 'none',borderRadius: '4px',fontSize: '12px',cursor: 'pointer',transition: 'all 0.2s ease'}} onMouseOver={(e) => {e.currentTarget.style.backgroundColor = '#c82333';}}onMouseOut={(e) => {e.currentTarget.style.backgroundColor = '#dc3545';}}>
+                    <FontAwesomeIcon icon={faTimes} size="xs" />
+                    Cancelar
+                </button>
+            )}
+        </div>
+    </div>
+
+    {/* Texto informativo */}
+    <p style={{margin: 0,fontSize: "13px",fontWeight: "400",color: "#6c757d",textAlign: "center",lineHeight: "1.4"}}>
+        Solo puedes subir Imágenes o PDF
+    </p>
+</div>
+
+{filePreview && filePreview !== 'no-preview' && (
+                <div style={{ marginTop: '10px', maxWidth: '250px' }}>
+                    <img src={filePreview} alt="Vista previa" style={{ maxWidth: '100%', maxHeight: '200px', objectFit: 'contain' }}/>
+                                <img src={filePreview} alt="Vista previa" style={{ maxWidth: '100%', maxHeight: '200px', objectFit: 'contain' }}
                                 />
-                                <img
-                                    src={filePreview}
-                                    alt="Vista previa"
-                                    style={{ maxWidth: '100%', maxHeight: '200px', objectFit: 'contain' }}
-                                />
-                            </div>
+                </div>
                         )}
 
 
-                        {filePreview === 'no-preview' && (
-                            <div style={{ marginTop: '10px', display: 'flex', alignItems: 'center', gap: '5px' }}>
-                                <FontAwesomeIcon icon={faInfo} />
-                                <span>Archivo seleccionado (sin vista previa disponible)</span>
-                            </div>
-                        )}
+{filePreview === 'no-preview' && (
+        <div style={{ marginTop: '10px', display: 'flex', alignItems: 'center', gap: '5px' }}>
+            <FontAwesomeIcon icon={faInfo} />
+            <span>Archivo seleccionado (sin vista previa disponible)</span>
+        </div>
+)}
 
                         {uploadError && (
                             <div style={{ color: 'red', marginTop: '5px' }}>
