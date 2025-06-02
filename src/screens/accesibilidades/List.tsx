@@ -98,7 +98,7 @@ function ListAccesibilidad() {
         setCurrentPage(1);
     }, [busqueda]);
 
-    
+
     if (selectedId !== null) {
         return (
             <EditarAccesibilidad
@@ -161,7 +161,8 @@ function ListAccesibilidad() {
                             <div className={styles.estado}
                                 style={{ backgroundColor: 'rgb(0, 97, 223)', }}
                             >
-                                <FontAwesomeIcon icon={faUniversalAccess} size='xl' style={{ color: 'white' }} />
+                                {accesibilidad.imagen ? <img src={accesibilidad.imagen} alt="Imagen" style={{ width: '50px', height: '50px', borderRadius: '50%' }} />
+                                    : <FontAwesomeIcon icon={faUniversalAccess} size='xl' style={{ color: 'white' }} />}
                             </div>
                             <div className={styles.cardContent}>
                                 <p style={{ color: 'black' }}>{accesibilidad.nombre}</p>

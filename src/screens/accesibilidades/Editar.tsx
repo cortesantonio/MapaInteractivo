@@ -18,7 +18,8 @@ export default function EditarAccesibilidad({ accesibilidadId, onCancel, onUpdat
     const [formData, setFormData] = useState<Accesibilidad>({
         id: accesibilidadId,
         tipo: '',
-        nombre: ''
+        nombre: '',
+        imagen: ''
     });
 
     useEffect(() => {
@@ -61,6 +62,7 @@ export default function EditarAccesibilidad({ accesibilidadId, onCancel, onUpdat
             .update({
                 tipo: formData.tipo,
                 nombre: formData.nombre,
+                imagen: formData.imagen
             })
             .eq('id', formData.id);
 
@@ -127,7 +129,20 @@ export default function EditarAccesibilidad({ accesibilidadId, onCancel, onUpdat
                             onChange={handleChange}
                             className={styles.inputText}
                         />
+                        <label className={styles.labelSeccion}>Link de la imagen</label>
+                        <div style={{ display: 'flex', flexDirection: 'row' }}>
+                            <div >
+                                {formData.imagen && <img src={formData.imagen} alt="Imagen" style={{ width: '50px', height: '50px' }} />}
+                            </div>
+                            <input
+                                name="imagen"
+                                onChange={handleChange}
+                                className={styles.inputText}
+                                style={{ width: '100%' }}
+                                value={formData.imagen}
+                            />
 
+                        </div>
                     </div>
                     <div className={styles.acciones}>
                         <button style={{ color: 'red', background: 'transparent' }} onClick={onCancel}>Cancelar</button>

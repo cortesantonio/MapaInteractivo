@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faFilter, faLocationDot, faXmark } from "@fortawesome/free-solid-svg-icons";
+import { faFilter, faLocationDot, faUniversalAccess, faXmark } from "@fortawesome/free-solid-svg-icons";
 import styles from "./css/Buscador.module.css";
 import { supabase } from "../services/supabase";
 import { Accesibilidad } from "../interfaces/Accesibilidad";
@@ -42,14 +42,15 @@ function Buscador({ onSeleccionMarcador }: BuscadorProps) {
                     direccion,
                     accesibilidad_marcador (
                         accesibilidad (
-                            nombre
+                            nombre,
+                            imagen
                         )
                     )
                 `).eq('activo', true);
 
             const { data: accesibilidadesData, error: accesibilidadesError } = await supabase
                 .from('accesibilidad')
-                .select('id, nombre, tipo');
+                .select('id, nombre, tipo, imagen');
 
             if (marcadoresError || accesibilidadesError) {
                 console.error(marcadoresError || accesibilidadesError);
@@ -193,16 +194,16 @@ function Buscador({ onSeleccionMarcador }: BuscadorProps) {
                     name="busqueda"
                 />
 
-                <button 
-                    onClick={() => setModalVisible(true)} 
+                <button
+                    onClick={() => setModalVisible(true)}
                     style={{ background: "transparent", padding: "0px", outline: "none", border: "none", position: "relative" }}
                     aria-label="Abrir filtros"
                     className={styles.filterButton}
                 >
-                    <FontAwesomeIcon 
-                        icon={faFilter} 
-                        size="xl" 
-                        style={{ color: modoNocturno ? "#888" : "black" }} 
+                    <FontAwesomeIcon
+                        icon={faFilter}
+                        size="xl"
+                        style={{ color: modoNocturno ? "#888" : "black" }}
                     />
                     {contarFiltrosActivos() > 0 && (
                         <span className={styles.filterCount}>
@@ -213,7 +214,7 @@ function Buscador({ onSeleccionMarcador }: BuscadorProps) {
             </div>
 
             {modalVisible && (
-                <div 
+                <div
                     className={styles.modalOverlay}
                     onClick={(e) => {
                         // Solo cerrar si el clic fue directamente en el overlay
@@ -225,7 +226,7 @@ function Buscador({ onSeleccionMarcador }: BuscadorProps) {
                     <div className={styles.modalContent} style={{ backgroundColor: modoNocturno ? "#333" : "white" }}>
                         <div className={styles.modalHeader}>
                             <h2 style={{ color: modoNocturno ? "white" : "black" }}>Filtros de Accesibilidad</h2>
-                            <button 
+                            <button
                                 onClick={() => setModalVisible(false)}
                                 className={styles.closeButton}
                                 aria-label="Cerrar filtros"
@@ -246,8 +247,8 @@ function Buscador({ onSeleccionMarcador }: BuscadorProps) {
                                     <h3 style={{ color: modoNocturno ? "#ddd" : "#222" }}>{tipo}</h3>
                                     <div className={styles.pictogramasGrid}>
                                         {accesibilidades.map((acces) => (
-                                            <div 
-                                                key={acces.id} 
+                                            <div
+                                                key={acces.id}
                                                 className={`${styles.pictogramaItem} ${filtrosActivos[acces.nombre] ? styles.activo : ''}`}
                                                 onClick={() => toggleFiltro(acces.nombre)}
                                                 role="button"
@@ -255,7 +256,7 @@ function Buscador({ onSeleccionMarcador }: BuscadorProps) {
                                                 aria-pressed={filtrosActivos[acces.nombre]}
                                             >
                                                 <div className={styles.pictogramaPlaceholder}>
-                                                    {/* Aquí irá el pictograma */}
+                                                    {acces.imagen ? <img src={acces.imagen} alt="Imagen" style={{ width: '50px', height: '50px', borderRadius: '50%' }} /> : <FontAwesomeIcon icon={faUniversalAccess} size='xl' style={{ color: 'white' }} />}
                                                 </div>
                                                 <span style={{ color: modoNocturno ? "white" : "black" }}>
                                                     {acces.nombre}
@@ -268,7 +269,7 @@ function Buscador({ onSeleccionMarcador }: BuscadorProps) {
                         </div>
 
                         <div className={styles.modalFooter}>
-                            <button 
+                            <button
                                 onClick={aplicarFiltros}
                                 className={styles.aplicarButton}
                                 style={{
@@ -301,8 +302,8 @@ function Buscador({ onSeleccionMarcador }: BuscadorProps) {
                                 SeleccionBusqueda(item.id);
                             }}
                         >
-                            <FontAwesomeIcon 
-                                icon={faLocationDot} 
+                            <FontAwesomeIcon
+                                icon={faLocationDot}
                                 className={styles.resultadoIcon}
                             />
                             <div className={styles.resultadoInfo}>
