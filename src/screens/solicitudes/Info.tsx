@@ -5,9 +5,9 @@ import { useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
 import Especificacion_Baño_Discapacitados_1 from "../../../public/img/Especificacion_Baño_Discapacitados_1_.webp";
 import Especificacion_Baño_Discapacitados_2 from "../../../public/img/Especificacion_Baño_Discapacitados_2_.webp";
-import Especificacion_Baño_Discapacitados_3 from "../../../public/img/Especificacion_Baño_Discapacitados_3_.webp";
-import Especificacion_Baño_Discapacitados_4 from "../../../public/img/Especificacion_Baño_Discapacitados_4_.webp";
-import Especificacion_Baño_Discapacitados_5 from "../../../public/img/Especificacion_Baño_Discapacitados_5_.webp";
+import Especificacion_Baño_Discapacitados_3 from "../../../public/img/Ducha-De-Baño.webp";
+import Especificacion_Baño_Discapacitados_4 from "../../../public/img/Objetos-de-Baño.webp";
+import Especificacion_Baño_Discapacitados_5 from "../../../public/img/Baranda_Baños.webp";
 import Especificacion_Estacionamiento_Discapacitados_8 from "../../../public/img/Especificacion_Estacionamiento_Discapacitados_8_.webp";
 import Especificacion_Estacionamiento_Discapacitados_9 from "../../../public/img/Especificacion_Estacionamiento_Discapacitados_9_.webp";
 import Especificacion_Rampas_Discapacitados_10 from "../../../public/img/Especificacion_Rampas_Discapacitados_10_.webp";
@@ -368,7 +368,7 @@ function Info({ onConfirmarLectura }: InfoProps) {
           </section>
         </div>
       </div>
-      <button style={{ fontSize: `${fontSize}rem` }} onClick={onConfirmarLectura} className={styles.confirmButton}>
+      <button style={{ fontSize: `${fontSize}rem`, background:  "linear-gradient(55deg, #004d00, #228b22, #90ee90 "}} onClick={onConfirmarLectura} className={styles.confirmButton}>
         He leído el instructivo
       </button>
 

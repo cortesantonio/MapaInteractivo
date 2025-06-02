@@ -24,7 +24,7 @@
 .acciones button {
     padding: 15px 20px 15px 20px;
     background: rgb(253, 29, 29);
-    background: linear-gradient(90deg, rgba(253, 29, 29, 1) 0%, rgba(255, 106, 60, 1) 100%);
+    background: linear-gradient(55deg, #004d00, #228b22, #90ee90);
     font-size: 0.8rem;
     font-weight: 500;
     border: none;
@@ -128,4 +128,8 @@ form .labelSeccion {
     opacity: 0.85;
     margin-left: 20px;
     margin-bottom: 20px;
+}
+
+.boton_subir {
+    background:linear-gradient(55deg, #3b7a3b, #5fa75f, #a0cfa0);
 }
