@@ -94,7 +94,7 @@ export default function Footer({
 
     return (
         <div className={`${styles.ContenPrin} ${modoNocturno ? styles.darkMode : ''}`}
-            style={{ fontSize: `${fontSize}rem`, width: window.innerWidth <= 768 ? "100%" : "300px", bottom: window.innerWidth <= 768 ? "25px" : '' }}>
+            style={{ fontSize: `${fontSize}rem`, width: window.innerWidth <= 768 ? "100%" : "300px", bottom: window.innerWidth <= 768 ? "0px" : '25px' }}>
 
             <div className={styles.ContenButton}>
                 <button onClick={() => togglePanel("map")} className={styles.Button}>

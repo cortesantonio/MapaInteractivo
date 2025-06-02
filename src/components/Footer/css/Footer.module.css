@@ -7,12 +7,11 @@
     top: auto;
     bottom: 10px;
     z-index: 1;
-    height: 5%;
     transform: translatex(-50%);
     position: fixed;
     transition: width 0.3s ease;
     left: 50%;
-    min-height: 45px;
+    height: 75px;
 }
 
 .ContenButton {
@@ -36,7 +35,7 @@
 
 .ButtonMicro {
     position: fixed;
-    bottom: 25px;
+    top: -25px;
     left: 50%;
     transform: translateX(-50%);
     width: 50px;
@@ -57,12 +56,12 @@
 .PanelInfo {
     position: absolute;
     margin-top: 8px;
-    bottom: 80%;
+    bottom: 100%;
     width: 100%;
     left: 0px;
     background-color: white;
     overflow: hidden;
-    height: 450px !important;
+    height: 500px !important;
     border-left: 1px solid #ccc;
     border-right: 1px solid #ccc;
     border-top: 1px solid #ccc;
