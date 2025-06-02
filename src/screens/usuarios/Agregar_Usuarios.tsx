@@ -1,6 +1,4 @@
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { useNavigate, useParams } from "react-router-dom";
-import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
+import { useNavigate } from "react-router-dom";
 import styles from "../usuarios/css/Formularios.module.css";
 import { supabase } from "../../services/supabase";
 import { useState, FormEvent } from "react";
@@ -8,17 +6,13 @@ import NavbarAdmin from "../../components/NavbarAdmin";
 import { useAuth } from '../../hooks/useAuth';
 
 function Agregar_Usuarios() {
-  const { id } = useParams();
   const { user } = useAuth();
-  const [mostrarContraseña, setMostrarContraseña] = useState(false);
   const navigate = useNavigate();
   const [rut, setRut] = useState("");
   const [rutValido, setRutValido] = useState(true);
   const [nombre, setNombre] = useState("");
   const [fechaNacimiento, setFechaNacimiento] = useState("");
   const [correo, setCorreo] = useState("");
-  const [password, setContrasena] = useState("");
-  const [repetirContrasena, setRepetirContrasena] = useState("");
   const [telefono, setTelefono] = useState("");
   const [rol, setRol] = useState("gestor");
   const [genero, setGenero] = useState("Hombre");
@@ -115,10 +109,7 @@ function Agregar_Usuarios() {
       alert("El RUT no es válido");
       return;
     }
-    if (password !== repetirContrasena) {
-      alert("Las contraseñas no coinciden");
-      return;
-    }
+
     try {
       const { data: nuevoUsuario, error: userError } = await supabase
         .from("usuarios")
@@ -127,7 +118,6 @@ function Agregar_Usuarios() {
           rut,
           fecha_nacimiento: fechaNacimiento,
           correo,
-          password,
           telefono,
           rol,
           genero
@@ -237,52 +227,6 @@ function Agregar_Usuarios() {
           <div className={styles.espacio}>
             <label className={styles.etiquetas}>Correo</label>
             <input className={styles.formulario} type="email" placeholder="tu@correo.cl" onChange={(e) => setCorreo(e.target.value)} required />
-          </div>
-
-          <div className={styles.espacio}>
-            <label className={styles.etiquetas}>Contraseña</label>
-            <div className={styles.input_contraseña}>
-              <input
-                className={styles.formulario}
-                type={mostrarContraseña ? "text" : "password"}
-                placeholder="Contraseña"
-                onChange={(e) => setContrasena(e.target.value)}
-                required
-              />
-              <button
-                type="button"
-                onClick={() => setMostrarContraseña(!mostrarContraseña)}
-                className={styles.boton_ojito}
-              >
-                <FontAwesomeIcon
-                  icon={mostrarContraseña ? faEye : faEyeSlash}
-                  style={{ color: "black" }}
-                />
-              </button>
-            </div>
-          </div>
-
-          <div className={styles.espacio}>
-            <label className={styles.etiquetas}>Repetir Contraseña</label>
-            <div className={styles.input_contraseña}>
-              <input
-                className={styles.formulario}
-                type={mostrarContraseña ? "text" : "password"}
-                placeholder="Repetir Contraseña"
-                onChange={(e) => setRepetirContrasena(e.target.value)}
-                required
-              />
-              <button
-                type="button"
-                onClick={() => setMostrarContraseña(!mostrarContraseña)}
-                className={styles.boton_ojito}
-              >
-                <FontAwesomeIcon
-                  icon={mostrarContraseña ? faEye : faEyeSlash}
-                  style={{ color: "black" }}
-                />
-              </button>
-            </div>
           </div>
 
           <div className={styles.espacio}>

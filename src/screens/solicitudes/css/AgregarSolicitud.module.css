@@ -24,7 +24,7 @@
 .acciones button {
     padding: 15px 20px 15px 20px;
     background: rgb(253, 29, 29);
-    background: linear-gradient(90deg, rgba(253, 29, 29, 1) 0%, rgba(255, 106, 60, 1) 100%);
+    background: linear-gradient(55deg, #004d00, #228b22, #90ee90);
     font-size: 0.8rem;
     font-weight: 500;
     border: none;
@@ -38,10 +38,60 @@
     transform: scale(101%);
 }
 
+.checkboxLey {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    border-radius: 6px;
+    max-width: 500px;
+    margin-top: 15px;
+    align-items: center;
+}
+
+.checkboxLey input[type="checkbox"] {
+    margin-top: 5px;
+    width: 18px;
+    height: 18px;
+    accent-color: #4e8950;
+    cursor: pointer;
+}
+
+.labelLey {
+    font-weight: 500;
+    display: flex;
+    flex-direction: column;
+    font-size: 0.95rem;
+    color: #333;
+}
+
+.linkLey {
+    color: #333;
+    text-decoration: none;
+    font-weight: 800;
+}
+
+.linkLey:hover {
+    text-decoration: underline;
+}
+
+.descripcionLey {
+    font-size: 0.8rem;
+    color: #666;
+    font-style: italic;
+    margin-top: 3px;
+    line-height: 1.3;
+}
+
 .opt {
     display: flex;
-    align-items: center;
     gap: 10px;
+}
+
+.checkboxColor {
+    accent-color: #4e8950;
+    width: 14px;
+    height: 18px;
+    cursor: pointer;
 }
 
 form p {
@@ -78,4 +128,8 @@ form .labelSeccion {
     opacity: 0.85;
     margin-left: 20px;
     margin-bottom: 20px;
+}
+
+.boton_subir {
+    background:linear-gradient(55deg, #3b7a3b, #5fa75f, #a0cfa0);
 }

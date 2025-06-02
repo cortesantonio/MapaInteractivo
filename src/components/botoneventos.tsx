@@ -4,17 +4,20 @@ import {
   faAngleUp,
   faCalendar,
   faCalendarAlt,
+  faHandshake,
   faLocationDot,
 } from "@fortawesome/free-solid-svg-icons";
 import useGetCalendario from "../hooks/GetCalendario";
 import { useTheme } from "../components/Footer/Modo_Nocturno";
 import { useFontSize } from "./Footer/Modificador_Letras";
+import { useNavigate } from "react-router-dom";
 
 function BotonEventos() {
   const [EventoIsVisible, setEventoIsVisible] = useState(false);
   const { events, error } = useGetCalendario();
-  const {modoNocturno} = useTheme ();
-  const {fontSize} = useFontSize ();
+  const { modoNocturno } = useTheme();
+  const { fontSize } = useFontSize();
+  const navigate = useNavigate();
 
   const toggleEventos = () => {
     setEventoIsVisible((prev) => !prev);
@@ -26,34 +29,63 @@ function BotonEventos() {
         display: "flex",
         flexDirection: "column",
         alignItems: "flex-start",
-        gap: "10px",
+        pointerEvents: 'auto'
       }}
     >
-      <button
-        onClick={toggleEventos}
-        style={{
-          background: modoNocturno ? "#2d2d2d" : "white",
-          border: modoNocturno ? "none" :  "1px solid #ccc",
-          borderRadius: "5px",
-          padding: "8px",
-          display: "flex",
-          alignItems: "center",
-          gap: "5px",
-          cursor: "pointer",
-        }}
-      >
-        <FontAwesomeIcon icon={faCalendar} style={{ color: modoNocturno ? "white": "black", fontSize:`${fontSize}rem`}} />
-        <p style={{ margin: 0, color: modoNocturno ? "white" : "black", fontSize: `${fontSize}rem` }}>Eventos</p>
-      </button>
+      <div style={{ display: "flex", flexDirection: "row", gap: "10px" }}>
 
+        <button
+          onClick={toggleEventos}
+          style={{
+            background: modoNocturno ? "#2d2d2d" : "white",
+            border: modoNocturno ? "none" : "1px solid #ccc",
+            borderRadius: "10px",
+            padding: "10px 15px",
+            display: "flex",
+            alignItems: "center",
+            gap: "5px",
+            cursor: "pointer",
+            boxShadow: "0 2px 8px rgba(0, 0, 0, 0.1)",
+            transition: "all 0.3s ease",
+          }}
+        >
+          <FontAwesomeIcon icon={faCalendar} style={{ color: modoNocturno ? "white" : "black", fontSize: `${fontSize}rem` }} />
+          <p style={{ margin: 0, color: modoNocturno ? "white" : "black", fontSize: `${fontSize}rem` }}>Eventos</p>
+        </button>
+
+        <button
+          style={{
+            background: modoNocturno ? "#2d2d2d" : "white",
+            border: modoNocturno ? "none" : "1px solid #ccc",
+            borderRadius: "10px",
+            padding: "10px 10px",
+            display: "flex",
+            alignItems: "center",
+            gap: "5px",
+            cursor: "pointer",
+            boxShadow: "0 2px 8px rgba(0, 0, 0, 0.1)",
+            transition: "all 0.3s ease",
+          }}
+          onClick={() => { navigate('/colaborar') }}
+          aria-label="Colaborar con el proyecto"
+          title="Colaborar con el proyecto"
+        >
+          <FontAwesomeIcon icon={faHandshake} style={{ color: modoNocturno ? "white" : "black", fontSize: `${fontSize}rem` }} />
+          <p style={{ margin: 0, color: modoNocturno ? "white" : "black", fontSize: `${fontSize}rem` }}> Colaborar</p>
+        </button>
+
+      </div>
+    
       <div
         style={{
           backgroundColor: modoNocturno ? "#2d2d2d" : "white",
-          borderRadius: "5px",
+          borderRadius: "10px",
           overflow: "hidden",
-          width: window.innerWidth < 768 ? "100%" : "400px",
-          transition: "width 0.3s ease-in-out",
+          width: window.innerWidth < 768 ? "100%" : "300px",
           padding: EventoIsVisible ? "10px" : "0",
+          marginTop: "10px",
+          boxShadow: "0 2px 8px rgba(0, 0, 0, 0.1)",
+          transition: "all 0.3s ease",
         }}
       >
         {EventoIsVisible && (
@@ -69,8 +101,8 @@ function BotonEventos() {
                 gap: "5px",
               }}
             >
-              <FontAwesomeIcon icon={faAngleUp} size="2x" style={{ color: modoNocturno ? "#fff" :"black", fontSize:`${fontSize}rem` }} />
-              <p style={{ margin: 0, color: modoNocturno ? "white" : "black", fontSize: `${fontSize}rem`}}>Ocultar</p>
+              <FontAwesomeIcon icon={faAngleUp} size="2x" style={{ color: modoNocturno ? "#fff" : "black", fontSize: `${fontSize}rem` }} />
+              <p style={{ margin: 0, color: modoNocturno ? "white" : "black", fontSize: `${fontSize}rem` }}>Ocultar</p>
             </button>
 
             {error ? (
@@ -90,7 +122,7 @@ function BotonEventos() {
                   textAlign: "left",
                   display: "flex",
                   flexDirection: "column",
-                  maxHeight: "390px",
+                  maxHeight: "410px",
                   overflowY: "auto",
                 }}
               >
@@ -104,7 +136,7 @@ function BotonEventos() {
                   <div key={event.id} style={{ paddingBottom: "10px" }}>
                     <div
                       style={{
-                        fontSize:`${fontSize}rem`,
+                        fontSize: `${fontSize}rem`,
                         width: "100%",
                         height: "1px",
                         backgroundColor: "black",
@@ -146,7 +178,7 @@ function BotonEventos() {
                             alignItems: "center",
                           }}
                         >
-                          <h3 style={{ color: modoNocturno ? "white": "black", margin: 0, fontSize: `${fontSize}`, fontWeight: "600" }}>
+                          <h3 style={{ color: modoNocturno ? "white" : "black", margin: 0, fontSize: `${fontSize}`, fontWeight: "600" }}>
                             {event.title}
                           </h3>
                           <span
@@ -165,7 +197,7 @@ function BotonEventos() {
                             margin: "5px 0",
                             fontSize: `${fontSize}rem`,
                             opacity: 0.6,
-                            color: modoNocturno ? "white": "black"
+                            color: modoNocturno ? "white" : "black"
                           }}
                         >
                           {event.description}
@@ -177,7 +209,7 @@ function BotonEventos() {
                             gap: "5px",
                             fontSize: `${fontSize}rem`,
                             marginTop: "10px",
-                            color: modoNocturno ? "#04cf1b": "#00570a"
+                            color: modoNocturno ? "#04cf1b" : "#00570a"
                           }}
                         >
                           <FontAwesomeIcon icon={faCalendarAlt} />
@@ -191,7 +223,7 @@ function BotonEventos() {
                             alignItems: "center",
                             gap: "5px",
                             fontSize: `${fontSize}rem`,
-                            color: modoNocturno ? "#04cf1b": "#00570a",
+                            color: modoNocturno ? "#04cf1b" : "#00570a",
                             marginTop: "10px",
                           }}
                         >

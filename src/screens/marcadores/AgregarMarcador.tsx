@@ -8,7 +8,7 @@ import { useAuth } from '../../hooks/useAuth';
 import NavbarAdmin from '../../components/NavbarAdmin';
 import { useLoadScript, Autocomplete } from "@react-google-maps/api";
 import { APIProvider, Map as VisMap, AdvancedMarker } from "@vis.gl/react-google-maps";
-import { useNavigate, useParams } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 
 interface TipoDeAccesibilidades {
@@ -19,7 +19,6 @@ const LIBRARIES: ("places")[] = ['places'];
 export default function AgregarMarcador() {
   const navigate = useNavigate()
   const apiKey = import.meta.env.VITE_GOOGLE_APIKEY;
-  const { id } = useParams();
   const { user } = useAuth();
   const [accesibilidades, setAccesibilidades] = useState<TipoDeAccesibilidades>({});
   const [dataMarcador, setDataMarcador] = useState<Partial<Marcador>>({
@@ -32,6 +31,7 @@ export default function AgregarMarcador() {
     latitud: undefined,
     longitud: undefined,
     activo: true,
+    info_adicional: '',
   });
   const [selecciones, setSelecciones] = useState<number[]>([]);
   const [tipoRecinto, setTipoRecinto] = useState<Tipo_Recinto[]>(); // almacena los recintos del llamado a la api
@@ -142,7 +142,9 @@ export default function AgregarMarcador() {
             longitud: newMarcador.longitud,
             activo: newMarcador.activo,
             url_img: newMarcador.url_img,
-            id_usuario: user?.id
+            id_usuario: user?.id,
+            info_adicional: newMarcador.info_adicional,
+
           })
           .select()
           .single<Marcador>();
@@ -287,7 +289,7 @@ export default function AgregarMarcador() {
                 type="text"
                 value={dataMarcador.pagina_web}
                 onChange={(e) => setDataMarcador({ ...dataMarcador, pagina_web: e.target.value })}
-                className={styles.inputText} required />
+                className={styles.inputText} />
 
               <label className={styles.labelSeccion} htmlFor="">Teléfono
                 <span style={{ fontSize: '0.8rem', color: 'gray', fontStyle: 'italic' }} > - Número de contacto del negocio.</span>
@@ -296,7 +298,7 @@ export default function AgregarMarcador() {
                 <p className={styles.codTelfono}>+569</p>
                 <input
                   type="number" value={dataMarcador.telefono}
-                  onChange={(e) => setDataMarcador({ ...dataMarcador, telefono: e.target.value })} required />
+                  onChange={(e) => setDataMarcador({ ...dataMarcador, telefono: e.target.value })} />
               </div>
 
               <label className={styles.labelSeccion} htmlFor="">Imagen de su local en URL
@@ -321,12 +323,13 @@ export default function AgregarMarcador() {
             </div>
 
             {Object.entries(accesibilidades).map(([tipo, lista]) => (
-              <div key={tipo}>
+              <div key={tipo} style={{ marginBottom: '20px' }}>
                 <p>{`Accesibilidad ${tipo}`}</p>
                 {lista.map(acc => (
                   <div className={styles.opt} key={acc.id}>
                     <input
                       type="checkbox"
+                      className={styles.checkboxColor}
                       value={acc.id}
                       checked={selecciones.includes(acc.id)}
                       onChange={() => handleCheckboxChange(acc.id)}
@@ -337,6 +340,19 @@ export default function AgregarMarcador() {
                 ))}
               </div>
             ))}
+
+            <label className={styles.labelSeccion} htmlFor="">Información Adicional
+              <span style={{ fontSize: '0.8rem', color: 'gray', fontStyle: 'italic' }} >*Opcional </span>
+            </label>
+            <textarea
+              placeholder="Escribe información adicional sobre el marcador..."
+              value={dataMarcador.info_adicional}
+              onChange={(e) => setDataMarcador({ ...dataMarcador, info_adicional: e.target.value })}
+              className={styles.inputText}
+              rows={4}
+              style={{ resize: 'none', height: '100px' }}
+
+            />
 
             <div className={styles.acciones}>
               <button type="submit" >Agregar Marcador</button>

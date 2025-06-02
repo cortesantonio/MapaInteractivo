@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faFilter, faFilterCircleXmark, faLocationDot } from "@fortawesome/free-solid-svg-icons";
+import { faFilter, faLocationDot, faXmark } from "@fortawesome/free-solid-svg-icons";
 import styles from "./css/Buscador.module.css";
 import { supabase } from "../services/supabase";
 import { Accesibilidad } from "../interfaces/Accesibilidad";
@@ -22,12 +22,9 @@ interface BuscadorProps {
 function Buscador({ onSeleccionMarcador }: BuscadorProps) {
     const { user } = useAuth();
     const { modoNocturno } = useTheme();
-    const {fontSize} = useFontSize ();
-    const [filtroIsVisible, setFiltroIsVisible] = useState(false);
+    const { fontSize } = useFontSize();
+    const [modalVisible, setModalVisible] = useState(false);
     const [width, setWidth] = useState(window.innerWidth <= 768 ? "65%" : "300px");
-    const [height, setHeight] = useState("0px");
-    const [opacity, setOpacity] = useState(0);
-    const [displayFiltro, setDisplayFiltro] = useState("none");
     const [filtrosActivos, setFiltrosActivos] = useState<Record<string, boolean>>({});
     const [marcadores, setMarcadores] = useState<Marcador[]>([]);
     const [resultados, setResultados] = useState<Marcador[]>([]);
@@ -112,7 +109,7 @@ function Buscador({ onSeleccionMarcador }: BuscadorProps) {
         if (!id_usuario) {
             return;
         }
-        
+
         const fechaHoraChile = obtenerFechaChile();
 
         const { error: insertError } = await supabase.from('busquedas').insert({
@@ -123,13 +120,13 @@ function Buscador({ onSeleccionMarcador }: BuscadorProps) {
 
         if (insertError) {
             console.error("Error al registrar la búsqueda:", insertError);
-        } 
+        }
     };
 
 
     useEffect(() => {
         const handleResize = () => {
-            setWidth(window.innerWidth <= 768 ? "65%" : "300px");
+            setWidth(window.innerWidth <= 768 ? "90%" : "300px");
         };
 
         window.addEventListener("resize", handleResize);
@@ -141,6 +138,10 @@ function Buscador({ onSeleccionMarcador }: BuscadorProps) {
             ...prev,
             [filtro]: !prev[filtro]
         }));
+    };
+
+    const aplicarFiltros = () => {
+        setModalVisible(false);
     };
 
     useEffect(() => {
@@ -164,122 +165,154 @@ function Buscador({ onSeleccionMarcador }: BuscadorProps) {
         setResultados(filtrados);
     }, [busqueda, marcadores, filtrosActivos]);
 
-    const ampliarBuscador = () => {
-        if (filtroIsVisible) {
-            setHeight("0px");
-            setOpacity(0);
-            setTimeout(() => setFiltroIsVisible(false), 300);
-            setDisplayFiltro('none')
-        } else {
-            setFiltroIsVisible(true);
-            setTimeout(() => {
-                setHeight("fit-content");
-                setDisplayFiltro('block')
-                setOpacity(1);
-            }, 10);
-        }
+    const contarFiltrosActivos = () => {
+        return Object.values(filtrosActivos).filter(activo => activo).length;
     };
-
 
     return (
         <div className={`${styles.container} ${modoNocturno ? styles.darkMode : ''}`}
             style={{
                 width: width,
-                transition: "width 0.3s ease"
-                
+                transition: "width 0.3s ease",
+                pointerEvents: 'auto'
             }}
         >
-            <div style={{backgroundColor: modoNocturno ? "#2d2d2d" : "", border: modoNocturno ? "none" :  "1px solid #ccc"}} className={styles.distribucionContainer}>
-                <FontAwesomeIcon 
-                    icon={faLocationDot} 
-                    size="xl" 
-                    style={{ color: modoNocturno ? "red" : "" }} 
+            <div style={{ backgroundColor: modoNocturno ? "#2d2d2d" : "", border: modoNocturno ? "none" : "1px solid #ccc" }} className={styles.distribucionContainer}>
+                <FontAwesomeIcon
+                    icon={faLocationDot}
+                    size="xl"
+                    style={{ color: modoNocturno ? "red" : "" }}
                 />
                 <input
                     type="text"
                     className={`${styles.inpBuscar}`}
-                    style={{backgroundColor:modoNocturno ? "#2d2d2d" : "", color: modoNocturno ? "white": "",fontSize : `${fontSize}rem`}}
+                    style={{ backgroundColor: modoNocturno ? "#2d2d2d" : "", color: modoNocturno ? "white" : "", fontSize: `${fontSize}rem` }}
                     placeholder="Buscador"
                     onChange={(e) => setBusqueda(e.target.value)}
                     value={busqueda}
+                    name="busqueda"
                 />
 
-                <button onClick={ampliarBuscador} style={{ background: "transparent", padding: "0px", outline: "none", border: "none" }}>
-                    {filtroIsVisible ? (
-                        <FontAwesomeIcon icon={faFilterCircleXmark} size="lg" style={{ color: "red" }} />
-                    ) : (
-                        <FontAwesomeIcon icon={faFilter} size="lg" style={{ color: modoNocturno ? "#888" : "black" }} />
+                <button 
+                    onClick={() => setModalVisible(true)} 
+                    style={{ background: "transparent", padding: "0px", outline: "none", border: "none", position: "relative" }}
+                    aria-label="Abrir filtros"
+                    className={styles.filterButton}
+                >
+                    <FontAwesomeIcon 
+                        icon={faFilter} 
+                        size="xl" 
+                        style={{ color: modoNocturno ? "#888" : "black" }} 
+                    />
+                    {contarFiltrosActivos() > 0 && (
+                        <span className={styles.filterCount}>
+                            {contarFiltrosActivos()}
+                        </span>
                     )}
                 </button>
             </div>
 
-            {filtroIsVisible && (
-                <div
-                    style={{
-                        overflow: "hidden",
-                        height: height,
-                        opacity: opacity,
-                        transition: "height 0.3s ease, opacity 0.3s ease",
-                        backgroundColor: modoNocturno ? "#333" : "white",
-                        marginTop: '10px',
-                        borderRadius: '15px',
-                        padding: '15px',
-                        display: displayFiltro,
-                        border: modoNocturno ? "none" :  "1px solid #ccc"
+            {modalVisible && (
+                <div 
+                    className={styles.modalOverlay}
+                    onClick={(e) => {
+                        // Solo cerrar si el clic fue directamente en el overlay
+                        if (e.target === e.currentTarget) {
+                            setModalVisible(false);
+                        }
                     }}
                 >
-                    <div style={{ textAlign: "left" }}>
-                        <p style={{ color: modoNocturno ? "white" : "black", fontWeight: 550 }}>
-                            Filtros de Accesibilidad
-                        </p>
-                        {opcionesAccesibilidad.map((acces) => (
-                            <div key={acces.id}>
-                                <label style={{ color: modoNocturno ? "white" : "black" }}>
-                                    <input
-                                        type="checkbox"
-                                        checked={filtrosActivos[acces.nombre] || false}
-                                        onChange={() => toggleFiltro(acces.nombre)}
-                                    />{" "}
-                                    {acces.nombre}
-                                </label>
-                                <br />
-                            </div>
-                        ))}
+                    <div className={styles.modalContent} style={{ backgroundColor: modoNocturno ? "#333" : "white" }}>
+                        <div className={styles.modalHeader}>
+                            <h2 style={{ color: modoNocturno ? "white" : "black" }}>Filtros de Accesibilidad</h2>
+                            <button 
+                                onClick={() => setModalVisible(false)}
+                                className={styles.closeButton}
+                                aria-label="Cerrar filtros"
+                            >
+                                <FontAwesomeIcon icon={faXmark} size="lg" />
+                            </button>
+                        </div>
+
+                        <div className={styles.filtrosContainer}>
+                            {Object.entries(
+                                opcionesAccesibilidad.reduce((acc, item) => {
+                                    if (!acc[item.tipo]) acc[item.tipo] = [];
+                                    acc[item.tipo].push(item);
+                                    return acc;
+                                }, {} as Record<string, Accesibilidad[]>)
+                            ).map(([tipo, accesibilidades]) => (
+                                <div key={tipo} className={styles.filtroGrupo}>
+                                    <h3 style={{ color: modoNocturno ? "#ddd" : "#222" }}>{tipo}</h3>
+                                    <div className={styles.pictogramasGrid}>
+                                        {accesibilidades.map((acces) => (
+                                            <div 
+                                                key={acces.id} 
+                                                className={`${styles.pictogramaItem} ${filtrosActivos[acces.nombre] ? styles.activo : ''}`}
+                                                onClick={() => toggleFiltro(acces.nombre)}
+                                                role="button"
+                                                tabIndex={0}
+                                                aria-pressed={filtrosActivos[acces.nombre]}
+                                            >
+                                                <div className={styles.pictogramaPlaceholder}>
+                                                    {/* Aquí irá el pictograma */}
+                                                </div>
+                                                <span style={{ color: modoNocturno ? "white" : "black" }}>
+                                                    {acces.nombre}
+                                                </span>
+                                            </div>
+                                        ))}
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+
+                        <div className={styles.modalFooter}>
+                            <button 
+                                onClick={aplicarFiltros}
+                                className={styles.aplicarButton}
+                                style={{
+                                    backgroundColor: "#4CAF50",
+                                    color: "white",
+                                    padding: "10px 20px",
+                                    border: "none",
+                                    borderRadius: "5px",
+                                    cursor: "pointer",
+                                    fontSize: `${fontSize}rem`
+                                }}
+                            >
+                                Aplicar Filtros
+                            </button>
+                        </div>
                     </div>
                 </div>
             )}
 
             {busqueda.length > 0 && (
-                <div style={{
-                    marginTop: "10px", 
-                    textAlign: "left", 
-                    maxHeight: "200px", 
-                    overflowY: "auto",
-                    backgroundColor: modoNocturno ? '#333' : 'white', 
-                    borderRadius: '10px', 
-                    padding: '10px',
-                    fontSize:  `${fontSize}rem` ,
-                    color: modoNocturno ? 'white' : 'black'
-                }}>
-                    <p>Resultados</p>
-                    <hr style={{ borderColor: modoNocturno ? '#555' : '#ccc' }} />
+                <div className={styles.resultadosContainer}>
                     {resultados.map((item) => (
                         <div
                             key={item.id}
-                            style={{ 
-                                padding: "5px 0", 
-                                borderBottom: `1px solid ${modoNocturno ? '#555' : '#ccc'}`, 
-                                cursor: "pointer" 
-                            }}
+                            className={styles.resultadoItem}
                             onClick={() => {
                                 onSeleccionMarcador(item.id);
-                                setFiltroIsVisible(false);
+                                setModalVisible(false);
                                 setBusqueda("");
                                 SeleccionBusqueda(item.id);
                             }}
                         >
-                            <strong>{item.nombre}</strong><br />
-                            <small>{item.direccion}</small>
+                            <FontAwesomeIcon 
+                                icon={faLocationDot} 
+                                className={styles.resultadoIcon}
+                            />
+                            <div className={styles.resultadoInfo}>
+                                <div className={styles.resultadoNombre}>
+                                    {item.nombre}
+                                </div>
+                                <div className={styles.resultadoDireccion}>
+                                    {item.direccion}
+                                </div>
+                            </div>
                         </div>
                     ))}
                 </div>

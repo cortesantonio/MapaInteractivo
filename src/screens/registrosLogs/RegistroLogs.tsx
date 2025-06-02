@@ -10,7 +10,6 @@ import { useNavigate } from 'react-router-dom';
 export default function RegistroLogs() {
     const [busqueda, setBusqueda] = useState('');
     const [registroLogs, setRegistrosLogs] = useState<Registro_Logs[]>([]);
-    const [isActiveBuscador, setIsActiveBuscador] = useState(false);
     const [currentPage, setCurrentPage] = useState(1);
     const navigate = useNavigate();
     const getItemsPerPage = (height: number): number => {
@@ -53,10 +52,6 @@ export default function RegistroLogs() {
 
     function handleBusquedaChange(e: React.ChangeEvent<HTMLInputElement>) {
         setBusqueda(e.target.value);
-    }
-
-    function handleBuscador() {
-        setIsActiveBuscador(prev => !prev);
     }
 
     // Filtro en tiempo real por tipo_accion o detalle
@@ -114,19 +109,23 @@ export default function RegistroLogs() {
                 <h2 style={{ textAlign: 'center', marginTop: '20px' }}>Gestión de Registros</h2>
 
                 <div className={styles.filtros}>
-                    <button className={styles.filtroCard} onClick={handleBuscador}>
-                        <FontAwesomeIcon icon={faMagnifyingGlass} /> Buscador de acciones
-                    </button>
-                    {isActiveBuscador && (
-                        <div className={styles.buscar}>
-                            <form onSubmit={(e) => e.preventDefault()}>
-                                <input type="text" placeholder="Buscar por tipo de accción" value={busqueda} onChange={handleBusquedaChange} />
-                                <button type="submit">
-                                    <FontAwesomeIcon icon={faMagnifyingGlass} />
-                                </button>
-                            </form>
+                        <div className={styles.filtroCard} style={{ position: 'relative' }}>
+                            <label>
+                                <FontAwesomeIcon icon={faMagnifyingGlass} />
+                            </label>
+                            <input
+                                type="text"
+                                placeholder="Buscar por tipo de accción"
+                                value={busqueda}
+                                onChange={handleBusquedaChange}
+                                style={{
+                                    width: '150px',
+                                    padding: '5px',
+                                    border: 'none',
+                                    outline: 'none'
+                                }}
+                            />
                         </div>
-                    )}
                 </div>
 
                 <div className={styles.content}>

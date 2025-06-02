@@ -1,0 +1,428 @@
+.container {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    max-width: 100%;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    overflow-x: hidden;
+}
+
+.header {
+    position: relative;
+    width: 100%;
+    height: 300px;
+    color: white;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+}
+
+.header {
+    position: relative;
+    width: 100%;
+}
+
+.header img {
+    z-index: 0;
+    width: 100%;
+    height: 40vh;
+    object-fit: cover;
+    filter: brightness(50%);
+}
+
+.header::before {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(to top, rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.3));
+    z-index: 2;
+}
+
+.botonatras {
+    position: absolute;
+    top: 20px;
+    left: 15px;
+    font-size: 1.5rem;
+    background-color: transparent;
+    color: white;
+    border: none;
+    cursor: pointer;
+    z-index: 3;
+}
+
+.Titulo {
+    position: absolute;
+    top: 25px;
+    left: 0;
+    width: 100%;
+    text-align: center;
+    color: white;
+    z-index: 2;
+}
+
+.locacionTitulo {
+    position: absolute;
+    bottom: 5px;
+    width: 100%;
+    padding-left: 25px;
+    z-index: 3;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.locacionTitulo h4 {
+    font-size: 3rem;
+    margin: 0;
+}
+
+.locacionTitulo p {
+    font-size: 1.7rem;
+    margin: 0;
+}
+
+.locacionTitulo h2 {
+    font-size: 1.1rem;
+    opacity: 0.9;
+    margin: 0;
+}
+
+.contenido_reseña {
+    flex: 1;
+    overflow-y: auto;
+    overflow-x: hidden;
+    background-color: #ffffff;
+    max-width: 800px;
+    margin: 0 auto;
+    width: 100%;
+    max-height: calc(110vh - 360px);
+    padding: 0 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.inspeccionar_reseñas {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    padding: 20px 0;
+}
+
+.titulo_reseña {
+    padding: 15px 5px;
+    text-align: left;
+    width: 100%;
+}
+
+.titulo_reseña h4 {
+    margin: 0;
+    font-size: 1.5rem;
+    color: #333;
+    font-weight: 400;
+}
+
+.titulo_reseña hr {
+    width: 100%;
+    margin: 10px auto;
+    border: none;
+    border-top: 1px solid #e0e0e0;
+}
+
+.bloque_reseña {
+    padding: 10px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 90%;
+    max-width: 600px;
+}
+
+.autor_reseña {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 0 0 10px 0;
+    width: 100%;
+}
+
+.autor_reseña h1 {
+    font-size: 1.4rem;
+    font-weight: 350;
+    color: #333;
+    margin: 0;
+}
+
+.horarioHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 8px;
+}
+
+.horarioHeader h3 {
+    flex: 1;
+    text-align: center;
+    margin: 0;
+    font-size: 1.2rem;
+    font-weight: 500;
+}
+
+.trash_button {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    border: 1px solid #ff3b30;
+    color: #ff3b30;
+    cursor: pointer;
+}
+
+.calificacion_fecha {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 10px;
+    font-size: 0.9rem;
+    color: #666;
+    width: 100%;
+}
+
+.estrella {
+    color: #ffb400;
+}
+
+.texto_reseña {
+    font-size: 1.3rem;
+    line-height: 1.5;
+    font-weight: 200;
+    color: #1f1f1f;
+    width: 100%;
+    text-align: left;
+}
+
+.horarios {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+}
+
+.modalOverlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.modalContent {
+    background: white;
+    padding: 30px 25px;
+    border-radius: 12px;
+    width: 90%;
+    max-width: 440px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.selectDia {
+    width: 100%;
+    min-width: 0;
+    max-width: 100%;
+    box-sizing: border-box;
+}
+
+.modalHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.modalHeader h2 {
+    font-size: 1.4rem;
+    font-weight: 500;
+    color: #333;
+}
+
+.modalContent label {
+    display: block;
+    font-size: 0.95rem;
+    font-weight: 500;
+    margin-bottom: 5px;
+    color: #333;
+}
+
+.modalContent input,
+.modalContent select {
+    width: 100%;
+    padding: 8px 10px;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+    font-size: 0.95rem;
+    background-color: #fdfdfd;
+}
+
+.modalContent input:focus,
+.modalContent select:focus {
+    outline: none;
+    border-color: #ff6100;
+    box-shadow: 0 0 0 2px rgba(255, 97, 0, 0.2);
+}
+
+.modalContent>div {
+    width: 100%;
+    max-width: 100%;
+}
+
+.modalCloseButton {
+    background: none;
+    border: none;
+    font-size: 1.5em;
+    cursor: pointer;
+}
+
+.botonesModal {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 20px;
+    width: 100%;
+}
+
+.botonCancelar {
+    border: 1px solid #ff0000;
+    color: #ff0000;
+    padding: 5px 15px;
+    background: white;
+    font-size: 0.8rem;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-right: 10px;
+    margin: 10px 10px;
+    max-width: 360px;
+}
+
+.botonGuardar {
+    padding: 5px 15px;
+    border: 1px solid #ff6100;
+    background: linear-gradient(90deg, #ff6100, #ff0000);
+    font-size: 1rem;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin: 10px 10px;
+}
+
+.botonCancelar,
+.botonGuardar {
+    flex: 1 1 160px;
+    max-width: 360px;
+    margin: 0 auto;
+}
+
+
+/* Centrado solo cuando hay wrap */
+
+@media (max-width: 420px) {
+    .botonesModal {
+        justify-content: center;
+    }
+    .botonCancelar,
+    .botonGuardar {
+        max-width: 100%;
+    }
+}
+
+.agregarHorario {
+    padding: 5px 10px;
+    border: 1px solid #ff6100;
+    background: linear-gradient(90deg, #ff6100, #ff0000);
+    font-size: 1rem;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.listaHorarios {
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+    flex-wrap: wrap;
+    text-align: center;
+    justify-content: center;
+}
+
+.listaHorarios .card {
+    border: 1px solid #ccc;
+    padding: 10px;
+    border-radius: 5px;
+    background-color: #f9f9f9;
+    list-style: none;
+    position: relative;
+}
+
+.listaHorarios .card h3 {
+    margin: 0;
+    font-size: 1.2rem;
+    font-weight: 500;
+    text-align: center;
+}
+
+.listaHorarios .card hr {
+    margin: 10px 0;
+    border: none;
+    border-top: 1px solid #e0e0e0;
+}
+
+.buttonEditar {
+    width: 100%;
+    padding: 5px 0px;
+    background: linear-gradient(90deg, #ff0000, #ff6100);
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: transform 0.2s ease;
+}
+
+.listaHorarios .card button:hover {
+    transform: translateY(-2px);
+}
+
+@media (min-width: 1024px) {
+    .inspeccionar_reseñas {
+        padding: 20px;
+        width: 100%;
+        display: flex;
+        justify-content: center;
+    }
+}
+
+@media (max-width: 768px) {
+    .header {
+        height: 300px;
+    }
+    .titulo_locacion h2 {
+        font-size: 2rem;
+        font-weight: 500;
+    }
+    .contenido_reseña {
+        max-width: 95%;
+    }
+}

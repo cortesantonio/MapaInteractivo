@@ -17,26 +17,25 @@ export default function NavbarUser() {
 
     if (!user) return null
     return (
-        <div style={{ display: 'flex', justifyContent: 'start', alignItems: 'end', flexDirection: 'column', gap: '10px' }}>
-            <div className={styles.containerUser} >
+        <div style={{ display: 'flex', justifyContent: 'start', alignItems: 'end', flexDirection: 'column', gap: '10px', position: "relative", height: '100%' }}>
+            <div className={styles.containerUser} onClick={() => { setModalOpen(!modalOpen) }}>
                 <div style={{ display: 'flex', gap: 10, justifyContent: 'center', alignItems: 'center' }}
-                    onClick={() => { setModalOpen(!modalOpen) }}
+
                 >
                     <img
                         src={user?.user_metadata?.picture || '../src/assets/react.svg'}
-                        alt="Foto de perfil"
                         style={{ width: '100%', height: '100%', borderRadius: '50%' }}
                     />
                 </div>
             </div>
 
             {modalOpen == true && (
-                <div style={{ backgroundColor: modoNocturno ? "#2d2d2d" : 'white', borderRadius: '15px', padding: 10, pointerEvents: 'auto', width: '200px' }}>
-                    <div>
+                <div style={{ position: 'absolute', backgroundColor: modoNocturno ? "#2d2d2d" : 'white', borderRadius: '15px', padding: 10, pointerEvents: 'auto', width: '200px', top: '60px', border: '1px solid #ccc' }}>
+                    <div >
                         <p style={{ color: modoNocturno ? "#fff" : "", fontWeight: 400, cursor: 'pointer', textOverflow: 'ellipsis', whiteSpace: 'nowrap', overflow: 'hidden', fontSize: `${fontSize}rem`, textTransform: 'capitalize' }}>{user?.user_metadata.full_name} </p>
                         <p style={{ fontSize: `${fontSize}rem`, color: modoNocturno ? "#fff" : 'gray', textOverflow: 'ellipsis', whiteSpace: 'nowrap', overflow: 'hidden' }}>{user?.email} </p>
-
                     </div>
+                    <hr style={{ marginTop: 10 }} />
                     <div className={styles.opt}>
                         <button className={styles.btnNavegacion} onClick={() => { navigate(`/usuario/perfil/${user.id}`) }} style={{ fontSize: `${fontSize}rem`, color: modoNocturno ? "#fff" : "", display: 'block' }}>Ver perfil</button>
                         <button className={styles.btnNavegacion} onClick={() => { navigate(`/usuarios/editar/${user.id}`) }} style={{ fontSize: `${fontSize}rem`, color: modoNocturno ? "#fff" : "", display: 'block' }}>Editar perfil</button>

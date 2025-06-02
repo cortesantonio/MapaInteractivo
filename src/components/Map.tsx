@@ -1,12 +1,14 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { supabase } from '../services/supabase';
 import { APIProvider, Map as GoogleMap, useMap, AdvancedMarker } from "@vis.gl/react-google-maps";
+import Supercluster from "supercluster";
 import { useTheme } from "./Footer/Modo_Nocturno";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faLocationDot } from "@fortawesome/free-solid-svg-icons";
 
 const apiKey = import.meta.env.VITE_GOOGLE_APIKEY;
 const lugarCentrado = { lat: -34.985378, lng: -71.239395 };
 const zoomPorDefecto = 15;
-
 
 const CustomMap = ({
   marcadores,
@@ -34,6 +36,9 @@ const CustomMap = ({
 }) => {
 
   const map = useMap();
+  const { modoNocturno } = useTheme();
+  const [clusters, setClusters] = useState<any[]>([]);
+  const [superclusterInstance, setSuperclusterInstance] = useState<Supercluster | null>(null);
 
 
   useEffect(() => {
@@ -53,12 +58,67 @@ const CustomMap = ({
         gestureHandling: "greedy",
         clickableIcons: false,
         keyboardShortcuts: false
-        
+
       });
 
     }
 
   }, [map]);
+
+
+  const puntos = useMemo(() => marcadores.map(m => ({
+    type: "Feature",
+    properties: {
+      cluster: false,
+      marcadorId: m.id,
+      nombre: m.nombre_recinto
+    },
+    geometry: {
+      type: "Point",
+      coordinates: [m.longitud, m.latitud]
+    }
+  })), [marcadores]);
+
+  useEffect(() => {
+    const supercluster = new Supercluster({
+      radius: 60,
+      maxZoom: 20,
+    });
+    supercluster.load(puntos as any);
+    setSuperclusterInstance(supercluster);
+  }, [puntos]);
+
+
+  useEffect(() => {
+    if (!map || !superclusterInstance) return;
+
+    const updateClusters = () => {
+      const bounds = map.getBounds();
+      if (!bounds) return;
+
+      const zoom = map.getZoom();
+      if (zoom === undefined || !superclusterInstance) return;
+
+      const clusters = superclusterInstance.getClusters(
+        [
+          bounds.getSouthWest().lng(),
+          bounds.getSouthWest().lat(),
+          bounds.getNorthEast().lng(),
+          bounds.getNorthEast().lat()
+        ],
+        zoom
+      );
+
+      setClusters(clusters);
+    };
+
+    updateClusters();
+
+    const listener = map.addListener('bounds_changed', updateClusters);
+    return () => {
+      window.google.maps.event.removeListener(listener);
+    };
+  }, [map, superclusterInstance]);
 
 
   useEffect(() => {
@@ -84,12 +144,12 @@ const CustomMap = ({
 
   useEffect(() => {
     if (!map || !ubicacionUsuario) return;
-  
+
     if (!destinoRuta) {
-      onIndicaciones([]); 
+      onIndicaciones([]);
       return;
     }
-  
+
     const directionsService = new google.maps.DirectionsService();
     const directionsRenderer = new google.maps.DirectionsRenderer({
       suppressMarkers: true,
@@ -101,7 +161,7 @@ const CustomMap = ({
     });
 
     directionsRenderer.setMap(map);
-  
+
     directionsService.route(
       {
         origin: ubicacionUsuario,
@@ -111,7 +171,7 @@ const CustomMap = ({
       (result, status) => {
         if (status === "OK" && result) {
           directionsRenderer.setDirections(result);
-  
+
           const steps = result.routes[0].legs[0].steps;
           const instrucciones = steps.map(step => step.instructions);
           onIndicaciones(instrucciones);
@@ -121,13 +181,13 @@ const CustomMap = ({
         }
       }
     );
-  
+
     return () => {
       directionsRenderer.setMap(null);
 
     };
   }, [map, modoViaje, ubicacionUsuario, destinoRuta]);
-  
+
 
   useEffect(() => {
     if (ubicacionUsuario) {
@@ -139,7 +199,7 @@ const CustomMap = ({
 
   useEffect(() => {
     if (mapacentrado && map && ubicacionUsuario) {
-      map.panTo(ubicacionUsuario); 
+      map.panTo(ubicacionUsuario);
     }
   }, [ubicacionUsuario, mapacentrado, map]);
 
@@ -148,7 +208,7 @@ const CustomMap = ({
 
     const listener = map.addListener("dragstart", () => {
       if (mapacentrado) {
-        setMapacentrado(false); 
+        setMapacentrado(false);
       }
     });
 
@@ -160,13 +220,80 @@ const CustomMap = ({
 
   return (
     <>
-      {!destinoRuta && marcadores.map((m, index) => (
-        <AdvancedMarker
-          key={index}
-          position={{ lat: m.latitud, lng: m.longitud }}
-          onClick={() => SeleccionMarcador(m.id)}
-        />
-      ))}
+
+      {!destinoRuta && clusters.map((cluster: any, index: number) => {
+        const [lng, lat] = cluster.geometry.coordinates;
+        const { cluster: isCluster, point_count: pointCount } = cluster.properties;
+
+        if (isCluster) {
+          return (
+            <AdvancedMarker key={`cluster-${index}`} position={{ lat, lng }}>
+              <div
+                style={{
+                  width: `${20 + (pointCount / marcadores.length) * 40}px`,
+                  height: `${20 + (pointCount / marcadores.length) * 40}px`,
+                  backgroundColor: modoNocturno ? 'rgba(255, 107, 107, 0.5)' : 'rgba(255, 107, 107, 0.8)',
+                  borderRadius: '50%',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  color: 'white',
+                  fontWeight: 'bold',
+                  border: '2px solid white',
+                  boxShadow: '0 0 4px rgba(0,0,0,0.5)',
+                  cursor: 'pointer'
+                }}
+                onClick={() => {
+                  if (!map || !superclusterInstance) return;
+
+                  const expansionZoom = Math.min(
+                    superclusterInstance.getClusterExpansionZoom(cluster.id),
+                    20
+                  );
+                  map.setZoom(expansionZoom);
+                  map.panTo({ lat, lng });
+                }}
+
+              >
+                {pointCount}
+              </div>
+            </AdvancedMarker>
+          );
+        }
+
+        return (
+          <AdvancedMarker
+            key={`marker-${cluster.properties.marcadorId}`}
+            position={{ lat, lng }}
+            onClick={() => SeleccionMarcador(cluster.properties.marcadorId)}
+          >
+            <div style={{ position: "relative", transform: "translate(-50%, -100%)" }}>
+              <div style={{ position: "absolute", left: "50%", top: "100%", transform: "translate(-50%, -100%)" }}>
+                <FontAwesomeIcon icon={faLocationDot} style={{ color: "red" }} size="lg" />
+              </div>
+              <div
+                style={{
+                  position: "absolute",
+                  top: "50%",
+                  left: "100%",
+                  transform: "translate(8px, -50%)", 
+                  fontSize: "15px",
+                  fontWeight: "bold",
+                  color: modoNocturno ? "#F0F0F0" : "#565656",
+                  whiteSpace: "nowrap",
+                  overflow: "hidden",
+                  textOverflow: "ellipsis",
+                  maxWidth: "200px"
+                }}
+              >
+                {cluster.properties.nombre}
+              </div>
+            </div>
+          </AdvancedMarker>
+
+
+        );
+      })}
 
       {destinoRuta && (
         <AdvancedMarker position={destinoRuta} title="Destino">
@@ -187,37 +314,37 @@ const CustomMap = ({
       )}
 
       {ubicacionUsuario && (
-        <AdvancedMarker 
-        position={ubicacionUsuario} 
+        <AdvancedMarker
+          position={ubicacionUsuario}
         >
-        <div style={{ position: "relative", width: "30px", height: "30px" }}>
-          <div style={{
-            position: "absolute",
-            top: 0, left: 0, right: 0, bottom: 0,
-            borderRadius: "50%",
-            backgroundColor: "#4285F4",
-            animation: "pulse 2s infinite",
-            opacity: 0.4
-          }} />
-          <div style={{
-            position: "absolute",
-            top: "7px", left: "7px",
-            width: "16px",
-            height: "16px",
-            backgroundColor: "#4285F4",
-            borderRadius: "50%",
-            border: "2px solid white",
-            boxShadow: "0 0 4px rgba(66, 133, 244, 0.8)"
-          }} />
-          <style>{`
+          <div style={{ position: "relative", width: "30px", height: "30px" }}>
+            <div style={{
+              position: "absolute",
+              top: 0, left: 0, right: 0, bottom: 0,
+              borderRadius: "50%",
+              backgroundColor: "#4285F4",
+              animation: "pulse 2s infinite",
+              opacity: 0.4
+            }} />
+            <div style={{
+              position: "absolute",
+              top: "7px", left: "7px",
+              width: "16px",
+              height: "16px",
+              backgroundColor: "#4285F4",
+              borderRadius: "50%",
+              border: "2px solid white",
+              boxShadow: "0 0 4px rgba(66, 133, 244, 0.8)"
+            }} />
+            <style>{`
             @keyframes pulse {
               0% { transform: scale(1); opacity: 0.4; }
               50% { transform: scale(2); opacity: 0; }
               100% { transform: scale(1); opacity: 0.4; }
             }
           `}</style>
-        </div>
-      </AdvancedMarker>
+          </div>
+        </AdvancedMarker>
 
       )}
     </>
@@ -251,28 +378,27 @@ const Map = ({
 }) => {
   const [marcadores, setMarcadores] = useState<any[]>([]);
   const [ubicacionUsuario, setUbicacionUsuario] = useState<{ lat: number, lng: number } | null>(null);
-  const {modoNocturno} = useTheme ();
-  
+  const { modoNocturno } = useTheme();
+
 
   useEffect(() => {
     const fetchMarcador = async () => {
       const { data, error } = await supabase
         .from("marcador")
-        .select("id, latitud, longitud")
-        .eq("activo", true); 
-  
+        .select("id, nombre_recinto, latitud, longitud")
+        .eq("activo", true);
+
       if (error) {
         console.error("Error al obtener los marcadores:", error);
       } else {
         setMarcadores(data);
       }
     };
-    
-  
+
     fetchMarcador();
-  
+
     let watchId: number;
-  
+
     if (navigator.geolocation) {
       watchId = navigator.geolocation.watchPosition(
         (position) => {
@@ -284,12 +410,12 @@ const Map = ({
         },
         {
           enableHighAccuracy: true,
-          maximumAge: 5000, 
+          maximumAge: 5000,
           timeout: 10000
         }
       );
     }
-  
+
     return () => {
       if (watchId !== undefined) {
         navigator.geolocation.clearWatch(watchId);
@@ -299,7 +425,7 @@ const Map = ({
 
   return (
     <APIProvider apiKey={apiKey}>
-      <GoogleMap defaultCenter={center} defaultZoom={zoom} style={{ height: "100%", width: "100%" }} colorScheme= {modoNocturno ? "DARK": "LIGHT"} mapId="e50cadbbb32f1efa">
+      <GoogleMap defaultCenter={center} defaultZoom={zoom} style={{ height: "100%", width: "100%" }} colorScheme={modoNocturno ? "DARK" : "LIGHT"} mapId="e50cadbbb32f1efa">
         <CustomMap
           marcadores={marcadores}
           SeleccionMarcador={onSeleccionMarcador}
@@ -308,7 +434,7 @@ const Map = ({
           modoViaje={modoViaje}
           destinoRuta={destinoRuta}
           onUbicacionActiva={onUbicacionActiva}
-          onIndicaciones={onIndicaciones} 
+          onIndicaciones={onIndicaciones}
           mapacentrado={mapacentrado}
           setMapacentrado={setMapacentrado}
 

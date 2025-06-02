@@ -11,6 +11,16 @@
     width: 100%;
 }
 
+.header::before {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(to top, rgba(67, 67, 67, 0.7), rgba(196, 195, 195, 0.3));
+    z-index: 2;
+}
+
 .header img {
     z-index: 0;
     width: 100%;
@@ -27,7 +37,7 @@
     border: none;
     outline: none;
     color: white;
-    z-index: 1;
+    z-index: 3;
 }
 
 .Titulo {
@@ -37,6 +47,7 @@
     width: 100%;
     text-align: center;
     color: white;
+    z-index: 3;
 }
 
 .locacionTitulo {
@@ -44,6 +55,24 @@
     bottom: 25px;
     left: 25px;
     color: white;
+    z-index: 3;
+}
+
+.locacionTitulo h4 {
+    font-size: 3rem;
+    margin: 0;
+}
+
+.locacionTitulo p {
+    font-size: 1.7rem;
+    margin: 0;
+}
+
+.locacionTitulo img {
+    width: 30px;
+    height: 30px;
+    margin-right: 10px;
+    filter: brightness(100%);
 }
 
 .Conten {
@@ -141,7 +170,6 @@
 }
 
 .opt input[type="checkbox"] {
-    width: 18px;
     height: 18px;
     accent-color: #4a6da7;
 }
@@ -149,6 +177,51 @@
 .opt label {
     font-size: 15px;
     color: #555;
+}
+
+.ContenHorarios {
+    border-radius: 10px;
+    padding: 15px;
+}
+
+.filaHorario {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.diaNombre {
+    font-weight: 350;
+    font-size: 16px;
+    color: #2c3e50;
+    text-transform: capitalize;
+    min-width: 100px;
+}
+
+.bloqueHorario {
+    display: flex;
+    gap: 25px;
+    flex-wrap: wrap;
+}
+
+.horarioEtiqueta {
+    font-size: 15px;
+    font-weight: 400;
+    color: #888;
+    display: block;
+    margin-bottom: 2px;
+}
+
+.horarioTexto {
+    font-size: 15px;
+    color: #333;
+    margin: 0;
+}
+
+.InfoAdicional {
+    border-radius: 10px;
+    padding: 15px;
 }
 
 .acciones {
@@ -177,4 +250,30 @@
     border: none;
     margin-left: 10px;
     cursor: pointer;
+}
+
+@media screen and (max-width: 768px) {
+    .VolverAtras {
+        top: 15px;
+        left: 15px;
+    }
+    .Titulo {
+        font-size: 1rem;
+        font-weight: 100;
+        top: 15px;
+    }
+    .header img {
+        height: 35vh;
+    }
+    .locacionTitulo h4 {
+        font-size: 2.1rem;
+        text-wrap: wrap;
+    }
+    .locacionTitulo p {
+        font-size: 1.5rem;
+    }
+    .locacionTitulo img {
+        width: 20px;
+        height: 20px;
+    }
 }

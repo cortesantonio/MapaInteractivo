@@ -1,0 +1,38 @@
+.ModalContainer {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.7);
+    z-index: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: white;
+    font-size: 1.5rem;
+    text-align: center;
+    padding: 20px;
+}
+
+.ContenInfo {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.ContenButton {
+    display: flex;
+    gap: 50px;
+    margin-top: 15px;
+}
+
+.ContenButton button {
+    padding: 10px 20px;
+    font-size: 1rem;
+    background-color: #b7520e;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}

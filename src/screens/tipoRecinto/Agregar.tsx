@@ -1,14 +1,14 @@
 import styles from './css/Agregar.module.css'
 import { useState } from 'react';
 import { supabase } from '../../services/supabase';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import NavbarAdmin from '../../components/NavbarAdmin';
 import { useAuth } from '../../hooks/useAuth';
 import { Tipo_Recinto } from '../../interfaces/Tipo_Recinto';
 
 export default function AgregarTipoRecinto() {
     const navigate = useNavigate();
-    const { id } = useParams();
+
     const { user } = useAuth();
     const [tipo, setTipo] = useState('')
 

@@ -5,7 +5,7 @@ import { formatDistanceToNow } from 'date-fns';
 import { es } from 'date-fns/locale'; // para español
 import styles from './css/VerMarcador.module.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faShareNodes, faRoute, faCommentDots, faStar, faLocationDot, faPhone, faEarthAmericas, faChevronUp, faChevronDown, faInfo } from '@fortawesome/free-solid-svg-icons';
+import { faShareNodes, faRoute, faCommentDots, faStar, faLocationDot, faPhone, faEarthAmericas, faChevronUp, faChevronDown, faInfo, faCheck, faCopy, faCheckCircle } from '@fortawesome/free-solid-svg-icons';
 import EscribirResena from '../components/EscribirResena';
 import Compartir from './Compartir';
 import { supabase } from '../services/supabase';
@@ -14,6 +14,7 @@ import { Accesibilidad } from '../interfaces/Accesibilidad';
 import ImagenConFallback from './ImagenConFallback';
 import { useTheme } from "../components/Footer/Modo_Nocturno";
 import Marca_Verificador from "../../public/img/Marca_Verificador.webp";
+import { ClipLoader } from 'react-spinners';
 
 interface Props {
     MarcadorSelectId: number;
@@ -23,8 +24,8 @@ interface Props {
 
 export default function VerMarcador({ MarcadorSelectId, CerrarMarcador, establecerIdRutaMarcador }: Props) {
     const [cargando, setCargando] = useState<boolean>(true);
-    const [width, setWidth] = useState(window.innerWidth <= 768 ? "100%" : "350px");
-    const [height, setHeight] = useState(window.innerWidth <= 768 ? "100%" : "fit-content");
+    const [width, setWidth] = useState(window.innerWidth <= 768 ? "100%" : "400px");
+    const [height,] = useState("100vh");
     const [Marcador, setMarcador] = useState<Partial<Marcador>>({});
     const [horariosMarcador, setHorariosMarcador] = useState<Horarios[]>([]);
     const [accesibilidadMarcador, setAccesibilidadMarcador] = useState<Accesibilidad[]>([]);
@@ -35,10 +36,43 @@ export default function VerMarcador({ MarcadorSelectId, CerrarMarcador, establec
     const { modoNocturno } = useTheme();
 
     const [calificacion, setCalificacion] = useState<number>(0.0);
+    const [estaAbierto, setEstaAbierto] = useState<boolean>(false);
+    const [copiado, setCopiado] = useState(false);
+
     // Función para volver a la vista del marcador
     const volverAMarcador = () => {
         setMostrarCompartir(false);
         setMostrarFormulario(false);
+    };
+
+    const verificarEstadoActual = () => {
+        const ahora = new Date();
+        const diaActual = ahora.toLocaleDateString('es-ES', { weekday: 'long' });
+        const horaActual = ahora.toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' });
+
+        const horarioHoy = horariosMarcador.find(h =>
+            h.dia.toLowerCase() === diaActual.toLowerCase()
+        );
+
+        if (horarioHoy) {
+            const horaApertura = horarioHoy.apertura.slice(0, 5);
+            const horaCierre = horarioHoy.cierre.slice(0, 5);
+            setEstaAbierto(horaActual >= horaApertura && horaActual <= horaCierre);
+        } else {
+            setEstaAbierto(false);
+        }
+    };
+
+    const copiarDireccion = async () => {
+        if (Marcador?.direccion) {
+            try {
+                await navigator.clipboard.writeText(Marcador.direccion);
+                setCopiado(true);
+                setTimeout(() => setCopiado(false), 2000);
+            } catch (err) {
+                console.error('Error al copiar la dirección:', err);
+            }
+        }
     };
 
     useEffect(() => {
@@ -73,9 +107,8 @@ export default function VerMarcador({ MarcadorSelectId, CerrarMarcador, establec
                     setMarcador(marcadorFormateado);
                 }
 
-                if (marcador.horarios && marcador.horarios.length > 0) {
-                    setHorariosMarcador(marcador.horarios);
-                }
+                setHorariosMarcador(marcador.horarios);
+
 
                 if (marcador.accesibilidad_marcador && marcador.accesibilidad_marcador.length > 0) {
                     const accesibilidades = marcador.accesibilidad_marcador.map((item: any) => item.id_accesibilidad);
@@ -109,16 +142,23 @@ export default function VerMarcador({ MarcadorSelectId, CerrarMarcador, establec
         }
     }, [MarcadorSelectId]);
 
+    useEffect(() => {
+        if (horariosMarcador.length > 0) {
+            verificarEstadoActual();
+            // Actualizar cada minuto
+            const intervalo = setInterval(verificarEstadoActual, 60000);
+            return () => clearInterval(intervalo);
+        }
+    }, [horariosMarcador]);
 
     useEffect(() => {
         const handleResize = () => {
-            setWidth(window.innerWidth <= 768 ? "100%" : "350px");
-            setHeight(window.innerWidth <= 768 ? "100%" : "fit-content");
+            setWidth(window.innerWidth <= 768 ? "100%" : "400px");
         };
 
         window.addEventListener("resize", handleResize);
         return () => window.removeEventListener("resize", handleResize);
-    },);
+    }, []);
 
     const accesibilidadAgrupada = accesibilidadMarcador.reduce((acc: Record<string, string[]>, item) => {
         if (!acc[item.tipo]) {
@@ -130,39 +170,71 @@ export default function VerMarcador({ MarcadorSelectId, CerrarMarcador, establec
 
 
     function InfoMarcador() {
-
         const [mostrarTodos, setMostrarTodos] = useState(false);
-
         const diasSemana = ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado', 'Domingo'];
-
         const diasAMostrar = mostrarTodos ? diasSemana : diasSemana.slice(0, 3);
+
         return (
             <div className={styles.InfoMarcador}>
                 {cargando ? (
-                    <div className={styles.cargando}>Cargando...</div>
+                    <div className={styles.cargando}>
+                        <ClipLoader color="#74C0FC" loading={cargando} size={50} />
+                        <p>Cargando...</p>
+                    </div>
                 ) : (
                     Marcador && (
                         <>
-                            <p style={{ color: modoNocturno ? "#fff" : "" }} ><FontAwesomeIcon icon={faLocationDot} style={{ color: "#74C0FC" }} /> {Marcador.direccion}</p>
-                            <p style={{ color: modoNocturno ? "#fff" : "" }}><FontAwesomeIcon icon={faPhone} style={{ color: "#74C0FC" }} /> {Marcador.telefono}</p>
-                            <p style={{ color: modoNocturno ? "#fff" : "" }}><FontAwesomeIcon icon={faEarthAmericas} style={{ color: "#74C0FC" }} /> <a href={Marcador.pagina_web}>{Marcador.pagina_web}</a></p>
+                            <div className={`${styles.infoBasica} ${modoNocturno ? styles.infoBasicaOscuro : ''}`}>
+                                <div className={styles.direccionContainer}>
+                                    <p style={{ color: modoNocturno ? "#fff" : "" }}>
+                                        <FontAwesomeIcon icon={faLocationDot} style={{ color: "#74C0FC" }} /> {Marcador.direccion || 'Sin dirección'}
+                                    </p>
+                                    <button
+                                        onClick={copiarDireccion}
+                                        className={styles.btnCopiar}
+                                        title="Copiar dirección"
+                                    >
+                                        <FontAwesomeIcon
+                                            icon={copiado ? faCheckCircle : faCopy}
+                                            className={copiado ? styles.iconoCopiado : ''}
+                                        />
+                                    </button>
+                                </div>
+                                <p style={{ color: modoNocturno ? "#fff" : "" }}>
+                                    <FontAwesomeIcon icon={faPhone} style={{ color: "#74C0FC" }} /> {Marcador.telefono ? <a href={`tel:${Marcador.telefono}`} style={{ color: modoNocturno ? "#fff" : "" }}>{Marcador.telefono}</a> : 'Sin teléfono'}
+                                </p>
+                                <p style={{ color: modoNocturno ? "#fff" : "" }}>
+                                    <FontAwesomeIcon icon={faEarthAmericas} style={{ color: "#74C0FC" }} />
+                                    {Marcador.pagina_web ?
+                                        <a href={Marcador.pagina_web} target="_blank" >
+                                            {Marcador.pagina_web}
+                                        </a>
+                                        :
+                                        <p>Sin página web</p>
+                                    }
+                                </p>
+                            </div>
 
-                            <h4 style={{ color: modoNocturno ? "#fff" : "" }}>Horarios</h4>
-                            <ul style={{ paddingLeft: '20px' }}>
-                                {diasAMostrar.map((dia, index) => {
-                                    const horario = horariosMarcador.find((h: any) => h.dia.toLowerCase() === dia.toLowerCase());
-                                    const esUltimoVisible = !mostrarTodos && index === 2;
-                                    return (
-                                        <li style={{ color: modoNocturno ? "#fff" : "" }}
-                                            key={index}
-                                            className={esUltimoVisible ? styles.tercerdia : ''}
-                                        >
-                                            {dia}: {horario ? `${horario.apertura.slice(0, 5)} - ${horario.cierre.slice(0, 5)}` : 'Cerrado'}
-                                        </li>
-                                    );
-                                })}
-                            </ul>
-                            <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', flexDirection: 'column' }}>
+                            <div className={`${styles.horariosSection} ${modoNocturno ? styles.horariosSectionOscuro : ''}`}>
+                                <h4 style={{ color: modoNocturno ? "#fff" : "" }}>Horarios</h4>
+                                <ul className={styles.horariosLista}>
+                                    {diasAMostrar.map((dia, index) => {
+                                        const horario = horariosMarcador.find((h: any) => h.dia.toLowerCase() === dia.toLowerCase());
+                                        const esUltimoVisible = !mostrarTodos && index === 2;
+                                        return (
+                                            <li
+                                                key={index}
+                                                className={`${styles.horarioItem} ${esUltimoVisible ? styles.tercerdia : ''}`}
+                                                style={{ color: modoNocturno ? "#fff" : "" }}
+                                            >
+                                                <span className={styles.dia}>{dia}</span>
+                                                <span className={styles.horario}>
+                                                    {horario ? `${horario.apertura.slice(0, 5)} - ${horario.cierre.slice(0, 5)}` : 'Cerrado'}
+                                                </span>
+                                            </li>
+                                        );
+                                    })}
+                                </ul>
                                 <button onClick={() => setMostrarTodos(!mostrarTodos)} className={styles.fechaVerMas}>
                                     {mostrarTodos ? (
                                         <>
@@ -176,23 +248,22 @@ export default function VerMarcador({ MarcadorSelectId, CerrarMarcador, establec
                                 </button>
                             </div>
 
-                            <h4 style={{ color: modoNocturno ? "#fff" : "" }} >Accesibilidad</h4>
-                            {Object.keys(accesibilidadAgrupada).map((tipo, index) => (
-                                <div key={index}>
-                                    <p style={{ fontWeight: 400, color: modoNocturno ? "#fff" : "" }}>{tipo}:</p>
-                                    {accesibilidadAgrupada[tipo].length > 0 ? (
-                                        <ul style={{ paddingLeft: '20px' }}>
+                            <div className={`${styles.accesibilidadSection} ${modoNocturno ? styles.accesibilidadSectionOscuro : ''}`}>
+                                <h4 style={{ color: modoNocturno ? "#fff" : "" }}>Accesibilidad</h4>
+                                {Object.keys(accesibilidadAgrupada).map((tipo, index) => (
+                                    <div key={index} className={styles.accesibilidadTipo}>
+                                        <h5 style={{ color: modoNocturno ? "#fff" : "" }}>{tipo}</h5>
+                                        <div className={styles.accesibilidadLista}>
                                             {accesibilidadAgrupada[tipo].map((nombre, i) => (
-                                                <li style={{ color: modoNocturno ? "#fff" : "" }} key={i}>{nombre}</li>
+                                                <span key={i} className={styles.accesibilidadItem} style={{ color: modoNocturno ? "#fff" : "" }}>
+                                                    <FontAwesomeIcon icon={faCheck} size="xs" />
+                                                    {nombre}
+                                                </span>
                                             ))}
-                                        </ul>
-                                    ) : (
-                                        <ul>
-                                            <li>No mencionado</li>
-                                        </ul>
-                                    )}
-                                </div>
-                            ))}
+                                        </div>
+                                    </div>
+                                ))}
+                            </div>
                         </>
                     )
                 )}
@@ -204,30 +275,73 @@ export default function VerMarcador({ MarcadorSelectId, CerrarMarcador, establec
 
     function ListReviews() {
         const [mostrarTodas, setMostrarTodas] = useState(false);
-
         const reseñasAMostrar = mostrarTodas ? resenasMarcador : resenasMarcador.slice(0, 2);
 
         return (
-            <div style={{ textAlign: 'center' }}>
-
-                {reseñasAMostrar.map((resena) => (
-                    <div key={resena.idresena} style={{ textAlign: 'left', borderBottom: '1px solid #ccc', margin: '10px 0px 10px 0px', padding: '10px' }}>
-                        <p style={{ fontWeight: 400, color: modoNocturno ? "#fff" : "" }}>{resena.nombreusuario}</p>
-                        <div style={{ display: 'flex', gap: 3 }}>
-                            <p style={{ color: modoNocturno ? "#fff" : "" }} > <FontAwesomeIcon icon={faStar} size="2xs" style={{ color: "#FFD43B", }} /> {resena.calificacion} </p>
-
-                            <p style={{ opacity: 0.5, color: modoNocturno ? "#fff" : "" }}> • <em>{formatDistanceToNow(new Date(resena.fecha), { addSuffix: true, locale: es })}</em></p>
-
+            <div className={styles.resenasContainer}>
+                {resenasMarcador.length === 0 ? (
+                    <div className={styles.sinResenas}>
+                        <FontAwesomeIcon icon={faCommentDots} size="2x" />
+                        <p>No hay reseñas aún</p>
+                        <button
+                            onClick={() => setMostrarFormulario(true)}
+                            className={styles.btnEscribirResena}
+                        >
+                            Escribir primera reseña
+                        </button>
+                    </div>
+                ) : (
+                    <>
+                        <div className={`${styles.resumenResenas} ${modoNocturno ? styles.resumenResenasOscuro : ''}`}>
+                            <div className={styles.puntuacionPromedio}>
+                                <FontAwesomeIcon icon={faStar} className={styles.estrellaGrande} />
+                                <span className={styles.numeroPuntuacion}>{calificacion.toFixed(1)}</span>
+                            </div>
+                            <p className={styles.totalResenas}>
+                                {resenasMarcador.length} {resenasMarcador.length === 1 ? 'reseña' : 'reseñas'}
+                            </p>
                         </div>
 
-                        <p style={{ color: modoNocturno ? "#fff" : "", textAlign: 'justify', fontSize: '0.9rem', marginTop: '10px' }}>{resena.comentario}</p>
-                    </div>
-                ))}
+                        <div className={styles.listaResenas}>
+                            {reseñasAMostrar.map((resena) => (
+                                <article key={resena.idresena} className={`${styles.resenaCard} ${modoNocturno ? styles.resenaCardOscuro : ''}`}>
+                                    <div className={styles.resenaHeader}>
+                                        <div className={styles.infoUsuario}>
+                                            <h3 className={styles.nombreUsuario}>{resena.nombreusuario}</h3>
+                                            <div className={styles.metaInfo}>
+                                                <div className={styles.puntuacion}>
+                                                    <FontAwesomeIcon icon={faStar} className={styles.estrella} />
+                                                    <span>{resena.calificacion}</span>
+                                                </div>
+                                                <time dateTime={resena.fecha} className={styles.fecha}>
+                                                    {formatDistanceToNow(new Date(resena.fecha), { addSuffix: true, locale: es })}
+                                                </time>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <p className={styles.comentario}>{resena.comentario}</p>
+                                </article>
+                            ))}
+                        </div>
 
-                {resenasMarcador.length > 2 && (
-                    <button className={styles.btnVerMas} onClick={() => setMostrarTodas(!mostrarTodas)}>
-                        {mostrarTodas ? 'Ver menos' : 'Ver más'}
-                    </button>
+                        {resenasMarcador.length > 2 && (
+                            <button
+                                onClick={() => setMostrarTodas(!mostrarTodas)}
+                                className={styles.btnVerMas}
+                                aria-expanded={mostrarTodas}
+                            >
+                                {mostrarTodas ? 'Ver menos reseñas' : 'Ver más reseñas'}
+                            </button>
+                        )}
+
+                        <button
+                            onClick={() => setMostrarFormulario(true)}
+                            className={styles.btnEscribirResena}
+                        >
+                            <FontAwesomeIcon icon={faCommentDots} />
+                            Escribir reseña
+                        </button>
+                    </>
                 )}
             </div>
         );
@@ -238,99 +352,111 @@ export default function VerMarcador({ MarcadorSelectId, CerrarMarcador, establec
             <div className={styles.HeaderFijo}>
                 <button onClick={CerrarMarcador} className={styles.CerrarMarcador}>X</button>
                 {cargando ? (
-                    <p>Cargando imagen...</p>
+                    <div className={styles.cargando}>
+                        <ClipLoader color="#74C0FC" loading={cargando} size={50} />
+                        <p>Cargando...</p>
+                    </div>
                 ) : (
-                    <ImagenConFallback
-                        src={Marcador?.url_img}
-                        alt="Imagen del recinto"
-                        className={styles.imagenMarcador}
-                    />
-                )}
-                <div style={{ backgroundColor: modoNocturno ? "#2d2d2d" : "" }} className={styles.headerContenido}>
-                    <div className={styles.info}>
-
-                        <div className={styles.nombreVerificado}>
-                            <h2 style={{ color: modoNocturno ? "#fff" : "" }}>
-                                {cargando ? 'Cargando...' : Marcador?.nombre_recinto}
-                            </h2>
-                            {Marcador?.accesibilidad_certificada && (
-                                <div
-                                    className={styles.tooltipContainer}
-                                    title="Marcador verificado"
-                                >
-                                    <img
-                                        src={Marca_Verificador}
-                                        alt="Verificado"
-                                        className={styles.imgVerific}
-                                    />
+                    <>
+                        <ImagenConFallback
+                            src={Marcador?.url_img}
+                            alt="Imagen del recinto"
+                            className={styles.imagenMarcador}
+                        />
+                        <div style={{ backgroundColor: modoNocturno ? "#2d2d2d" : "" }} className={styles.headerContenido}>
+                            <div className={styles.info}>
+                                <div className={styles.nombreVerificado}>
+                                    <h2 style={{ color: modoNocturno ? "#fff" : "" }}>
+                                        {cargando ? 'Cargando...' : Marcador?.nombre_recinto}
+                                    </h2>
+                                    {Marcador?.accesibilidad_certificada && (
+                                        <div
+                                            className={styles.tooltipContainer}
+                                            title="Marcador verificado"
+                                        >
+                                            <img
+                                                src={Marca_Verificador}
+                                                alt="Verificado"
+                                                className={styles.imgVerific}
+                                            />
+                                        </div>
+                                    )}
                                 </div>
-                            )}
-                        </div>
-                        <h4 style={{ color: modoNocturno ? "#fff" : "" }} >{cargando ? 'Cargando...' : '> ' + Marcador?.tipo_recinto}</h4>
-                        <p style={{ marginTop: '10px', color: modoNocturno ? "#fff" : "" }}>
-                            {calificacion > 0 ? (
-                                <><FontAwesomeIcon icon={faStar} size="2xs" style={{ color: "#FFD43B", }} /> • {calificacion} de la comunidad.</>
-                            ) : (
-                                <span style={{ color: 'gray', fontSize: '0.8rem' }}>Sin reseñas aún.</span>
-                            )}
-                        </p>
+                                <div className={styles.estadoActual}>
+                                    <span className={`${styles.estado} ${estaAbierto ? styles.abierto : styles.cerrado}`}>
+                                        {estaAbierto ? 'Abierto' : 'Cerrado'}
+                                    </span>
+                                </div>
+                                <div className={`${styles.tipoRecintoContainer} ${modoNocturno ? styles.tipoRecintoContainerOscuro : ''}`}>
+                                    <h4>{cargando ? 'Cargando...' : Marcador?.tipo_recinto}</h4>
+                                </div>
+                                <div className={`${styles.promedioResenasContainer} ${modoNocturno ? styles.promedioResenasContainerOscuro : ''}`}>
+                                    {calificacion > 0 ? (
+                                        <p>
+                                            <FontAwesomeIcon icon={faStar} className={styles.estrella} />
+                                            {calificacion.toFixed(1)} de la comunidad
+                                        </p>
+                                    ) : (
+                                        <p className={styles.sinResenas}>Sin reseñas aún</p>
+                                    )}
+                                </div>
+                            </div>
+                            <div className={styles.containerButtons}>
+                                {MostrarCompartir ? (
+                                    // Botones cuando estás en modo Compartir
+                                    <>
+                                        <button onClick={volverAMarcador}>
+                                            <FontAwesomeIcon icon={faInfo} style={{ width: "13px" }} className={styles.icon} />
+                                            <p style={{ color: modoNocturno ? "#fff" : "" }}>Información</p>
 
-                    </div>
-                    <div className={styles.containerButtons}>
-                        {MostrarCompartir ? (
-                            // Botones cuando estás en modo Compartir
-                            <>
-                                <button onClick={volverAMarcador}>
-                                    <FontAwesomeIcon icon={faInfo} style={{ width: "13px" }} className={styles.icon} />
-                                    <p style={{ color: modoNocturno ? "#fff" : "" }}>Información</p>
-
-                                </button>
-                                <button onClick={() => {
-                                    establecerIdRutaMarcador(Marcador.id as number);
-                                    CerrarMarcador();
-                                }}>
-                                    <FontAwesomeIcon icon={faRoute} className={styles.icon} />
-                                    <p style={{ color: modoNocturno ? "#fff" : "" }}>Cómo llegar</p>
-                                </button>
-                                <button onClick={() => {
-                                    setMostrarCompartir(false);
-                                    setMostrarFormulario(true);
-                                }}>
-                                    <FontAwesomeIcon icon={faCommentDots} className={styles.icon} />
-                                    <p style={{ color: modoNocturno ? "#fff" : "" }}>Escribir Reseña</p>
-                                </button>
-                            </>
-                        ) : (
-                            // Botones normales cuando NO estás en modo Compartir
-                            <>
-                                <button onClick={() => setMostrarCompartir(true)}>
-                                    <FontAwesomeIcon icon={faShareNodes} className={styles.icon} />
-                                    <p style={{ color: modoNocturno ? "#fff" : "" }} >Compartir</p>
-                                </button>
-                                <button onClick={() => {
-                                    establecerIdRutaMarcador(Marcador.id as number);
-                                    CerrarMarcador();
-                                }}>
-                                    <FontAwesomeIcon icon={faRoute} className={styles.icon} />
-                                    <p style={{ color: modoNocturno ? "#fff" : "" }}>Cómo llegar</p>
-                                </button>
-                                {!mostrarFormulario && (
-                                    <button onClick={() => setMostrarFormulario(true)}>
-                                        <FontAwesomeIcon icon={faCommentDots} className={styles.icon} />
-                                        <p style={{ color: modoNocturno ? "#fff" : "" }}>Escribir Reseña</p>
-                                    </button>
+                                        </button>
+                                        <button onClick={() => {
+                                            establecerIdRutaMarcador(Marcador.id as number);
+                                            CerrarMarcador();
+                                        }}>
+                                            <FontAwesomeIcon icon={faRoute} className={styles.icon} />
+                                            <p style={{ color: modoNocturno ? "#fff" : "" }}>Cómo llegar</p>
+                                        </button>
+                                        <button onClick={() => {
+                                            setMostrarCompartir(false);
+                                            setMostrarFormulario(true);
+                                        }}>
+                                            <FontAwesomeIcon icon={faCommentDots} className={styles.icon} />
+                                            <p style={{ color: modoNocturno ? "#fff" : "" }}>Escribir Reseña</p>
+                                        </button>
+                                    </>
+                                ) : (
+                                    // Botones normales cuando NO estás en modo Compartir
+                                    <>
+                                        <button onClick={() => setMostrarCompartir(true)}>
+                                            <FontAwesomeIcon icon={faShareNodes} className={styles.icon} />
+                                            <p style={{ color: modoNocturno ? "#fff" : "" }} >Compartir</p>
+                                        </button>
+                                        <button onClick={() => {
+                                            establecerIdRutaMarcador(Marcador.id as number);
+                                            CerrarMarcador();
+                                        }}>
+                                            <FontAwesomeIcon icon={faRoute} className={styles.icon} />
+                                            <p style={{ color: modoNocturno ? "#fff" : "" }}>Cómo llegar</p>
+                                        </button>
+                                        {!mostrarFormulario && (
+                                            <button onClick={() => setMostrarFormulario(true)}>
+                                                <FontAwesomeIcon icon={faCommentDots} className={styles.icon} />
+                                                <p style={{ color: modoNocturno ? "#fff" : "" }}>Escribir Reseña</p>
+                                            </button>
+                                        )}
+                                    </>
                                 )}
-                            </>
-                        )}
-                    </div>
-                </div>
-
+                            </div>
+                        </div>
+                    </>
+                )}
             </div>
 
 
             <div className={styles.ContenedorInfo}>
                 {MostrarCompartir ? (
-                    <Compartir />
+                    <Compartir idMarcador={MarcadorSelectId} />
                 ) : mostrarFormulario ? (
                     <EscribirResena
                         onSubmit={(resena) => {
@@ -342,24 +468,47 @@ export default function VerMarcador({ MarcadorSelectId, CerrarMarcador, establec
                     />
                 ) : (
                     <>
-                        <div className={styles.headerInfo}>
+                        <nav className={`${styles.headerInfo} ${modoNocturno ? styles.headerInfoOscuro : ''}`} role="tablist" aria-label="Secciones de información">
                             <button
-
-                                className={tabActiva === 'general' ? styles.tabActiva : ''}
+                                role="tab"
+                                aria-selected={tabActiva === 'general'}
+                                aria-controls="panel-general"
+                                id="tab-general"
+                                className={`${styles.tab} ${tabActiva === 'general' ? styles.tabActiva : ''} ${modoNocturno ? styles.tabNocturno : ''}`}
                                 onClick={() => setTabActiva('general')}
                             >
+                                <FontAwesomeIcon icon={faInfo} className={styles.tabIcon} />
                                 General
                             </button>
                             <button
-
-                                className={tabActiva === 'resenas' ? styles.tabActiva : ''}
+                                role="tab"
+                                aria-selected={tabActiva === 'resenas'}
+                                aria-controls="panel-resenas"
+                                id="tab-resenas"
+                                className={`${styles.tab} ${tabActiva === 'resenas' ? styles.tabActiva : ''}`}
                                 onClick={() => setTabActiva('resenas')}
                             >
+                                <FontAwesomeIcon icon={faCommentDots} className={styles.tabIcon} />
                                 Reseñas
                             </button>
+                        </nav>
+                        <div
+                            id="panel-general"
+                            role="tabpanel"
+                            aria-labelledby="tab-general"
+                            hidden={tabActiva !== 'general'}
+                            className={styles.tabPanel}
+                        >
+                            <InfoMarcador />
                         </div>
-                        <div className={styles.scrollSeccion}>
-                            {tabActiva === 'general' ? <InfoMarcador /> : <ListReviews />}
+                        <div
+                            id="panel-resenas"
+                            role="tabpanel"
+                            aria-labelledby="tab-resenas"
+                            hidden={tabActiva !== 'resenas'}
+                            className={styles.tabPanel}
+                        >
+                            <ListReviews />
                         </div>
                     </>
                 )}

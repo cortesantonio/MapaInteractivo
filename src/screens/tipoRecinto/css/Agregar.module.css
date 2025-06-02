@@ -1,12 +1,20 @@
+.container {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
 .titulo {
     width: 100%;
     margin-top: 20px;
 }
 
-.container {
+.formularioCentro {
     display: flex;
     flex-direction: column;
-    gap: 10px;
+    max-width: 600px;
+    width: 100%;
+    margin: 0 auto;
 }
 
 .acciones {
@@ -15,6 +23,7 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
+    max-width: 600px;
 }
 
 .acciones button {

@@ -1,4 +1,5 @@
 .ContenPrin {
+    border: 1px solid #ccc;
     background-Color: white;
     padding: 5px;
     align-Items: center;
@@ -22,6 +23,7 @@
     height: 30px;
     width: auto;
     gap: 10;
+
 }
 
 .Button {
@@ -40,8 +42,8 @@
     width: 50px;
     height: 50px;
     border-radius: 50%;
-    background-color: rgb(253, 29, 29);
-    background: linear-gradient(90deg, rgba(253, 29, 29, 1) 0%, rgba(255, 106, 60, 1) 100%);
+    background: -webkit-linear-gradient(55deg, #29482a, #4e8950, #9fb97f);
+    background: linear-gradient(55deg, #29482a, #4e8950, #9fb97f);
     display: flex;
     justify-content: center;
     align-items: center;
@@ -49,11 +51,11 @@
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
     z-Index: 4;
     cursor: pointer;
+    border: 1px solid #9fb97f;
 }
 
 .PanelInfo {
     position: absolute;
-    border-radius: 5px;
     margin-top: 8px;
     bottom: 80%;
     width: 100%;
@@ -61,6 +63,12 @@
     background-color: white;
     overflow: hidden;
     height: 450px !important;
+    border-left: 1px solid #ccc;
+    border-right: 1px solid #ccc;
+    border-top: 1px solid #ccc;
+    border-top-right-radius: 10px;
+    border-top-left-radius: 10px;
+
 }
 
 .ContenPrin.darkMode {
@@ -77,4 +85,3 @@
     /* tus estilos existentes */
     transition: all 0.3s ease;
 }
-

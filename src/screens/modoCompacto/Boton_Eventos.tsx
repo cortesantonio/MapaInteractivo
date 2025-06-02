@@ -5,56 +5,56 @@ import {
   faLocationDot,
 } from "@fortawesome/free-solid-svg-icons";
 import useGetCalendario from "../../hooks/GetCalendario";
-import "./css/Boton_Eventos.css"; // Importamos la hoja de estilos
+import styles from "./css/Boton_Eventos.module.css"; // Importamos la hoja de estilos
 
 function BotonEventos() {
   const { events, error } = useGetCalendario();
 
   return (
-    <div className="contenedor_principal">
-      <div className="tarjeta_eventos">
-        <div className="columna_eventos">
+    <div className={styles.contenedor_principal}>
+      <div className={styles.tarjeta_eventos}>
+        <div className={styles.columna_eventos}>
           {error ? (
-            <div className="mensaje_error">
+            <div className={styles.mensaje_error}>
               {error}
             </div>
           ) : (
-            <div className="lista_eventos">
+            <div className={styles.lista_eventos}>
               {events.length === 0 && (
-                <div className="mensaje_sin_eventos">
+                <div className={styles.mensaje_sin_eventos}>
                   No hay eventos próximos
                 </div>
               )}
 
               {events.map((event) => (
-                <div key={event.id} className="evento_item">
-                  <div className="separador_evento"></div>
-                  <div className="contenedor_evento">
-                    <div className="icono_calendario">
+                <div key={event.id} className={styles.evento_item}>
+                  <div className={styles.separador_evento}></div>
+                  <div className={styles.contenedor_evento}>
+                    <div className={styles.icono_calendario}>
                       <FontAwesomeIcon icon={faCalendar} />
                     </div>
-                    <div className="detalles_evento">
-                      <div className="encabezado_evento">
-                        <h3 className="titulo_evento">
+                    <div className={styles.detalles_evento}>
+                      <div className={styles.encabezado_evento}>
+                        <h3 className={styles.titulo_evento}>
                           {event.title}
                         </h3>
                         <span
-                          className="estado_evento"
+                          className={styles.estado_evento}
                           style={{ color: event.colorStatus }}
                         >
                           • {event.status}
                         </span>
                       </div>
-                      <p className="descripcion_evento">
+                      <p className={styles.descripcion_evento}>
                         {event.description}
                       </p>
-                      <div className="fecha_evento">
+                      <div className={styles.fecha_evento}>
                         <FontAwesomeIcon icon={faCalendarAlt} />
                         <span>
                           {event.start} - {event.end}
                         </span>
                       </div>
-                      <div className="ubicacion_evento">
+                      <div className={styles.ubicacion_evento}>
                         <FontAwesomeIcon icon={faLocationDot} />
                         <span>{event.address}</span>
                       </div>

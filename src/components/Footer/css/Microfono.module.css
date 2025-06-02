@@ -1,63 +1,98 @@
 .PanelActivo {
-    padding: 15px;
-    position: relative;
-    height: 80%;
-    overflow: auto;
+  padding: 15px;
+  position: relative;
+  height: 80%;
+  overflow: auto;
 }
 
 .ButtonClose {
-    position: absolute;
-    top: 1px;
-    right: 1px;
-    background: transparent;
-    padding: 10px;
-    border: none;
-    cursor: pointer;
+  position: absolute;
+  top: 1px;
+  right: 1px;
+  background: transparent;
+  padding: 10px;
+  border: none;
+  cursor: pointer;
+
 }
 
 .Titulo {
-    color: black;
-    font: 120% sans-serif;
-    margin-top: 50px;
-    text-align: center;
+  color: black;
+  font: 1.3rem sans-serif;
+  margin-top: 50px;
+  text-align: center;
 }
 
 .MicroActive {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin-top: 30px;
-    flex-direction: column;
-    gap: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 30px;
+  flex-direction: column;
+  gap: 20px;
 }
 
 .EscuchandoTexto {
-    margin-top: 10px;
-    color: rgb(255, 3, 3);
-    font-weight: bold;
-    animation: parpadeo 1s infinite;
-    text-align: center;
-    font-size: 1.2rem;
-    justify-content: center;
+  margin-top: 10px;
+  color: rgb(255, 3, 3);
+  font-weight: bold;
+  animation: parpadeo 1s infinite;
+  text-align: center;
+  font-size: 1.2rem;
+  justify-content: center;
 }
 
 @keyframes parpadeo {
-    0%, 100% { opacity: 1; }
-    50% { opacity: 0; }
+
+  0%,
+  100% {
+    opacity: 1;
+  }
+
+  50% {
+    opacity: 0;
+  }
 }
 
 .BotonReintentar {
-    padding: 10px 20px;
-    background-color: #007bff;
-    color: white;
-    font-weight: bold;
-    border: none;
-    border-radius: 10px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-    margin-top: 20px;
+  padding: 10px 20px;
+  background-color: #007bff;
+  color: white;
+  font-weight: bold;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  margin-top: 20px;
 }
 
 .BotonReintentar:hover {
-    background-color: #0056b3;
+  background-color: #0056b3;
+}
+
+.microfonoIncompatible {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  width: 100%;
+  padding: 30px 40px;
+  background-color: #f9f9f9;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  text-align: center;
+}
+
+.microfonoIncompatible p {
+  font-size: 1.1rem;
+  color: #444;
+  max-width: 400px;
+  line-height: 1.5;
+  margin-top: 10px;
+}
+
+.microfonoIncompatible .icono {
+  font-size: 3rem;
+  color: #cc0000;
 }

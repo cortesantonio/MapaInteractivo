@@ -1,5 +1,5 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import { faReply, faEyeSlash, faEye } from "@fortawesome/free-solid-svg-icons"
+import { faReply,  } from "@fortawesome/free-solid-svg-icons"
 import styles from "../usuarios/css/Formularios.module.css"
 import { supabase } from "../../services/supabase"
 import { useState, useEffect } from "react"
@@ -12,7 +12,6 @@ import { useAuth } from '../../hooks/useAuth';
 function Editar_Usuarios() {
   const { id } = useParams();
   const { user } = useAuth();
-  const [mostrarContraseña, setMostrarContraseña] = useState(false);
   const [usuarios, setUsuarios] = useState<Usuarios[]>([]);
   const [accesibilidad, setAccesibilidad] = useState<Accesibilidad[]>([]);
   const navigate = useNavigate();
@@ -132,7 +131,7 @@ function Editar_Usuarios() {
       setAccesibilidad(accesibilidadData || []);
 
       if (accesibilidadData && accesibilidadData.length > 0) {
-        setTipoAccesibilidadSeleccionado(accesibilidadData[0].id);
+        setTipoAccesibilidadSeleccionado("");
       }
 
       // Consulta para obtener datos de discapacidad del usuario
@@ -146,9 +145,6 @@ function Editar_Usuarios() {
       } else {
         setDiscapacidad(discapacidadData as any);
       }
-
-
-
     };
 
     if (id) {
@@ -201,7 +197,15 @@ function Editar_Usuarios() {
 
     try {
       // Actualizar información del usuario
-      const { error: errorUsuario } = await supabase.from('usuarios').update({ nombre: usuarios[0].nombre, correo: usuarios[0].correo, telefono: usuarios[0].telefono, genero: usuarios[0].genero, rol: usuarios[0].rol, rut: usuarios[0].rut, password: usuarios[0].password, fecha_nacimiento: usuarios[0].fecha_nacimiento }).eq('id', id);
+      const { error: errorUsuario } = await supabase.from('usuarios').update({
+        nombre: usuarios[0].nombre,
+        correo: usuarios[0].correo,
+        telefono: usuarios[0].telefono,
+        genero: usuarios[0].genero,
+        rol: usuarios[0].rol,
+        rut: usuarios[0].rut,
+        fecha_nacimiento: usuarios[0].fecha_nacimiento
+      }).eq('id', id);
       if (errorUsuario) {
         console.error('Error al actualizar datos de usuario:', errorUsuario);
         alert("Hubo un error al actualizar los datos del usuario");
@@ -279,16 +283,12 @@ function Editar_Usuarios() {
               required
             />
           </div>
+          {/* Este div de Correo se encuentra bloquedo para que el usuario no pueda hacer cosas extrañas */}
           <div className={styles.espacio}>
             <label className={styles.etiquetas}>Correo *</label>
-            <input
-              className={styles.formulario}
-              type="email"
-              placeholder="tu@correo.cl"
-              onChange={(e) => handleChange('correo', e.target.value)}
-              value={usuarios[0]?.correo || ""}
-              required
-            />
+            <p className={styles.texto_bloqueado}>
+              {usuarios[0]?.correo || "Correo no disponible"}
+            </p>
           </div>
           <div className={styles.espacio}>
             <label className={styles.etiquetas}>Fecha de nacimiento</label>
@@ -317,26 +317,7 @@ function Editar_Usuarios() {
               </span>
             )}
           </div>
-          <div className={styles.espacio}>
-            <label className={styles.etiquetas}>Contraseña *</label>
-            <div className={styles.input_contraseña}>
-              <input
-                className={styles.formulario}
-                type={mostrarContraseña ? "text" : "password"}
-                placeholder="Contraseña"
-                onChange={(e) => handleChange('password', e.target.value)}
-                value={usuarios[0]?.password || ""}
-                required
-              />
-              <button
-                type="button"
-                onClick={() => setMostrarContraseña(!mostrarContraseña)}
-                className={styles.boton_ojito}
-              >
-                <FontAwesomeIcon icon={mostrarContraseña ? faEye : faEyeSlash} style={{ color: "black" }} />
-              </button>
-            </div>
-          </div>
+
           <div className={styles.espacio}>
             <label className={styles.etiquetas}>Teléfono</label>
             <input
@@ -355,7 +336,8 @@ function Editar_Usuarios() {
               onChange={(e) => handleChange('genero', e.target.value)}
               value={usuarios[0]?.genero || ""}
             >
-              <option value="">Seleccione género</option>
+
+              <option value='No especificado'>Seleccione género</option>
               {['Hombre', 'Mujer', 'No especificado'].map((genero, index) => (
                 <option key={index} value={genero}>
                   {genero}
@@ -391,9 +373,25 @@ function Editar_Usuarios() {
               <input
                 type="checkbox"
                 checked={tiene_una_Discapacidad}
-                onChange={(e) => set_tiene_una_Discapacidad(e.target.checked)}
+                onChange={async (e) => {
+                  const checked = e.target.checked;
+                  set_tiene_una_Discapacidad(checked);
+
+                  if (!checked) {
+                    // Si el usuario desactiva el checkbox, eliminamos la discapacidad del backend
+                    await supabase
+                      .from("discapacidad")
+                      .delete()
+                      .eq("id_usuario", id);
+
+                    // También limpiamos el estado local
+                    setDiscapacidad([]);
+                    setTipoAccesibilidadSeleccionado("");
+                  }
+                }}
                 id="discapacidad_checkbox"
               />
+
               <label htmlFor="discapacidad_checkbox">¿Presentas algún tipo de discapacidad?</label>
             </div>
 
@@ -407,7 +405,7 @@ function Editar_Usuarios() {
                     onChange={(e) => setTipoAccesibilidadSeleccionado(e.target.value)}
                     required={tiene_una_Discapacidad}
                   >
-                    <option value="">Seleccione tipo de accesibilidad</option>
+                    <option value="" disabled hidden>Seleccione tipo de accesibilidad</option>
                     {accesibilidad.map((tipo) => (
                       <option key={tipo.id} value={tipo.id}>
                         {tipo.nombre}

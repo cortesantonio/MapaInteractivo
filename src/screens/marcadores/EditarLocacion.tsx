@@ -35,6 +35,7 @@ export default function EditarLocacion() {
         longitud: undefined,
         activo: true,
         accesibilidad_certificada: false,
+        info_adicional: '',
 
     };
     const [dataMarcador, setDataMarcador] = useState<Partial<Marcador>>(estadoInicialMarcadores);
@@ -387,14 +388,14 @@ export default function EditarLocacion() {
                                     type="text"
                                     value={dataMarcador.pagina_web}
                                     onChange={(e) => setDataMarcador({ ...dataMarcador, pagina_web: e.target.value })}
-                                    className={styles.inputText} required />
+                                    className={styles.inputText} />
 
                                 <label className={styles.labelSeccion} htmlFor="">URL de imagen</label>
                                 <input
                                     type="text"
                                     value={dataMarcador.url_img}
                                     onChange={(e) => setDataMarcador({ ...dataMarcador, url_img: e.target.value })}
-                                    className={styles.inputText} required />
+                                    className={styles.inputText} />
 
 
                                 <label className={styles.labelSeccion} htmlFor="">Teléfono</label>
@@ -402,7 +403,7 @@ export default function EditarLocacion() {
                                     <p className={styles.codTelfono}>+569</p>
                                     <input
                                         type="number" value={dataMarcador.telefono}
-                                        onChange={(e) => setDataMarcador({ ...dataMarcador, telefono: e.target.value })} required />
+                                        onChange={(e) => setDataMarcador({ ...dataMarcador, telefono: e.target.value })} />
                                 </div>
 
                             </div>
@@ -415,6 +416,7 @@ export default function EditarLocacion() {
                                                 <div className={styles.opt} key={acc.id}>
                                                     <input
                                                         type="checkbox"
+                                                        className={styles.checkboxColor}
                                                         value={acc.id}
                                                         checked={selecciones.includes(acc.id)}
                                                         onChange={() => handleCheckboxChange(acc.id)}
@@ -425,36 +427,65 @@ export default function EditarLocacion() {
                                             ))}
                                         </div>
                                     ))}
+
+                                    <div>
+                                        <label className={styles.labelSeccion} htmlFor="">Información Adicional</label>
+                                        <textarea
+                                            placeholder="Escribe información adicional sobre el marcador..."
+                                            value={dataMarcador.info_adicional}
+                                            onChange={(e) => setDataMarcador({ ...dataMarcador, info_adicional: e.target.value })}
+                                            className={styles.inputText}
+                                            rows={4}
+                                            style={{ resize: 'none', height: '100px' }}
+
+                                        />
+                                    </div>
+
                                 </div>) : null}
                             {/*Segundo Grupo*/}
 
                         </div>
 
-                        {/* EDICION AVANZAD DEL MARCADOR, DISPONIBLE PARA ADMIN O GESTOR */}
-                        {userRole === 'administrador' || user?.role === 'gestor' ? (<>
-                            <h3>Edicion avanzada</h3>
-                            <div >
-                                <label className={styles.labelSeccion} style={{ marginRight: '20px' }} htmlFor="">Activo</label>
-                                <input
-                                    type="checkbox"
-                                    checked={dataMarcador.activo}
-                                    onChange={(e) => setDataMarcador({ ...dataMarcador, activo: e.target.checked })}
-                                    style={{ display: 'block' }}
-                                />
+                        {/* EDICIÓN AVANZADA DEL MARCADOR, DISPONIBLE PARA ADMIN O GESTOR */}
+                        {userRole === 'administrador' || user?.role === 'gestor' ? (
+                            <>
+                                <h3>Edición avanzada</h3>
+                                <div>
 
-                                <label className={styles.labelSeccion} htmlFor="">Accesibilidad certificada</label>
-                                <input
-                                    style={{ display: 'block' }}
-                                    type="checkbox"
-                                    checked={dataMarcador.accesibilidad_certificada}
-                                    onChange={(e) => setDataMarcador({ ...dataMarcador, accesibilidad_certificada: e.target.checked })}
-                                    value={dataMarcador.accesibilidad_certificada ? 'true' : 'false'}
-                                />
+                                    <div style={{ display: 'flex', alignItems: 'center', marginBottom: '10px' }}>
+                                        <input
+                                            type="checkbox"
+                                            checked={dataMarcador.activo}
+                                            onChange={(e) => setDataMarcador({ ...dataMarcador, activo: e.target.checked })}
+                                            style={{ marginRight: '10px' }}
+                                        />
+                                        <label className={styles.labelSeccion}>
+                                            Activo
+                                            <span style={{ fontSize: '0.8rem', color: 'gray', fontStyle: 'italic', marginLeft: '5px' }}>
+                                                - Habilita la visualización del marcador en el mapa.
+                                            </span>
+                                        </label>
+                                    </div>
 
-                            </div>
-                        </>
+                                    <div style={{ display: 'flex', alignItems: 'center' }}>
+                                        <input
+                                            type="checkbox"
+                                            checked={dataMarcador.accesibilidad_certificada}
+                                            onChange={(e) => setDataMarcador({ ...dataMarcador, accesibilidad_certificada: e.target.checked })}
+                                            style={{ marginRight: '10px' }}
+                                        />
+                                        <label className={styles.labelSeccion}>
+                                            Accesibilidad certificada
+                                            <span style={{ fontSize: '0.8rem', color: 'gray', fontStyle: 'italic', marginLeft: '5px' }}>
+                                                - Activa la opción cuando el marcador tenga su sello certificado.
+                                            </span>
+                                        </label>
+                                    </div>
 
+                                </div>
+                            </>
                         ) : null}
+
 
 
 

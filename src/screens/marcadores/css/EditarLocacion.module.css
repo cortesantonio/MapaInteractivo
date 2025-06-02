@@ -42,10 +42,26 @@
 
 .locacionTitulo {
     position: absolute;
-    bottom: 45px;
+    bottom: 25px;
     left: 25px;
     color: white;
-    font-size: 30px;
+}
+
+.locacionTitulo h4 {
+    font-size: 3rem;
+    margin: 0;
+}
+
+.locacionTitulo p {
+    font-size: 1.7rem;
+    margin: 0;
+}
+
+.locacionTitulo img {
+    width: 30px;
+    height: 30px;
+    margin-right: 10px;
+    filter: brightness(100%);
 }
 
 .Conten {
@@ -89,8 +105,12 @@
 .labelSeccion {
     font-size: 16px !important;
     color: #555;
-    font-weight: 600;
+    font-weight: 350;
     padding-bottom: 5px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 8px;
 }
 
 .inputText {
@@ -169,6 +189,13 @@
 .opt label {
     font-size: 15px;
     color: #555;
+}
+
+.checkboxColor {
+    accent-color: #4e8950;
+    width: 14px;
+    height: 18px;
+    cursor: pointer;
 }
 
 .acciones {

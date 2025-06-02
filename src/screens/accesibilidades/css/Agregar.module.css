@@ -1,12 +1,20 @@
+.container {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
 .titulo {
     width: 100%;
     margin-top: 20px;
 }
 
-.container {
+.formularioCentro {
     display: flex;
     flex-direction: column;
-    gap: 10px;
+    max-width: 600px;
+    width: 100%;
+    margin: 0 auto;
 }
 
 .acciones {
@@ -15,6 +23,7 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
+    max-width: 600px;
 }
 
 .acciones button {
@@ -58,4 +67,113 @@
     margin-bottom: 10px;
     border: 1px solid rgb(165, 165, 165);
     padding: 5px;
+}
+
+.tituloCategorias {
+    text-align: center;
+    font-size: 1.1rem;
+    margin-top: 30px;
+    margin-bottom: 15px;
+    font-weight: 500;
+    color: #444;
+}
+
+.ContenGrid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 20px;
+    margin: 0 auto;
+    padding: 25px;
+    width: 90%;
+}
+
+.iconoBox {
+    text-align: center;
+    padding: 15px;
+    background-color: #f9f9f9;
+    border-radius: 12px;
+    transition: transform 0.3s ease;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.iconoBox:hover {
+    transform: scale(1.05);
+}
+
+.iconoBox h2 {
+    margin-bottom: 10px;
+    font-size: 1.2rem;
+    color: #333;
+}
+
+.iconoBox p {
+    margin-top: 10px;
+    font-size: 1.1rem;
+    color: #555;
+    line-height: 1.4;
+    text-align: justify;
+}
+
+.icono {
+    font-size: 5rem;
+    color: #4a4a4a;
+    transition: transform 0.3s ease;
+}
+
+.iconoBox h2 {
+    margin-bottom: 10px;
+    font-size: 1.2rem;
+    color: #333;
+}
+
+.iconCircle {
+    width: 100px;
+    height: 100px;
+    margin: 0 auto;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: transform 0.3s ease;
+    border: none;
+}
+
+@media (max-width: 520px) {
+    .iconoBox {
+        padding: 10px;
+    }
+    .iconCircle {
+        width: 70px;
+        height: 70px;
+    }
+    .icono {
+        font-size: 1.8rem;
+    }
+    .iconoBox h2 {
+        font-size: 0.9rem;
+    }
+}
+
+.icono {
+    font-size: 2.5rem;
+    color: white;
+}
+
+
+/* Colores por categoría */
+
+.arquitectonica {
+    background-color: #007BFF;
+}
+
+.sensorial {
+    background-color: #f39c12;
+}
+
+.cognitiva {
+    background-color: #e74c3c;
+}
+
+.ca {
+    background-color: #27ae60;
 }

@@ -5,9 +5,9 @@ import { useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
 import Especificacion_Baño_Discapacitados_1 from "../../../public/img/Especificacion_Baño_Discapacitados_1_.webp";
 import Especificacion_Baño_Discapacitados_2 from "../../../public/img/Especificacion_Baño_Discapacitados_2_.webp";
-import Especificacion_Baño_Discapacitados_3 from "../../../public/img/Especificacion_Baño_Discapacitados_3_.webp";
-import Especificacion_Baño_Discapacitados_4 from "../../../public/img/Especificacion_Baño_Discapacitados_4_.webp";
-import Especificacion_Baño_Discapacitados_5 from "../../../public/img/Especificacion_Baño_Discapacitados_5_.webp";
+import Especificacion_Baño_Discapacitados_3 from "../../../public/img/Ducha-De-Baño.webp";
+import Especificacion_Baño_Discapacitados_4 from "../../../public/img/Objetos-de-Baño.webp";
+import Especificacion_Baño_Discapacitados_5 from "../../../public/img/Baranda_Baños.webp";
 import Especificacion_Estacionamiento_Discapacitados_8 from "../../../public/img/Especificacion_Estacionamiento_Discapacitados_8_.webp";
 import Especificacion_Estacionamiento_Discapacitados_9 from "../../../public/img/Especificacion_Estacionamiento_Discapacitados_9_.webp";
 import Especificacion_Rampas_Discapacitados_10 from "../../../public/img/Especificacion_Rampas_Discapacitados_10_.webp";
@@ -113,7 +113,19 @@ function Info({ onConfirmarLectura }: InfoProps) {
 
             <div>
               <div className={styles.Pre_Descripcion}>
-                <FontAwesomeIcon icon={faInfo} style={{ fontSize: `${fontSize}rem` }} /> <a style={{ fontSize: `${fontSize}rem` }} href="https://www.bcn.cl/leychile/navegar?idNorma=1088117">art. 4.1.7 numeral 6</a>
+                <div className={styles.alertaInformativa}>
+                  <FontAwesomeIcon icon={faInfo} className={styles.iconoInfo} />
+                  <a
+                    className={styles.linkArticulo}
+                    href="https://www.bcn.cl/leychile/navegar?idNorma=1088117"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    art. 4.1.7 numeral 6
+                    <span className={styles.infoExtra}>- Haz clic aquí para más información.</span>
+                  </a>
+                </div>
+
                 <h4 style={{ fontSize: `${fontSize}rem` }} >Deben cumplir con diseño universal y el recinto debe cumplir con estas medidas:</h4>
               </div>
 
@@ -170,8 +182,18 @@ function Info({ onConfirmarLectura }: InfoProps) {
 
             <div>
               <div className={styles.Pre_Descripcion}>
-                <FontAwesomeIcon style={{ fontSize: `${fontSize}rem` }} icon={faInfo} />
-                <a href="https://www.bcn.cl/leychile/navegar?idNorma=1088117"> art. 4.1.7 numeral 6</a>
+                <div className={styles.alertaInformativa}>
+                  <FontAwesomeIcon icon={faInfo} className={styles.iconoInfo} />
+                  <a
+                    className={styles.linkArticulo}
+                    href="https://www.bcn.cl/leychile/navegar?idNorma=1088117"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    art. 4.1.7 numeral 6
+                    <span className={styles.infoExtra}>- Haz clic aquí para más información.</span>
+                  </a>
+                </div>
                 <h4 style={{ fontSize: `${fontSize}rem` }}>Las rampas deben cumplir con diseño universal  y el recinto debe cumplir con estas medidas:</h4>
                 <h4 style={{ fontSize: `${fontSize}rem` }}>En cruces peatonales, accesos y desniveles debe cumplir con estos requisitos:</h4>
               </div>
@@ -212,8 +234,18 @@ function Info({ onConfirmarLectura }: InfoProps) {
 
             <div>
               <div className={styles.Pre_Descripcion}>
-                <FontAwesomeIcon icon={faInfo} />
-                <a href="https://www.ciudadaccesible.cl/wp-content/uploads/2021/04/Ficha-3-Estacionamientos-Accesibles_2021.pdf">art. 2.2.8 n°11</a>
+                <div className={styles.alertaInformativa}>
+                  <FontAwesomeIcon icon={faInfo} className={styles.iconoInfo} />
+                  <a
+                    className={styles.linkArticulo}
+                    href="https://www.ciudadaccesible.cl/wp-content/uploads/2021/04/Ficha-3-Estacionamientos-Accesibles_2021.pdf"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    art. 2.2.8 n°11
+                    <span className={styles.infoExtra}>- Haz clic aquí para más información.</span>
+                  </a>
+                </div>
                 <h4 style={{ fontSize: `${fontSize}rem` }}>Los estacionamientos accesibles deben cumplir con normativa específica para garantizar su uso adecuado:</h4>
               </div>
 
@@ -260,8 +292,18 @@ function Info({ onConfirmarLectura }: InfoProps) {
 
             <div>
               <div className={styles.Pre_Descripcion}>
-                <FontAwesomeIcon icon={faInfo} />
-                <a style={{ fontSize: `${fontSize}rem` }} href="https://www.bcn.cl/leychile/navegar?idNorma=1088117&idParte=10027833">art. 2.2.8 y 2.6.17</a>
+                <div className={styles.alertaInformativa}>
+                  <FontAwesomeIcon icon={faInfo} className={styles.iconoInfo} />
+                  <a
+                    className={styles.linkArticulo}
+                    href="https://www.bcn.cl/leychile/navegar?idNorma=1088117&idParte=10027833"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    art. 2.2.8 y 2.6.17
+                    <span className={styles.infoExtra}>- Haz clic aquí para más información.</span>
+                  </a>
+                </div>
                 <h4 style={{ fontSize: `${fontSize}rem` }}>Las zonas de calma son espacios esenciales para personas con trastorno del espectro autista:</h4>
               </div>
 
@@ -326,7 +368,7 @@ function Info({ onConfirmarLectura }: InfoProps) {
           </section>
         </div>
       </div>
-      <button style={{ fontSize: `${fontSize}rem` }} onClick={onConfirmarLectura} className={styles.confirmButton}>
+      <button style={{ fontSize: `${fontSize}rem`, background:  "linear-gradient(55deg, #004d00, #228b22, #90ee90 "}} onClick={onConfirmarLectura} className={styles.confirmButton}>
         He leído el instructivo
       </button>
 

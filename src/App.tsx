@@ -18,6 +18,9 @@ import AgregarMarcador from './screens/marcadores/AgregarMarcador'
 import InfoDetallada from './screens/marcadores/InfoDetallada'
 import EditarLocation from './screens/marcadores/EditarLocacion'
 
+import VerHorarioMarcador from './screens/horarios/Ver'
+import ListHorarioMarcador from './screens/horarios/List'
+
 import Gestion_Usuarios from './screens/usuarios/Gestion_Usuarios'
 import Agregar_Usuarios from './screens/usuarios/Agregar_Usuarios'
 import Editar_Usuarios from './screens/usuarios/Editar_Usuarios'
@@ -55,7 +58,7 @@ function App() {
         <Route path='/login' element={<LoginUsuario />} />
         <Route path='/info' element={<Info />} />
         <Route path='/colaborar' element={<AgregarSolicitud />} />
-        <Route path='/modocompacto' element= {<Modo_Compacto/>} />
+        <Route path='/modocompacto' element={<Modo_Compacto />} />
         <Route path='/modocompacto/trazadoruta/:id' element={<TrazadoRuta />} />
 
         {/* Marcadores */}
@@ -90,6 +93,20 @@ function App() {
             <EditarLocation />
           </ProtectedRoute>
         } />
+
+
+        <Route path='/panel-administrativo/marcadores/horarios' element={
+          <ProtectedRoute allowedRoles={['administrador', 'gestor']}>
+            <ListHorarioMarcador />
+          </ProtectedRoute>
+        } />
+        <Route path='/panel-administrativo/marcadores/horario/:id' element={
+          <ProtectedRoute allowedRoles={['administrador', 'gestor']}>
+            <VerHorarioMarcador />
+          </ProtectedRoute>
+        } />
+
+        {/* Usuarios protegidos */}
 
         <Route path='/panel-administrativo/usuarios' element={
           <ProtectedRoute allowedRoles={['administrador', 'gestor']}>

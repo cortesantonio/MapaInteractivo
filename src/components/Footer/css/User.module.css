@@ -4,6 +4,9 @@ button{cursor: pointer;}
     position: relative;
     height: 100%;
     overflow: auto;
+    background-color: #f8f9fa;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
 }
 
 .ButtonClose {
@@ -14,12 +17,19 @@ button{cursor: pointer;}
     padding: 10px;
     border: none;
     cursor: pointer;
+    transition: transform 0.2s;
+}
+
+.ButtonClose:hover {
+    transform: scale(1.1);
 }
 
 .Titulo {
-    color: black;
-    margin: 10px;
+    color: #2c3e50;
+    margin: 15px 10px;
     text-align: center;
+    font-size: 1.5rem;
+    font-weight: 600;
 }
 
 .ButtonPerfil {
@@ -34,75 +44,120 @@ button{cursor: pointer;}
 }
 
 .ButtonSesion {
-    color: blue;
+    color: #3498db;
     background: transparent;
     outline: none;
     border: none;
-    font-weight: bold;
-    padding: 10px;
-    text-align: center;
-    margin-top: 5px;
+    font-weight: 500;
+    padding: 12px;
+    text-align: left;
+    margin-top: 8px;
     cursor: pointer;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    transition: background-color 0.2s;
+    border-radius: 6px;
+}
+
+.ButtonSesion:hover {
+    background-color: rgba(52, 152, 219, 0.1);
+}
+
+.ButtonIcon {
+    margin-right: 10px;
+    width: 20px;
+    text-align: center;
 }
 
 .ButtonColab {
-    color: black;
+    color: #2c3e50;
     background: transparent;
     outline: none;
     border: none;
-    padding: 10px;
+    padding: 12px;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    transition: background-color 0.2s;
+    border-radius: 6px;
+}
+
+.ButtonColab:hover {
+    background-color: rgba(44, 62, 80, 0.1);
 }
 
 .ContenSpan {
     display: flex;
-    justify-content: space-around;
-    align-items: right;
-    padding: 9px;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px;
+    margin: 8px 0;
+    background-color: rgba(0,0,0,0.03);
+    border-radius: 6px;
 }
 
-.SpanNocturn {
-    color: black;
-    text-align: right;
+.SpanNoctur {
+    color: #2c3e50;
+    text-align: left;
+    display: flex;
+    align-items: center;
+    font-weight: 500;
 }
 
 .ButtonNoctur {
-    width: 40px;
-    height: 20px;
+    width: 44px;
+    height: 24px;
     border-radius: 34px;
-    left: 20px;
-    border: 1px solid gray;
+    border: 1px solid #bdc3c7;
     outline: none;
     position: relative;
-    transition: background-color 0.4s;
+    transition: all 0.3s ease;
     cursor: pointer;
+    background-color: #ecf0f1;
+}
+
+.ButtonNoctur:hover {
+    border-color: #95a5a6;
 }
 
 .Span {
     position: absolute;
-    height: 16px;
-    border: 1px solid gray;
-    width: 16px;
-    bottom: 1px;
-    background-color: black;
+    height: 18px;
+    border: 1px solid #bdc3c7;
+    width: 18px;
+    bottom: 2px;
+    background-color: #2c3e50;
     border-radius: 50%;
-    transition: 0.4s;
+    transition: all 0.3s ease;
 }
 
 .ButtonCompact {
-    color: black;
+    color: #2c3e50;
     background: transparent;
     outline: none;
     border: none;
-    padding: 9px;
+    padding: 12px;
     cursor: pointer;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    transition: background-color 0.2s;
+    border-radius: 6px;
+}
+
+.ButtonCompact:hover {
+    background-color: rgba(44, 62, 80, 0.1);
 }
 
 .ContenFuncion {
     justify-content: space-between;
-    padding: 8px;
+    padding: 12px;
     justify-items: center;
     text-align: center;
-    margin: 10px;
+    margin: 15px 10px;
+    background-color: rgba(0,0,0,0.03);
+    border-radius: 6px;
 }
 
 .MenosFuente {
@@ -113,20 +168,29 @@ button{cursor: pointer;}
     display: flex;
     font-weight: bold;
     align-items: center;
-    padding: 0;
+    padding: 8px;
+    border-radius: 4px;
+    transition: background-color 0.2s;
+}
+
+.MenosFuente:hover {
+    background-color: rgba(0,0,0,0.05);
 }
 
 .MenosA {
     margin-right: 2px;
-    color: black;
+    color: #2c3e50;
     text-align: center;
     font-size: 18px;
 }
 
 .TituloFuente {
     margin: 5px;
-    color: black;
+    color: #2c3e50;
     justify-items: center;
+    display: flex;
+    align-items: center;
+    font-weight: 500;
 }
 
 .MasFuente {
@@ -137,46 +201,78 @@ button{cursor: pointer;}
     font-weight: bold;
     display: flex;
     align-items: center;
-    padding: 0;
+    padding: 8px;
+    border-radius: 4px;
+    transition: background-color 0.2s;
+}
+
+.MasFuente:hover {
+    background-color: rgba(0,0,0,0.05);
 }
 
 .MasA {
     margin-right: 2px;
-    color: black;
+    color: #2c3e50;
     text-align: center;
     font-size: 18px;
 }
 
+/* Dark Mode Styles */
 .PanelActivo.darkMode {
-    color: white;
+    color: #ecf0f1;
+    background-color: #2d2d2d;
 }
 
 .darkMode .Titulo {
-    color: white;
+    color: #ecf0f1;
 }
 
-.darkMode .ButtonSesion,
+.darkMode .ButtonSesion {
+    color: #3498db;
+}
+
+.darkMode .ButtonSesion:hover {
+    background-color: rgba(52, 152, 219, 0.2);
+}
+
 .darkMode .ButtonColab,
 .darkMode .ButtonCompact {
-    color: white;
+    color: #ecf0f1;
 }
 
+.darkMode .ButtonColab:hover,
+.darkMode .ButtonCompact:hover {
+    background-color: rgba(236, 240, 241, 0.1);
+}
 
+.darkMode .ContenSpan,
+.darkMode .ContenFuncion {
+    background-color: rgba(236, 240, 241, 0.05);
+}
 
 .darkMode .SpanNoctur {
-    color: white;
+    color: #ecf0f1;
+}
+
+.darkMode .ButtonNoctur {
+    background-color: #34495e;
+    border-color: #7f8c8d;
+}
+
+.darkMode .ButtonNoctur:hover {
+    border-color: #95a5a6;
 }
 
 .darkMode .TituloFuente {
-    color: white;
+    color: #ecf0f1;
 }
 
-.darkMode .MenosFuente,
-.darkMode .MasFuente {
-    color: white;
+.darkMode .MenosFuente:hover,
+.darkMode .MasFuente:hover {
+    background-color: rgba(236, 240, 241, 0.1);
 }
 
 .darkMode .MenosA,
 .darkMode .MasA {
-    color: white;
+    color: #ecf0f1;
 }

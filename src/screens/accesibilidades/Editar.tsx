@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react';
 import { Accesibilidad } from '../../interfaces/Accesibilidad';
 import { supabase } from '../../services/supabase';
 import { useAuth } from '../../hooks/useAuth';
-import { useParams } from 'react-router-dom';
+
 
 interface EditarAccesibilidadProps {
     accesibilidadId: number;
@@ -13,7 +13,7 @@ interface EditarAccesibilidadProps {
 }
 
 export default function EditarAccesibilidad({ accesibilidadId, onCancel, onUpdate }: EditarAccesibilidadProps) {
-    const { id } = useParams();
+
     const { user } = useAuth();
     const [formData, setFormData] = useState<Accesibilidad>({
         id: accesibilidadId,
@@ -110,8 +110,8 @@ export default function EditarAccesibilidad({ accesibilidadId, onCancel, onUpdat
                     </h2>
                 </div>
 
-                <div style={{ margin: '20px auto', width: '40%', alignContent: "center", display: 'flex', flexDirection: 'column', minWidth: '250px' }}>
-                    <div style={{ display: 'flex', flexDirection: 'column', maxWidth: '600px' }}>
+                <div style={{ margin: '20px auto', width: '40%', display: 'flex', flexDirection: 'column', minWidth: '200px' }}>
+                    <div className={styles.formularioCentro}>
                         <label className={styles.labelSeccion}>Tipo Accesibilidad</label>
                         <select name="tipo" value={formData.tipo} onChange={handleChange}>
                             <option value="">Selecciona un tipo</option>
@@ -127,12 +127,14 @@ export default function EditarAccesibilidad({ accesibilidadId, onCancel, onUpdat
                             onChange={handleChange}
                             className={styles.inputText}
                         />
-                    </div>
 
+                    </div>
                     <div className={styles.acciones}>
                         <button style={{ color: 'red', background: 'transparent' }} onClick={onCancel}>Cancelar</button>
                         <button onClick={handleSubmit}>Guardar cambios</button>
                     </div>
+
+
                 </div>
             </div>
         </>

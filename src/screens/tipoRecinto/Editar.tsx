@@ -3,7 +3,7 @@ import { useState, useEffect } from 'react';
 import { supabase } from '../../services/supabase';
 import { Tipo_Recinto } from '../../interfaces/Tipo_Recinto';
 import NavbarAdmin from '../../components/NavbarAdmin';
-import { useParams } from 'react-router-dom';
+
 import { useAuth } from '../../hooks/useAuth';
 
 interface EditarTipoRecintoProps {
@@ -13,7 +13,7 @@ interface EditarTipoRecintoProps {
 }
 
 export default function EditarTipoRecinto({ idTipoRecinto, onCancel, onUpdate }: EditarTipoRecintoProps) {
-    const { id } = useParams();
+
     const { user } = useAuth()
     const [formData, setFormData] = useState<Tipo_Recinto>({
         id: idTipoRecinto,
@@ -106,7 +106,7 @@ export default function EditarTipoRecinto({ idTipoRecinto, onCancel, onUpdate }:
                 </div>
 
                 <div style={{ margin: '20px auto', width: '40%', display: 'flex', justifyContent: 'center', flexDirection: 'column', minWidth: '250px' }}>
-                    <div style={{ display: 'flex', flexDirection: 'column', maxWidth: '600px' }}>
+                    <div className={styles.formularioCentro}>
                         <label className={styles.labelSeccion} >Tipo</label>
                         <input name="tipo" onChange={handleChange} value={formData.tipo}
                             className={styles.inputText} />

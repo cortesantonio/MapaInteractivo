@@ -8,7 +8,6 @@ export interface Usuarios {
     genero: string;
     fecha_nacimiento: Date;
     telefono: number;
-    password: string;
     rol: string;
     activo: boolean;
     rut:string;

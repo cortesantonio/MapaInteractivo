@@ -1,4 +1,4 @@
-import styles from "./css/Trazado_Compacto.module.css";
+import styles from "./css/Trazado_compacto.module.css";
 import { APIProvider } from "@vis.gl/react-google-maps";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBus, faCar, faPersonBiking, faPersonWalking, faReply } from "@fortawesome/free-solid-svg-icons";
@@ -18,37 +18,72 @@ function TrazadoRutaInterno() {
     const [marcadorDestino, setMarcadorDestino] = useState<Partial<Marcador> | null>(null);
     const [destino, setDestino] = useState<{ lat: number; lng: number } | null>(null);
     const [instrucciones, setInstrucciones] = useState<string[]>([]);
+    const [mensajePermisoUbicacion, setMensajePermisoUbicacion] = useState<string>("");
 
     useEffect(() => {
-        navigator.geolocation.getCurrentPosition(
-            (pos) => {
-                setOrigen({
-                    lat: pos.coords.latitude,
-                    lng: pos.coords.longitude,
-                });
-            },
-            (err) => console.error("No se pudo obtener la ubicación", err)
-        );
+        const verificarPermisosUbicacion = async () => {
+            try {
+                const permiso = await navigator.permissions.query({ name: 'geolocation' as PermissionName });
+
+                const actualizarMensaje = () => {
+                    if (permiso.state === 'denied') {
+                        setMensajePermisoUbicacion(
+                            "No se puede acceder a tu ubicación porque los permisos fueron denegados. \n" +
+                            "Para habilitarlos, ve a la configuración de tu navegador, busca 'Privacidad y seguridad' > 'Configuración del sitio' > 'Ubicación' y permite el acceso manualmente para este sitio."
+                        );
+                    } else if (permiso.state === 'prompt') {
+                        setMensajePermisoUbicacion(
+                            "Activa los permisos de ubicación para utilizar esta función. \n " +
+                            "Cuando se te solicite, haz clic en 'Permitir'. Si no ves la solicitud, revisa el icono del candado 🔒 en la barra de direcciones y ajusta los permisos desde allí."
+                        );
+                    } else {
+                        setMensajePermisoUbicacion("");
+                    }
+                };
+
+                actualizarMensaje();
+                permiso.onchange = actualizarMensaje;
+
+                if (permiso.state !== 'denied') {
+                    navigator.geolocation.getCurrentPosition(
+                        (pos) => {
+                            setOrigen({
+                                lat: pos.coords.latitude,
+                                lng: pos.coords.longitude,
+                            });
+                        },
+                        (err) => {
+                            console.error("No se pudo obtener la ubicación", err);
+                        }
+                    );
+                }
+            } catch (error) {
+                console.warn("No se pudo verificar el permiso de ubicación:", error);
+            }
+        };
+
+        verificarPermisosUbicacion();
     }, []);
 
+
     useEffect(() => {
-    const fetchDestino = async () => {
-        const { data, error } = await supabase
-            .from("marcador")
-            .select("nombre_recinto, direccion, latitud, longitud") 
-            .eq("id", id)
-            .single();
+        const fetchDestino = async () => {
+            const { data, error } = await supabase
+                .from("marcador")
+                .select("nombre_recinto, direccion, latitud, longitud")
+                .eq("id", id)
+                .single();
 
-        if (error) {
-            console.error("Error al obtener destino:", error);
-        } else {
-            setMarcadorDestino(data);
-            setDestino({ lat: data.latitud, lng: data.longitud });
-        }
-    };
+            if (error) {
+                console.error("Error al obtener destino:", error);
+            } else {
+                setMarcadorDestino(data);
+                setDestino({ lat: data.latitud, lng: data.longitud });
+            }
+        };
 
-    fetchDestino();
-}, [id]);
+        fetchDestino();
+    }, [id]);
 
     useEffect(() => {
         const obtenerRuta = () => {
@@ -94,46 +129,57 @@ function TrazadoRutaInterno() {
 
             <div className={styles.Container_secundario}>
 
-                <h3>Trazado ruta:</h3>
+                {mensajePermisoUbicacion && (
+                    <div className={styles.mensajePermiso}>
+                        <p>{mensajePermisoUbicacion}</p>
+                    </div>
+                )}
 
-                <h3 >
-                    <strong> Para llegar a </strong>{marcadorDestino?.nombre_recinto ?? "tu destino"},<strong> que se encuentra en </strong>{marcadorDestino?.direccion ?? "cargando la dirección..."}, <strong>tienes que pasar por los siguientes puntos para llegar al destino:</strong>
-                </h3>
-                <h3>Indicaciones de ruta:</h3>
-                <div className={styles.direccion}>
-                    {instrucciones.length > 0 ? (
-                        <ol>
-                            {instrucciones.map((inst, index) => (
-                                <li style={{ margin: "5px " }} key={index}>{inst}</li>
-                            ))}
-                        </ol>
-                    ) : (
-                        <p>Cargando instrucciones...</p>
-                    )}
+                {mensajePermisoUbicacion === "" && (
 
-                </div>
+                    <>
+                        <h3>Trazado ruta:</h3>
 
+                        <h3 >
+                            <strong> Para llegar a </strong>{marcadorDestino?.nombre_recinto ?? "tu destino"},<strong> que se encuentra en </strong>{marcadorDestino?.direccion ?? "cargando la dirección..."}, <strong>tienes que pasar por los siguientes puntos para llegar al destino:</strong>
+                        </h3>
+                        <h3>Indicaciones de ruta:</h3>
+                        <div className={styles.direccion}>
+                            {instrucciones.length > 0 ? (
+                                <ol>
+                                    {instrucciones.map((inst, index) => (
+                                        <li style={{ margin: "5px " }} key={index}>{inst}</li>
+                                    ))}
+                                </ol>
+                            ) : (
+                                <p>Cargando instrucciones...</p>
+                            )}
 
-                <div className={styles.PositionIcons}>
-                    <button className={styles.ButttonIcons} onClick={() => handleCambiarModoViaje('DRIVING')}>
-                        <FontAwesomeIcon icon={faCar} size="lg" style={{
-                            color: modoViajeActual === 'DRIVING' ? 'rgb(75, 127, 241)' : ""
-                        }} />
-                    </button>
-                    <button className={styles.ButttonIcons}>
-                        <FontAwesomeIcon icon={faBus} size="lg" style={{ color: "gray" }} />
-                    </button>
-                    <button className={styles.ButttonIcons} onClick={() => handleCambiarModoViaje('WALKING')}>
-                        <FontAwesomeIcon icon={faPersonWalking} size="lg" style={{
-                            color: modoViajeActual === 'WALKING' ? 'rgb(75, 127, 241)' : ""
-                        }} />
-                    </button>
-                    <button className={styles.ButttonIcons} onClick={() => handleCambiarModoViaje('BICYCLING')}>
-                        <FontAwesomeIcon icon={faPersonBiking} size="lg" style={{
-                            color: modoViajeActual === 'BICYCLING' ? 'rgb(75, 127, 241)' : ""
-                        }} />
-                    </button>
-                </div>
+                        </div>
+
+                        <div className={styles.PositionIcons}>
+                            <button className={styles.ButttonIcons} onClick={() => handleCambiarModoViaje('DRIVING')}>
+                                <FontAwesomeIcon icon={faCar} size="lg" style={{
+                                    color: modoViajeActual === 'DRIVING' ? 'rgb(75, 127, 241)' : ""
+                                }} />
+                            </button>
+                            <button className={styles.ButttonIcons}>
+                                <FontAwesomeIcon icon={faBus} size="lg" style={{ color: "gray" }} />
+                            </button>
+                            <button className={styles.ButttonIcons} onClick={() => handleCambiarModoViaje('WALKING')}>
+                                <FontAwesomeIcon icon={faPersonWalking} size="lg" style={{
+                                    color: modoViajeActual === 'WALKING' ? 'rgb(75, 127, 241)' : ""
+                                }} />
+                            </button>
+                            <button className={styles.ButttonIcons} onClick={() => handleCambiarModoViaje('BICYCLING')}>
+                                <FontAwesomeIcon icon={faPersonBiking} size="lg" style={{
+                                    color: modoViajeActual === 'BICYCLING' ? 'rgb(75, 127, 241)' : ""
+                                }} />
+                            </button>
+                        </div>
+                    </>
+                )}
+
             </div>
 
         </div>

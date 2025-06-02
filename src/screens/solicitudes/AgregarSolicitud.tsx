@@ -1,6 +1,7 @@
+
 import styles from './css/AgregarSolicitud.module.css'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faInfo, faReply, faUpload } from '@fortawesome/free-solid-svg-icons'
+import { faInfo, faReply, faUpload, faArrowUpRightFromSquare,faFileImage,faFilePdf,faTimes } from '@fortawesome/free-solid-svg-icons'
 import { useState, useEffect, useRef } from 'react';
 import { Solicitudes } from '../../interfaces/Solicitudes';
 import { Accesibilidad } from '../../interfaces/Accesibilidad';
@@ -40,6 +41,7 @@ export default function AgregarSolicitud() {
     const [filePreview, setFilePreview] = useState<string | null>(null);
     const [uploading, setUploading] = useState(false);
     const [uploadError, setUploadError] = useState<string | null>(null);
+    const [charCount, setCharCount] = useState(0);
 
 
     useEffect(() => {
@@ -120,6 +122,9 @@ export default function AgregarSolicitud() {
 
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => { // MANEJA LOS DATOS DE LOS INPUTS
         const { name, value, type, checked } = e.target;
+        if (name === 'descripcion') {
+            setCharCount(value.length);
+        }
         setFormData({
             ...formData,
             [name]: type === 'checkbox' ? checked : value
@@ -283,6 +288,18 @@ export default function AgregarSolicitud() {
 
     };
 
+    // Función para cancelar/eliminar el archivo seleccionado
+    const handleCancelFile = () => {
+        setFile(null);
+        setFilePreview(null);
+        setUploadError(null);
+        // Limpiar el input file
+        const fileInput = document.getElementById('file-upload') as HTMLInputElement;
+        if (fileInput) {
+            fileInput.value = '';
+        }
+    };
+
 
 
     const fechaHoraActual = new Date().toISOString();
@@ -332,7 +349,7 @@ export default function AgregarSolicitud() {
                 <button style={{ position: "absolute", backgroundColor: 'transparent', border: 'none', cursor: 'pointer', left: "10px" }} onClick={() => { navigate(-1) }}>
                     <FontAwesomeIcon icon={faReply} size='2xl' />
                 </button>
-                <h2 style={{ textAlign: 'center' }}>Colaborar <FontAwesomeIcon icon={faInfo} style={{ border: '1px solid gray', borderRadius: '50%', width: '20px', height: '20px', padding: '5px', color: 'gray', cursor: 'pointer' }} onClick={() => { navigate("/info") }} /></h2>
+                <h2 style={{ textAlign: 'center' }}>Colaborar <FontAwesomeIcon icon={faInfo} style={{ border: '1px solid gray', borderRadius: '50%', width: '20px', height: '20px', padding: '5px', color: 'gray', cursor: 'pointer' }} onClick={() => { setInstruccionesLeidas(false) }} /></h2>
             </div>
 
             {
@@ -430,7 +447,9 @@ export default function AgregarSolicitud() {
                         onChange={handleInputChange}
                         disabled={!usuario?.nombre} // Deshabilitar el campo si no hay usuario
                         required
+                        maxLength={250}
                     />
+                    <div style={{ fontSize: '0.8rem', color: '#666', textAlign: 'right' }}>{charCount}/250</div>
                     <label className={styles.labelSeccion}>
                         Dirección
                         <span style={{ fontSize: '0.8rem', color: 'gray', fontStyle: 'italic' }}>
@@ -510,17 +529,32 @@ export default function AgregarSolicitud() {
 
                 </div>
 
-                <div className={styles.opt}>
-                    <label htmlFor='cumple_ley_21015' style={{ fontWeight: 500, display: 'flex', flexDirection: 'column' }}>
-                        <p>Cumple con la <a target='_blank' href="https://www.bcn.cl/leychile/navegar?idNorma=1103997" style={{ color: 'black', fontWeight: 500, textTransform: 'capitalize' }}>ley nro. 21015 </a></p>
-                        <span style={{ fontSize: '0.8rem', color: 'gray', fontStyle: 'italic', maxWidth: '200px', }}>
-                            - Indique si su negocio cumple con  la inclusión en el mundo laboral.
+                <div className={styles.checkboxLey}>
+                    <input
+                        type="checkbox"
+                        name="cumple_ley_21015"
+                        id="cumple_ley_21015"
+                        onChange={handleInputChange}
+                        disabled={!usuario?.nombre}
+                    />
+                    <label htmlFor="cumple_ley_21015" className={styles.labelLey}>
+                        <p>
+                            Cumple con la{" "}
+                            <a
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                href="https://www.bcn.cl/leychile/navegar?idNorma=1103997"
+                                className={styles.linkLey}
+                            >
+                                Ley N.º 21.015 <FontAwesomeIcon size="2xs" icon={faArrowUpRightFromSquare} style={{ transform: 'scale(1.2)' }} />
+                            </a>
+                        </p>
+                        <span className={styles.descripcionLey}>
+                            - Indique si su negocio cumple con la inclusión en el mundo laboral.
                         </span>
                     </label>
-                    <input type="checkbox" name="cumple_ley_21015" id='cumple_ley_21015' onChange={handleInputChange} disabled={!usuario?.nombre} // Deshabilitar el campo si no hay usuario
-                    />
-
                 </div>
+
 
 
 
@@ -531,6 +565,7 @@ export default function AgregarSolicitud() {
                             <div className={styles.opt} key={acc.id}>
                                 <input
                                     type="checkbox"
+                                    className={styles.checkboxColor}
                                     value={acc.id}
                                     checked={seleccionadas.includes(acc.id)}
                                     onChange={() => handleCheckboxChange(acc.id)}
@@ -554,46 +589,57 @@ export default function AgregarSolicitud() {
                             </span>
                         </label>
 
-                        <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                        
+                        <div style={{ display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: "12px", backgroundColor: "#f8f9fa", border: "2px dashed #dee2e6", borderRadius: "8px", padding: "20px", margin: "16px auto", width: "100%", maxWidth: "100%", transition: "all 0.2s ease" }}>
+                            <div>
+                                <h4 style={{ fontWeight: "300", borderBottom: "solid gray 1px", padding: "3px" }}>
+                                    Subir Imagen o PDF
+                                </h4>
+                            </div>
 
-                            <label
-                                htmlFor="file-upload"
-                                style={{
-                                    display: 'flex',
-                                    alignItems: 'center',
-                                    gap: '5px',
-                                    padding: '8px 12px',
-                                    backgroundColor: '#f0f0f0',
-                                    borderRadius: '4px',
-                                    cursor: usuario?.nombre ? 'pointer' : 'not-allowed',
-                                    opacity: usuario?.nombre ? 1 : 0.6
-                                }} >
+                            <div style={{ display: "flex", gap: "12px", alignItems: "center", marginBottom: "8px" }}>
+                                <FontAwesomeIcon icon={faFileImage} style={{ color: '#2b579a', fontSize: "1.8rem" }} />
+                                <FontAwesomeIcon icon={faFilePdf} style={{ color: '#dc3545', fontSize: "1.8rem" }} />
+                            </div>
 
-                                <FontAwesomeIcon icon={faUpload} />
-                                Seleccionar archivo
-                            </label>
-                            <input
-                                id="file-upload"
-                                type="file"
-                                accept="image/*,.pdf"
-                                onChange={handleFileChange}
-                                disabled={!usuario?.nombre}
-                                style={{ display: 'none' }}
-                            />
-                            <span>{file ? file.name : 'Ningún archivo seleccionado'}</span>
+                            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '12px', width: '100%' }}>
+                                <label className={styles.boton_subir} htmlFor="file-upload" style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '10px 16px', backgroundColor: usuario?.nombre ? '#007bff' : '#f0f0f0', color: usuario?.nombre ? '#fff' : '#6c757d', borderRadius: '6px', cursor: usuario?.nombre ? 'pointer' : 'not-allowed', opacity: usuario?.nombre ? 1 : 0.6, fontWeight: '500', transition: 'all 0.2s ease', border: 'none' }}>
+                                    <FontAwesomeIcon icon={faUpload} />
+                                    Seleccionar archivo
+                                </label>
+
+                                <input id="file-upload" type="file" accept="image/*,.pdf" onChange={handleFileChange} disabled={!usuario?.nombre} style={{ display: 'none' }} />
+
+                                {/* Información del archivo y botón cancelar */}
+                                <div style={{
+                                    display: 'flex', alignItems: 'center',
+                                    gap: '8px',
+                                    flexWrap: 'wrap',
+                                    justifyContent: 'center'
+                                }}>
+                                    <span style={{ fontSize: "14px", color: file ? "#28a745" : "#6c757d", fontWeight: file ? "500" : "400", textAlign: "center" }}>
+                                        {file ? `📄 ${file.name}` : 'Ningún archivo seleccionado'}
+                                    </span>
+
+                                    {file && (
+                                        <button type="button" onClick={handleCancelFile} style={{ display: 'flex', alignItems: 'center', gap: '4px', padding: '4px 8px', backgroundColor: '#dc3545', color: '#fff', border: 'none', borderRadius: '4px', fontSize: '12px', cursor: 'pointer', transition: 'all 0.2s ease' }} onMouseOver={(e) => { e.currentTarget.style.backgroundColor = '#c82333'; }} onMouseOut={(e) => { e.currentTarget.style.backgroundColor = '#dc3545'; }}>
+                                            <FontAwesomeIcon icon={faTimes} size="xs" />
+                                            Cancelar
+                                        </button>
+                                    )}
+                                </div>
+                            </div>
+
+                            {/* Texto informativo */}
+                            <p style={{ margin: 0, fontSize: "13px", fontWeight: "400", color: "#6c757d", textAlign: "center", lineHeight: "1.4" }}>
+                                Solo puedes subir Imágenes o PDF
+                            </p>
                         </div>
 
                         {filePreview && filePreview !== 'no-preview' && (
                             <div style={{ marginTop: '10px', maxWidth: '250px' }}>
-                                <img
-                                    src={filePreview}
-                                    alt="Vista previa"
-                                    style={{ maxWidth: '100%', maxHeight: '200px', objectFit: 'contain' }}
-                                />
-                                <img
-                                    src={filePreview}
-                                    alt="Vista previa"
-                                    style={{ maxWidth: '100%', maxHeight: '200px', objectFit: 'contain' }}
+                                <img src={filePreview} alt="Vista previa" style={{ maxWidth: '100%', maxHeight: '200px', objectFit: 'contain' }} />
+                                <img src={filePreview} alt="Vista previa" style={{ maxWidth: '100%', maxHeight: '200px', objectFit: 'contain' }}
                                 />
                             </div>
                         )}
