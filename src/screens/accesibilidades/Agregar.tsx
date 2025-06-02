@@ -12,16 +12,11 @@ export default function AgregarAccesibilidad() {
 
     const { user } = useAuth();
     const navigate = useNavigate();
-    const [isMenuOpen, setIsMenuOpen] = useState(false)
     const [formData, setFormData] = useState<Accesibilidad>({
         id: 0,
         tipo: '',
         nombre: ''
     })
-
-    const toggleMenu = () => {
-        setIsMenuOpen(!isMenuOpen)
-    }
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
         const { name, value } = e.target;
