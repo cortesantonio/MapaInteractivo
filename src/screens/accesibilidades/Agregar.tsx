@@ -1,5 +1,7 @@
 import styles from './css/Agregar.module.css'
 import NavbarAdmin from '../../components/NavbarAdmin';
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faWheelchairMove, faEyeLowVision, faHandsAslInterpreting, faEarDeaf } from '@fortawesome/free-solid-svg-icons';
 import { useState } from 'react';
 import { Accesibilidad } from '../../interfaces/Accesibilidad';
 import { supabase } from '../../services/supabase';
@@ -10,11 +12,16 @@ export default function AgregarAccesibilidad() {
 
     const { user } = useAuth();
     const navigate = useNavigate();
+    const [isMenuOpen, setIsMenuOpen] = useState(false)
     const [formData, setFormData] = useState<Accesibilidad>({
         id: 0,
         tipo: '',
         nombre: ''
     })
+
+    const toggleMenu = () => {
+        setIsMenuOpen(!isMenuOpen)
+    }
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
         const { name, value } = e.target;
@@ -100,6 +107,7 @@ export default function AgregarAccesibilidad() {
     return (
         <>
             <NavbarAdmin />
+
             <div className={styles.container}>
                 <div className={styles.titulo} >
                     <h2 style={{ textAlign: 'center' }}>
@@ -131,6 +139,72 @@ export default function AgregarAccesibilidad() {
                     </div>
                 </div>
             </div>
+            <div className={styles.SubContainer}>
+                <div className={styles.tituloCategorias}>
+                    <h3 style={{ textAlign: 'center' }}>
+                        Categorías de apoyo para una mejor accesibilidad
+                    </h3>
+                </div>
+                <div className={styles.ContenGrid}>
+                    {/* Arquitectónica */}
+                    <div className={styles.iconoBox}>
+                        <h2>Arquitectónica</h2>
+                        <div className={`${styles.iconCircle} ${styles.arquitectonica}`}>
+                            <FontAwesomeIcon icon={faWheelchairMove} className={styles.icono} />
+                        </div>
+                        <div>
+                            <p>
+                                Incluye rampas, ascensores, pasamanos, baños accesibles y señalización
+                                adecuada que facilita el desplazamiento físico de personas con movilidad reducida.
+                            </p>
+                        </div>
+                    </div>
+
+                    {/* Sensorial */}
+                    <div className={styles.iconoBox}>
+                        <h2>Sensorial</h2>
+                        <div className={`${styles.iconCircle} ${styles.sensorial}`}>
+                            <FontAwesomeIcon icon={faEyeLowVision} className={styles.icono} />
+                        </div>
+                        <div>
+                            <p>
+                                Considera ayudas visuales y auditivas como señalización táctil, braille,
+                                contraste de colores, bucles magnéticos y alarmas visuales o sonoras.
+                            </p>
+                        </div>
+                    </div>
+
+                    {/* Cognitiva */}
+                    <div className={styles.iconoBox}>
+                        <h2>Cognitiva</h2>
+                        <div className={`${styles.iconCircle} ${styles.cognitiva}`}>
+                            <FontAwesomeIcon icon={faHandsAslInterpreting} className={styles.icono} />
+                        </div>
+                        <div>
+                            <p>
+                                Apoya la comprensión mediante lenguaje claro, pictogramas,
+                                señalética intuitiva, y entornos que favorecen la orientación y el entendimiento.
+                            </p>
+                        </div>
+                    </div>
+
+                    {/* Comunicación y Audición */}
+                    <div className={styles.iconoBox}>
+                        <h2>Comunicación y Audición</h2>
+                        <div className={`${styles.iconCircle} ${styles.ca}`}>
+                            <FontAwesomeIcon icon={faEarDeaf} className={styles.icono} />
+                        </div>
+                        <div>
+                            <p>
+                                Se enfoca en sistemas de comunicación aumentativa, intérpretes de lengua de señas,
+                                subtitulados en videos, y accesos adaptados para personas con discapacidad auditiva o con dificultades auditivas.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
         </>
 
 
