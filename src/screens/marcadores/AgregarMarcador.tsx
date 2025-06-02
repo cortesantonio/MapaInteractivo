@@ -119,6 +119,11 @@ export default function AgregarMarcador() {
         return;
       }
 
+      if (!newMarcador.tipo_recinto) {
+        alert('Por favor, selecciona un tipo de recinto válido.');
+        return;
+      }
+
       try {
 
         // 4. Se inserta el "registro_logs"
@@ -178,6 +183,15 @@ export default function AgregarMarcador() {
 
     guardarMarcador();
   }, [newMarcador]);
+
+  const [filtroBusqueda, setFiltroBusqueda] = useState('');
+  const [showFiltroOptions, setShowFiltroOptions] = useState(false);
+
+  const tipoRecintoRef = useRef<HTMLInputElement>(null);
+
+  const filteredTipoRecinto = (tipoRecinto ?? []).filter((tipo) =>
+    tipo.tipo.toLowerCase().includes(filtroBusqueda.toLowerCase())
+  );
 
   const { isLoaded, loadError } = useLoadScript({
     googleMapsApiKey: apiKey,
@@ -313,12 +327,75 @@ export default function AgregarMarcador() {
               <label className={styles.labelSeccion}>Tipo de recinto
                 <span style={{ fontSize: '0.8rem', color: 'gray', fontStyle: 'italic' }} > - Selecciona a un tipo de recinto que pertenecera el local.</span>
               </label>
-              <select name="tipo_recinto" value={dataMarcador.tipo_recinto} onChange={(e) => setDataMarcador({ ...dataMarcador, tipo_recinto: e.target.value })} className={styles.inputText} required>
-                <option value="" >Selecciona un tipo de recinto</option>
-                {tipoRecinto?.map((tipo) => (
-                  <option key={tipo.id} value={tipo.id}>{tipo.tipo}</option>
-                ))}
-              </select>
+              <div style={{ position: 'relative', width: '100%' }}>
+                <input
+                  ref={tipoRecintoRef}
+                  type="text"
+                  placeholder="Selecciona un tipo de recinto"
+                  className={styles.inputText}
+                  style={{ width: '100%', marginBottom: '0px' }}
+                  value={filtroBusqueda}
+                  onChange={(e) => {
+                    const texto = e.target.value;
+                    setFiltroBusqueda(texto);
+                    setShowFiltroOptions(true);
+
+                    const tipoEncontrado = tipoRecinto?.find(
+                      (tipo) => tipo.tipo.toLowerCase() === texto.toLowerCase()
+                    );
+
+                    if (tipoEncontrado) {
+                      setDataMarcador(prev => ({ ...prev, tipo_recinto: String(tipoEncontrado.id) }));
+                    } else {
+                      setDataMarcador(prev => ({ ...prev, tipo_recinto: '' }));
+                    }
+                  }}
+
+                  onFocus={() => setShowFiltroOptions(true)}
+                  onBlur={() => {
+                    setTimeout(() => {
+                      setShowFiltroOptions(false);
+                    }, 100);
+                  }}
+                  required
+                />
+
+                {showFiltroOptions && (
+                  <div
+                    style={{
+                      position: 'absolute',
+                      top: '100%',
+                      left: 0,
+                      right: 0,
+                      backgroundColor: 'white',
+                      border: '1px solid #ddd',
+                      borderRadius: '4px',
+                      maxHeight: '200px',
+                      overflowY: 'auto',
+                      zIndex: 1000
+                    }}
+                  >
+                    {filteredTipoRecinto.map((tipo) => (
+                      <div
+                        key={tipo.id}
+                        style={{
+                          padding: '8px',
+                          cursor: 'pointer',
+                        }}
+                        onMouseDown={(e) => e.preventDefault()}
+                        onClick={() => {
+                          setDataMarcador({ ...dataMarcador, tipo_recinto: String(tipo.id) });
+                          setFiltroBusqueda(tipo.tipo);
+                          setShowFiltroOptions(false);
+                        }}
+                      >
+                        {tipo.tipo}
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+
 
             </div>
 

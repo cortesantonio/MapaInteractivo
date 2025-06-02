@@ -104,6 +104,7 @@ form p {
     border-radius: 5px;
     border: 1px solid rgb(165, 165, 165);
     margin-bottom: 10px;
+    padding: 0 5px;
 }
 
 form .labelSeccion {
@@ -132,4 +133,20 @@ form .labelSeccion {
 
 .boton_subir {
     background:linear-gradient(55deg, #3b7a3b, #5fa75f, #a0cfa0);
+}
+
+.filtroCard {
+    border: 1px solid gray;
+    padding: 0px 10px 0px 10px;
+    border-radius: 15px;
+    font-size: 0.8rem;
+    cursor: pointer;
+    transition: 0.2s all;
+    margin-bottom: 15px;
+    background-color: transparent;
+}
+
+.filtroCard select {
+    border: none;
+    background-color: transparent;
 }
