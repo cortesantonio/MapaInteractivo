@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { Marcador } from '../interfaces/Marcador';
 import { Review } from '../interfaces/Review';
 import { formatDistanceToNow } from 'date-fns';
@@ -39,6 +39,10 @@ export default function VerMarcador({ MarcadorSelectId, CerrarMarcador, establec
     const [estaAbierto, setEstaAbierto] = useState<boolean>(false);
     const [copiado, setCopiado] = useState(false);
 
+
+    const [mostrarTodos, setMostrarTodos] = useState(false);
+    const diasSemana = ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado', 'Domingo'];
+    const diasAMostrar = mostrarTodos ? diasSemana : diasSemana.slice(0, 3);
     // Función para volver a la vista del marcador
     const volverAMarcador = () => {
         setMostrarCompartir(false);
@@ -169,110 +173,6 @@ export default function VerMarcador({ MarcadorSelectId, CerrarMarcador, establec
     }, {});
 
 
-    function InfoMarcador() {
-        const [mostrarTodos, setMostrarTodos] = useState(false);
-        const diasSemana = ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado', 'Domingo'];
-        const diasAMostrar = mostrarTodos ? diasSemana : diasSemana.slice(0, 3);
-
-        return (
-            <div className={styles.InfoMarcador}>
-                {cargando ? (
-                    <div className={styles.cargando}>
-                        <ClipLoader color="#74C0FC" loading={cargando} size={50} />
-                        <p>Cargando...</p>
-                    </div>
-                ) : (
-                    Marcador && (
-                        <>
-                            <div className={`${styles.infoBasica} ${modoNocturno ? styles.infoBasicaOscuro : ''}`}>
-                                <div className={styles.direccionContainer}>
-                                    <p style={{ color: modoNocturno ? "#fff" : "" }}>
-                                        <FontAwesomeIcon icon={faLocationDot} style={{ color: "#74C0FC" }} /> {Marcador.direccion || 'Sin dirección'}
-                                    </p>
-                                    <button
-                                        onClick={copiarDireccion}
-                                        className={styles.btnCopiar}
-                                        title="Copiar dirección"
-                                    >
-                                        <FontAwesomeIcon
-                                            icon={copiado ? faCheckCircle : faCopy}
-                                            className={copiado ? styles.iconoCopiado : ''}
-                                        />
-                                    </button>
-                                </div>
-                                <p style={{ color: modoNocturno ? "#fff" : "" }}>
-                                    <FontAwesomeIcon icon={faPhone} style={{ color: "#74C0FC" }} /> {Marcador.telefono ? <a href={`tel:${Marcador.telefono}`} style={{ color: modoNocturno ? "#fff" : "" }}>{Marcador.telefono}</a> : 'Sin teléfono'}
-                                </p>
-                                <p style={{ color: modoNocturno ? "#fff" : "" }}>
-                                    <FontAwesomeIcon icon={faEarthAmericas} style={{ color: "#74C0FC" }} />
-                                    {Marcador.pagina_web ?
-                                        <a href={Marcador.pagina_web} target="_blank" >
-                                            {Marcador.pagina_web}
-                                        </a>
-                                        :
-                                        <p>Sin página web</p>
-                                    }
-                                </p>
-                            </div>
-
-                            <div className={`${styles.horariosSection} ${modoNocturno ? styles.horariosSectionOscuro : ''}`}>
-                                <h4 style={{ color: modoNocturno ? "#fff" : "" }}>Horarios</h4>
-                                <ul className={styles.horariosLista}>
-                                    {diasAMostrar.map((dia, index) => {
-                                        const horario = horariosMarcador.find((h: any) => h.dia.toLowerCase() === dia.toLowerCase());
-                                        const esUltimoVisible = !mostrarTodos && index === 2;
-                                        return (
-                                            <li
-                                                key={index}
-                                                className={`${styles.horarioItem} ${esUltimoVisible ? styles.tercerdia : ''}`}
-                                                style={{ color: modoNocturno ? "#fff" : "" }}
-                                            >
-                                                <span className={styles.dia}>{dia}</span>
-                                                <span className={styles.horario}>
-                                                    {horario ? `${horario.apertura.slice(0, 5)} - ${horario.cierre.slice(0, 5)}` : 'Cerrado'}
-                                                </span>
-                                            </li>
-                                        );
-                                    })}
-                                </ul>
-                                <button onClick={() => setMostrarTodos(!mostrarTodos)} className={styles.fechaVerMas}>
-                                    {mostrarTodos ? (
-                                        <>
-                                            <FontAwesomeIcon icon={faChevronUp} /> Ver menos días
-                                        </>
-                                    ) : (
-                                        <>
-                                            <FontAwesomeIcon icon={faChevronDown} /> Ver más días
-                                        </>
-                                    )}
-                                </button>
-                            </div>
-
-                            <div className={`${styles.accesibilidadSection} ${modoNocturno ? styles.accesibilidadSectionOscuro : ''}`}>
-                                <h4 style={{ color: modoNocturno ? "#fff" : "" }}>Accesibilidad</h4>
-                                {Object.keys(accesibilidadAgrupada).map((tipo, index) => (
-                                    <div key={index} className={styles.accesibilidadTipo}>
-                                        <h5 style={{ color: modoNocturno ? "#fff" : "" }}>{tipo}</h5>
-                                        <div className={styles.accesibilidadLista}>
-                                            {accesibilidadAgrupada[tipo].map((nombre, i) => (
-                                                <span key={i} className={styles.accesibilidadItem} style={{ color: modoNocturno ? "#fff" : "" }}>
-                                                    <FontAwesomeIcon icon={faCheck} size="xs" />
-                                                    {nombre}
-                                                </span>
-                                            ))}
-                                        </div>
-                                    </div>
-                                ))}
-                            </div>
-                        </>
-                    )
-                )}
-            </div>
-        );
-    }
-
-
-
     function ListReviews() {
         const [mostrarTodas, setMostrarTodas] = useState(false);
         const reseñasAMostrar = mostrarTodas ? resenasMarcador : resenasMarcador.slice(0, 2);
@@ -346,6 +246,31 @@ export default function VerMarcador({ MarcadorSelectId, CerrarMarcador, establec
             </div>
         );
     }
+
+    const scrollContainerRef = useRef<HTMLDivElement>(null);
+
+    // Nuevo useEffect para manejar el scroll
+    useEffect(() => {
+        const container = scrollContainerRef.current;
+        if (!container) return;
+
+        const handleTouchStart = (e: TouchEvent) => {
+            // Permitir scroll solo dentro del contenedor
+            e.stopPropagation();
+        };
+
+        const handleTouchMove = (e: TouchEvent) => {
+            e.stopPropagation();
+        };
+
+        container.addEventListener('touchstart', handleTouchStart, { passive: true });
+        container.addEventListener('touchmove', handleTouchMove, { passive: true });
+
+        return () => {
+            container.removeEventListener('touchstart', handleTouchStart);
+            container.removeEventListener('touchmove', handleTouchMove);
+        };
+    }, []);
 
     return (
         <div className={styles.container} style={{ backgroundColor: modoNocturno ? "#2d2d2d" : "", width: width, height: height }}>
@@ -499,7 +424,88 @@ export default function VerMarcador({ MarcadorSelectId, CerrarMarcador, establec
                             hidden={tabActiva !== 'general'}
                             className={styles.tabPanel}
                         >
-                            <InfoMarcador />
+                            <>
+                                <div className={`${styles.infoBasica} ${modoNocturno ? styles.infoBasicaOscuro : ''}`}>
+                                    <div className={styles.direccionContainer}>
+                                        <p style={{ color: modoNocturno ? "#fff" : "" }}>
+                                            <FontAwesomeIcon icon={faLocationDot} style={{ color: "#74C0FC" }} /> {Marcador.direccion || 'Sin dirección'}
+                                        </p>
+                                        <button
+                                            onClick={copiarDireccion}
+                                            className={styles.btnCopiar}
+                                            title="Copiar dirección"
+                                        >
+                                            <FontAwesomeIcon
+                                                icon={copiado ? faCheckCircle : faCopy}
+                                                className={copiado ? styles.iconoCopiado : ''}
+                                            />
+                                        </button>
+                                    </div>
+                                    <p style={{ color: modoNocturno ? "#fff" : "" }}>
+                                        <FontAwesomeIcon icon={faPhone} style={{ color: "#74C0FC" }} /> {Marcador.telefono ? <a href={`tel:${Marcador.telefono}`} style={{ color: modoNocturno ? "#fff" : "" }}>{Marcador.telefono}</a> : 'Sin teléfono'}
+                                    </p>
+                                    <p style={{ color: modoNocturno ? "#fff" : "" }}>
+                                        <FontAwesomeIcon icon={faEarthAmericas} style={{ color: "#74C0FC" }} />
+                                        {Marcador.pagina_web ?
+                                            <a href={Marcador.pagina_web} target="_blank" >
+                                                {Marcador.pagina_web}
+                                            </a>
+                                            :
+                                            <p>Sin página web</p>
+                                        }
+                                    </p>
+                                </div>
+
+                                <div className={`${styles.horariosSection} ${modoNocturno ? styles.horariosSectionOscuro : ''}`}>
+                                    <h4 style={{ color: modoNocturno ? "#fff" : "" }}>Horarios</h4>
+                                    <ul className={styles.horariosLista}>
+                                        {diasAMostrar.map((dia, index) => {
+                                            const horario = horariosMarcador.find((h: any) => h.dia.toLowerCase() === dia.toLowerCase());
+                                            const esUltimoVisible = !mostrarTodos && index === 2;
+                                            return (
+                                                <li
+                                                    key={index}
+                                                    className={`${styles.horarioItem} ${esUltimoVisible ? styles.tercerdia : ''}`}
+                                                    style={{ color: modoNocturno ? "#fff" : "" }}
+                                                >
+                                                    <span className={styles.dia}>{dia}</span>
+                                                    <span className={styles.horario}>
+                                                        {horario ? `${horario.apertura.slice(0, 5)} - ${horario.cierre.slice(0, 5)}` : 'Cerrado'}
+                                                    </span>
+                                                </li>
+                                            );
+                                        })}
+                                    </ul>
+                                    <button onClick={() => setMostrarTodos(!mostrarTodos)} className={styles.fechaVerMas}>
+                                        {mostrarTodos ? (
+                                            <>
+                                                <FontAwesomeIcon icon={faChevronUp} /> Ver menos días
+                                            </>
+                                        ) : (
+                                            <>
+                                                <FontAwesomeIcon icon={faChevronDown} /> Ver más días
+                                            </>
+                                        )}
+                                    </button>
+                                </div>
+
+                                <div className={`${styles.accesibilidadSection} ${modoNocturno ? styles.accesibilidadSectionOscuro : ''}`}>
+                                    <h4 style={{ color: modoNocturno ? "#fff" : "" }}>Accesibilidad</h4>
+                                    {Object.keys(accesibilidadAgrupada).map((tipo, index) => (
+                                        <div key={index} className={styles.accesibilidadTipo}>
+                                            <h5 style={{ color: modoNocturno ? "#fff" : "" }}>{tipo}</h5>
+                                            <div className={styles.accesibilidadLista}>
+                                                {accesibilidadAgrupada[tipo].map((nombre, i) => (
+                                                    <span key={i} className={styles.accesibilidadItem} style={{ color: modoNocturno ? "#fff" : "" }}>
+                                                        <FontAwesomeIcon icon={faCheck} size="xs" />
+                                                        {nombre}
+                                                    </span>
+                                                ))}
+                                            </div>
+                                        </div>
+                                    ))}
+                                </div>
+                            </>
                         </div>
                         <div
                             id="panel-resenas"

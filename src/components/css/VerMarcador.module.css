@@ -6,6 +6,8 @@
 .container {
     background-color: white;
     height: 100vh;
+    height: 100dvh;
+    /* Agrega esta línea para mejor compatibilidad móvil */
     position: fixed;
     left: 0;
     top: 0;
@@ -16,6 +18,10 @@
     z-index: 1000;
     display: flex;
     flex-direction: column;
+    /* Agregar estas propiedades */
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior: contain;
+    touch-action: pan-y;
 }
 
 .container .CerrarMarcador {
@@ -209,6 +215,10 @@
     overflow-y: auto;
     padding-top: 0;
     animation: fadeIn 0.3s ease;
+    /* Agregar estas propiedades */
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior: contain;
+    scroll-behavior: smooth;
 }
 
 @keyframes fadeIn {
@@ -223,11 +233,19 @@
     }
 }
 
+
 .InfoMarcador {
     height: 100%;
     overflow-y: auto;
     padding: 10px;
     padding-bottom: 25px;
+    /* Agregar estas propiedades */
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior: contain;
+    scroll-behavior: auto;
+    /* Cambiar de smooth a auto para evitar conflictos */
+
+    touch-action: pan-y;
 }
 
 .InfoMarcador::-webkit-scrollbar {
@@ -354,6 +372,7 @@
     padding: 15px;
     border-radius: 10px;
     padding-top: 0;
+    margin-bottom: 30px;
 }
 
 .accesibilidadTipo {
