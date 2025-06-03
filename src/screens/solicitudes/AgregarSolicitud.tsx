@@ -120,11 +120,19 @@ export default function AgregarSolicitud() {
         );
     };
 
+    const handleTextareaChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    const { name, value } = e.target;
+    if (name === 'descripcion') {
+        setCharCount(value.length);
+    }
+    setFormData({
+        ...formData,
+        [name]: value
+    });
+};
+
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => { // MANEJA LOS DATOS DE LOS INPUTS
         const { name, value, type, checked } = e.target;
-        if (name === 'descripcion') {
-            setCharCount(value.length);
-        }
         setFormData({
             ...formData,
             [name]: type === 'checkbox' ? checked : value
@@ -209,12 +217,6 @@ export default function AgregarSolicitud() {
             alert('Por favor, selecciona una dirección desde las sugerencias de Google Places.');
             return;
         }
-
-        if (!formData.tipo_recinto) {
-            alert('Por favor, selecciona un tipo de recinto válido.');
-            return;
-        }
-
         setUploading(true);
 
         try {
@@ -330,20 +332,13 @@ export default function AgregarSolicitud() {
         console.log('Registro insertado en registro_logs correctamente', registro_logs);
     };
 
-    const [filtroBusqueda, setFiltroBusqueda] = useState('');
-    const [showFiltroOptions, setShowFiltroOptions] = useState(false);
-    const tipoRecintoRef = useRef<HTMLInputElement>(null);
-
-    const filteredTipoRecinto = (tipoRecinto ?? []).filter(tipo =>
-        tipo.tipo.toLowerCase().includes(filtroBusqueda.toLowerCase())
-    );
 
     const { isLoaded, loadError } = useLoadScript({
         googleMapsApiKey: apiKey,
         libraries: LIBRARIES,
     });
 
-    
+
     const [autocomplete, setAutocomplete] = useState<google.maps.places.Autocomplete | null>(null);
     const [position, setPosition] = useState<{ lat: number; lng: number } | null>(null);
     const [direccionValida, setDireccionValida] = useState(false);
@@ -359,7 +354,7 @@ export default function AgregarSolicitud() {
     return (
         <div className={styles.container}>
             <div className={styles.titulo}>
-                <button style={{ position: "absolute", backgroundColor: 'transparent', border: 'none', cursor: 'pointer', left: "10px" }} onClick={() => { navigate(-1) }}>
+                <button style={{ position: "static", backgroundColor: 'transparent', border: 'none', cursor: 'pointer', left: "5px" }} onClick={() => { navigate(-1) }}>
                     <FontAwesomeIcon icon={faReply} size='2xl' />
                 </button>
                 <h2 style={{ textAlign: 'center' }}>Colaborar <FontAwesomeIcon icon={faInfo} style={{ border: '1px solid gray', borderRadius: '50%', width: '20px', height: '20px', padding: '5px', color: 'gray', cursor: 'pointer' }} onClick={() => { setInstruccionesLeidas(false) }} /></h2>
@@ -431,88 +426,32 @@ export default function AgregarSolicitud() {
 
                     />
                     <label className={styles.labelSeccion}>Tipo de Recinto</label>
-                    <div style={{ position: 'relative', width: '100%' }}>
-                        <input
-                            ref={tipoRecintoRef}
-                            type="text"
-                            placeholder="Selecciona un tipo de recinto"
-                            className={styles.inputText}
-                            style={{ width: '100%', marginBottom: '0px'  }}
-                            value={filtroBusqueda}
-                            onChange={(e) => {
-                                const texto = e.target.value;
-                                setFiltroBusqueda(texto);
-                                setShowFiltroOptions(true);
+                    <select
+                        name="tipo_recinto"
+                        className={styles.inputText}
+                        required
+                        value={formData.tipo_recinto || ''}
+                        onChange={handleSelectChange}
+                        disabled={!usuario?.nombre} // Deshabilitar el campo si no hay usuario
 
-                                const tipoEncontrado = tipoRecinto?.find(
-                                    (tipo) => tipo.tipo.toLowerCase() === texto.toLowerCase()
-                                );
+                    >
+                        <option value="">Selecciona un tipo de recinto</option>
+                        {tipoRecinto?.map((tipo) => (
+                            <option key={tipo.id} value={tipo.id}>{tipo.tipo}</option>
+                        ))}
+                    </select>
 
-                                if (tipoEncontrado) {
-                                    handleSelectChange({ target: { name: "tipo_recinto", value: tipoEncontrado.id } } as any);
-                                } else {
-                                    handleSelectChange({ target: { name: "tipo_recinto", value: '' } } as any);
-                                }
-                            }}
-
-                            onFocus={() => setShowFiltroOptions(true)}
-                            onBlur={() => {
-                                setTimeout(() => {
-                                    setShowFiltroOptions(false);
-                                }, 100);
-                            }}
-                            disabled={!usuario?.nombre}
-                            required
-                        />
-                        {showFiltroOptions && (
-                            <div
-                                style={{
-                                    position: 'absolute',
-                                    top: '100%',
-                                    left: 0,
-                                    right: 0,
-                                    backgroundColor: 'white',
-                                    border: '1px solid #ddd',
-                                    borderRadius: '4px',
-                                    maxHeight: '200px',
-                                    overflowY: 'auto',
-                                    zIndex: 1000
-                                }}
-                            >
-                                {filteredTipoRecinto.map((tipo) => (
-                                    <div
-                                        key={tipo.id}
-                                        style={{
-                                            padding: '8px',
-                                            cursor: 'pointer',
-                                            backgroundColor: formData.tipo_recinto === tipo.id ? '#f0f0f0' : 'white'
-                                        }}
-                                        onMouseDown={(e) => e.preventDefault()}
-                                        onClick={() => {
-                                            handleSelectChange({ target: { name: "tipo_recinto", value: tipo.id } } as any);
-                                            setFiltroBusqueda(tipo.tipo);
-                                            setShowFiltroOptions(false);
-                                        }}
-                                    >
-                                        {tipo.tipo}
-                                    </div>
-                                ))}
-                            </div>
-                        )}
-                    </div>
-
-                    <label className={styles.labelSeccion} style={{ marginTop: '10px' }}>
+                    <label className={styles.labelSeccion}>
                         Mensaje
                         <span style={{ fontSize: '0.8rem', color: 'gray', fontStyle: 'italic' }}>
                             {' '} - Describa brevemente la accesibilidad de su negocio.
                         </span>
                     </label>
-                    <input
-                        type="text"
+                    <textarea
                         name="descripcion"
-                        className={styles.inputText}
+                        style={{height:"50px",resize:"vertical",borderRadius:"5px",border:"1px solid rgb(165, 165, 165)",color:"black"}}
                         value={formData.descripcion}
-                        onChange={handleInputChange}
+                        onChange={handleTextareaChange}
                         disabled={!usuario?.nombre} // Deshabilitar el campo si no hay usuario
                         required
                         maxLength={250}
@@ -567,7 +506,7 @@ export default function AgregarSolicitud() {
                                 setDireccionValida(false);
                                 setPosition(null);
                             }}
-                            style={{ width: '100%' }}
+                            style={{ width: '100%', padding: '0 10px' }}
                             required
                             disabled={!usuario?.nombre} // Deshabilitar el campo si no hay usuario
                         />
