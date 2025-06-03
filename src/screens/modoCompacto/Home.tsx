@@ -64,7 +64,8 @@ function Modo_Compacto() {
                         accesibilidad_marcador (
                             accesibilidad (
                                 nombre,
-                                tipo
+                                tipo,
+                                imagen
                             )
                         ),
                         tipo_recinto (
@@ -76,7 +77,7 @@ function Modo_Compacto() {
 
                 const { data: accesibilidadesData, error: accesibilidadesError } = await supabase
                     .from('accesibilidad')
-                    .select('id, nombre, tipo');
+                    .select('id, nombre, tipo, imagen');
 
                 if (marcadoresError || accesibilidadesError) {
                     console.error('Error al cargar datos:', marcadoresError || accesibilidadesError);
@@ -93,7 +94,8 @@ function Modo_Compacto() {
                     },
                     filtros: item.accesibilidad_marcador.map((am: any) => ({
                         nombre: am.accesibilidad.nombre,
-                        tipo: am.accesibilidad.tipo
+                        tipo: am.accesibilidad.tipo,
+                        imagen: am.accesibilidad.imagen
                     }))
                 }));
 
