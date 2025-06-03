@@ -156,7 +156,7 @@ export default function Home() {
             position: 'absolute', top: 0, right: 0, width: '100%', height: 'fit-content',
             padding: '25px', display: 'flex', pointerEvents: 'none', flexDirection: 'row', justifyContent: 'space-between'
           }}>
-            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'start', gap: '10px', pointerEvents: 'none', width: '80%' }}>
+            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'start', gap: '10px', pointerEvents: 'none', width: '80%', zIndex: 20, position: 'relative' }}>
               <Buscador onSeleccionMarcador={(id: number) => {
                 setMarcadorSeleccionadoId(id);
                 setMostrarMarcador(true);
@@ -170,22 +170,36 @@ export default function Home() {
               <BotonEventos />
             </div>
 
-            <div style={{ width: '30%', display: 'flex', justifyContent: 'end', gap: '10px', height: '50px', zIndex: 10, flexWrap: 'wrap' }} >
-              <img style={{ width: '30dvw', maxWidth: '150px', height: 'fit-content' }} src="../../img/logoConCurico.png" alt="" />
+            <div style={{ width: '30%', display: 'flex', justifyContent: 'end', gap: '10px', height: '50px', zIndex: 10, flexWrap: 'wrap', position: 'relative' }} >
+              <img
+                style={{
+                  width: "150px",
+                  height: "auto",
+                  maxWidth: "150px",
+                  maxHeight: "60px",
+                  objectFit: "contain",
+                  aspectRatio: "auto 3 / 1",
+                  display: "block",
+                  zIndex: 10,
+                  position: 'relative'
+                }}
+                src="../../img/logoConCurico.png"
+                alt=""
+              />
               <NavbarUser />
             </div>
 
-            {mostrarMarcador && marcadorSeleccionadoId !== null && (
-              <div style={estilosMarcador}>
-                <VerMarcador
-                  MarcadorSelectId={marcadorSeleccionadoId as number}
-                  CerrarMarcador={() => setMostrarMarcador(false)}
-                  establecerIdRutaMarcador={(id) => setIdrutamarcador(id)}
-                />
-              </div>
-            )}
-          </div>
 
+          </div>
+          {mostrarMarcador && marcadorSeleccionadoId !== null && (
+            <div style={estilosMarcador}>
+              <VerMarcador
+                MarcadorSelectId={marcadorSeleccionadoId as number}
+                CerrarMarcador={() => setMostrarMarcador(false)}
+                establecerIdRutaMarcador={(id) => setIdrutamarcador(id)}
+              />
+            </div>
+          )}
           <Footer onSeleccionMarcador={(id: number) => {
             setMarcadorSeleccionadoId(id);
             setMostrarMarcador(true);
