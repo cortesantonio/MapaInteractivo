@@ -451,7 +451,7 @@ export default function VerMarcador({ MarcadorSelectId, CerrarMarcador, establec
                                                 {Marcador.pagina_web}
                                             </a>
                                             :
-                                            <p>Sin página web</p>
+                                            <span>Sin página web</span>
                                         }
                                     </p>
                                 </div>

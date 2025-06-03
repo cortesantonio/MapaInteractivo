@@ -17,9 +17,10 @@ interface Marcador {
 
 interface BuscadorProps {
     onSeleccionMarcador: (id: number) => void;
+    onSeleccionFiltro?: (filtros: { nombre: string; tipo: string }[]) => void;
 }
 
-function Buscador({ onSeleccionMarcador }: BuscadorProps) {
+function Buscador({ onSeleccionMarcador, onSeleccionFiltro }: BuscadorProps) {
     const { user } = useAuth();
     const { modoNocturno } = useTheme();
     const { fontSize } = useFontSize();
@@ -30,6 +31,13 @@ function Buscador({ onSeleccionMarcador }: BuscadorProps) {
     const [resultados, setResultados] = useState<Marcador[]>([]);
     const [busqueda, setBusqueda] = useState<string>("");
     const [opcionesAccesibilidad, setOpcionesAccesibilidad] = useState<Accesibilidad[]>([]);
+
+    const coloresAccesibilidad: Record<string, string> = {
+        "Arquitectónica": "#FB8C00",
+        "Cognitiva": "#4FC3F7",
+        "Sensorial": "#FFEB3B",
+        "CA": "#66BB6A",
+    };
 
 
     useEffect(() => {
@@ -135,10 +143,25 @@ function Buscador({ onSeleccionMarcador }: BuscadorProps) {
     },);
 
     const toggleFiltro = (filtro: string) => {
-        setFiltrosActivos(prev => ({
-            ...prev,
-            [filtro]: !prev[filtro]
-        }));
+        setFiltrosActivos(prev => {
+            const nuevosFiltros = {
+                ...prev,
+                [filtro]: !prev[filtro]
+            };
+
+            const seleccionados = Object.entries(nuevosFiltros)
+                .filter(([_, activo]) => activo)
+                .map(([nombre]) => ({
+                    nombre,
+                    tipo: opcionesAccesibilidad.find(a => a.nombre === nombre)?.tipo || ""
+                }));
+
+            if (onSeleccionFiltro) {
+                onSeleccionFiltro(seleccionados);
+            }
+
+            return nuevosFiltros;
+        });
     };
 
     const aplicarFiltros = () => {
@@ -244,7 +267,19 @@ function Buscador({ onSeleccionMarcador }: BuscadorProps) {
                                 }, {} as Record<string, Accesibilidad[]>)
                             ).map(([tipo, accesibilidades]) => (
                                 <div key={tipo} className={styles.filtroGrupo}>
-                                    <h3 style={{ color: modoNocturno ? "#ddd" : "#222" }}>{tipo}</h3>
+                                    <h3 style={{ display: "flex", alignItems: "center", gap: "8px", color: modoNocturno ? "#ddd" : "#222" }}>
+                                        {tipo}
+                                        <span
+                                            style={{
+                                                width: "12px",
+                                                height: "12px",
+                                                borderRadius: "50%",
+                                                backgroundColor: coloresAccesibilidad[tipo] || "#ccc",
+                                                display: "inline-block"
+                                            }}
+                                        />
+                                        
+                                    </h3>
                                     <div className={styles.pictogramasGrid}>
                                         {accesibilidades.map((acces) => (
                                             <div

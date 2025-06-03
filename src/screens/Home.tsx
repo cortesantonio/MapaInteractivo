@@ -32,6 +32,7 @@ export default function Home() {
   const [yaVerificado, setYaVerificado] = useState(false);
   const [mapacentrado, setMapacentrado] = useState(false);
   const { modoNocturno } = useTheme();
+  const [filtrosSeleccionados, setFiltrosSeleccionados] = useState<{ nombre: string; tipo: string }[]>([]);
 
   useEffect(() => {
     if (userEstado === false && !yaVerificado) {
@@ -122,12 +123,14 @@ export default function Home() {
     transition: "bottom 0.3s ease-in-out",
     pointerEvents: 'auto'
   };
+
   useEffect(() => {
     if (shared) {
       setMarcadorSeleccionadoId(shared);
       setMostrarMarcador(true);
     }
   }, [shared]);
+
   return (
 
     <div style={{ width: '100%', height: '100vh', position: 'relative' }}>
@@ -143,6 +146,7 @@ export default function Home() {
         onIndicaciones={setOnIndicaciones}
         mapacentrado={mapacentrado}
         setMapacentrado={setMapacentrado}
+        onSeleccionFiltro={filtrosSeleccionados}
 
       />
 
@@ -156,7 +160,13 @@ export default function Home() {
               <Buscador onSeleccionMarcador={(id: number) => {
                 setMarcadorSeleccionadoId(id);
                 setMostrarMarcador(true);
-              }} />
+              }}
+
+                onSeleccionFiltro={(filtros: { nombre: string; tipo: string }[]) => {
+                  setFiltrosSeleccionados(filtros);
+
+                }}
+              />
               <BotonEventos />
             </div>
 

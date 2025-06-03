@@ -6,6 +6,7 @@ import { useTheme } from "./Footer/Modo_Nocturno";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faLocationDot } from "@fortawesome/free-solid-svg-icons";
 
+
 const apiKey = import.meta.env.VITE_GOOGLE_APIKEY;
 const lugarCentrado = { lat: -34.985378, lng: -71.239395 };
 const zoomPorDefecto = 15;
@@ -20,7 +21,8 @@ const CustomMap = ({
   onUbicacionActiva,
   onIndicaciones,
   mapacentrado,
-  setMapacentrado
+  setMapacentrado,
+  onSeleccionFiltro
 }: {
   marcadores: any[],
   SeleccionMarcador: (id: number) => void,
@@ -32,6 +34,7 @@ const CustomMap = ({
   onIndicaciones: (instrucciones: string[]) => void,
   mapacentrado: boolean;
   setMapacentrado: (valor: boolean) => void;
+  onSeleccionFiltro?: { nombre: string; tipo: string }[];
 
 }) => {
 
@@ -39,6 +42,13 @@ const CustomMap = ({
   const { modoNocturno } = useTheme();
   const [clusters, setClusters] = useState<any[]>([]);
   const [superclusterInstance, setSuperclusterInstance] = useState<Supercluster | null>(null);
+
+  const coloresAccesibilidad: Record<string, string> = {
+    "Arquitectónica": "#FB8C00",
+    "Cognitiva": "#4FC3F7",
+    "Sensorial": "#FFEB3B",
+    "CA": "#66BB6A",
+  };
 
 
   useEffect(() => {
@@ -65,8 +75,25 @@ const CustomMap = ({
 
   }, [map]);
 
+  const marcadoresFiltrados = useMemo(() => {
+    if (!onSeleccionFiltro || onSeleccionFiltro.length === 0) {
+      return marcadores;
+    }
 
-  const puntos = useMemo(() => marcadores.map(m => ({
+    return marcadores.filter(marcador => {
+      const accesibilidadesMarcador = marcador.accesibilidad_marcador || [];
+
+      return accesibilidadesMarcador.some((a: any) => {
+        const acc = a.accesibilidad;
+        return onSeleccionFiltro.some(filtro =>
+          acc?.nombre === filtro.nombre && acc?.tipo === filtro.tipo
+        );
+      });
+    });
+  }, [marcadores, onSeleccionFiltro]);
+
+
+  const puntos = useMemo(() => marcadoresFiltrados.map(m => ({
     type: "Feature",
     properties: {
       cluster: false,
@@ -77,7 +104,8 @@ const CustomMap = ({
       type: "Point",
       coordinates: [m.longitud, m.latitud]
     }
-  })), [marcadores]);
+  })), [marcadoresFiltrados]);
+
 
   useEffect(() => {
     const supercluster = new Supercluster({
@@ -217,7 +245,6 @@ const CustomMap = ({
     };
   }, [map, mapacentrado]);
 
-
   return (
     <>
 
@@ -276,17 +303,55 @@ const CustomMap = ({
                   position: "absolute",
                   top: "50%",
                   left: "100%",
-                  transform: "translate(8px, -50%)", 
-                  fontSize: "15px",
-                  fontWeight: "bold",
-                  color: modoNocturno ? "#F0F0F0" : "#565656",
-                  whiteSpace: "nowrap",
-                  overflow: "hidden",
-                  textOverflow: "ellipsis",
-                  maxWidth: "200px"
+                  transform: "translate(8px, -50%)",
+                  display: "flex",
+                  alignItems: "center",
+                  gap: "4px",
+                  maxWidth: "220px"
                 }}
               >
-                {cluster.properties.nombre}
+                <span
+                  style={{
+                    fontSize: "15px",
+                    fontWeight: "bold",
+                    color: modoNocturno ? "#F0F0F0" : "#565656",
+                    whiteSpace: "nowrap",
+                    overflow: "hidden",
+                    textOverflow: "ellipsis",
+                  }}
+                >
+                  {cluster.properties.nombre}
+                </span>
+
+                {onSeleccionFiltro && onSeleccionFiltro.length > 0 && (() => {
+                  const marcador = marcadores.find(m => m.id === cluster.properties.marcadorId);
+                  const accesibilidadesMarcador = marcador?.accesibilidad_marcador || [];
+
+                  const accesibilidadesFiltradas = accesibilidadesMarcador.filter((a: any) => {
+                    const acc = a.accesibilidad;
+                    return onSeleccionFiltro.some(filtro =>
+                      acc?.nombre === filtro.nombre && acc?.tipo === filtro.tipo
+                    );
+                  });
+
+                  const tiposUnicos: string[] = Array.from(new Set(accesibilidadesFiltradas.map((a: { accesibilidad: { tipo: string } }) => a.accesibilidad.tipo)));
+
+                  const colores = tiposUnicos
+                    .filter(tipo => tipo && coloresAccesibilidad.hasOwnProperty(tipo))
+                    .map(tipo => coloresAccesibilidad[tipo]);
+
+                  return colores.map((color, i) => (
+                    <div
+                      key={i}
+                      style={{
+                        width: "10px",
+                        height: "10px",
+                        borderRadius: "50%",
+                        backgroundColor: color,
+                      }}
+                    />
+                  ));
+                })()}
               </div>
             </div>
           </AdvancedMarker>
@@ -361,7 +426,8 @@ const Map = ({
   onUbicacionActiva,
   onIndicaciones,
   mapacentrado,
-  setMapacentrado
+  setMapacentrado,
+  onSeleccionFiltro
 
 }: {
   center?: { lat: number, lng: number },
@@ -374,6 +440,8 @@ const Map = ({
   onIndicaciones: (instrucciones: string[]) => void,
   mapacentrado: boolean;
   setMapacentrado: (valor: boolean) => void;
+  onSeleccionFiltro?: { nombre: string; tipo: string }[];
+
 
 }) => {
   const [marcadores, setMarcadores] = useState<any[]>([]);
@@ -385,7 +453,7 @@ const Map = ({
     const fetchMarcador = async () => {
       const { data, error } = await supabase
         .from("marcador")
-        .select("id, nombre_recinto, latitud, longitud")
+        .select("id, nombre_recinto, latitud, longitud, accesibilidad_marcador(accesibilidad(tipo, nombre))")
         .eq("activo", true);
 
       if (error) {
@@ -437,7 +505,7 @@ const Map = ({
           onIndicaciones={onIndicaciones}
           mapacentrado={mapacentrado}
           setMapacentrado={setMapacentrado}
-
+          onSeleccionFiltro={onSeleccionFiltro}
         />
       </GoogleMap>
     </APIProvider>
