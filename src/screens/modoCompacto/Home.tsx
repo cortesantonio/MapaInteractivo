@@ -455,7 +455,7 @@ function Modo_Compacto() {
                                                     aria-label={`Iniciar navegación hacia el recinto ${marcador.nombre} ubicado en ${marcador.direccion}`}
                                                 >
                                                     Iniciar Navegación
-                                                    <span className="sr-only"> hacia {marcador.nombre}</span>
+                                                    <span> hacia {marcador.nombre}</span>
                                                 </button>
                                             </div>
                                         </div>
