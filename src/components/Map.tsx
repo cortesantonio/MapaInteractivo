@@ -83,7 +83,6 @@ const CustomMap = ({
     return marcadores.filter(marcador => {
       const accesibilidadesMarcador = marcador.accesibilidad_marcador || [];
 
-      // Verificamos si el marcador tiene alguna accesibilidad que coincida con el filtro
       return accesibilidadesMarcador.some((a: any) => {
         const acc = a.accesibilidad;
         return onSeleccionFiltro.some(filtro =>
