@@ -11,7 +11,7 @@ const FontSizeContext = createContext<FontSizeContextType | undefined>(undefined
 export const useFontSize = () => {
   const context = useContext(FontSizeContext);
   if (!context) {
-    throw new Error('useFontSize debe ser usado dentro de un FontSizeProvider');
+    throw new Error('useFontSize debe usarse dentro de un FontSizeProvider.');
   }
   return context;
 };

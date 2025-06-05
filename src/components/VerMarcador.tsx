@@ -239,7 +239,7 @@ export default function VerMarcador({ MarcadorSelectId, CerrarMarcador, establec
                             className={styles.btnEscribirResena}
                         >
                             <FontAwesomeIcon icon={faCommentDots} />
-                            Escribir reseña
+                            Escribir Reseña
                         </button>
                     </>
                 )}
