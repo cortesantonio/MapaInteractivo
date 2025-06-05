@@ -39,7 +39,7 @@ function BotonEventos() {
         <button
           onClick={toggleEventos}
           style={{
-            background: modoNocturno ? "#2d2d2d" : "white",
+            background: modoNocturno ? "#2d2d2d" : "#5ac15d",
             border: modoNocturno ? "none" : "1px solid #ccc",
             borderRadius: "10px",
             padding: "10px 15px",
@@ -51,13 +51,13 @@ function BotonEventos() {
             transition: "all 0.3s ease",
           }}
         >
-          <FontAwesomeIcon icon={faCalendar} style={{ color: modoNocturno ? "#70cf73" : "#426b44", fontSize: `${fontSize}rem` }} />
-          <p style={{ margin: 0, color: modoNocturno ? "#70cf73" : "#426b44", fontSize: `${fontSize}rem` }}>Eventos</p>
+          <FontAwesomeIcon icon={faCalendar} style={{ color: modoNocturno ? "#70cf73" : "white", fontSize: `${fontSize}rem` }} />
+          <p style={{ margin: 0, color: modoNocturno ? "#70cf73" : "white", fontSize: `${fontSize}rem` }}>Eventos</p>
         </button>
 
         <button
           style={{
-            background: modoNocturno ? "#2d2d2d" : "white",
+            background: modoNocturno ? "#2d2d2d" : "linear-gradient(55deg, #29482a, #4e8950, #9fb97f)",
             border: modoNocturno ? "none" : "1px solid #ccc",
             borderRadius: "10px",
             padding: "10px 10px",
@@ -72,8 +72,8 @@ function BotonEventos() {
           aria-label="Colaborar con el proyecto"
           title="Colaborar con el proyecto"
         >
-          <FontAwesomeIcon icon={faHandshake} style={{ color: modoNocturno ? "#FBEC5D" : "#D1B500", fontSize: `${fontSize}rem`, }} />
-          <p style={{ margin: 0, color: modoNocturno ? "#FBEC5D" : "#D1B500", fontSize: `${fontSize}rem` }}> Colaborar</p>
+          <FontAwesomeIcon icon={faHandshake} style={{ color: modoNocturno ? "#FBEC5D" : "white", fontSize: `${fontSize}rem`, }} />
+          <p style={{ margin: 0, color: modoNocturno ? "#FBEC5D" : "white", fontSize: `${fontSize}rem` }}> Colaborar</p>
         </button>
       </div>
 
