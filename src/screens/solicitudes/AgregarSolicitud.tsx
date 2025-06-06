@@ -519,7 +519,7 @@ export default function AgregarSolicitud() {
                         name="descripcion"
                         placeholder='¿Tu recinto tiene accesibilidad? Describe qué tipo, si aplica'
                         wrap='soft'
-                        style={{height:"45px",resize:"none",borderRadius:"5px",border:"1px solid rgb(165, 165, 165)",color:"black"}}
+                        style={{height:"50px",maxHeight:"100px",resize:"vertical",overflowY:"auto",borderRadius:"5px",border:"1px solid rgb(165, 165, 165)",color:"black"}}
                         value={formData.descripcion}
                         onChange={handleTextareaChange}
                         disabled={!usuario?.nombre} // Deshabilitar el campo si no hay usuario
