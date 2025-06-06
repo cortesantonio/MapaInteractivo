@@ -428,7 +428,7 @@ export default function AgregarSolicitud() {
             <form onSubmit={handleSubmit}>
                 <div style={{ display: 'flex', flexDirection: 'column', maxWidth: '500px' }}>
 
-                    <label className={styles.labelSeccion}>Nombre Locación <span style={{ fontSize: '0.8rem', color: 'gray', fontStyle: 'italic' }}> - ¿Como se llama su negocio?</span></label>
+                    <label className={styles.labelSeccion}>Nombre del negocio o establecimiento </label>
                     <input
                         type="text"
                         name="nombre_locacion"
@@ -439,7 +439,7 @@ export default function AgregarSolicitud() {
                         required
 
                     />
-                    <label className={styles.labelSeccion}>Tipo de Recinto</label>
+                    <label className={styles.labelSeccion}>Tipo de establecimiento<span style={{ fontSize: '0.8rem', color: 'gray', fontStyle: 'italic' }}> - ¿Qué tipo de establecimiento o negocio es? (Ej: farmacia, hospital, cajero,negocio...)</span></label>
                     <div style={{ position: 'relative', width: '100%' }}>
                         <input
                             ref={tipoRecintoRef}
@@ -511,10 +511,8 @@ export default function AgregarSolicitud() {
                     </div>
 
                     <label className={styles.labelSeccion} style={{ marginTop: '10px' }}>
-                        Mensaje
-                        <span style={{ fontSize: '0.8rem', color: 'gray', fontStyle: 'italic' }}>
-                            {' '} - Describa brevemente la accesibilidad de su negocio.
-                        </span>
+                        Accesibilidad del lugar
+                        <span style={{ fontSize: '0.8rem', color: 'gray', fontStyle: 'italic' }}>{' '}- Describa la accesibilidad del recinto (rampas, ascensores, baños adaptados, etc.)</span>
                     </label>
                     <textarea
                         name="descripcion"
@@ -527,9 +525,9 @@ export default function AgregarSolicitud() {
                     />
                     <div style={{ fontSize: '0.8rem', color: '#666', textAlign: 'right' }}>{charCount}/250</div>
                     <label className={styles.labelSeccion}>
-                        Dirección
+                        Dirección de su negocio
                         <span style={{ fontSize: '0.8rem', color: 'gray', fontStyle: 'italic' }}>
-                            {' '} - ¿Dónde está ubicado su negocio? (Dirección completa)
+                            {' '}- ¿Dónde está el negocio o recinto? (Dirección completa, ej: Av. Siempre Viva 742, Curicó)
                         </span>
                     </label>
                     <Autocomplete

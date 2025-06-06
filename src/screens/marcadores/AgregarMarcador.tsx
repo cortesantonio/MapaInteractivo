@@ -223,9 +223,7 @@ export default function AgregarMarcador() {
           <form className={styles.formulario} onSubmit={handleAgregarMarcador}>
             <div style={{ display: 'flex', flexDirection: 'column', maxWidth: '100%' }}>
 
-              <label className={styles.labelSeccion} >Nombre locación
-                <span style={{ fontSize: '0.8rem', color: 'gray', fontStyle: 'italic' }} >  - ¿Como se llama el negocio?</span>
-              </label>
+              <label className={styles.labelSeccion} >Nombre del negocio o establecimiento</label>
               <input
                 type="text"
                 value={dataMarcador.nombre_recinto}
@@ -233,8 +231,8 @@ export default function AgregarMarcador() {
                 className={styles.inputText} required />
 
 
-              <label style={{ display: "flex", flexDirection: "row", alignItems: "center", gap: "5px" }} className={styles.labelSeccion} htmlFor="">Dirección
-                <span style={{ fontSize: '0.8rem', color: 'gray', fontStyle: 'italic' }} > - ¿Dónde está ubicado el negocio? (Dirección completa)</span>
+              <label style={{ display: "flex", flexDirection: "row", alignItems: "center", gap: "5px" }} className={styles.labelSeccion} htmlFor="">Dirección del Establecimiento 
+                <span style={{ fontSize: '0.8rem', color: 'gray', fontStyle: 'italic' }} > - ¿Dónde está el negocio o recinto? (Dirección completa, ej: Av. Siempre Viva 742, Curicó)</span>
               </label>
 
               <Autocomplete
@@ -306,7 +304,7 @@ export default function AgregarMarcador() {
                 className={styles.inputText} />
 
               <label className={styles.labelSeccion} htmlFor="">Teléfono
-                <span style={{ fontSize: '0.8rem', color: 'gray', fontStyle: 'italic' }} > - Número de contacto del negocio.</span>
+                <span style={{ fontSize: '0.8rem', color: 'gray', fontStyle: 'italic' }} > - Número de contacto del negocio o establecimiento.</span>
               </label>
               <div className={styles.ContainerinputTelefono}>
                 <p className={styles.codTelfono}>+569</p>
