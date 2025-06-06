@@ -17,11 +17,10 @@ const ProtectedRoute = ({ children, allowedRoles }: ProtectedRouteProps) => {
             flexDirection: 'column'
         }}>
             <PropagateLoader
-                color="#a90000"
-                size={40}
+                color='#29482a' size={40}
             />
 
-            <p style={{ color: '#a90000', fontSize: '1.2rem', marginTop: '50px', paddingLeft: '50px' }}>Cargando...</p>
+            <p style={{ color: '#29482a', fontSize: '1.2rem', marginTop: '50px', paddingLeft: '50px' }}>Cargando...</p>
         </div>;
     }
 
