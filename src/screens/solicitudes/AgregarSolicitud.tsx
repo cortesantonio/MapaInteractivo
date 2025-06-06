@@ -431,6 +431,7 @@ export default function AgregarSolicitud() {
                     <label className={styles.labelSeccion}>Nombre del negocio o establecimiento </label>
                     <input
                         type="text"
+                        placeholder='Escribe el nombre del negocio o establecimiento'
                         name="nombre_locacion"
                         className={styles.inputText}
                         value={formData.nombre_locacion}
@@ -516,7 +517,9 @@ export default function AgregarSolicitud() {
                     </label>
                     <textarea
                         name="descripcion"
-                        style={{height:"50px",resize:"vertical",borderRadius:"5px",border:"1px solid rgb(165, 165, 165)",color:"black"}}
+                        placeholder='¿Tu recinto tiene accesibilidad? Describe qué tipo, si aplica'
+                        wrap='soft'
+                        style={{height:"45px",resize:"none",borderRadius:"5px",border:"1px solid rgb(165, 165, 165)",color:"black"}}
                         value={formData.descripcion}
                         onChange={handleTextareaChange}
                         disabled={!usuario?.nombre} // Deshabilitar el campo si no hay usuario
