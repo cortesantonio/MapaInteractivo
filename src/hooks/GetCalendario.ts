@@ -16,7 +16,7 @@ const useGetCalendario = () => {
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
 
-  const calendarId = "correoprueba56026@gmail.com";
+  const calendarId = import.meta.env.VITE_GOOGLE_CALENDAR_ID;
   const apiKey = import.meta.env.VITE_GOOGLE_APIKEY;
 
   useEffect(() => {
@@ -75,8 +75,8 @@ const useGetCalendario = () => {
             title: event.summary || "Sin título",
             description: event.description || "Sin descripción",
             address: event.location || "Ubicación no disponible",
-            start: start, 
-            end: end,     
+            start: start,
+            end: end,
             status: status,
             colorStatus: colorStatus,
           };
