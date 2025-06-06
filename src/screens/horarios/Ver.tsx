@@ -132,7 +132,7 @@ function VerHorarioMarcador() {
           h.id === horarioExistente.id ? { ...h, ...nuevoHorario } : h
         );
         setHorarios(actualizados);
-        Registro_cambios('Modificación de un horario', `Se editó el horario del día ${horarioExistente.dia}. Apertura: ${aperturaAnterior} → ${nuevoHorario.apertura}, Cierre: ${cierreAnterior} → ${nuevoHorario.cierre} en el marcador con ID ${id}`);
+        Registro_cambios('Modificación de un Horario', `Se editó el Horario del día ${horarioExistente.dia}. Apertura: ${aperturaAnterior} → ${nuevoHorario.apertura}, Cierre: ${cierreAnterior} → ${nuevoHorario.cierre} en el marcador con ID ${id}`);
       }
     } else {
       const existe = horarios.some(h => h.dia === nuevoHorario.dia);
@@ -156,7 +156,7 @@ function VerHorarioMarcador() {
 
       if (!error && data) {
         setHorarios([...horarios, ...data]);
-        await Registro_cambios('Creación de un horario', `Se agregó el horario del día ${nuevoHorario.dia}. Apertura: ${nuevoHorario.apertura}, Cierre: ${nuevoHorario.cierre} en el marcador con ID ${id}`);
+        await Registro_cambios('Creación de un Horario', `Se agregó el Horario del día ${nuevoHorario.dia}. Apertura: ${nuevoHorario.apertura}, Cierre: ${nuevoHorario.cierre} en el marcador con ID ${id}`);
         window.location.reload();
 
       }
@@ -189,7 +189,7 @@ function VerHorarioMarcador() {
     setHorarios(horarios.filter(h => h.id !== idHorario));
     setDiasSemana(prevDias => [...prevDias, dia]);
 
-    await Registro_cambios('Eliminación de un horario', `Se eliminó el horario del día ${dia} en el marcador con ID ${id}`);
+    await Registro_cambios('Eliminación de un Horario', `Se eliminó el Horario del día ${dia} en el marcador con ID ${id}`);
   };
 
 

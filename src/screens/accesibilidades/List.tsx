@@ -31,7 +31,7 @@ function ListAccesibilidad() {
 
 
     const handleDelete = async (id: number) => {
-        const confirmDelete = window.confirm('¿Estás seguro que deseas eliminar este registro?');
+        const confirmDelete = window.confirm('¿Estás seguro de que deseas eliminar esta accesibilidad?');
 
         if (!confirmDelete) return;
 

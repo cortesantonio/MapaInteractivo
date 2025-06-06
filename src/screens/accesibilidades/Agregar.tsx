@@ -114,12 +114,12 @@ export default function AgregarAccesibilidad() {
 
                 <div style={{ margin: '20px auto', width: '40%', display: 'flex', flexDirection: 'column', minWidth: '200px' }}>
                     <div className={styles.formularioCentro}>
-                        <label className={styles.labelSeccion} >Tipo accesibilidad</label>
+                        <label className={styles.labelSeccion} >Tipo de accesibilidad</label>
                         <select name="tipo" value={formData.tipo} onChange={handleChange}>
                             <option value="">Selecciona un tipo</option>
                             <option value="Arquitectónica">Arquitectónica</option>
                             <option value="Sensorial">Sensorial</option>
-                            <option value="Cognitiva">Cognitiva </option>
+                            <option value="Cognitiva">Cognitiva</option>
                             <option value="CA">CA </option>
                         </select>
                         <label className={styles.labelSeccion}>Nombre</label>
@@ -154,7 +154,7 @@ export default function AgregarAccesibilidad() {
                 <div className={styles.SubContainer}>
                     <div className={styles.tituloCategorias}>
                         <h3 style={{ textAlign: 'center' }}>
-                            Categorías de apoyo para una mejor accesibilidad
+                            Conoce las categorías de accesibilidad disponibles
                         </h3>
                     </div>
                     <div className={styles.ContenGrid}>
@@ -166,8 +166,8 @@ export default function AgregarAccesibilidad() {
                             </div>
                             <div>
                                 <p>
-                                    Incluye rampas, ascensores, pasamanos, baños accesibles y señalización
-                                    adecuada que facilita el desplazamiento físico de personas con movilidad reducida.
+                                    Incluye rampas, ascensores, pasamanos, baños accesibles y señalización adecuada 
+                                    que facilita el desplazamiento físico de personas con movilidad reducida.
                                 </p>
                             </div>
                         </div>
@@ -180,7 +180,7 @@ export default function AgregarAccesibilidad() {
                             </div>
                             <div>
                                 <p>
-                                    Considera ayudas visuales y auditivas como señalización táctil, braille,
+                                    Considera ayudas visuales y auditivas como señalización táctil, braille, 
                                     contraste de colores, bucles magnéticos y alarmas visuales o sonoras.
                                 </p>
                             </div>
@@ -194,8 +194,8 @@ export default function AgregarAccesibilidad() {
                             </div>
                             <div>
                                 <p>
-                                    Apoya la comprensión mediante lenguaje claro, pictogramas,
-                                    señalética intuitiva, y entornos que favorecen la orientación y el entendimiento.
+                                    Apoya la comprensión mediante lenguaje claro, pictogramas, 
+                                    señalética intuitiva y entornos que favorecen la orientación y el entendimiento.
                                 </p>
                             </div>
                         </div>
@@ -208,8 +208,8 @@ export default function AgregarAccesibilidad() {
                             </div>
                             <div>
                                 <p>
-                                    Se enfoca en sistemas de comunicación aumentativa, intérpretes de lengua de señas,
-                                    subtitulados en videos, y accesos adaptados para personas con discapacidad auditiva o con dificultades auditivas.
+                                    Se enfoca en sistemas de comunicación aumentativa, intérpretes de lengua de señas, 
+                                    subtitulados en videos y accesos adaptados para personas con discapacidad auditiva o con dificultades auditivas.
                                 </p>
                             </div>
                         </div>

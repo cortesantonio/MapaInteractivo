@@ -114,7 +114,7 @@ export default function EditarAccesibilidad({ accesibilidadId, onCancel, onUpdat
 
                 <div style={{ margin: '20px auto', width: '40%', display: 'flex', flexDirection: 'column', minWidth: '200px' }}>
                     <div className={styles.formularioCentro}>
-                        <label className={styles.labelSeccion}>Tipo Accesibilidad</label>
+                        <label className={styles.labelSeccion}>Tipo accesibilidad</label>
                         <select name="tipo" value={formData.tipo} onChange={handleChange}>
                             <option value="">Selecciona un tipo</option>
                             <option value="Arquitectónica">Arquitectónica</option>
