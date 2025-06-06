@@ -39,7 +39,7 @@ function BotonEventos() {
         <button
           onClick={toggleEventos}
           style={{
-            background: modoNocturno ? "#2d2d2d" : "#5ac15d",
+            background: modoNocturno ? "#2d2d2d" : "rgb(223, 255, 197)",
             border: modoNocturno ? "none" : "1px solid #ccc",
             borderRadius: "10px",
             padding: "10px 15px",
@@ -51,8 +51,8 @@ function BotonEventos() {
             transition: "all 0.3s ease",
           }}
         >
-          <FontAwesomeIcon icon={faCalendar} style={{ color: modoNocturno ? "#70cf73" : "white", fontSize: `${fontSize}rem` }} />
-          <p style={{ margin: 0, color: modoNocturno ? "#70cf73" : "white", fontSize: `${fontSize}rem` }}>Eventos</p>
+          <FontAwesomeIcon icon={faCalendar} style={{ color: modoNocturno ? "#70cf73" : "black", fontSize: `${fontSize}rem` }} />
+          <p style={{ margin: 0, color: modoNocturno ? "#70cf73" : "black", fontSize: `${fontSize}rem` }}>Eventos</p>
         </button>
 
         <button

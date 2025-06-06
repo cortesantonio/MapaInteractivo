@@ -1,9 +1,9 @@
 import { useEffect, useState, CSSProperties, useCallback } from "react";
-import Map from "../components/Map";
-import Footer from "../components/Footer/Footer";
+import { lazy, Suspense } from 'react';
+const Map = lazy(() => import('../components/Map')); import Footer from "../components/Footer/Footer";
 import Buscador from "../components/Buscador";
 import BotonEventos from "../components/botoneventos";
-import VerMarcador from "../components/VerMarcador";
+const VerMarcador = lazy(() => import("../components/VerMarcador"));
 import NavbarUser from "../components/NavbarUser";
 import { useAuth } from "../hooks/useAuth";
 import { useTheme } from "../components/Footer/Modo_Nocturno";
@@ -134,22 +134,24 @@ export default function Home() {
   return (
 
     <div style={{ width: '100%', height: '100vh', position: 'relative' }}>
-      <Map
-        onSeleccionMarcador={(id: number) => {
-          setMarcadorSeleccionadoId(id);
-          setMostrarMarcador(true);
-        }}
-        onStreetViewChange={(isActive) => setIsStreetViewActive(isActive)}
-        modoViaje={modoViaje}
-        destinoRuta={destino}
-        onUbicacionActiva={handleUbicacionActiva}
-        onIndicaciones={setOnIndicaciones}
-        mapacentrado={mapacentrado}
-        setMapacentrado={setMapacentrado}
-        onSeleccionFiltro={filtrosSeleccionados}
+      <Suspense fallback={<div>Cargando mapa...</div>}>
 
-      />
+        <Map
+          onSeleccionMarcador={(id: number) => {
+            setMarcadorSeleccionadoId(id);
+            setMostrarMarcador(true);
+          }}
+          onStreetViewChange={(isActive) => setIsStreetViewActive(isActive)}
+          modoViaje={modoViaje}
+          destinoRuta={destino}
+          onUbicacionActiva={handleUbicacionActiva}
+          onIndicaciones={setOnIndicaciones}
+          mapacentrado={mapacentrado}
+          setMapacentrado={setMapacentrado}
+          onSeleccionFiltro={filtrosSeleccionados}
 
+        />
+      </Suspense >
       {!isStreetViewActive && (
         <>
           <div style={{
@@ -191,13 +193,16 @@ export default function Home() {
 
 
           </div>
+
           {mostrarMarcador && marcadorSeleccionadoId !== null && (
             <div style={estilosMarcador}>
-              <VerMarcador
-                MarcadorSelectId={marcadorSeleccionadoId as number}
-                CerrarMarcador={() => setMostrarMarcador(false)}
-                establecerIdRutaMarcador={(id) => setIdrutamarcador(id)}
-              />
+              <Suspense fallback={<div>Cargando marcador...</div>}>
+                <VerMarcador
+                  MarcadorSelectId={marcadorSeleccionadoId as number}
+                  CerrarMarcador={() => setMostrarMarcador(false)}
+                  establecerIdRutaMarcador={(id) => setIdrutamarcador(id)}
+                />
+              </Suspense>
             </div>
           )}
           <Footer onSeleccionMarcador={(id: number) => {

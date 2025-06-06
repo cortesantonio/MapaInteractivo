@@ -5,9 +5,13 @@
 }
 
 .containerizquierdo {
-    background-image: url("https://farm1.staticflickr.com/409/31851370830_06403903e3_o.jpg");
-    background-size: cover;
-    background-position: center;
+    background: #11998e;
+    /* fallback for old browsers */
+    background: -webkit-linear-gradient(to right, #38ef7d, #11998e);
+    /* Chrome 10-25, Safari 5.1-6 */
+    background: linear-gradient(to right, #38ef7d, #11998e);
+    /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+
     filter: blur(2px) brightness(0.8);
     position: fixed;
     top: -5px;
@@ -19,7 +23,7 @@
 
 
 .containerderecho {
-    background-color: rgba(255, 255, 255, 0.829);
+    background-color: rgba(255, 255, 255);
     position: absolute;
     top: 0;
     right: 0;
