@@ -6,6 +6,7 @@ import { lazy, Suspense } from 'react'
 const LoginUsuario = lazy(() => import("./screens/Login/loginUsuario"))
 import Home from './screens/Home'
 import AuthCallback from './screens/AuthCallback'
+import NotFound from './screens/NotFound'
 
 // Lazy load para vistas menos críticas
 const Modo_Compacto = lazy(() => import('./screens/modoCompacto/Home'))
@@ -175,7 +176,7 @@ function App() {
             </ProtectedRoute>
           } />
           <Route path='/auth/callback' element={<AuthCallback />} />
-          <Route path='*' element={<h1>404 NOT FOUND</h1>} />
+          <Route path='*' element={<NotFound />} />
         </Routes>
       </div>
     </Suspense >
