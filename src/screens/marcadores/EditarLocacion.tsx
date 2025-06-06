@@ -288,14 +288,14 @@ export default function EditarLocacion() {
 
                                 {userRole === 'administrador' || userRole === 'gestor' ? (
                                     <>
-                                        <label className={styles.labelSeccion} >Nombre locación</label>
+                                        <label className={styles.labelSeccion} >Nombre de negocio o establecimiento</label>
                                         <input
                                             type="text"
                                             value={dataMarcador.nombre_recinto}
                                             onChange={(e) => setDataMarcador({ ...dataMarcador, nombre_recinto: e.target.value })}
                                             className={styles.inputText} required />
 
-                                        <label className={styles.labelSeccion}>Tipo de Recinto</label>
+                                        <label className={styles.labelSeccion}>Tipo de establecimiento <span style={{ fontSize: '0.8rem', color: 'gray', fontStyle: 'italic' }}> - ¿Qué tipo de establecimiento o negocio es? (Ej: farmacia, hospital, cajero,negocio...)</span></label>
                                         <select
                                             name="tipo_recinto"
                                             className={styles.inputOpt}
@@ -307,7 +307,7 @@ export default function EditarLocacion() {
                                                 console.log('Nuevo tipo seleccionado:', newTipoRecinto);
                                             }}
                                         >
-                                            <option value="">Selecciona un tipo de recinto</option>
+                                            <option value="">Selecciona un tipo de establecimiento</option>
                                             {tipoRecinto?.map((tipo) => (
                                                 <option key={tipo.id} value={tipo.id}>
                                                     {tipo.tipo}
@@ -315,7 +315,7 @@ export default function EditarLocacion() {
                                             ))}
                                         </select>
 
-                                        <label className={styles.labelSeccion} htmlFor="">Dirección</label>
+                                        <label className={styles.labelSeccion} htmlFor="">Dirección del establecimiento<span style={{ fontSize: '0.8rem', color: 'gray', fontStyle: 'italic' }} > - ¿Dónde está el negocio o recinto? (Dirección completa, ej: Av. Siempre Viva 742, Curicó)</span></label>
                                         <Autocomplete
                                             onLoad={ac => setAutocomplete(ac)}
                                             onPlaceChanged={() => {
