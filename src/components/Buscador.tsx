@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faFilter, faLocationDot, faUniversalAccess, faXmark } from "@fortawesome/free-solid-svg-icons";
+import { faFilter, faLocationDot, faUniversalAccess, faXmark, faAngleUp, faAngleDown } from "@fortawesome/free-solid-svg-icons";
 import styles from "./css/Buscador.module.css";
 import { supabase } from "../services/supabase";
 import { Accesibilidad } from "../interfaces/Accesibilidad";
@@ -193,6 +193,15 @@ function Buscador({ onSeleccionMarcador, onSeleccionFiltro }: BuscadorProps) {
         return Object.values(filtrosActivos).filter(activo => activo).length;
     };
 
+    const [categoriasAbiertas, setCategoriasAbiertas] = useState<string[]>([]);
+
+    const abrirCategoria = (tipo: string) => {
+        setCategoriasAbiertas((prev) =>
+            prev.includes(tipo)
+                ? prev.filter((cat) => cat !== tipo)
+                : [...prev, tipo]
+        );
+    };
     return (
         <div className={`${styles.container} ${modoNocturno ? styles.darkMode : ''}`}
             style={{
@@ -267,7 +276,16 @@ function Buscador({ onSeleccionMarcador, onSeleccionFiltro }: BuscadorProps) {
                                 }, {} as Record<string, Accesibilidad[]>)
                             ).map(([tipo, accesibilidades]) => (
                                 <div key={tipo} className={styles.filtroGrupo}>
-                                    <h3 style={{ display: "flex", alignItems: "center", gap: "8px", color: modoNocturno ? "#ddd" : "#222" }}>
+                                    <h3
+                                        style={{
+                                            display: "flex",
+                                            alignItems: "center",
+                                            gap: "8px",
+                                            color: modoNocturno ? "#ddd" : "#222",
+                                            cursor: "pointer"
+                                        }}
+                                        onClick={() => abrirCategoria(tipo)}
+                                    >
                                         {tipo}
                                         <span
                                             style={{
@@ -278,27 +296,59 @@ function Buscador({ onSeleccionMarcador, onSeleccionFiltro }: BuscadorProps) {
                                                 display: "inline-block"
                                             }}
                                         />
-                                        
+                                        <FontAwesomeIcon icon={categoriasAbiertas.includes(tipo) ? faAngleUp : faAngleDown} />
+
                                     </h3>
-                                    <div className={styles.pictogramasGrid}>
-                                        {accesibilidades.map((acces) => (
-                                            <div
-                                                key={acces.id}
-                                                className={`${styles.pictogramaItem} ${filtrosActivos[acces.nombre] ? styles.activo : ''}`}
-                                                onClick={() => toggleFiltro(acces.nombre)}
-                                                role="button"
-                                                tabIndex={0}
-                                                aria-pressed={filtrosActivos[acces.nombre]}
-                                            >
-                                                <div className={styles.pictogramaPlaceholder}>
-                                                    {acces.imagen ? <img src={acces.imagen} alt="Imagen" style={{ width: '50px', height: '50px', borderRadius: '50%' }} /> : <FontAwesomeIcon icon={faUniversalAccess} size='xl' style={{ color: 'white' }} />}
+
+                                    {categoriasAbiertas.includes(tipo) && (
+                                        <div className={styles.pictogramasGrid}>
+                                            {accesibilidades.map((acces) => (
+                                                <div
+                                                    key={acces.id}
+                                                    className={`${styles.pictogramaItem} ${filtrosActivos[acces.nombre] ? styles.activo : ''}`}
+                                                    onClick={() => toggleFiltro(acces.nombre)}
+                                                    role="button"
+                                                    aria-pressed={filtrosActivos[acces.nombre]}
+                                                    style={{ backgroundColor: modoNocturno ? "#2d2d2d" : "", }}
+                                                    title={acces.nombre}
+
+                                                >
+                                                    <div className={styles.pictogramaPlaceholder}>
+                                                        {acces.imagen ? (
+                                                            <img
+                                                                src={acces.imagen}
+                                                                alt="Imagen"
+                                                                style={{
+                                                                    width: '50px',
+                                                                    height: '50px',
+                                                                    borderRadius: '50%'
+                                                                }}
+                                                            />
+                                                        ) : (
+                                                            <FontAwesomeIcon
+                                                                icon={faUniversalAccess}
+                                                                size="xl"
+                                                                style={{ color: 'white' }}
+                                                            />
+                                                        )}
+                                                    </div>
+                                                    <span
+                                                        style={{
+                                                            color: modoNocturno ? "white" : "black",
+                                                            display: '-webkit-box',
+                                                            WebkitLineClamp: 2,
+                                                            WebkitBoxOrient: 'vertical',
+                                                            overflow: 'hidden',
+                                                            textOverflow: 'ellipsis',
+                                                            maxWidth: '100%',
+                                                        }}
+                                                    >
+                                                        {acces.nombre}
+                                                    </span>
                                                 </div>
-                                                <span style={{ color: modoNocturno ? "white" : "black" }}>
-                                                    {acces.nombre}
-                                                </span>
-                                            </div>
-                                        ))}
-                                    </div>
+                                            ))}
+                                        </div>
+                                    )}
                                 </div>
                             ))}
                         </div>
