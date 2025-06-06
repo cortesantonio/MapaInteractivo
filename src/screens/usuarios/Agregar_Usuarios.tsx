@@ -186,12 +186,12 @@ function Agregar_Usuarios() {
 
       <div className={styles.container}>
         <div className={styles.titulo}>
-          <h1>Crear Usuario</h1>
+          <h1>Crear usuario</h1>
         </div>
 
         <form className={styles.div_formulario} onSubmit={handleSubmit}>
           <div className={styles.espacio}>
-            <label className={styles.etiquetas}>Nombre Completo</label>
+            <label className={styles.etiquetas}>Nombre completo</label>
             <input
               className={styles.formulario}
               type="text"
@@ -214,13 +214,13 @@ function Agregar_Usuarios() {
             />
             {!rutValido && (
               <span style={{ color: "red", fontSize: "0.8rem" }}>
-                Rut no válido ("Por favor, escriba correctamente su Rut")
+                RUT no válido ("Por favor, escriba correctamente su Rut")
               </span>
             )}
           </div>
 
           <div className={styles.espacio}>
-            <label className={styles.etiquetas}>Fecha de Nacimiento</label>
+            <label className={styles.etiquetas}>Fecha de nacimiento</label>
             <input className={styles.formulario} type="date" placeholder="Fecha Nacimiento" onChange={(e) => setFechaNacimiento(e.target.value)} required />
           </div>
 
@@ -280,7 +280,7 @@ function Agregar_Usuarios() {
           {tiene_una_Discapacidad && (
             <>
               <div className={styles.espacio}>
-                <label className={styles.etiquetas}>Tipo Discapacidad</label>
+                <label className={styles.etiquetas}>Tipo de discapacidad</label>
                 <select
                   onChange={(e) => set_tipo_discapacidad(e.target.value)}
                   className={styles.formulario}
@@ -290,7 +290,7 @@ function Agregar_Usuarios() {
                   <option value="Sensorial">Sensorial</option>
                   <option value="Intelectual">Intelectual</option>
                   <option value="Psicosocial">Psicosocial</option>
-                  <option value="NeuroDesarrollo">NeuroDesarrollo</option>
+                  <option value="NeuroDesarrollo">Neurodesarrollo</option>
                 </select>
               </div>
 
@@ -303,7 +303,7 @@ function Agregar_Usuarios() {
 
           <div className={styles.botones}>
             <button className={styles.btn1} type="button" onClick={() => navigate(-1)}>Cancelar</button>
-            <button className={styles.btn2} type="submit">Añadir Usuario
+            <button className={styles.btn2} type="submit">Añadir usuario
             </button>
           </div>
         </form>

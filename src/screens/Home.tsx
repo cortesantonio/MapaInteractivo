@@ -38,7 +38,7 @@ export default function Home() {
     if (userEstado === false && !yaVerificado) {
       setYaVerificado(true);
       signOut();
-      alert("Su cuenta está desactivada, por favor contacta a soporte");
+      alert("Su cuenta está desactivada. Por favor, contacta a soporte.");
     }
   }, [userEstado]);
 

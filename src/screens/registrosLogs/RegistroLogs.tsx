@@ -1,6 +1,6 @@
 import styles from './css/RegistrosLogs.module.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faMagnifyingGlass,faArrowUpRightFromSquare } from '@fortawesome/free-solid-svg-icons';
+import { faMagnifyingGlass, faArrowUpRightFromSquare } from '@fortawesome/free-solid-svg-icons';
 import { useState, useEffect } from 'react';
 import { supabase } from '../../services/supabase';
 import { Registro_Logs } from '../../interfaces/Registro_Logs';
@@ -106,36 +106,36 @@ export default function RegistroLogs() {
             <NavbarAdmin />
             <div className={styles.container}>
 
-                <h2 style={{ textAlign: 'center', marginTop: '20px' }}>Gestión de Registros</h2>
+                <h2 style={{ textAlign: 'center', marginTop: '20px' }}>Gestión de registros</h2>
 
                 <div className={styles.filtros}>
-                        <div className={styles.filtroCard} style={{ position: 'relative' }}>
-                            <label>
-                                <FontAwesomeIcon icon={faMagnifyingGlass} />
-                            </label>
-                            <input
-                                type="text"
-                                placeholder="Buscar por tipo de accción"
-                                value={busqueda}
-                                onChange={handleBusquedaChange}
-                                style={{
-                                    width: '150px',
-                                    padding: '5px',
-                                    border: 'none',
-                                    outline: 'none'
-                                }}
-                            />
-                        </div>
+                    <div className={styles.filtroCard} style={{ position: 'relative' }}>
+                        <label>
+                            <FontAwesomeIcon icon={faMagnifyingGlass} />
+                        </label>
+                        <input
+                            type="text"
+                            placeholder="Buscar por tipo de acción"
+                            value={busqueda}
+                            onChange={handleBusquedaChange}
+                            style={{
+                                width: '150px',
+                                padding: '5px',
+                                border: 'none',
+                                outline: 'none'
+                            }}
+                        />
+                    </div>
                 </div>
 
                 <div className={styles.content}>
                     <table className={styles.table}>
                         <thead>
                             <tr>
-                                <th>Fecha y Hora</th>
+                                <th>Fecha y hora</th>
                                 <th>Usuario</th>
                                 <th>Rol</th>
-                                <th>Tipo Acción</th>
+                                <th>Tipo de acción</th>
                                 <th>Detalle</th>
                             </tr>
                         </thead>
@@ -143,8 +143,8 @@ export default function RegistroLogs() {
                             {paginatedLogs.map((log) => (
                                 <tr key={log.id}>
                                     <td>{new Date(log.fecha_hora).toLocaleString()}</td>
-                                    <td><button style={{textTransform:'capitalize'}} onClick={() => { navigate(`/usuario/perfil/${log.id_usuario?.id}`) }}>{log.id_usuario?.nombre ?? 'Desconocido'} <FontAwesomeIcon icon={faArrowUpRightFromSquare} size='xs' /></button></td>
-                                    <td style={{textTransform:'capitalize'}}>{log.id_usuario?.rol ?? 'Desconocido'}</td>
+                                    <td><button style={{ textTransform: 'capitalize' }} onClick={() => { navigate(`/usuario/perfil/${log.id_usuario?.id}`) }}>{log.id_usuario?.nombre ?? 'Desconocido'} <FontAwesomeIcon icon={faArrowUpRightFromSquare} size='xs' /></button></td>
+                                    <td style={{ textTransform: 'capitalize' }}>{log.id_usuario?.rol ?? 'Desconocido'}</td>
                                     <td>{log.tipo_accion}</td>
                                     <td>{log.detalle}</td>
                                 </tr>
