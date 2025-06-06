@@ -294,7 +294,7 @@ function Modo_Compacto() {
             
             <div className={styles.contenedor_de_opciones}>
                 {/* Título principal */}
-                <h2 style={{textAlign:"center",padding:"5px",margin:"5px",fontWeight:"300",fontSize:"1.2rem"}}>Inicio Búsqueda de Recintos</h2>
+                <h2 style={{textAlign:"center",padding:"5px",margin:"5px",fontWeight:"300",fontSize:"1.2rem"}}>Inicio de búsqueda de recintos</h2>
                     
                 
                 
@@ -342,7 +342,7 @@ function Modo_Compacto() {
                             aria-label="Ir a mi perfil"
                         >
                             <FontAwesomeIcon className={styles.icono_opcion} icon={faUser} aria-hidden="true" />
-                            <button>Mi Perfil</button>
+                            <button>Mi perfil</button>
                         </div>
                     ) : (
                         <div 
@@ -354,7 +354,7 @@ function Modo_Compacto() {
                             aria-label="Iniciar sesión"
                         >
                             <FontAwesomeIcon className={styles.icono_opcion} icon={faRightToBracket} aria-hidden="true" />
-                            <button>Iniciar Sesión</button>
+                            <button>Iniciar sesión</button>
                         </div>
                     )}
 
@@ -372,7 +372,6 @@ function Modo_Compacto() {
                     </div>
                     
                 </div>
-
                 
                
 
@@ -385,7 +384,7 @@ function Modo_Compacto() {
                                 aria-expanded={eventosVisible}
                                 aria-controls="panel-eventos"
                             >
-                                {eventosVisible ? "Ocultar Eventos" : "Listado De Eventos"}
+                                {eventosVisible ? "Ocultar eventos" : "Listado de eventos"}
                             </button>
                             <FontAwesomeIcon 
                                 className={styles.icono_evento} 
@@ -402,7 +401,7 @@ function Modo_Compacto() {
                                 aria-expanded={filtroIsVisible}
                                 aria-controls="panel-filtros"
                             >
-                                {filtroIsVisible ? "Ocultar Filtros" : "Filtrar Resultados"}
+                                {filtroIsVisible ? "Ocultar filtros" : "Filtrar resultados"}
                             </button>
                             <FontAwesomeIcon 
                                 className={styles.icono_filtro} 
@@ -564,7 +563,7 @@ function Modo_Compacto() {
                         role="region"
                         aria-label="Panel de filtros de accesibilidad"
                     >
-                        <h3>Filtros de Accesibilidad</h3>
+                        <h3>Filtros de accesibilidad</h3>
                         
                         {opcionesAccesibilidad.map((acces) => (
                             <div key={acces.id}>
@@ -645,7 +644,7 @@ function Modo_Compacto() {
                                             <h3 role="list">Accesibilidades:</h3>
                                             
                                             {marcador.filtros.length === 0 ? (
-                                                <p>Este recinto no cuenta con Accesibilidad Universal aún</p>
+                                                <p>Este recinto no cuenta con accesibilidad universal aún.</p>
                                             ) : (
                                                 <p >
                                                     {marcador.filtros.map((filtro, index) => (
@@ -660,7 +659,7 @@ function Modo_Compacto() {
                                                     onClick={() => navigate(`/modocompacto/trazadoruta/${marcador.id}`)}
                                                     aria-label={`Iniciar navegación hacia el recinto ${marcador.nombre} ubicado en ${marcador.direccion}`}
                                                 >
-                                                    Iniciar Navegación
+                                                    Iniciar navegación
                                                     <span> hacia {marcador.nombre}</span>
                                                 </button>
                                             </div>

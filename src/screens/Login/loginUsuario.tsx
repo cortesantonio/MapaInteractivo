@@ -83,7 +83,7 @@ function LoginUsuario() {
 
               </div>
               <p style={{ textAlign: "center", fontSize: "1rem", color: "#666", width: "60%", marginTop: '20px' }}>
-                No almacenamos tu contraseña ni accedemos a tus datos personales sin permiso.
+                No almacenamos tu contraseña ni accedemos a tus datos personales sin tu permiso.
               </p>
             </div>
           </div>
