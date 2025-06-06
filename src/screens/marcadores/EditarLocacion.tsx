@@ -295,7 +295,7 @@ export default function EditarLocacion() {
                                             onChange={(e) => setDataMarcador({ ...dataMarcador, nombre_recinto: e.target.value })}
                                             className={styles.inputText} required />
 
-                                        <label className={styles.labelSeccion}>Tipo de establecimiento <span style={{ fontSize: '0.8rem', color: 'gray', fontStyle: 'italic' }}> - ¿Qué tipo de establecimiento o negocio es? (Ej: farmacia, hospital, cajero,negocio...)</span></label>
+                                        <label className={styles.labelSeccion}>Tipo de establecimiento <span style={{ fontSize: '0.8rem', color: 'gray', fontStyle: 'italic' }}> - ¿Qué tipo de establecimiento o negocio es? (Ej: farmacia, hospital, cajero, almacen, etc.)</span></label>
                                         <select
                                             name="tipo_recinto"
                                             className={styles.inputOpt}
