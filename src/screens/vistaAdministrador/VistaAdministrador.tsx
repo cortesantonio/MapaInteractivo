@@ -122,7 +122,7 @@ function VistaAdministrador() {
                 <div className={styles.sectionHeader}>
                     <hr className={styles.sectionDivider} />
                     <h2 className={styles.sectionTitle}>
-                    Resumen de Solicitudes
+                    Resumen de solicitudes
                     </h2>
                 </div>
 

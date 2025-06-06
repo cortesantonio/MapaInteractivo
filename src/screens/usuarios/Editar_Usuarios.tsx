@@ -243,7 +243,7 @@ function Editar_Usuarios() {
         {
           id_usuario: user?.id,
           tipo_accion: 'Edición de Usuario',
-          detalle: `Se Editó información de un Usuario con ID ${id}`,
+          detalle: `Se editó información de un Usuario con ID ${id}`,
           fecha_hora: fechaHoraActual,
         }
       ]);
@@ -287,7 +287,7 @@ function Editar_Usuarios() {
           <div className={styles.espacio}>
             <label className={styles.etiquetas}>Correo *</label>
             <p className={styles.texto_bloqueado}>
-              {usuarios[0]?.correo || "Correo no disponible"}
+              {usuarios[0]?.correo || "Correo no disponible."}
             </p>
           </div>
           <div className={styles.espacio}>
@@ -295,7 +295,7 @@ function Editar_Usuarios() {
             <input
               className={styles.formulario}
               type="date"
-              placeholder="Fecha de Nacimiento"
+              placeholder="Fecha de nacimiento"
               onChange={(e) => handleChange('fecha_nacimiento', e.target.value)}
               value={usuarios[0]?.fecha_nacimiento ? new Date(usuarios[0].fecha_nacimiento).toISOString().split('T')[0] : ""}
             />

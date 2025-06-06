@@ -107,7 +107,7 @@ function Perfil_Usuario() {
     const fechaHoraActual = new Date().toISOString();
 
     const Registro_cambios = async () => {
-      const tipoAccion = nuevoEstado ? 'Activación de Uusario' : 'Desactivación de Usuario';
+      const tipoAccion = nuevoEstado ? 'Activación de Usuario' : 'Desactivación de Usuario';
       const detalleAccion = nuevoEstado
         ? `Se activó el Usuario con ID ${id}`
         : `Se desactivó el Usuario con ID ${id}`;

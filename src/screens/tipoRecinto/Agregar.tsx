@@ -49,7 +49,7 @@ export default function AgregarTipoRecinto() {
             .single<Tipo_Recinto>();
 
         if (error) {
-            console.error('Error al insertar en ssupabase:', error);
+            console.error('Error al insertar en Supabase:', error);
         } else {
             alert('Agregado correctamente: ' + nuevoTipoRecinto.tipo);
             await Registro_cambios(nuevoTipoRecinto.id);
@@ -98,7 +98,7 @@ export default function AgregarTipoRecinto() {
                 <div style={{ margin: '20px auto', width: '40%', display: 'flex', justifyContent: 'center', flexDirection: 'column', minWidth: '250px' }}>
                     <div style={{ display: 'flex', flexDirection: 'column', maxWidth: '600px' }}>
 
-                        <label className={styles.labelSeccion} >Tipo de recinto</label>
+                        <label className={styles.labelSeccion}>Tipo de recinto</label>
                         <input name="tipo" value={tipo} onChange={(e) => setTipo(e.target.value)}
                             className={styles.inputText} style={{ marginTop: '10px' }} />
                         <p style={{ fontSize: '0.8rem', color: 'gray' }}>*Debe ser en singular.</p>

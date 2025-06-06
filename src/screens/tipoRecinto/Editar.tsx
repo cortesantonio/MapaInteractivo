@@ -80,8 +80,8 @@ export default function EditarTipoRecinto({ idTipoRecinto, onCancel, onUpdate }:
             .insert([
                 {
                     id_usuario: user?.id,
-                    tipo_accion: 'Edición de tipo Recinto',
-                    detalle: `Se editó un tipo de recinto con ID ${id}`,
+                    tipo_accion: 'Edición de Tipo Recinto',
+                    detalle: `Se editó un Tipo de Recinto con ID ${id}`,
                     fecha_hora: fechaHoraActual,
                 }
             ]);
@@ -101,7 +101,7 @@ export default function EditarTipoRecinto({ idTipoRecinto, onCancel, onUpdate }:
                 <div className={styles.titulo}>
 
                     <h2 style={{ textAlign: 'center' }}>
-                        Editar tipo recinto
+                        Editar tipo de recinto
                     </h2>
                 </div>
 
