@@ -37,7 +37,7 @@ function BotonEventos() {
                 padding: "20px 10px"
               }}
               role="alert"
-              aria-label="Error al cargar eventos"
+              aria-label="Error al cargar eventos."
             >
               {error}
             </div>

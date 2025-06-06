@@ -141,7 +141,7 @@ function TrazadoRutaInterno() {
                         <h3>Trazado ruta:</h3>
 
                         <h3 >
-                            <strong> Para llegar a </strong>{marcadorDestino?.nombre_recinto ?? "tu destino"},<strong> que se encuentra en </strong>{marcadorDestino?.direccion ?? "cargando la dirección..."}, <strong>tienes que pasar por los siguientes puntos para llegar al destino:</strong>
+                            <strong> Para llegar a </strong>{marcadorDestino?.nombre_recinto ?? "tu destino"},<strong> que se encuentra en </strong>{marcadorDestino?.direccion ?? "cargando la dirección..."}, <strong>Tienes que pasar por los siguientes puntos para llegar al destino:</strong>
                         </h3>
                         <h3>Indicaciones de ruta:</h3>
                         <div className={styles.direccion}>
