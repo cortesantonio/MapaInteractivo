@@ -1,15 +1,15 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { 
-    faLocationDot, 
-    faCalendar, 
-    faFilter, 
-    faFilterCircleXmark, 
-    faReply, 
-    faRightFromBracket, 
-    faRightToBracket, 
-    faUser, 
+import {
+    faLocationDot,
+    faCalendar,
+    faFilter,
+    faFilterCircleXmark,
+    faReply,
+    faRightFromBracket,
+    faRightToBracket,
+    faUser,
     faBook,
     faChevronLeft,
     faChevronRight
@@ -42,17 +42,17 @@ function Modo_Compacto() {
     const [filtroIsVisible, setFiltroIsVisible] = useState(false);
     const [filtrosActivos, setFiltrosActivos] = useState<Record<string, boolean>>({});
     const [busqueda, setBusqueda] = useState<string>("");
-    
+
     // Estados para datos
     const [marcadores, setMarcadores] = useState<Marcador[]>([]);
     const [resultados, setResultados] = useState<Marcador[]>([]);
     const [opcionesAccesibilidad, setOpcionesAccesibilidad] = useState<Accesibilidad[]>([]);
     const [userDetails, setUserDetails] = useState<Usuarios | null>(null);
-    
+
     // Estados para UI
     const [cargando, setCargando] = useState<boolean>(true);
     const [eventosVisible, setEventosVisible] = useState<boolean>(false);
-    
+
     // Estados para paginación
     const [paginaActual, setPaginaActual] = useState<number>(1);
     const marcadoresPorPagina = 4;
@@ -94,20 +94,20 @@ function Modo_Compacto() {
     const generarNumerosPagina = () => {
         const totalPaginas = calcularTotalPaginas();
         const numeros = [];
-        
+
         // Mostrar máximo 4 números de página
         let inicio = Math.max(1, paginaActual - 1);
         let fin = Math.min(totalPaginas, inicio + 3);
-        
+
         // Ajustar si estamos cerca del final
         if (fin - inicio < 3) {
             inicio = Math.max(1, fin - 3);
         }
-        
+
         for (let i = inicio; i <= fin; i++) {
             numeros.push(i);
         }
-        
+
         return numeros;
     };
 
@@ -219,8 +219,8 @@ function Modo_Compacto() {
                 m.nombre.toLowerCase().includes(texto) ||
                 m.direccion.toLowerCase().includes(texto);
 
-            const coincideFiltro = filtrosSeleccionados.length === 0 || 
-                filtrosSeleccionados.every(f => 
+            const coincideFiltro = filtrosSeleccionados.length === 0 ||
+                filtrosSeleccionados.every(f =>
                     m.filtros.some(filtro => filtro.nombre === f)
                 );
 
@@ -254,7 +254,7 @@ function Modo_Compacto() {
 
     // Limpiar todos los filtros
     const limpiarFiltros = () => {
-        const resetFiltros = {...filtrosActivos};
+        const resetFiltros = { ...filtrosActivos };
         Object.keys(resetFiltros).forEach(key => {
             resetFiltros[key] = false;
         });
@@ -269,20 +269,27 @@ function Modo_Compacto() {
             setEventosVisible(false);
         }
     };
+    const nombre = userDetails?.nombre || user?.user_metadata?.nombre || user?.email;
 
     return (
         <div className={styles.container_principal} role="main" aria-label="Página principal de búsqueda de recintos">
-            
-            <div style={{display:"flex",flexDirection:"row",justifyContent:"center",padding:"25px 5px ",height:"10px"}}>
-                <h4 style={{marginTop:"20px",marginLeft:"5px",fontSize:"1.5rem",fontWeight:"500",marginBottom:"5px"}}>
-                    {user ? `Bienvenido/a, ${userDetails?.nombre || user.user_metadata?.nombre || user.email}` : 'Bienvenido'}
+
+            <div style={{ display: "flex", flexDirection: "row", justifyContent: "center", padding: "25px 5px ", height: "10px" }}>
+                <h4 style={{ marginTop: "20px", marginLeft: "5px", fontSize: "1.5rem", fontWeight: "500", marginBottom: "5px" }}>
+                    {user ? (
+                        <>
+                            Bienvenido/a, <span style={{ textTransform: 'capitalize', fontSize: "1.5rem", fontWeight: "500" }}>{nombre}</span>
+                        </>
+                    ) : (
+                        'Bienvenido'
+                    )}
                 </h4>
             </div>
-        
+
             {/* Botón Atrás */}
             <div>
-                <button 
-                    className={styles.botonatras} 
+                <button
+                    className={styles.botonatras}
                     onClick={() => navigate(-1)}
                     aria-label="Volver a la página anterior"
                 >
@@ -291,21 +298,21 @@ function Modo_Compacto() {
                 </button>
             </div>
 
-            
+
             <div className={styles.contenedor_de_opciones}>
                 {/* Título principal */}
-                <h2 style={{textAlign:"center",padding:"5px",margin:"5px",fontWeight:"300",fontSize:"1.2rem"}}>Inicio de búsqueda de recintos</h2>
-                    
-                
-                
-                
+                <h2 style={{ textAlign: "center", padding: "5px", margin: "5px", fontWeight: "300", fontSize: "1.2rem" }}>Inicio de búsqueda de recintos</h2>
+
+
+
+
                 {/* Buscador */}
                 <div className={styles.contenedor_buscador}>
                     <div className={styles.buscador}>
-                        <input 
-                            type="text" 
-                            placeholder="Buscar por nombre o dirección" 
-                            onChange={(e) => setBusqueda(e.target.value)} 
+                        <input
+                            type="text"
+                            placeholder="Buscar por nombre o dirección"
+                            onChange={(e) => setBusqueda(e.target.value)}
                             value={busqueda}
                             aria-label="Buscar recintos por nombre o dirección"
                             role="searchbox"
@@ -316,11 +323,11 @@ function Modo_Compacto() {
 
                 {/* Opciones de usuario */}
                 <div className={styles.contenedor_opciones} role="navigation" aria-label="Opciones de usuario">
-                    
-               
+
+
                     {/* Opción Colaborar */}
-                    <div 
-                        className={styles.opcion_tarjeta} 
+                    <div
+                        className={styles.opcion_tarjeta}
                         onClick={() => navigate("/colaborar")}
                         role="button"
                         tabIndex={0}
@@ -333,8 +340,8 @@ function Modo_Compacto() {
 
                     {/* Opción Mi Perfil o Iniciar Sesión */}
                     {user ? (
-                        <div 
-                            className={styles.opcion_tarjeta} 
+                        <div
+                            className={styles.opcion_tarjeta}
                             onClick={() => navigate(`/usuario/perfil/${user.id}`)}
                             role="button"
                             tabIndex={0}
@@ -345,8 +352,8 @@ function Modo_Compacto() {
                             <button>Mi perfil</button>
                         </div>
                     ) : (
-                        <div 
-                            className={styles.opcion_tarjeta} 
+                        <div
+                            className={styles.opcion_tarjeta}
                             onClick={() => navigate("/login")}
                             role="button"
                             tabIndex={0}
@@ -359,8 +366,8 @@ function Modo_Compacto() {
                     )}
 
                     {/* Opción Salir */}
-                    <div 
-                        className={styles.opcion_tarjeta} 
+                    <div
+                        className={styles.opcion_tarjeta}
                         onClick={() => navigate("/")}
                         role="button"
                         tabIndex={0}
@@ -370,79 +377,79 @@ function Modo_Compacto() {
                         <FontAwesomeIcon className={styles.icono_opcion} icon={faRightFromBracket} aria-hidden="true" />
                         <button>Salir</button>
                     </div>
-                    
+
                 </div>
-                
-               
+
+
 
                 {/* Botones de eventos y filtros */}
                 <div className={styles.contenedor_botones} role="toolbar" aria-label="Herramientas de búsqueda">
                     <div className={styles.contenedor_eventos}>
                         <div className={styles.eventos}>
-                            <button 
+                            <button
                                 onClick={toggleEventos}
                                 aria-expanded={eventosVisible}
                                 aria-controls="panel-eventos"
                             >
                                 {eventosVisible ? "Ocultar eventos" : "Listado de eventos"}
                             </button>
-                            <FontAwesomeIcon 
-                                className={styles.icono_evento} 
-                                icon={faCalendar} 
-                                onClick={toggleEventos} 
+                            <FontAwesomeIcon
+                                className={styles.icono_evento}
+                                icon={faCalendar}
+                                onClick={toggleEventos}
                                 aria-hidden="true"
                             />
                         </div>
                     </div>
                     <div className={styles.contenedor_filtros}>
                         <div className={styles.filtros}>
-                            <button 
+                            <button
                                 onClick={toggleFiltros}
                                 aria-expanded={filtroIsVisible}
                                 aria-controls="panel-filtros"
                             >
                                 {filtroIsVisible ? "Ocultar filtros" : "Filtrar resultados"}
                             </button>
-                            <FontAwesomeIcon 
-                                className={styles.icono_filtro} 
-                                icon={filtroIsVisible ? faFilterCircleXmark : faFilter} 
+                            <FontAwesomeIcon
+                                className={styles.icono_filtro}
+                                icon={filtroIsVisible ? faFilterCircleXmark : faFilter}
                                 onClick={toggleFiltros}
                                 aria-hidden="true"
                             />
                         </div>
                     </div>
 
-                    
+
                 </div>
 
-        
+
 
                 {/* Paginación Para Marcadores */}
                 {!eventosVisible && resultados.length > 0 && (
-                    <nav 
-                        role="navigation" 
+                    <nav
+                        role="navigation"
                         aria-label="Navegación de páginas de resultados"
                         style={{
-                            display: "flex", 
-                            flexDirection: "row", 
-                            justifyContent: "center", 
-                            alignItems: "center", 
-                            listStyle: "none", 
+                            display: "flex",
+                            flexDirection: "row",
+                            justifyContent: "center",
+                            alignItems: "center",
+                            listStyle: "none",
                             margin: "5px"
                         }}
                     >
                         {/* Botón Anterior */}
                         <div style={{
-                            margin: "10px", 
-                            color:"yellow",
+                            margin: "10px",
+                            color: "yellow",
                             backgroundColor: "#000",
-                            padding: "5px", 
+                            padding: "5px",
                             borderRadius: "5px",
                             opacity: paginaActual === 1 ? 0.5 : 1
                         }}>
-                            <button 
+                            <button
                                 style={{
-                                    color:"yellow",
+                                    color: "yellow",
                                     backgroundColor: "#000",
                                     border: "none",
                                     fontSize: "12px",
@@ -454,11 +461,11 @@ function Modo_Compacto() {
                                 disabled={paginaActual === 1}
                                 aria-label={`Ir a la página anterior. Página actual ${paginaActual} de ${calcularTotalPaginas()}`}
                             >
-                                <FontAwesomeIcon 
+                                <FontAwesomeIcon
                                     style={{
-                                        fontSize:"15px",
+                                        fontSize: "15px",
                                         marginRight: "5px"
-                                    }} 
+                                    }}
                                     icon={faChevronLeft}
                                     aria-hidden="true"
                                 />
@@ -467,10 +474,10 @@ function Modo_Compacto() {
                         </div>
 
                         {/* Números de página */}
-                        <ul 
+                        <ul
                             style={{
-                                display: "flex", 
-                                gap: "5px", 
+                                display: "flex",
+                                gap: "5px",
                                 background: "#fff",
                                 listStyle: "none",
                                 margin: 0,
@@ -494,8 +501,8 @@ function Modo_Compacto() {
                                         }}
                                         onClick={() => irAPagina(numeroPagina)}
                                         aria-label={
-                                            paginaActual === numeroPagina 
-                                                ? `Página ${numeroPagina}, página actual` 
+                                            paginaActual === numeroPagina
+                                                ? `Página ${numeroPagina}, página actual`
                                                 : `Ir a la página ${numeroPagina} de ${calcularTotalPaginas()}`
                                         }
                                         aria-current={paginaActual === numeroPagina ? "page" : undefined}
@@ -508,15 +515,15 @@ function Modo_Compacto() {
 
                         {/* Botón Siguiente */}
                         <div style={{
-                            margin: "10px", 
-                            backgroundColor:"#000",
-                            padding: "5px", 
+                            margin: "10px",
+                            backgroundColor: "#000",
+                            padding: "5px",
                             borderRadius: "5px",
                             opacity: paginaActual === calcularTotalPaginas() ? 0.5 : 1
                         }}>
-                            <button 
+                            <button
                                 style={{
-                                    color:"yellow",
+                                    color: "yellow",
                                     backgroundColor: "#000",
                                     border: "none",
                                     fontSize: "12px",
@@ -529,10 +536,10 @@ function Modo_Compacto() {
                                 aria-label={`Ir a la página siguiente. Página actual ${paginaActual} de ${calcularTotalPaginas()}`}
                             >
                                 Siguiente
-                                <FontAwesomeIcon 
+                                <FontAwesomeIcon
                                     style={{
-                                        color:"yellow",
-                                        fontSize:"15px",
+                                        color: "yellow",
+                                        fontSize: "15px",
                                         marginLeft: "5px"
                                     }}
                                     icon={faChevronRight}
@@ -545,7 +552,7 @@ function Modo_Compacto() {
 
                 {/* Panel de eventos */}
                 {eventosVisible && (
-                    <div 
+                    <div
                         id="panel-eventos"
                         className={styles.contenedor_resultados_eventos}
                         role="region"
@@ -557,14 +564,14 @@ function Modo_Compacto() {
 
                 {/* Panel de filtros */}
                 {filtroIsVisible && (
-                    <div 
+                    <div
                         id="panel-filtros"
                         className={styles.contenedor_resultados_filtros}
                         role="region"
                         aria-label="Panel de filtros de accesibilidad"
                     >
                         <h3>Filtros de accesibilidad</h3>
-                        
+
                         {opcionesAccesibilidad.map((acces) => (
                             <div key={acces.id}>
                                 <label>
@@ -581,9 +588,9 @@ function Modo_Compacto() {
                                 </label>
                             </div>
                         ))}
-                        
+
                         {Object.values(filtrosActivos).some(Boolean) && (
-                            <button 
+                            <button
                                 onClick={limpiarFiltros}
                                 style={{
                                     marginTop: '10px',
@@ -602,24 +609,24 @@ function Modo_Compacto() {
                     </div>
                 )}
 
-                
+
 
                 {/* Resultados de búsqueda */}
                 {!eventosVisible && (
-                    <div 
+                    <div
                         className={styles.resultados_busqueda}
                         role="region"
                         aria-label="Resultados de la búsqueda"
                     >
                         <div className={styles.contenedor_titulo}>
-                            <h4 style={{textAlign:"center"}}>
+                            <h4 style={{ textAlign: "center" }}>
                                 Resultados {resultados.length > 0 && `(${resultados.length})`}
                                 {resultados.length > marcadoresPorPagina && (
-                                    <span style={{fontSize: "0.9em", color: "#666"}}>
+                                    <span style={{ fontSize: "0.9em", color: "#666" }}>
                                         - Página {paginaActual} de {calcularTotalPaginas()}
                                     </span>
                                 )}
-                            </h4> 
+                            </h4>
                         </div>
 
                         <div className={styles.contenedor_resultados}>
@@ -629,8 +636,8 @@ function Modo_Compacto() {
                                 </div>
                             ) : calcularMarcadoresPaginados().length > 0 ? (
                                 calcularMarcadoresPaginados().map((marcador) => (
-                                    <div 
-                                        key={marcador.id} 
+                                    <div
+                                        key={marcador.id}
                                         className={styles.marcador}
                                         role="article"
                                         aria-label={`Recinto: ${marcador.nombre}`}
@@ -639,10 +646,10 @@ function Modo_Compacto() {
                                         <h3>{marcador.nombre}</h3>
                                         <p><strong>Tipo:</strong> {marcador.tipoRecintoInfo.tipo}</p>
                                         <p><strong>Dirección:</strong> {marcador.direccion}</p>
-                                        
+
                                         <div className={styles.accesibilidad_marcador}>
                                             <h3 role="list">Accesibilidades:</h3>
-                                            
+
                                             {marcador.filtros.length === 0 ? (
                                                 <p>Este recinto no cuenta con accesibilidad universal aún.</p>
                                             ) : (
@@ -652,8 +659,8 @@ function Modo_Compacto() {
                                                     ))}
                                                 </p>
                                             )}
-                                            
-                                            <div style={{display: "flex", justifyContent: "flex-end", alignItems: "flex-end", margin: "15px"}}>
+
+                                            <div style={{ display: "flex", justifyContent: "flex-end", alignItems: "flex-end", margin: "15px" }}>
                                                 <button
                                                     role="button"
                                                     onClick={() => navigate(`/modocompacto/trazadoruta/${marcador.id}`)}

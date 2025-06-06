@@ -39,7 +39,7 @@ function Inspeccionar_Resenas() {
   }, [id]);
 
   const EliminarResena = async (idResena: number) => {
-    const confirmacion = window.confirm("¿Estás seguro de que quieres borrar esta reseña?");
+    const confirmacion = window.confirm("¿Estás seguro de que quieres eliminar esta reseña?");
     if (!confirmacion) return;
 
     try {
