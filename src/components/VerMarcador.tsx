@@ -13,7 +13,7 @@ import { Horarios } from '../interfaces/Horarios';
 import { Accesibilidad } from '../interfaces/Accesibilidad';
 import ImagenConFallback from './ImagenConFallback';
 import { useTheme } from "../components/Footer/Modo_Nocturno";
-import Marca_Verificador from "../../public/img/Marca_Verificador.webp";
+import Marca_Verificador from "../../public/img/verificado.png";
 import { ClipLoader } from 'react-spinners';
 
 interface Props {
@@ -104,7 +104,8 @@ export default function VerMarcador({ MarcadorSelectId, CerrarMarcador, establec
                         pagina_web: marcador.pagina_web,
                         telefono: marcador.telefono,
                         activo: marcador.activo,
-                        accesibilidad_certificada: marcador.accesibilidad_certificada
+                        accesibilidad_certificada: marcador.accesibilidad_certificada,
+                        info_adicional: marcador.info_adicional
 
                     };
 
@@ -297,7 +298,7 @@ export default function VerMarcador({ MarcadorSelectId, CerrarMarcador, establec
                                     {Marcador?.accesibilidad_certificada && (
                                         <div
                                             className={styles.tooltipContainer}
-                                            title="Marcador verificado"
+                                            title="Marcador verificado por municipalidad."
                                         >
                                             <img
                                                 src={Marca_Verificador}
@@ -504,6 +505,10 @@ export default function VerMarcador({ MarcadorSelectId, CerrarMarcador, establec
                                             </div>
                                         </div>
                                     ))}
+                                    <div className={styles.infoAdicional}>
+                                        <h4 style={{ color: modoNocturno ? "#fff" : "" }}>Información Adicional</h4>
+                                        <p style={{ color: modoNocturno ? "#fff" : "#575757", marginTop: "10px" }}>{Marcador.info_adicional || '- No aporta información adicional.'}</p>
+                                    </div>
                                 </div>
                             </>
                         </div>

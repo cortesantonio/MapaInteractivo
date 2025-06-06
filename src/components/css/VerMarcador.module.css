@@ -89,7 +89,7 @@
 }
 
 .tooltipContainer:hover::after {
-    content: "Marcador verificado";
+    content: "Marcador verificado por municipalidad";
     position: absolute;
     bottom: 120%;
     left: 50%;

@@ -39,7 +39,7 @@ function BotonEventos() {
         <button
           onClick={toggleEventos}
           style={{
-            background: modoNocturno ? "#2d2d2d" : "rgb(223, 255, 197)",
+            background: modoNocturno ? "#2d2d2d" : "rgb(255, 255, 255)",
             border: modoNocturno ? "none" : "1px solid #ccc",
             borderRadius: "10px",
             padding: "10px 15px",
