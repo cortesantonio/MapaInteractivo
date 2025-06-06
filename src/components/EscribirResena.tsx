@@ -132,16 +132,16 @@ export default function EscribirResena({ onSubmit, onCancel, idMarcador }: Props
 
                     <div className={styles.buttons}>
                         {onCancel && (
-                            <button 
-                                onClick={onCancel} 
+                            <button
+                                onClick={onCancel}
                                 className={styles.cancelButton}
                                 aria-label="Cancelar reseña"
                             >
                                 Cancelar
                             </button>
                         )}
-                        <button 
-                            onClick={handleSubmit} 
+                        <button
+                            onClick={handleSubmit}
                             className={styles.submitButton}
                             disabled={calificacion === 0 || comentario.trim() === ''}
                             aria-label="Publicar reseña"
@@ -153,7 +153,7 @@ export default function EscribirResena({ onSubmit, onCancel, idMarcador }: Props
             ) : (
                 <div className={styles.loginPrompt}>
                     <p>Inicia sesión para dejar una reseña</p>
-                    <button 
+                    <button
                         className={styles.loginButton}
                         onClick={() => navigate('/login')}
                         aria-label="Iniciar sesión con Google"

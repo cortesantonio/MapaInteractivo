@@ -47,7 +47,7 @@ function Compartir({ idMarcador }: Props) {
     return (
         <div>
             <div className={styles.contenedor_principal_iconos}>
-                <h3 style={{ color: modoNocturno ? "#fff" : "" }} >Compartir Información</h3>
+                <h3 style={{ color: modoNocturno ? "#fff" : "" }} >Compartir información</h3>
                 <div className={styles.contenedor_de_iconos}>
                     <div className={styles.seccion_icono} onClick={() => compartirEnRedSocial('facebook')}>
                         <FontAwesomeIcon icon={faFacebook} style={{ color: "#1877f2", cursor: "pointer" }} className={styles.icono} />

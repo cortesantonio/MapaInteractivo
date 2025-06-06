@@ -21,8 +21,8 @@ export default function Microfono({
     onSeleccionMarcador: (id: number) => void;
 }) {
     const { user } = useAuth();
-    const {modoNocturno} = useTheme ();
-    const {fontSize} = useFontSize ();
+    const { modoNocturno } = useTheme();
+    const { fontSize } = useFontSize();
     const [mensajePermisos, setMensajePermisos] = useState("");
     const [mostrarEscuchando, setMostrarEscuchando] = useState(false);
     const [intentosFallidos, setIntentosFallidos] = useState(0);
@@ -76,13 +76,13 @@ export default function Microfono({
 
 
     const solicitarPermisoMicrofono = async () => {
-        if (!browserSupportsSpeechRecognition){
+        if (!browserSupportsSpeechRecognition) {
             return;
         }
-        
+
         try {
             const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-            setStream(stream); 
+            setStream(stream);
             setEstadoPermisoMicrofono('granted');
             stream.getTracks().forEach(track => track.stop());
         } catch (error) {
@@ -114,7 +114,7 @@ export default function Microfono({
         const fechaFinal = `${partes.year}-${partes.month}-${partes.day}T${partes.hour}:${partes.minute}:${partes.second}`;
         return fechaFinal;
     };
-    
+
     const SeleccionBusqueda = async (idMarcador: number) => {
         const id_usuario = user?.id;
 
@@ -147,7 +147,7 @@ export default function Microfono({
                 await SpeechRecognition.startListening({ continuous: true });
                 setTimeout(() => setMostrarEscuchando(true), 2000);
             } catch (error) {
-                console.error('Error al iniciar reconocimiento:', error);
+                console.error('Error al iniciar reconocimiento de voz:', error);
                 setMostrarEscuchando(false);
             }
         };
@@ -217,11 +217,11 @@ export default function Microfono({
 
         const textoMin = texto.toLowerCase().trim();
 
-        const palabrasTexto = textoMin.split(/\s+/); 
+        const palabrasTexto = textoMin.split(/\s+/);
 
         const coincidencias = data.filter((marcador: { nombre_recinto: string; id: number }) => {
             const nombreMin = marcador.nombre_recinto?.toLowerCase().trim() || "";
-            const palabrasNombre = nombreMin.split(/\s+/); 
+            const palabrasNombre = nombreMin.split(/\s+/);
             return palabrasTexto.some(palabraTexto =>
                 palabrasNombre.includes(palabraTexto)
             );
@@ -297,7 +297,7 @@ export default function Microfono({
                 setTimeout(() => {
                     SpeechRecognition.startListening({ continuous: true });
                 }, 1500);
-                
+
                 setTimeout(() => {
                     setMostrarEscuchando(true);
                 }, 2000);
@@ -320,15 +320,15 @@ export default function Microfono({
                 const index = opcion - 1;
                 if (coincidenciasEncontradas[index]) {
                     onSeleccionMarcador(coincidenciasEncontradas[index].id);
-                    SeleccionBusqueda(coincidenciasEncontradas[index].id); 
+                    SeleccionBusqueda(coincidenciasEncontradas[index].id);
                     closePanel();
                     setCoincidenciasEncontradas(null);
                     SpeechRecognition.stopListening();
                     setModoSeleccion(false);
-                    
+
                 }
             } else {
-                setMensaje("Por favor, di '1', o '2' para seleccionar la opción.");
+                setMensaje("Por favor, di '1' o '2' para seleccionar la opción.");
                 SpeechRecognition.stopListening();
                 resetTranscript();
                 setMostrarEscuchando(false);
@@ -372,7 +372,7 @@ export default function Microfono({
                     )}
 
                     {mensajePermisos && (
-                        <h3 style={{ color: "red", whiteSpace: "pre-line"  }} className={styles.Titulo}>
+                        <h3 style={{ color: "red", whiteSpace: "pre-line" }} className={styles.Titulo}>
                             {mensajePermisos}
                         </h3>
                     )}
@@ -388,7 +388,7 @@ export default function Microfono({
                                         className={styles.BotonReintentar}
                                         onClick={() => {
                                             setIntentosFallidos(0);
-                                            setMensaje("Te escucho ¿Cuál es el nombre del lugar que quieres ir?");
+                                            setMensaje("Te escucho. ¿Cuál es el nombre del lugar al que quieres ir?");
                                             setMostrarEscuchando(false);
                                             resetTranscript();
                                             setTimeout(() => {

@@ -278,7 +278,7 @@ export default function TrazadoRuta({
                                     Inicia sesión para acceder a búsquedas recientes
                                 </p>
                             ) : !destinosRecientes ? (
-                                <p style={{ color: modoNocturno ? "#fff" : "", fontSize: `${fontSize}rem` }} className={styles.MensajeP}>No hay Destinos Recientes</p>
+                                <p style={{ color: modoNocturno ? "#fff" : "", fontSize: `${fontSize}rem` }} className={styles.MensajeP}>No hay destinos recientes</p>
                             ) : (
 
                                 <div

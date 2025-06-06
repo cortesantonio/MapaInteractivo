@@ -10,7 +10,9 @@ import {
     faRightFromBracket, 
     faRightToBracket, 
     faUser, 
-    faBook 
+    faBook,
+    faChevronLeft,
+    faChevronRight
 } from "@fortawesome/free-solid-svg-icons";
 
 import styles from "./css/Modo_Compacto.module.css";
@@ -33,6 +35,7 @@ interface Marcador {
         tipo: string;
     }[];
 }
+
 function Modo_Compacto() {
     const navigate = useNavigate();
     const { user } = useAuth();
@@ -49,6 +52,64 @@ function Modo_Compacto() {
     // Estados para UI
     const [cargando, setCargando] = useState<boolean>(true);
     const [eventosVisible, setEventosVisible] = useState<boolean>(false);
+    
+    // Estados para paginación
+    const [paginaActual, setPaginaActual] = useState<number>(1);
+    const marcadoresPorPagina = 4;
+
+    // Función para calcular marcadores paginados
+    const calcularMarcadoresPaginados = () => {
+        const indiceInicio = (paginaActual - 1) * marcadoresPorPagina;
+        const indiceFin = indiceInicio + marcadoresPorPagina;
+        return resultados.slice(indiceInicio, indiceFin);
+    };
+
+    // Función para calcular total de páginas
+    const calcularTotalPaginas = () => {
+        return Math.ceil(resultados.length / marcadoresPorPagina);
+    };
+
+    // Funciones para manejar navegación
+    const irPaginaAnterior = () => {
+        if (paginaActual > 1) {
+            setPaginaActual(paginaActual - 1);
+        }
+    };
+
+    const irPaginaSiguiente = () => {
+        const totalPaginas = calcularTotalPaginas();
+        if (paginaActual < totalPaginas) {
+            setPaginaActual(paginaActual + 1);
+        }
+    };
+
+    const irAPagina = (numeroPagina: number) => {
+        const totalPaginas = calcularTotalPaginas();
+        if (numeroPagina >= 1 && numeroPagina <= totalPaginas) {
+            setPaginaActual(numeroPagina);
+        }
+    };
+
+    // Función para generar números de página visibles
+    const generarNumerosPagina = () => {
+        const totalPaginas = calcularTotalPaginas();
+        const numeros = [];
+        
+        // Mostrar máximo 4 números de página
+        let inicio = Math.max(1, paginaActual - 1);
+        let fin = Math.min(totalPaginas, inicio + 3);
+        
+        // Ajustar si estamos cerca del final
+        if (fin - inicio < 3) {
+            inicio = Math.max(1, fin - 3);
+        }
+        
+        for (let i = inicio; i <= fin; i++) {
+            numeros.push(i);
+        }
+        
+        return numeros;
+    };
 
     useEffect(() => {
         const fetchMarcadores = async () => {
@@ -169,6 +230,11 @@ function Modo_Compacto() {
         setResultados(filtrados);
     }, [busqueda, marcadores, filtrosActivos]);
 
+    // useEffect para resetear página cuando cambian los filtros
+    useEffect(() => {
+        setPaginaActual(1); // Resetear a página 1 cuando cambien los resultados
+    }, [busqueda, filtrosActivos]);
+
     // Cambiar estado del filtro
     const toggleFiltro = (filtro: string) => {
         setFiltrosActivos(prev => ({
@@ -203,6 +269,7 @@ function Modo_Compacto() {
             setEventosVisible(false);
         }
     };
+
     return (
         <div className={styles.container_principal} role="main" aria-label="Página principal de búsqueda de recintos">
             
@@ -229,6 +296,7 @@ function Modo_Compacto() {
                 {/* Título principal */}
                 <h2 style={{textAlign:"center",padding:"5px",margin:"5px",fontWeight:"300",fontSize:"1.2rem"}}>Inicio Búsqueda de Recintos</h2>
                     
+                
                 
                 
                 {/* Buscador */}
@@ -302,7 +370,10 @@ function Modo_Compacto() {
                         <FontAwesomeIcon className={styles.icono_opcion} icon={faRightFromBracket} aria-hidden="true" />
                         <button>Salir</button>
                     </div>
+                    
                 </div>
+
+                
                
 
                 {/* Botones de eventos y filtros */}
@@ -341,7 +412,137 @@ function Modo_Compacto() {
                             />
                         </div>
                     </div>
+
+                    
                 </div>
+
+        
+
+                {/* Paginación Para Marcadores */}
+                {!eventosVisible && resultados.length > 0 && (
+                    <nav 
+                        role="navigation" 
+                        aria-label="Navegación de páginas de resultados"
+                        style={{
+                            display: "flex", 
+                            flexDirection: "row", 
+                            justifyContent: "center", 
+                            alignItems: "center", 
+                            listStyle: "none", 
+                            margin: "5px"
+                        }}
+                    >
+                        {/* Botón Anterior */}
+                        <div style={{
+                            margin: "10px", 
+                            color:"yellow",
+                            backgroundColor: "#000",
+                            padding: "5px", 
+                            borderRadius: "5px",
+                            opacity: paginaActual === 1 ? 0.5 : 1
+                        }}>
+                            <button 
+                                style={{
+                                    color:"yellow",
+                                    backgroundColor: "#000",
+                                    border: "none",
+                                    fontSize: "12px",
+                                    cursor: paginaActual === 1 ? "not-allowed" : "pointer",
+                                    padding: "8px 12px",
+                                    borderRadius: "5px"
+                                }}
+                                onClick={irPaginaAnterior}
+                                disabled={paginaActual === 1}
+                                aria-label={`Ir a la página anterior. Página actual ${paginaActual} de ${calcularTotalPaginas()}`}
+                            >
+                                <FontAwesomeIcon 
+                                    style={{
+                                        fontSize:"15px",
+                                        marginRight: "5px"
+                                    }} 
+                                    icon={faChevronLeft}
+                                    aria-hidden="true"
+                                />
+                                Anterior
+                            </button>
+                        </div>
+
+                        {/* Números de página */}
+                        <ul 
+                            style={{
+                                display: "flex", 
+                                gap: "5px", 
+                                background: "#fff",
+                                listStyle: "none",
+                                margin: 0,
+                                padding: 0
+                            }}
+                            role="list"
+                            aria-label="Páginas disponibles"
+                        >
+                            {generarNumerosPagina().map(numeroPagina => (
+                                <li key={numeroPagina}>
+                                    <button
+                                        style={{
+                                            fontSize: "12px",
+                                            border: "1px solid rgb(221, 221, 221)",
+                                            padding: "8px 12px",
+                                            cursor: "pointer",
+                                            borderRadius: "5px",
+                                            backgroundColor: paginaActual === numeroPagina ? "#333" : "#000",
+                                            color: "yellow",
+                                            fontWeight: paginaActual === numeroPagina ? "bold" : "normal"
+                                        }}
+                                        onClick={() => irAPagina(numeroPagina)}
+                                        aria-label={
+                                            paginaActual === numeroPagina 
+                                                ? `Página ${numeroPagina}, página actual` 
+                                                : `Ir a la página ${numeroPagina} de ${calcularTotalPaginas()}`
+                                        }
+                                        aria-current={paginaActual === numeroPagina ? "page" : undefined}
+                                    >
+                                        {numeroPagina}
+                                    </button>
+                                </li>
+                            ))}
+                        </ul>
+
+                        {/* Botón Siguiente */}
+                        <div style={{
+                            margin: "10px", 
+                            backgroundColor:"#000",
+                            padding: "5px", 
+                            borderRadius: "5px",
+                            opacity: paginaActual === calcularTotalPaginas() ? 0.5 : 1
+                        }}>
+                            <button 
+                                style={{
+                                    color:"yellow",
+                                    backgroundColor: "#000",
+                                    border: "none",
+                                    fontSize: "12px",
+                                    cursor: paginaActual === calcularTotalPaginas() ? "not-allowed" : "pointer",
+                                    padding: "8px 12px",
+                                    borderRadius: "5px"
+                                }}
+                                onClick={irPaginaSiguiente}
+                                disabled={paginaActual === calcularTotalPaginas()}
+                                aria-label={`Ir a la página siguiente. Página actual ${paginaActual} de ${calcularTotalPaginas()}`}
+                            >
+                                Siguiente
+                                <FontAwesomeIcon 
+                                    style={{
+                                        color:"yellow",
+                                        fontSize:"15px",
+                                        marginLeft: "5px"
+                                    }}
+                                    icon={faChevronRight}
+                                    aria-hidden="true"
+                                />
+                            </button>
+                        </div>
+                    </nav>
+                )}
 
                 {/* Panel de eventos */}
                 {eventosVisible && (
@@ -414,6 +615,11 @@ function Modo_Compacto() {
                         <div className={styles.contenedor_titulo}>
                             <h4 style={{textAlign:"center"}}>
                                 Resultados {resultados.length > 0 && `(${resultados.length})`}
+                                {resultados.length > marcadoresPorPagina && (
+                                    <span style={{fontSize: "0.9em", color: "#666"}}>
+                                        - Página {paginaActual} de {calcularTotalPaginas()}
+                                    </span>
+                                )}
                             </h4> 
                         </div>
 
@@ -422,8 +628,8 @@ function Modo_Compacto() {
                                 <div style={{ padding: '20px', textAlign: 'center' }}>
                                     <p>Cargando recintos...</p>
                                 </div>
-                            ) : resultados.length > 0 ? (
-                                resultados.map((marcador) => (
+                            ) : calcularMarcadoresPaginados().length > 0 ? (
+                                calcularMarcadoresPaginados().map((marcador) => (
                                     <div 
                                         key={marcador.id} 
                                         className={styles.marcador}
