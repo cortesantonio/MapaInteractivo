@@ -40,25 +40,25 @@ function BotonEventos() {
           onClick={toggleEventos}
           style={{
             background: modoNocturno ? "#2d2d2d" : "rgb(255, 255, 255)",
-            border: modoNocturno ? "none" : "1px solid #ccc",
+            border: modoNocturno ? "1px solid rgb(102, 102, 102)" : "1px solid #ccc",
             borderRadius: "10px",
             padding: "10px 15px",
             display: "flex",
             alignItems: "center",
             gap: "5px",
             cursor: "pointer",
-            boxShadow: "0 2px 8px rgba(0, 0, 0, 0.1)",
+            boxShadow: "0 2px 8px rgba(59, 59, 59, 0.86)",
             transition: "all 0.3s ease",
           }}
         >
-          <FontAwesomeIcon icon={faCalendar} style={{ color: modoNocturno ? "#70cf73" : "black", fontSize: `${fontSize}rem` }} />
-          <p style={{ margin: 0, color: modoNocturno ? "#70cf73" : "black", fontSize: `${fontSize}rem` }}>Eventos</p>
+          <FontAwesomeIcon icon={faCalendar} style={{ color: modoNocturno ? "white" : "black", fontSize: `${fontSize}rem` }} />
+          <p style={{ margin: 0, color: modoNocturno ? "white" : "black", fontSize: `${fontSize}rem` }}>Eventos</p>
         </button>
 
         <button
           style={{
             background: modoNocturno ? "#2d2d2d" : "linear-gradient(55deg, #29482a, #4e8950, #9fb97f)",
-            border: modoNocturno ? "none" : "1px solid #ccc",
+            border: modoNocturno ? "1px solid rgb(102, 102, 102)" : "1px solid #ccc",
             borderRadius: "10px",
             padding: "10px 10px",
             display: "flex",
@@ -94,7 +94,8 @@ function BotonEventos() {
           left: window.innerWidth < 768 ? "50%" : "0",
           transform: window.innerWidth < 768 ? "translate(-50%, -50%)" : "none",
           zIndex: 1000,
-          display: EventoIsVisible ? "block" : "none"
+          display: EventoIsVisible ? "block" : "none",
+          
         }}
       >
         {EventoIsVisible && (
