@@ -1,4 +1,4 @@
-import imagenPorDefecto from '../../public/img/Sin Img.png';
+import imagenPorDefecto from '../../public/img/Sin Img.webp';
 
 type Props = {
     src?: string;
