@@ -46,6 +46,7 @@ function LoginUsuario() {
       >
         {!isMobile && (
           <div className={style.containerizquierdo} style={{ flex: 1 }}>
+            <img src="../../../public\img\MarcadorBlanco.png" alt="" />
           </div>
         )}
 

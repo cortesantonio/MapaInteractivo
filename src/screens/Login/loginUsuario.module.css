@@ -12,15 +12,24 @@
     background: linear-gradient(to right, #38ef7d, #11998e);
     /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
 
-    filter: blur(2px) brightness(0.8);
     position: fixed;
     top: -5px;
     left: -5px;
     width: 105%;
     height: 105%;
     z-index: -1;
+    overflow: hidden;
+    filter: blur(1px);
 }
 
+.containerizquierdo img {
+    position: absolute;
+    width: 50%;
+    opacity: 0.8;
+    left: -20%;
+
+
+}
 
 .containerderecho {
     background-color: rgba(255, 255, 255);
