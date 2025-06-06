@@ -185,7 +185,7 @@ export default function Home() {
                   zIndex: 10,
                   position: 'relative'
                 }}
-                src="../../img/logoConCurico.png"
+                src="../../img/logo.png"
                 alt=""
               />
               <NavbarUser />
