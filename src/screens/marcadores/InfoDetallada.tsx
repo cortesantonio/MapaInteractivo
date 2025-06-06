@@ -286,11 +286,11 @@ export default function InfoDetallada() {
                             )}
 
 
-                            <label className={styles.labelSeccion} >Nombre locación</label>
+                            <label className={styles.labelSeccion} >Nombre del negocio o establecimiento </label>
                             <p>{dataMarcador.nombre_recinto}</p>
-                            <label className={styles.labelSeccion}>Tipo de recinto</label>
+                            <label className={styles.labelSeccion}>Tipo de establecimiento</label>
                             <p>{nombreTipoRecinto}</p>
-                            <label className={styles.labelSeccion} htmlFor="">Dirección</label>
+                            <label className={styles.labelSeccion} htmlFor="">Dirección del establecimiento</label>
                             <p>{dataMarcador.direccion}</p>
                             <label className={styles.labelSeccion} htmlFor="">Página web</label>
                             <p>{dataMarcador.pagina_web}</p>
