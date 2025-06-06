@@ -9,7 +9,7 @@ import { supabase } from '../../services/supabase';
 import { faArrowUpRightFromSquare } from '@fortawesome/free-solid-svg-icons';
 import ImagenConFallback from '../../components/ImagenConFallback';
 import { useAuth } from '../../hooks/useAuth';
-import Marca_Verificador from '../../../public/img/Marca_Verificador.webp';
+import Marca_Verificador from '../../../public/img/verificado.png';
 import { Horarios } from '../../interfaces/Horarios';
 
 interface TipoDeAccesibilidades {
