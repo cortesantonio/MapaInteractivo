@@ -45,8 +45,8 @@ function LoginUsuario() {
         style={{ display: "flex", justifyContent: "space-between" }}
       >
         {!isMobile && (
-          <div className={style.containerizquierdo} style={{ flex: 1 }}>
-            <img src="../../../public\img\MarcadorBlanco.png" alt="" />
+          <div className={style.containerizquierdo} style={{ flex: 1, alignItems: "center", display: "flex" }}>
+            <img src="../../..\img\MarcadorBlanco.png" alt="" />
           </div>
         )}
 
