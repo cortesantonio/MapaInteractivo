@@ -192,7 +192,7 @@ function ListMarcadores() {
                 <div className={styles.SubTitulo}>
                     <p>Listado de marcadores</p>
                     <hr style={{ width: '25%', marginTop: '10px', marginBottom: '10px', opacity: '50%' }} />
-                    <p>Aquí puedes ver y administrar todos los marcadores registrados en tu plataforma.</p>
+                    <p>Aquí puedes ver y administrar todos los marcadores registrados en la plataforma.</p>
                 </div>
                 <div className={styles.content}>
                     {currentItems.map((locacion: { id: number; nombre_recinto: string; direccion: string; tipo_recinto: string; activo: boolean; pagina_web: string; }, index: number) => (

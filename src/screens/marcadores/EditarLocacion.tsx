@@ -96,7 +96,7 @@ export default function EditarLocacion() {
                 {
                     id_usuario: user?.id,
                     tipo_accion: 'Edición de Marcador',
-                    detalle: `Se editó el marcador con ID ${id}`,
+                    detalle: `Se editó el Marcador con ID ${id}`,
                     fecha_hora: fechaHoraActual,
                 }
             ]);
@@ -156,7 +156,6 @@ export default function EditarLocacion() {
         }
 
         try {
-
             const { data: { user }, error: userError } = await supabase.auth.getUser();
 
             if (userError || !user) {
@@ -235,7 +234,7 @@ export default function EditarLocacion() {
     const [direccionValida, setDireccionValida] = useState(false);
     const inputRef = useRef<HTMLInputElement>(null);
 
-    if (loadError) return <div>Error cargando places</div>;
+    if (loadError) return <div>Error al cargar Google Places</div>;
     if (!isLoaded) return <div>Cargando autocomplete...</div>;
 
     if (!marcadorPropio) {
@@ -266,7 +265,7 @@ export default function EditarLocacion() {
                     <FontAwesomeIcon icon={faReply} size='2xl' />
                 </button>
                 <div className={styles.Titulo} >
-                    <h2>Editar locación</h2>
+                    <h2>Editar marcador</h2>
                 </div>
                 <div className={styles.locacionTitulo}>
                     <h4>{dataMarcador.nombre_recinto}</h4>
@@ -425,7 +424,7 @@ export default function EditarLocacion() {
                                     ))}
 
                                     <div>
-                                        <label className={styles.labelSeccion} htmlFor="">Información Adicional</label>
+                                        <label className={styles.labelSeccion} htmlFor="">Información adicional</label>
                                         <textarea
                                             placeholder="Escribe información adicional sobre el marcador..."
                                             value={dataMarcador.info_adicional}

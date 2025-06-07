@@ -11,10 +11,9 @@ button{cursor: pointer;}
 
 .ButtonClose {
     position: absolute;
-    top: 1px;
-    right: 1px;
+    top: 15px;
+    right: 15px;
     background: transparent;
-    padding: 10px;
     border: none;
     cursor: pointer;
     transition: transform 0.2s;

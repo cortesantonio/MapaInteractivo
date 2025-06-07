@@ -110,7 +110,7 @@ function ListSolicitudes() {
                             <label htmlFor="filtro"><FontAwesomeIcon icon={faFilter} /> </label>
                             <select id="filtro" value={filtroEstado} onChange={handleFiltroCambio} >
                                 <option value="">Todos</option>
-                                <option value="pendiente">pendiente</option>
+                                <option value="pendiente">Pendiente</option>
                                 <option value="aprobada">Aprobado</option>
                                 <option value="rechazada">Rechazado</option>
                             </select>
