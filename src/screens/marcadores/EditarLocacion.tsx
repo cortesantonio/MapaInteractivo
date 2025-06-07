@@ -157,10 +157,7 @@ export default function EditarLocacion() {
 
         try {
 
-            // 1. Se inserta el "registro_logs"
-            console.log('Entró a actualizarMarcador');
             const { data: { user }, error: userError } = await supabase.auth.getUser();
-            console.log('Usuario obtenido:', user);
 
             if (userError || !user) {
                 console.error('No se pudo obtener el usuario:', userError);
@@ -175,12 +172,11 @@ export default function EditarLocacion() {
                     tipo_recinto: dataMarcador.tipo_recinto,
                 })
                 .eq('id', id);
-
+            console.log(dataMarcador)
             if (errorMarcador) {
                 console.error('Error al actualizar el marcador:', errorMarcador);
                 return;
             }
-
             // 3. Elimina las relaciones antiguas en 'accesibilidad_marcador'
             const { error: errorDelete } = await supabase
                 .from('accesibilidad_marcador')

@@ -11,7 +11,7 @@ import ImagenConFallback from '../../components/ImagenConFallback';
 import { useAuth } from '../../hooks/useAuth';
 import Marca_Verificador from '../../../public/img/verificado.png';
 import { Horarios } from '../../interfaces/Horarios';
-
+import { Solicitudes } from '../../interfaces/Solicitudes';
 interface TipoDeAccesibilidades {
     [tipo: string]: Accesibilidad[];
 }
@@ -25,6 +25,10 @@ export default function InfoDetallada() {
     const [marcadorPropio, setMarcadorPropio] = useState(false);
 
     const [horario, setHorario] = useState<Horarios[]>([]);
+    const [solicitud, setSolicitud] = useState<Partial<Solicitudes>>({
+        id_usuario: undefined,
+        id_supervisor: undefined,
+    })
 
     const [dataMarcador, setDataMarcador] = useState<Partial<Marcador>>({
         nombre_recinto: '',
@@ -32,7 +36,7 @@ export default function InfoDetallada() {
         direccion: '',
         pagina_web: '',
         telefono: '',
-        id_usuario: undefined,
+        id_usuario: undefined, //supervisor
         id_solicitud: undefined,
         url_img: '',
         latitud: undefined,
@@ -43,10 +47,7 @@ export default function InfoDetallada() {
 
     });
     const [selecciones, setSelecciones] = useState<number[]>([]);
-    const [supervisor, setSupervisor] = useState({
-        id: undefined,
-        nombre: ''
-    });
+   
 
     useEffect(() => { // LLAMADO A LA API PARA OBTNER TODOAS LAS ACCESIBILIDADES QUE HAY EN LA BASE DE DATOS Y LA CLASIFICA POR TIPO
         const fetchAccesibilidades = async () => {
@@ -100,18 +101,18 @@ export default function InfoDetallada() {
 
     useEffect(() => {
         const fetchNombreUsuario = async () => {
-            if (!dataMarcador.id_usuario) return;
+            if (!dataMarcador.id_solicitud) return;
 
             const { data, error } = await supabase
-                .from('usuarios')
-                .select('id, nombre')
-                .eq('id', dataMarcador.id_usuario)
+                .from('solicitudes')
+                .select('id_usuario, id_supervisor')
+                .eq('id', dataMarcador.id_solicitud)
                 .single();
 
             if (error) {
                 console.error('Error al obtener el nombre del usuario:', error);
             } else {
-                setSupervisor(data);
+                setSolicitud(data);
             }
         };
 
@@ -274,17 +275,25 @@ export default function InfoDetallada() {
                             )}
 
                             <label className={styles.labelSeccion} >Supervisor</label>
-                            {supervisor.id === undefined ? (
+                            {solicitud.id_supervisor === undefined ? (
                                 <p>No se ingresó registro.</p>
                             ) : (
-                                <p>{supervisor.nombre}
+                                <p>{solicitud.id_supervisor}
                                     <button className={styles.btnLink} >
-                                        <FontAwesomeIcon onClick={() => { navigate(`/usuario/perfil/${supervisor.id}`) }} size="sm" icon={faArrowUpRightFromSquare} />
+                                        <FontAwesomeIcon onClick={() => { navigate(`/usuario/perfil/${solicitud.id_supervisor}`) }} size="sm" icon={faArrowUpRightFromSquare} />
 
                                     </button>
                                 </p>
                             )}
+                            <label>Dueño de negocio/rencinto</label>
+                            {solicitud.id_usuario === undefined ? (
+                                <p>No se ingresó</p>
+                            ) : (<p>{String(solicitud.id_usuario)}
+                                <button className={styles.btnLink} >
+                                    <FontAwesomeIcon onClick={() => { navigate(`/usuario/perfil/${solicitud.id_usuario}`) }} size="sm" icon={faArrowUpRightFromSquare} />
 
+                                </button>
+                            </p>)}
 
                             <label className={styles.labelSeccion} >Nombre del negocio o establecimiento </label>
                             <p>{dataMarcador.nombre_recinto}</p>

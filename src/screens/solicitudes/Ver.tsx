@@ -163,7 +163,7 @@ export default function Ver() {
             .from('marcador')
             .insert({
                 id_solicitud: id,
-                id_usuario: solicitud.id_usuario?.id,
+                id_usuario: solicitud.id_usuario?.id, // este seria el dueño del marcador.
                 activo: true,
                 tipo_recinto: solicitud.tipo_recinto?.id,
                 nombre_recinto: solicitud.nombre_locacion,
