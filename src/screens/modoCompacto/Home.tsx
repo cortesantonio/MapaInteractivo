@@ -653,13 +653,11 @@ function Modo_Compacto() {
                                             {marcador.filtros.length === 0 ? (
                                                 <p>Este recinto no cuenta con accesibilidad universal aún.</p>
                                             ) : (
-                                                <ul aria-label="Lista de accesibilidades disponibles">
+                                                <p>
                                                     {marcador.filtros.map((filtro, index) => (
-                                                        <li key={index}>
-                                                            {filtro.tipo}: {filtro.nombre}
-                                                        </li>
+                                                        <li key={index}>{filtro.tipo}: {filtro.nombre}</li>
                                                     ))}
-                                                </ul>
+                                                </p>
                                             )}
 
                                             <div style={{ display: "flex", justifyContent: "flex-end", alignItems: "flex-end", margin: "15px" }}>
