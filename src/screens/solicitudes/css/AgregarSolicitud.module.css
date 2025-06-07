@@ -104,7 +104,7 @@ form p {
     border-radius: 5px;
     border: 1px solid rgb(165, 165, 165);
     margin-bottom: 10px;
-    padding: 0 5px;
+    padding: 0 10px;
 }
 
 form .labelSeccion {
@@ -132,7 +132,7 @@ form .labelSeccion {
 }
 
 .boton_subir {
-    background:linear-gradient(55deg, #3b7a3b, #5fa75f, #a0cfa0);
+    background: linear-gradient(55deg, #3b7a3b, #5fa75f, #a0cfa0);
 }
 
 .filtroCard {

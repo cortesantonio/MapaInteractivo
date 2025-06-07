@@ -127,7 +127,7 @@ export default function AgregarMarcador() {
       try {
 
         // 4. Se inserta el "registro_logs"
-        console.log('Entró a actualizarMarcador');
+        console.log('Entró a actualizar marcador');
         const { data: { user }, error: userError } = await supabase.auth.getUser();
         console.log('Usuario obtenido:', user);
 
@@ -204,7 +204,7 @@ export default function AgregarMarcador() {
   const [direccionValida, setDireccionValida] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
 
-  if (loadError) return <div>Error cargando Places</div>;
+  if (loadError) return <div>Error al cargar Google Places</div>;
   if (!isLoaded) return <div>Cargando Autocomplete...</div>;
 
   return (
@@ -231,8 +231,8 @@ export default function AgregarMarcador() {
                 className={styles.inputText} required />
 
 
-              <label style={{ display: "flex", flexDirection: "row", alignItems: "center", gap: "5px" }} className={styles.labelSeccion} htmlFor="">Dirección del Establecimiento 
-                <span style={{ fontSize: '0.8rem', color: 'gray', fontStyle: 'italic' }} > - ¿Dónde está el negocio o recinto? (Dirección completa, ej: Av. Siempre Viva 742, Curicó)</span>
+              <label style={{ display: "flex", flexDirection: "row", alignItems: "center", gap: "5px" }} className={styles.labelSeccion} htmlFor="">Dirección del Establecimiento
+                <span style={{ fontSize: '0.8rem', color: 'gray', fontStyle: 'italic' }} >- ¿Dónde está el negocio o recinto? (Dirección completa, ej.: Av. Siempre Viva 742, Curicó)</span>
               </label>
 
               <Autocomplete
@@ -293,8 +293,8 @@ export default function AgregarMarcador() {
                 )}
               </APIProvider>
 
-              <label style={{ display: "flex", flexDirection: "row", alignItems: "center", gap: "5px" }} className={styles.labelSeccion} htmlFor="">Pagina web
-                <span style={{ fontSize: '0.8rem', color: 'gray', fontStyle: 'italic' }} > - El URL perteneciente al local que se ingresará.</span>
+              <label style={{ display: "flex", flexDirection: "row", alignItems: "center", gap: "5px" }} className={styles.labelSeccion} htmlFor="">Página web
+                <span style={{ fontSize: '0.8rem', color: 'gray', fontStyle: 'italic' }} >- El URL perteneciente al local que se ingresará.</span>
               </label>
 
               <input
@@ -304,7 +304,7 @@ export default function AgregarMarcador() {
                 className={styles.inputText} />
 
               <label className={styles.labelSeccion} htmlFor="">Teléfono
-                <span style={{ fontSize: '0.8rem', color: 'gray', fontStyle: 'italic' }} > - Número de contacto del negocio o establecimiento.</span>
+                <span style={{ fontSize: '0.8rem', color: 'gray', fontStyle: 'italic' }} >- Número de contacto del negocio o establecimiento.</span>
               </label>
               <div className={styles.ContainerinputTelefono}>
                 <p className={styles.codTelfono}>+569</p>
@@ -323,7 +323,7 @@ export default function AgregarMarcador() {
                 className={styles.inputText} />
 
               <label className={styles.labelSeccion}>Tipo de recinto
-                <span style={{ fontSize: '0.8rem', color: 'gray', fontStyle: 'italic' }} > - Selecciona a un tipo de recinto que pertenecera el local.</span>
+                <span style={{ fontSize: '0.8rem', color: 'gray', fontStyle: 'italic' }} >- Selecciona un tipo de recinto al que pertenezca el local.</span>
               </label>
               <div style={{ position: 'relative', width: '100%' }}>
                 <input
@@ -416,12 +416,12 @@ export default function AgregarMarcador() {
               </div>
             ))}
 
-            <label className={styles.labelSeccion} htmlFor="">Información Adicional
+            <label className={styles.labelSeccion} htmlFor="">Información adicional
               <span style={{ fontSize: '0.8rem', color: 'gray', fontStyle: 'italic' }} >*Opcional </span>
             </label>
-          
+
             <textarea
-              placeholder="Cuentanos como es tu recinto en pocas palabras..."
+              placeholder="Cuéntanos cómo es tu recinto en pocas palabras..."
               value={dataMarcador.info_adicional}
               onChange={(e) => setDataMarcador({ ...dataMarcador, info_adicional: e.target.value })}
               className={styles.inputText}
@@ -430,13 +430,13 @@ export default function AgregarMarcador() {
               maxLength={250}
             />
 
-            <div style={{textAlign:"right",color:"rgb(102, 102, 102)"}}>
+            <div style={{ textAlign: "right", color: "rgb(102, 102, 102)", fontSize: '0.8rem' }}>
               {dataMarcador.info_adicional?.length || 0}/250
             </div>
 
 
             <div className={styles.acciones}>
-              <button type="submit" >Agregar Marcador</button>
+              <button type="submit" >Agregar marcador</button>
             </div>
           </form>
 

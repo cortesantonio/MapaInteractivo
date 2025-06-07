@@ -207,10 +207,13 @@ function Buscador({ onSeleccionMarcador, onSeleccionFiltro }: BuscadorProps) {
             style={{
                 width: width,
                 transition: "width 0.3s ease",
-                pointerEvents: 'auto'
+                pointerEvents: 'auto',
+
             }}
         >
-            <div style={{ backgroundColor: modoNocturno ? "#2d2d2d" : "", border: modoNocturno ? "none" : "1px solid #ccc" }} className={styles.distribucionContainer}>
+            <div style={{
+                backgroundColor: modoNocturno ? "#2d2d2d" : "", border: modoNocturno ? "1px solid rgb(102, 102, 102)" : "1px solid #ccc"
+            }} className={styles.distribucionContainer}>
                 <FontAwesomeIcon
                     icon={faLocationDot}
                     size="xl"

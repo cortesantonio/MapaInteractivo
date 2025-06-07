@@ -13,6 +13,7 @@ export interface Solicitudes {
   fecha_revision: Date;
   cumple_ley_21015: boolean;
   accesibilidad_certificada: boolean;
+  id_supervisor?: number
   latitud?: number;
   longitud?: number;
 };

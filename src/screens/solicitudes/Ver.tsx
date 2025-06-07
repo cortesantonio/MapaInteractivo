@@ -43,7 +43,7 @@ function contentEmail(nombre: string, estado: string, solicitudId: string) {
                 El equipo de mapainteractivo.site
             </div>
             <div class="footer">
-                Este mensaje fue enviado automáticamente. Por favor no respondas.
+                Este mensaje fue enviado automáticamente. Por favor, no respondas.
             </div>
             </div>
         </body>
@@ -163,7 +163,7 @@ export default function Ver() {
             .from('marcador')
             .insert({
                 id_solicitud: id,
-                id_usuario: solicitud.id_usuario?.id,
+                id_usuario: solicitud.id_usuario?.id, // este seria el dueño del marcador.
                 activo: true,
                 tipo_recinto: solicitud.tipo_recinto?.id,
                 nombre_recinto: solicitud.nombre_locacion,
@@ -226,8 +226,8 @@ export default function Ver() {
                 .insert([
                     {
                         id_usuario: user?.id,
-                        tipo_accion: 'Aceptación de una solicitud',
-                        detalle: `Se a aceptado una Solicitud con ID ${id}`,
+                        tipo_accion: 'Aceptación de una Solicitud',
+                        detalle: `Se ha aceptado una Solicitud con ID ${id}`,
                         fecha_hora: fechaHoraActual,
                     }
                 ]);
@@ -285,7 +285,7 @@ export default function Ver() {
                     {
                         id_usuario: user?.id,
                         tipo_accion: 'Rechazo de una solicitud',
-                        detalle: `Se a rechazado una Solicitud con ID ${id}`,
+                        detalle: `Se ha rechazado una Solicitud con ID ${id}`,
                         fecha_hora: fechaHoraActual,
                     }
                 ]);
@@ -357,7 +357,7 @@ export default function Ver() {
                     <hr style={{ opacity: '50%' }} />
                     <h4>Identificador de solicitud</h4>
                     <p>{solicitud?.id}</p>
-                    <h4>Fecha ingreso</h4>
+                    <h4>Fecha de ingreso</h4>
 
                     {solicitud.fecha_ingreso && (
                         <p>{new Date(solicitud.fecha_ingreso).toLocaleDateString()}</p>
@@ -423,7 +423,7 @@ export default function Ver() {
                     <h4>Documentación</h4>
                     {solicitud.documentacion != '' ? (
                         <a href={solicitud.documentacion} target="_blank" rel="noopener noreferrer" style={{ color: 'black', paddingLeft: '25px', textDecoration: 'underline' }}>
-                            Ver Documentacion <FontAwesomeIcon icon={faArrowUpRightFromSquare} />
+                            Ver documentación <FontAwesomeIcon icon={faArrowUpRightFromSquare} />
                         </a>
                     ) : (
                         <p style={{ color: 'gray' }}>Sin archivos adjuntos.</p>
@@ -446,8 +446,8 @@ export default function Ver() {
                         <h3>Motivo de rechazo</h3>
                         <textarea placeholder='Escribe aqui...' onChange={(e) => setRespuestaRechazo(e.target.value)}></textarea>
                         <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-                            <button className={styles.btnModal} onClick={handleModal} style={{ color: 'red', background: 'transparent' }} type='button'> CANCELAR</button>
-                            <button className={styles.btnModal} onClick={handleRechazar} type='submit'> RECHAZAR SOLICITUD</button>
+                            <button className={styles.btnModal} onClick={handleModal} style={{ color: 'red', background: 'transparent' }} type='button'> Cancelar</button>
+                            <button className={styles.btnModal} onClick={handleRechazar} type='submit'> Rechazar solicitud</button>
 
                         </div>
 

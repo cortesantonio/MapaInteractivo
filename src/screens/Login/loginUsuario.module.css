@@ -27,8 +27,7 @@
     width: 50%;
     opacity: 0.8;
     left: -20%;
-
-
+    bottom: 0;
 }
 
 .containerderecho {
@@ -46,7 +45,15 @@
 }
 
 .containeratras img {
-    width: 250px;
+    width: 200px;
+    height: auto;
+    max-width: 200px;
+    max-height: 90px;
+    object-fit: "contain";
+    aspect-ratio: "auto 3 / 1";
+    display: "block";
+    z-index: 10;
+    position: 'relative';
 }
 
 .containeratras .botonatras {

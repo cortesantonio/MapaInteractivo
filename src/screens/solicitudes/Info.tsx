@@ -97,7 +97,7 @@ function Info({ onConfirmarLectura }: InfoProps) {
       </div>
       <div className={styles.container}>
         <div className={styles.titulo}>
-          <h1 style={{ fontSize: `${fontSize}rem` }}>Manual De Accesibilidad Universal;</h1>
+          <h1 style={{ fontSize: `${fontSize}rem` }}>Manual de Accesibilidad Universal</h1>
           <h2 style={{ fontSize: `${fontSize}rem` }}>Indicaciones para una colaboración accesible</h2>
 
         </div>
@@ -107,7 +107,7 @@ function Info({ onConfirmarLectura }: InfoProps) {
               <h2 style={{ fontSize: `${fontSize}rem` }} >Requisitos para implementar vías de accesibilidad</h2>
             </div>
             <div className={styles.featureHeader}>
-              <h3 style={{ fontSize: `${fontSize}rem` }}>Baños Accesibles (Requisitos para su Instalación):</h3>
+              <h3 style={{ fontSize: `${fontSize}rem` }}>Baños Accesibles (Requisitos para su instalación):</h3>
               <FontAwesomeIcon style={{ fontSize: `${fontSize}rem` }} icon={faWheelchair} className={styles.featureIcon_1} />
             </div>
 
@@ -121,12 +121,12 @@ function Info({ onConfirmarLectura }: InfoProps) {
                     target="_blank"
                     rel="noopener noreferrer"
                   >
-                    art. 4.1.7 numeral 6
+                    Art. 4.1.7 numeral 6
                     <span className={styles.infoExtra}>- Haz clic aquí para más información.</span>
                   </a>
                 </div>
 
-                <h4 style={{ fontSize: `${fontSize}rem` }} >Deben cumplir con diseño universal y el recinto debe cumplir con estas medidas:</h4>
+                <h4 style={{ fontSize: `${fontSize}rem` }} >Deben cumplir con diseño universal y el recinto debe respetar las siguientes medidas:</h4>
               </div>
 
               <div className={styles.especificacion_de_contenido}>
@@ -136,31 +136,31 @@ function Info({ onConfirmarLectura }: InfoProps) {
                 <h4 style={{ fontSize: `${fontSize}rem` }}>El baño debe permitir un giro de 360° de una silla de ruedas:</h4>
                 <ul>
                   <li style={{ fontSize: `${fontSize}rem` }}>Deben incluir mudadores de diseño universal, accesibles para ambos sexos.</li>
-                  <li style={{ fontSize: `${fontSize}rem` }}>Diámetro mínimo de 1,50 metros</li>
-                  <li style={{ fontSize: `${fontSize}rem` }}>El espacio puede incluir el área bajo el lavamanos, siempre que no haya pedestal ni elementos que impidan la aproximación frontal</li>
+                  <li style={{ fontSize: `${fontSize}rem` }}>Diámetro mínimo: 1,50 metros.</li>
+                  <li style={{ fontSize: `${fontSize}rem` }}>El espacio puede incluir el área bajo el lavamanos, siempre que no haya pedestal ni elementos que impidan la aproximación frontal.</li>
                 </ul>
               </div>
 
               <div className={styles.especificacion_de_contenido}>
                 <h4 style={{ fontSize: `${fontSize}rem` }}>Puertas de acceso:</h4>
                 <ul>
-                  <li style={{ fontSize: `${fontSize}rem` }}>Vano mínimo de 0,90 m y ancho libre de paso de 0,80 m</li>
+                  <li style={{ fontSize: `${fontSize}rem` }}>Vano mínimo de 0,90 m y ancho libre de paso de 0,80 m.</li>
                   <li style={{ fontSize: `${fontSize}rem` }}>Preferiblemente debe abrir hacia el exterior.</li>
-                  <li style={{ fontSize: `${fontSize}rem` }}>Si abre hacia el interior, la puerta no puede interferir con el diámetro de giro de 1,50 m</li>
+                  <li style={{ fontSize: `${fontSize}rem` }}>Si abre hacia el interior, la puerta no debe interferir con el diámetro de giro de 1,50 m.</li>
                 </ul>
               </div>
 
               <div className={styles.especificacion_de_contenido}>
                 <h4 style={{ fontSize: `${fontSize}rem` }}>Espacio de transferencia del inodoro:</h4>
                 <ul>
-                  <li style={{ fontSize: `${fontSize}rem` }}>Debe haber al menos 0,80 m de ancho por 1,20 m de largo junto al inodoro para permitir transferencia lateral</li>
+                  <li style={{ fontSize: `${fontSize}rem` }}>Debe haber al menos 0,80 m de ancho por 1,20 m de largo junto al inodoro para permitir transferencia lateral.</li>
                 </ul>
               </div>
 
               <div className={styles.contenedor_imagenes}>
                 <div className={styles.imagenes} onClick={() => toggleSection("banos")} style={{ cursor: "pointer" }}>
                   <FontAwesomeIcon icon={visibleSections.banos ? faChevronUp : faChevronDown} />
-                  <h4 style={{ fontSize: `${fontSize}rem` }} >Imagenes Accesibilidad Universal</h4>
+                  <h4 style={{ fontSize: `${fontSize}rem` }} >Imágenes de Accesibilidad Universal</h4>
                 </div>
                 {visibleSections.banos && (
                   <div className={styles.imagen_container}>
@@ -190,12 +190,12 @@ function Info({ onConfirmarLectura }: InfoProps) {
                     target="_blank"
                     rel="noopener noreferrer"
                   >
-                    art. 4.1.7 numeral 6
+                    Art. 4.1.7 numeral 6
                     <span className={styles.infoExtra}>- Haz clic aquí para más información.</span>
                   </a>
                 </div>
-                <h4 style={{ fontSize: `${fontSize}rem` }}>Las rampas deben cumplir con diseño universal  y el recinto debe cumplir con estas medidas:</h4>
-                <h4 style={{ fontSize: `${fontSize}rem` }}>En cruces peatonales, accesos y desniveles debe cumplir con estos requisitos:</h4>
+                <h4 style={{ fontSize: `${fontSize}rem` }}>Las rampas deben cumplir con diseño universal, y el recinto debe respetar las siguientes medidas:</h4>
+                <h4 style={{ fontSize: `${fontSize}rem` }}>En cruces peatonales, accesos y desniveles, debe cumplir con estos requisitos:</h4>
               </div>
 
               <div className={styles.especificacion_de_contenido}>
@@ -203,9 +203,9 @@ function Info({ onConfirmarLectura }: InfoProps) {
                 <hr />
                 <h4 style={{ fontSize: `${fontSize}rem` }}>Pendiente máxima:</h4>
                 <ul>
-                  <li style={{ fontSize: `${fontSize}rem` }}>Hasta 1.5 m: 12%.</li>
-                  <li style={{ fontSize: `${fontSize}rem` }}>Más de 1.5 m: pendiente decreciente según fórmula (ver art. 4.1.7)</li>
-                  <li style={{ fontSize: `${fontSize}rem` }}>Ancho mínimo: 1.2 m.</li>
+                  <li style={{ fontSize: `${fontSize}rem` }}>Hasta 1,5 m: 12%.</li>
+                  <li style={{ fontSize: `${fontSize}rem` }}>Más de 1,5 m: pendiente decreciente según fórmula (ver art. 4.1.7).</li>
+                  <li style={{ fontSize: `${fontSize}rem` }}>Ancho mínimo: 1,20 m.</li>
                   <li style={{ fontSize: `${fontSize}rem` }}>Superficie: antideslizante en seco y mojado.</li>
                 </ul>
               </div>
@@ -213,7 +213,7 @@ function Info({ onConfirmarLectura }: InfoProps) {
             <div className={styles.contenedor_imagenes}>
               <div className={styles.imagenes} onClick={() => toggleSection("rampas")} style={{ cursor: "pointer" }}>
                 <FontAwesomeIcon style={{ fontSize: `${fontSize}rem` }} icon={visibleSections.rampas ? faChevronUp : faChevronDown} />
-                <h4 style={{ fontSize: `${fontSize}rem` }}>Imagenes Accesibilidad Universal</h4>
+                <h4 style={{ fontSize: `${fontSize}rem` }}>Imágenes de Accesibilidad Universal</h4>
               </div>
               {visibleSections.rampas && (
                 <div className={styles.imagen_container}>
@@ -228,7 +228,7 @@ function Info({ onConfirmarLectura }: InfoProps) {
           </section>
           <section className={styles.Seccion_de_Accesibilidad}>
             <div className={styles.featureHeader}>
-              <h3 style={{ fontSize: `${fontSize}rem` }}>Estacionamiento para Discapacitados:</h3>
+              <h3 style={{ fontSize: `${fontSize}rem` }}>Estacionamiento para Personas con Discapacidad:</h3>
               <FontAwesomeIcon style={{ fontSize: `${fontSize}rem` }} icon={faSquareParking} className={styles.featureIcon_3} />
             </div>
 
@@ -242,39 +242,39 @@ function Info({ onConfirmarLectura }: InfoProps) {
                     target="_blank"
                     rel="noopener noreferrer"
                   >
-                    art. 2.2.8 n°11
+                    Art. 2.2.8 numeral 11
                     <span className={styles.infoExtra}>- Haz clic aquí para más información.</span>
                   </a>
                 </div>
-                <h4 style={{ fontSize: `${fontSize}rem` }}>Los estacionamientos accesibles deben cumplir con normativa específica para garantizar su uso adecuado:</h4>
+                <h4 style={{ fontSize: `${fontSize}rem` }}>Los estacionamientos accesibles deben cumplir con la normativa específica para garantizar su uso adecuado:</h4>
               </div>
 
               <div className={styles.especificacion_de_contenido}>
                 <h5 style={{ fontSize: `${fontSize}rem` }}>Especificaciones Arquitectónicas:</h5>
                 <hr />
                 <ul>
-                  <li style={{ fontSize: `${fontSize}rem` }}>Al menos el 1% del total de estacionamientos debe ser accesible, con un mínimo obligatorio de 2 unidades</li>
-                  <small >* Fuente: Decreto DS N°50 / 2015 - OGUC</small>
+                  <li style={{ fontSize: `${fontSize}rem` }}>Al menos el 1% del total de estacionamientos debe ser accesible, con un mínimo obligatorio de 2 unidades.</li>
+                  <small >* Fuente: Decreto DS N°50 / 2015 - OGUC.</small>
 
                 </ul>
 
                 <h4 style={{ fontSize: `${fontSize}rem` }}>Dimensiones:</h4>
                 <ul>
-                  <li style={{ fontSize: `${fontSize}rem` }}>5 m largo x 2.5 m ancho + franja de circulación de 1.1 m (compartible)</li>
+                  <li style={{ fontSize: `${fontSize}rem` }}>5 m de largo x 2,5 m de ancho + franja de circulación de 1,1 m (compartible).</li>
                   <li style={{ fontSize: `${fontSize}rem` }}>Pendiente máxima: 2% en ambos sentidos.</li>
                 </ul>
 
                 <h4 style={{ fontSize: `${fontSize}rem` }} >Señalización:</h4>
                 <ul>
                   <li style={{ fontSize: `${fontSize}rem` }}>Horizontal: con el símbolo internacional de accesibilidad (SIA).</li>
-                  <li style={{ fontSize: `${fontSize}rem` }}>Vertical: visible pero no puede obstaculizar la apertura de puertas ni la ruta accesible.</li>
+                  <li style={{ fontSize: `${fontSize}rem` }}>Vertical: visible, pero no puede obstaculizar la apertura de puertas ni la ruta accesible.</li>
                 </ul>
               </div>
             </div>
             <div className={styles.contenedor_imagenes}>
               <div className={styles.imagenes} onClick={() => toggleSection("estacionamiento")} style={{ cursor: "pointer" }}>
                 <FontAwesomeIcon icon={visibleSections.estacionamiento ? faChevronUp : faChevronDown} />
-                <h4 style={{ fontSize: `${fontSize}rem` }}>Imagenes Accesibilidad Universal</h4>
+                <h4 style={{ fontSize: `${fontSize}rem` }}>Imágenes de Accesibilidad Universal</h4>
               </div>
               {visibleSections.estacionamiento && (
                 <div className={styles.imagen_container}>
@@ -286,7 +286,7 @@ function Info({ onConfirmarLectura }: InfoProps) {
           </section>
           <section className={styles.Seccion_de_Accesibilidad}>
             <div className={styles.featureHeader}>
-              <h3 style={{ fontSize: `${fontSize}rem` }} >Zonas de Calma (Personas Neuro Divergentes )</h3>
+              <h3 style={{ fontSize: `${fontSize}rem` }} >Zonas de Calma (para Personas Neurodivergentes):</h3>
               <FontAwesomeIcon style={{ fontSize: `${fontSize}rem` }} icon={faPuzzlePiece} className={styles.featureIcon_4} />
             </div>
 
@@ -300,7 +300,7 @@ function Info({ onConfirmarLectura }: InfoProps) {
                     target="_blank"
                     rel="noopener noreferrer"
                   >
-                    art. 2.2.8 y 2.6.17
+                    Art. 2.2.8 y 2.6.17
                     <span className={styles.infoExtra}>- Haz clic aquí para más información.</span>
                   </a>
                 </div>
@@ -313,14 +313,14 @@ function Info({ onConfirmarLectura }: InfoProps) {
                 <ul>
                   <li style={{ fontSize: `${fontSize}rem` }}>Rutas accesibles claras y señalizadas.</li>
                   <li style={{ fontSize: `${fontSize}rem` }}>Espacios de regulación emocional o descanso sensorial.</li>
-                  <li style={{ fontSize: `${fontSize}rem` }}>Acceso conectado mediante la ruta accesible</li>
+                  <li style={{ fontSize: `${fontSize}rem` }}>Acceso conectado mediante la ruta accesible.</li>
                 </ul>
               </div>
             </div>
             <div className={styles.contenedor_imagenes}>
               <div className={styles.imagenes} onClick={() => toggleSection("zonaCalma")} style={{ cursor: "pointer" }}>
                 <FontAwesomeIcon style={{ fontSize: `${fontSize}rem` }} icon={visibleSections.zonaCalma ? faChevronUp : faChevronDown} />
-                <h4 style={{ fontSize: `${fontSize}rem` }}>Imagenes Accesibilidad Universal</h4>
+                <h4 style={{ fontSize: `${fontSize}rem` }}>Imágenes de Accesibilidad Universal</h4>
               </div>
               {visibleSections.zonaCalma && (
                 <div className={styles.imagen_container}>
@@ -331,7 +331,7 @@ function Info({ onConfirmarLectura }: InfoProps) {
           </section>
           <section className={styles.Seccion_de_Accesibilidad}>
             <div className={styles.featureHeader}>
-              <h3 style={{ fontSize: `${fontSize}rem` }}>Accesibilidad Para Personas con Discapacidad Visual</h3>
+              <h3 style={{ fontSize: `${fontSize}rem` }}>Accesibilidad para Personas con Discapacidad Visual</h3>
               <FontAwesomeIcon icon={faPersonWalkingWithCane} className={styles.featureIcon_4} />
             </div>
 
@@ -344,10 +344,10 @@ function Info({ onConfirmarLectura }: InfoProps) {
                 <h5 style={{ fontSize: `${fontSize}rem` }}>Especificaciones Arquitectónicas:</h5>
                 <hr />
                 <ul>
-                  <li style={{ fontSize: `${fontSize}rem` }}>Señalización braille en dispositivos (como semáforos peatonales).</li>
-                  <h4 style={{ fontSize: `${fontSize}rem` }}> Caracteristicas de la señalización:</h4>
-                  <li style={{ fontSize: `${fontSize}rem` }}>Vibración</li>
-                  <li style={{ fontSize: `${fontSize}rem` }}>Señales Auditivas</li>
+                  <li style={{ fontSize: `${fontSize}rem` }}>Señalización en braille en dispositivos (como semáforos peatonales).</li>
+                  <h4 style={{ fontSize: `${fontSize}rem` }}>Características de la señalización:</h4>
+                  <li style={{ fontSize: `${fontSize}rem` }}>Vibración.</li>
+                  <li style={{ fontSize: `${fontSize}rem` }}>Señales auditivas.</li>
                   <li style={{ fontSize: `${fontSize}rem` }}>Flechas en relieve en el botón del semáforo.</li>
                 </ul>
               </div>
@@ -355,7 +355,7 @@ function Info({ onConfirmarLectura }: InfoProps) {
             <div className={styles.contenedor_imagenes}>
               <div className={styles.imagenes} onClick={() => toggleSection("discapacidadVisual")} style={{ cursor: "pointer" }}>
                 <FontAwesomeIcon style={{ fontSize: `${fontSize}rem` }} icon={visibleSections.discapacidadVisual ? faChevronUp : faChevronDown} />
-                <h4 style={{ fontSize: `${fontSize}rem` }}>Imagenes Accesibilidad Universal</h4>
+                <h4 style={{ fontSize: `${fontSize}rem` }}>Imágenes de Accesibilidad Universal</h4>
               </div>
               {visibleSections.discapacidadVisual && (
                 <div className={styles.imagen_container}>
@@ -368,7 +368,7 @@ function Info({ onConfirmarLectura }: InfoProps) {
           </section>
         </div>
       </div>
-      <button style={{ fontSize: `${fontSize}rem`, background:  "linear-gradient(55deg, #004d00, #228b22, #90ee90 "}} onClick={onConfirmarLectura} className={styles.confirmButton}>
+      <button style={{ fontSize: `${fontSize}rem`, background: "linear-gradient(55deg, #004d00, #228b22, #90ee90 " }} onClick={onConfirmarLectura} className={styles.confirmButton}>
         He leído el instructivo
       </button>
 
