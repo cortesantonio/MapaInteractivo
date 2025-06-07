@@ -63,7 +63,6 @@ export default function EscribirResena({ onSubmit, onCancel, idMarcador }: Props
         if (error) {
             console.error("No se Puedieron Insertar los Datos", error)
         } else {
-            console.log("Datos Enviados con Exito:" + nuevaReseña)
             await Registro_cambios(nuevaReseña.id);
             alert("¡Gracias por compartir tu reseña!");
         }
@@ -72,7 +71,7 @@ export default function EscribirResena({ onSubmit, onCancel, idMarcador }: Props
     const fechaHoraActual = new Date().toISOString();
 
     const Registro_cambios = async (idReseña: number) => {
-        const { data: registro_logs, error: errorLog } = await supabase
+        const { error: errorLog } = await supabase
             .from('registro_logs')
             .insert([{
                 id_usuario: user?.id,
@@ -86,7 +85,6 @@ export default function EscribirResena({ onSubmit, onCancel, idMarcador }: Props
             return;
         }
 
-        console.log('Registro insertado en registro_logs correctamente', registro_logs);
     };
 
     return (

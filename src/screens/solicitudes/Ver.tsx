@@ -137,7 +137,6 @@ export default function Ver() {
                     return;
                 }
                 setinfoMarcador(marcadorData)
-                console.log('marcado:', marcadorData)
             }
 
         };
@@ -158,7 +157,6 @@ export default function Ver() {
     }
 
     const handleAprobar = async () => {
-        console.log("Enviando solicitud de creación de marcador...");
         const { data: newMarcador, error: errorMarcador } = await supabase
             .from('marcador')
             .insert({
@@ -221,7 +219,7 @@ export default function Ver() {
         const fechaHoraActual = new Date().toISOString();
 
         const Registro_cambios = async () => {
-            const { data: registro_logs, error: errorLog } = await supabase
+            const { error: errorLog } = await supabase
                 .from('registro_logs')
                 .insert([
                     {
@@ -237,7 +235,6 @@ export default function Ver() {
                 return;
             }
 
-            console.log(' Registro insertado en registro_logs correctamente', registro_logs);
         };
         Registro_cambios();
 
@@ -245,7 +242,7 @@ export default function Ver() {
         sendEmail(correoDestinario,
             "Solicitud aprobada",
             contentEmail(solicitud.id_usuario?.nombre || '', 'Aprobada', id as string))
-            .then(res => console.log("Correo enviado", res))
+            .then(res => res)
             .catch(err => console.error("Error", err))
 
         navigate(-1)
@@ -274,12 +271,12 @@ export default function Ver() {
         sendEmail(correoDestinario,
             "Solicitud rechazada",
             contentEmail(solicitud.id_usuario?.nombre || '', 'Rechazada', id as string))
-            .then(res => console.log("Correo enviado", res))
+            .then(res => res)
             .catch(err => console.error("Error", err))
 
 
         const Registro_cambios = async () => {
-            const { data: registro_logs, error: errorLog } = await supabase
+            const { error: errorLog } = await supabase
                 .from('registro_logs')
                 .insert([
                     {
@@ -295,13 +292,9 @@ export default function Ver() {
                 return;
             }
 
-            console.log(' Registro insertado en registro_logs correctamente', registro_logs);
         };
         Registro_cambios();
     };
-
-
-
 
 
     return (

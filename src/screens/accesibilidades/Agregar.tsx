@@ -81,7 +81,7 @@ export default function AgregarAccesibilidad() {
 
     const Registro_cambios = async (idAcc: number) => {
 
-        const { data: registro_logs, error: errorLog } = await supabase
+        const { error: errorLog } = await supabase
             .from('registro_logs')
             .insert([
                 {
@@ -97,7 +97,6 @@ export default function AgregarAccesibilidad() {
             return;
         }
 
-        console.log(' Registro insertado en registro_logs correctamente', registro_logs);
     };
 
 

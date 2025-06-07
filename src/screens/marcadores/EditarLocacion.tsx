@@ -90,7 +90,7 @@ export default function EditarLocacion() {
     const fechaHoraActual = new Date().toISOString();
 
     const Registro_cambios = async () => {
-        const { data: registro_logs, error: errorLog } = await supabase
+        const { error: errorLog } = await supabase
             .from('registro_logs')
             .insert([
                 {
@@ -106,7 +106,6 @@ export default function EditarLocacion() {
             return;
         }
 
-        console.log(' Registro insertado en registro_logs correctamente', registro_logs);
     };
 
 
@@ -171,7 +170,6 @@ export default function EditarLocacion() {
                     tipo_recinto: dataMarcador.tipo_recinto,
                 })
                 .eq('id', id);
-            console.log(dataMarcador)
             if (errorMarcador) {
                 console.error('Error al actualizar el marcador:', errorMarcador);
                 return;
@@ -299,7 +297,6 @@ export default function EditarLocacion() {
                                             onChange={(e) => {
                                                 const newTipoRecinto = e.target.value;
                                                 setDataMarcador({ ...dataMarcador, tipo_recinto: newTipoRecinto });
-                                                console.log('Nuevo tipo seleccionado:', newTipoRecinto);
                                             }}
                                         >
                                             <option value="">Selecciona un tipo de establecimiento</option>

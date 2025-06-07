@@ -91,7 +91,7 @@ export default function AgregarMarcador() {
   const fechaHoraActual = new Date().toISOString();
 
   const Registro_cambios = async (idMarcador: number) => {
-    const { data: registro_logs, error: errorLog } = await supabase
+    const { error: errorLog } = await supabase
       .from('registro_logs')
       .insert([
         {
@@ -104,8 +104,6 @@ export default function AgregarMarcador() {
 
     if (errorLog) {
       console.error('Error al registrar en los logs:', errorLog);
-    } else {
-      console.log('Registro insertado en registro_logs correctamente', registro_logs);
     }
   };
 
@@ -127,9 +125,7 @@ export default function AgregarMarcador() {
       try {
 
         // 4. Se inserta el "registro_logs"
-        console.log('Entró a actualizar marcador');
         const { data: { user }, error: userError } = await supabase.auth.getUser();
-        console.log('Usuario obtenido:', user);
 
         if (userError || !user) {
           console.error('No se pudo obtener el usuario:', userError);

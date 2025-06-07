@@ -225,7 +225,6 @@ function Editar_Usuarios() {
         }
       }
       alert("Datos de usuario actualizados correctamente");
-      console.log('Datos de usuario actualizados correctamente');
       navigate(-1);
     } catch (error) {
       console.error('Error general al actualizar:', error);
@@ -237,7 +236,7 @@ function Editar_Usuarios() {
   const fechaHoraActual = new Date().toISOString();
 
   const Registro_cambios = async () => {
-    const { data: registro_logs, error: errorLog } = await supabase
+    const { error: errorLog } = await supabase
       .from('registro_logs')
       .insert([
         {
@@ -253,7 +252,6 @@ function Editar_Usuarios() {
       return;
     }
 
-    console.log(' Registro insertado en registro_logs correctamente', registro_logs);
   };
 
   const handleDiscapacidadChange = (field: keyof Discapacidad, value: string) => { const updated = [{ ...discapacidad[0], [field]: value }]; setDiscapacidad(updated); };

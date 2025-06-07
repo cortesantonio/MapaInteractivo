@@ -165,7 +165,7 @@ export default function InfoDetallada() {
                 ? `Se activó el Marcador con ID ${id}`
                 : `Se desactivó el Marcador con ID ${id}`;
 
-            const { data: registro_logs, error: errorLog } = await supabase
+            const { error: errorLog } = await supabase
                 .from('registro_logs')
                 .insert([
                     {
@@ -181,7 +181,6 @@ export default function InfoDetallada() {
                 return;
             }
 
-            console.log('Registro insertado en registro_logs correctamente', registro_logs);
         };
 
         Registro_cambios();
