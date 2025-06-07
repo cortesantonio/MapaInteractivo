@@ -619,14 +619,14 @@ function Modo_Compacto() {
                         aria-label="Resultados de la búsqueda"
                     >
                         <div className={styles.contenedor_titulo}>
-                            <h4 style={{ textAlign: "center" }}>
+                            <h3 style={{ textAlign: "center" }}>
                                 Resultados {resultados.length > 0 && `(${resultados.length})`}
                                 {resultados.length > marcadoresPorPagina && (
                                     <span style={{ fontSize: "0.9em", color: "#666" }}>
                                         - Página {paginaActual} de {calcularTotalPaginas()}
                                     </span>
                                 )}
-                            </h4>
+                            </h3>
                         </div>
 
                         <div className={styles.contenedor_resultados}>
@@ -648,16 +648,18 @@ function Modo_Compacto() {
                                         <p><strong>Dirección:</strong> {marcador.direccion}</p>
 
                                         <div className={styles.accesibilidad_marcador}>
-                                            <h3 role="list">Accesibilidades:</h3>
+                                            <h3>Accesibilidades:</h3>
 
                                             {marcador.filtros.length === 0 ? (
                                                 <p>Este recinto no cuenta con accesibilidad universal aún.</p>
                                             ) : (
-                                                <p >
+                                                <ul aria-label="Lista de accesibilidades disponibles">
                                                     {marcador.filtros.map((filtro, index) => (
-                                                        <li key={index}>{filtro.tipo}: {filtro.nombre}</li>
+                                                        <li key={index}>
+                                                            {filtro.tipo}: {filtro.nombre}
+                                                        </li>
                                                     ))}
-                                                </p>
+                                                </ul>
                                             )}
 
                                             <div style={{ display: "flex", justifyContent: "flex-end", alignItems: "flex-end", margin: "15px" }}>
