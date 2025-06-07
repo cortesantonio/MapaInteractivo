@@ -240,7 +240,7 @@ export default function VerMarcador({ MarcadorSelectId, CerrarMarcador, establec
                             className={styles.btnEscribirResena}
                         >
                             <FontAwesomeIcon icon={faCommentDots} />
-                            Escribir Reseña
+                            Escribir reseña
                         </button>
                     </>
                 )}
@@ -348,7 +348,7 @@ export default function VerMarcador({ MarcadorSelectId, CerrarMarcador, establec
                                             setMostrarFormulario(true);
                                         }}>
                                             <FontAwesomeIcon icon={faCommentDots} className={styles.icon} />
-                                            <p style={{ color: modoNocturno ? "#fff" : "" }}>Escribir Reseña</p>
+                                            <p style={{ color: modoNocturno ? "#fff" : "" }}>Escribir reseña</p>
                                         </button>
                                     </>
                                 ) : (
@@ -368,7 +368,7 @@ export default function VerMarcador({ MarcadorSelectId, CerrarMarcador, establec
                                         {!mostrarFormulario && (
                                             <button onClick={() => setMostrarFormulario(true)}>
                                                 <FontAwesomeIcon icon={faCommentDots} className={styles.icon} />
-                                                <p style={{ color: modoNocturno ? "#fff" : "" }}>Escribir Reseña</p>
+                                                <p style={{ color: modoNocturno ? "#fff" : "" }}>Escribir reseña</p>
                                             </button>
                                         )}
                                     </>

@@ -153,7 +153,6 @@ function Editar_Usuarios() {
   }, [id]);
 
   const Actualizar_Informacion = async () => {
-
     if (!rutValido) {
       alert("El RUT no es válido");
       return;
@@ -165,35 +164,27 @@ function Editar_Usuarios() {
     }
 
     const rolActual = usuarioActual.rol.toLowerCase();
-    const rolEditadoOriginal = rolOriginalEditado;
+    const rolEditado = rolOriginalEditado.toLowerCase();
     const idActual = usuarioActual.id;
+    const idEditado = usuarios[0].id;
+    const rolAsignado = usuarios[0].rol.toLowerCase();
 
-    //  restriccion de jerárquia
-    if (rolActual === "administrador") {
-      if (rolEditadoOriginal === "administrador" && idActual !== usuarios[0].id) {
-        alert("No puedes editar a otros Administradores.");
-        return;
-      }
-    } else if (rolActual === "gestor") {
-      if (rolEditadoOriginal === "administrador") {
-        alert("No puedes editar a un Administrador.");
-        return;
-      }
-      if (rolEditadoOriginal === "gestor" && idActual !== usuarios[0].id) {
-        alert("No puedes editar a otros Gestores.");
-        return;
-      }
-      // Se restinje que un gestor asigne rol administrador
-      if (usuarios[0].rol === "administrador") {
-        alert("No puedes asignar el rol Administrador.");
-        return;
-      }
-    } else if (rolActual === "usuario") {
-      if (idActual !== usuarios[0].id) {
-        alert("No puedes editar información de otros usuarios.");
-        return;
-      }
-    }
+    // Restricciones de jerarquía
+    const esMismoUsuario = idActual === idEditado;
+
+    const mostrarError = (mensaje: string) => {
+      alert(mensaje);
+      return true;
+    };
+
+    const restriccionesVioladas =
+      (rolActual === "administrador" && rolEditado === "administrador" && !esMismoUsuario && mostrarError("No puedes editar a otros Administradores.")) ||
+      (rolActual === "gestor" && rolEditado === "administrador" && mostrarError("No puedes editar a un Administrador.")) ||
+      (rolActual === "gestor" && rolEditado === "gestor" && !esMismoUsuario && mostrarError("No puedes editar a otros Gestores.")) ||
+      (rolActual === "gestor" && rolAsignado === "administrador" && mostrarError("No puedes asignar el rol Administrador.")) ||
+      (rolActual === "usuario" && !esMismoUsuario && mostrarError("No puedes editar información de otros usuarios."));
+
+    if (restriccionesVioladas) return;
 
     try {
       // Actualizar información del usuario
@@ -206,32 +197,39 @@ function Editar_Usuarios() {
         rut: usuarios[0].rut,
         fecha_nacimiento: usuarios[0].fecha_nacimiento
       }).eq('id', id);
+
       if (errorUsuario) {
         console.error('Error al actualizar datos de usuario:', errorUsuario);
         alert("Hubo un error al actualizar los datos del usuario");
         return;
       }
-      // Actualizar o eliminar información de discapacidad
+
+      // Actualizar o insertar discapacidad
       if (tiene_una_Discapacidad) {
-        // Verificar si ya existe un registro de discapacidad para este usuario
         const { data: existingData } = await supabase.from("discapacidad").select("*").eq("id_usuario", id);
 
+        const datosDiscapacidad = {
+          nombre: discapacidad[0]?.nombre || "",
+          tipo: discapacidad[0]?.tipo || "",
+        };
+
         if (existingData && existingData.length > 0) {
-          // Si existe, actualizamos
-          await supabase.from("discapacidad").update({ nombre: discapacidad[0]?.nombre || "", tipo: discapacidad[0]?.tipo || "", }).eq("id_usuario", id);
+          await supabase.from("discapacidad").update(datosDiscapacidad).eq("id_usuario", id);
         } else {
-          // Si no existe, insertamos
-          await supabase.from("discapacidad").insert([{ id_usuario: id, nombre: discapacidad[0]?.nombre || "", tipo: discapacidad[0]?.tipo || "", }]);
+          await supabase.from("discapacidad").insert([{ id_usuario: id, ...datosDiscapacidad }]);
         }
       }
+
       alert("Datos de usuario actualizados correctamente");
       navigate(-1);
     } catch (error) {
       console.error('Error general al actualizar:', error);
       alert("Ocurrió un error al actualizar la información");
     }
+
     Registro_cambios();
   };
+
 
   const fechaHoraActual = new Date().toISOString();
 
