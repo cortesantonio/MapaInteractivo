@@ -324,7 +324,7 @@ export default function AgregarSolicitud() {
             .insert([
                 {
                     id_usuario: user?.id,
-                    tipo_accion: 'Agregación de una solicitud',
+                    tipo_accion: 'Agregación de una Solicitud',
                     detalle: `Se agregó una Solicitud con ID ${solicitudId}`,
                     fecha_hora: fechaHoraActual,
                 }
@@ -358,7 +358,7 @@ export default function AgregarSolicitud() {
     const [direccionValida, setDireccionValida] = useState(false);
     const inputRef = useRef<HTMLInputElement>(null);
 
-    if (loadError) return <div>Error cargando Places</div>;
+    if (loadError) return <div>Error al cargar Google Places</div>;
     if (!isLoaded) return <div>Cargando Autocomplete...</div>;
 
 
@@ -440,7 +440,7 @@ export default function AgregarSolicitud() {
                         required
 
                     />
-                    <label className={styles.labelSeccion}>Tipo de establecimiento<span style={{ fontSize: '0.8rem', color: 'gray', fontStyle: 'italic' }}> - ¿Qué tipo de establecimiento o negocio es? (Ej: farmacia, hospital, cajero,negocio...)</span></label>
+                    <label className={styles.labelSeccion}>Tipo de establecimiento<span style={{ fontSize: '0.8rem', color: 'gray', fontStyle: 'italic' }}> - ¿Qué tipo de establecimiento o negocio es? (Ej.: farmacia, hospital, cajero, negocio...)</span></label>
                     <div style={{ position: 'relative', width: '100%' }}>
                         <input
                             ref={tipoRecintoRef}
@@ -518,9 +518,10 @@ export default function AgregarSolicitud() {
                     <textarea
                         name="descripcion"
                         placeholder='¿Tu recinto tiene accesibilidad? Describe qué tipo, si aplica'
-                        wrap='soft'
-                        style={{height:"50px",maxHeight:"100px",resize:"vertical",overflowY:"auto",borderRadius:"5px",border:"1px solid rgb(165, 165, 165)",color:"black"}}
+                        rows={4}
+                        style={{ resize: 'none', height: '100px' }}
                         value={formData.descripcion}
+                        className={styles.inputText}
                         onChange={handleTextareaChange}
                         disabled={!usuario?.nombre} // Deshabilitar el campo si no hay usuario
                         required
@@ -567,7 +568,7 @@ export default function AgregarSolicitud() {
                         <input
                             ref={inputRef}
                             type="text"
-                            name="direccion"
+                            name="dirección"
                             placeholder="Escribe una dirección…"
                             className={styles.inputText}
                             value={formData.direccion}

@@ -161,8 +161,8 @@ export default function InfoDetallada() {
         const Registro_cambios = async () => {
             const tipoAccion = nuevoEstado ? 'Activación de Marcador' : 'Desactivación de Marcador';
             const detalleAccion = nuevoEstado
-                ? `Se activó el marcador con ID ${id}`
-                : `Se desactivó el marcador con ID ${id}`;
+                ? `Se activó el Marcador con ID ${id}`
+                : `Se desactivó el Marcador con ID ${id}`;
 
             const { data: registro_logs, error: errorLog } = await supabase
                 .from('registro_logs')
@@ -245,7 +245,7 @@ export default function InfoDetallada() {
                     <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', gap: '10px' }}>
                         <h4>{dataMarcador.nombre_recinto}</h4>
                         {dataMarcador.accesibilidad_certificada ? (
-                            <img className={styles.marcaVerificador} src={Marca_Verificador} alt="Marca Verificador" title='Marcador Verificado' />
+                            <img className={styles.marcaVerificador} src={Marca_Verificador} alt="Marca verificador" title='Marcador verificado' />
                         ) : (
                             <p></p>
                         )}
@@ -376,7 +376,7 @@ export default function InfoDetallada() {
 
                                 {/* Información adicional */}
                                 <div className={styles.InfoAdicional}>
-                                    <label className={styles.labelSeccion} htmlFor="">Información Adicional</label>
+                                    <label className={styles.labelSeccion} htmlFor="">Información adicional</label>
                                     <p style={{ color: '#ccc' }}>{dataMarcador.info_adicional || 'No aporta información adicional.'}</p>
                                 </div>
                             </div>
