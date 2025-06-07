@@ -63,7 +63,7 @@ function Inspeccionar_Resenas() {
 
   const fechaHoraActual = new Date().toISOString();
   const Registro_cambios = async (id: number) => {
-    const { data: registro_logs, error: errorLog } = await supabase
+    const { error: errorLog } = await supabase
       .from('registro_logs')
       .insert([
         {
@@ -79,7 +79,6 @@ function Inspeccionar_Resenas() {
       return;
     }
 
-    console.log(' Registro insertado en registro_logs correctamente', registro_logs);
   };
 
   const renderResenas = () => {

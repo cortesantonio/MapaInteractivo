@@ -112,7 +112,7 @@ function Perfil_Usuario() {
         ? `Se activó el Usuario con ID ${id}`
         : `Se desactivó el Usuario con ID ${id}`;
 
-      const { data: registro_logs, error: errorLog } = await supabase
+      const { error: errorLog } = await supabase
         .from('registro_logs')
         .insert([
           {
@@ -128,7 +128,6 @@ function Perfil_Usuario() {
         return;
       }
 
-      console.log('Registro insertado en registro_logs correctamente', registro_logs);
     };
 
     Registro_cambios();

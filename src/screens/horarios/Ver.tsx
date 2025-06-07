@@ -29,7 +29,7 @@ function VerHorarioMarcador() {
   const Registro_cambios = async (tipo_accion: string, detalle: string) => {
     const fechaHoraActual = new Date().toISOString(); // <-- mover aquí
 
-    const { data: registro_logs, error: errorLog } = await supabase
+    const { error: errorLog } = await supabase
       .from('registro_logs')
       .insert([
         {
@@ -45,11 +45,7 @@ function VerHorarioMarcador() {
       return;
     }
 
-    console.log('Registro insertado en registro_logs correctamente', registro_logs);
   };
-
-
-
 
   useEffect(() => {
     const fetchData = async () => {
@@ -191,9 +187,6 @@ function VerHorarioMarcador() {
 
     await Registro_cambios('Eliminación de un Horario', `Se eliminó el Horario del día ${dia} en el marcador con ID ${id}`);
   };
-
-
-
 
 
   return (

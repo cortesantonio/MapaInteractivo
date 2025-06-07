@@ -385,8 +385,7 @@ export default function VerMarcador({ MarcadorSelectId, CerrarMarcador, establec
                     <Compartir idMarcador={MarcadorSelectId} />
                 ) : mostrarFormulario ? (
                     <EscribirResena
-                        onSubmit={(resena) => {
-                            console.log('Reseña enviada:', resena);
+                        onSubmit={() => {
                             setMostrarFormulario(false);
                         }}
                         onCancel={() => setMostrarFormulario(false)}

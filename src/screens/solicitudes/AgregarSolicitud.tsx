@@ -319,7 +319,7 @@ export default function AgregarSolicitud() {
     const fechaHoraActual = new Date().toISOString();
 
     const Registro_cambios = async (solicitudId: number) => {
-        const { data: registro_logs, error: errorLog } = await supabase
+        const { error: errorLog } = await supabase
             .from('registro_logs')
             .insert([
                 {
@@ -335,7 +335,6 @@ export default function AgregarSolicitud() {
             return;
         }
 
-        console.log('Registro insertado en registro_logs correctamente', registro_logs);
     };
 
     const [filtroBusqueda, setFiltroBusqueda] = useState('');
